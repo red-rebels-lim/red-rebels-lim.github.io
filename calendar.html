@@ -40,13 +40,7 @@
         h1 {
             color: white;
             font-size: 3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            color: #ff6b6b;
-            font-size: 1.5rem;
-            font-weight: bold;
+            margin-bottom: 2rem;
         }
 
         .month-toggle {
@@ -215,8 +209,7 @@
 <div class="main-container">
     <div class="header">
         <img src="clear_logo.png" alt="Red Rebels Limassol" class="logo">
-        <h1 id="current-month">October 2025</h1>
-        <p class="subtitle">Red Rebels Event Schedule</p>
+        <h1>Red Rebels Event Schedule 2025</h1>
     </div>
 
     <div class="month-toggle">
@@ -421,11 +414,9 @@ function showMonth(month) {
     // Show selected calendar
     if (month === 'october') {
         document.getElementById('october-calendar').classList.add('active');
-        document.getElementById('current-month').textContent = 'October 2025';
         event.target.classList.add('active');
     } else if (month === 'november') {
         document.getElementById('november-calendar').classList.add('active');
-        document.getElementById('current-month').textContent = 'November 2025';
         event.target.classList.add('active');
     }
 }
