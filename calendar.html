@@ -154,25 +154,15 @@
             font-weight: 800;
         }
 
-        .legend {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            background: rgba(220, 38, 38, 0.9);
-            padding: 1rem;
-            border-radius: 8px;
-            border: 2px solid white;
-            color: white;
-            z-index: 1000;
-        }
-
         .legend-title {
             font-size: 1.2rem;
             font-weight: bold;
             margin-bottom: 0.5rem;
+            color: white;
         }
 
         .legend-item {
+            color: white;
             display: flex;
             align-items: center;
             margin-bottom: 0.3rem;
@@ -212,14 +202,9 @@
                 margin-bottom: 1rem;
             }
 
-            .legend {
-                position: static;
-                margin: 0 auto 1rem;
-                max-width: 90%;
-            }
-
             .legend-title {
                 font-size: 1rem;
+                margin: auto;
             }
 
             .legend-item {
@@ -329,21 +314,6 @@
     </style>
 </head>
 <body>
-<div class="legend">
-    <div class="legend-title">Υπόμνημα</div>
-    <div class="legend-item">
-        <span class="legend-icon">👨⚽</span>
-        <span>Ανδρικό Ποδόσφαιρο</span>
-    </div>
-    <div class="legend-item">
-        <span class="legend-icon">👨🏐</span>
-        <span>Ανδρικό Βόλεϊ</span>
-    </div>
-    <div class="legend-item">
-        <span class="legend-icon">👩🏻🏐</span>
-        <span>Γυναικείο Βόλεϊ</span>
-    </div>
-</div>
 
 <div class="main-container">
     <div class="header">
@@ -533,6 +503,26 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <div class="nav col-md-12 align-items-center justify-content-center d-flex legend-title">Υπόμνημα</div>
+        <ul class="nav col-md-12 align-items-center justify-content-center d-flex">
+            <li class="ms-3 legend-item">
+                <span class="legend-icon">👨⚽</span>
+                <span>Ανδρικό Ποδόσφαιρο</span>
+            </li>
+            <li class="ms-3 legend-item">
+                <span class="legend-icon">👨🏐</span>
+                <span>Ανδρικό Βόλεϊ</span>
+            </li>
+            <li class="ms-3 legend-item">
+                <span class="legend-icon">👩🏻🏐</span>
+                <span>Γυναικείο Βόλεϊ</span>
+            </li>
+        </ul>
+    </footer>
 </div>
 
 <!-- Bootstrap JS -->
