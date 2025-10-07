@@ -125,6 +125,10 @@
             margin-bottom: 0.5rem;
         }
 
+        .day-name {
+            display: none;
+        }
+
         .calendar-day.event .day-number {
             color: white;
         }
@@ -187,6 +191,141 @@
         .calendar-container.active {
             display: block;
         }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .main-container {
+                max-width: 100%;
+            }
+
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+
+            .legend {
+                position: static;
+                margin: 0 auto 1rem;
+                max-width: 90%;
+            }
+
+            .legend-title {
+                font-size: 1rem;
+            }
+
+            .legend-item {
+                font-size: 0.85rem;
+            }
+
+            .legend-icon {
+                font-size: 1rem;
+            }
+
+            .month-toggle {
+                margin-bottom: 1rem;
+            }
+
+            .btn-month {
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
+                margin: 0.25rem;
+            }
+
+            .calendar-header {
+                display: none;
+            }
+
+            .calendar-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .calendar-day:not(.event) {
+                display: none;
+            }
+
+            .calendar-day.empty {
+                display: none;
+            }
+
+            .calendar-day {
+                min-height: auto;
+                padding: 0.75rem;
+                margin: 0;
+                border-radius: 8px;
+            }
+
+            .day-number {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+                display: inline-block;
+                padding-right: 0.5rem;
+            }
+
+            .day-name {
+                display: inline;
+                font-size: 1rem;
+                font-weight: normal;
+                color: #ff6b6b;
+            }
+
+            .event-details {
+                padding: 0.5rem;
+                font-size: 0.7rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .event-title {
+                font-size: 0.9rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .event-subtitle {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .btn-month {
+                display: block;
+                width: 90%;
+                margin: 0.25rem auto;
+            }
+
+            .calendar-day {
+                padding: 0.5rem;
+            }
+
+            .day-number {
+                font-size: 1rem;
+            }
+
+            .event-details {
+                padding: 0.4rem;
+                font-size: 0.65rem;
+            }
+
+            .event-title {
+                font-size: 0.8rem;
+            }
+
+            .event-subtitle {
+                font-size: 0.75rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -233,7 +372,7 @@
                 <div class="calendar-day empty"></div>
                 <div class="calendar-day empty"></div>
                 <div class="calendar-day event">
-                    <div class="day-number">1</div>
+                    <div class="day-number">1 <span class="day-name">Τετάρτη</span></div>
                     <div class="event-details">
                         <div class="event-title">ΕΝΥ Υψωνας vs Νεα Σαλαμίνα</div>
                         <div class="event-subtitle">👨⚽ - 19:00</div>
@@ -243,7 +382,7 @@
                 <div class="calendar-day"><div class="day-number">3</div></div>
                 <div class="calendar-day"><div class="day-number">4</div></div>
                 <div class="calendar-day event">
-                    <div class="day-number">5</div>
+                    <div class="day-number">5 <span class="day-name">Κυριακή</span></div>
                     <div class="event-details">
                         <div class="event-title">Νεα Σαλαμίνα vs ΠΟ Αχυρώνας Ονήσιλος</div>
                         <div class="event-subtitle">👨⚽ - 16:00</div>
@@ -251,7 +390,7 @@
                 </div>
                 <div class="calendar-day"><div class="day-number">6</div></div>
                 <div class="calendar-day event">
-                    <div class="day-number">7</div>
+                    <div class="day-number">7 <span class="day-name">Τρίτη</span></div>
                     <div class="event-details">
                         <div class="event-title">Συνεδρία Συνδέσμου Λεμεσού</div>
                         <div class="event-subtitle">Meeting - 19:30</div>
@@ -267,14 +406,14 @@
                 <div class="calendar-day"><div class="day-number">15</div></div>
                 <div class="calendar-day"><div class="day-number">16</div></div>
                 <div class="calendar-day event">
-                    <div class="day-number">17</div>
+                    <div class="day-number">17 <span class="day-name">Παρασκευή</span></div>
                     <div class="event-details">
                         <div class="event-title">Νεα Σαλαμίνα vs Παφιακός</div>
                         <div class="event-subtitle">👨🏐 - 20:30</div>
                     </div>
                 </div>
                 <div class="calendar-day event">
-                    <div class="day-number">18</div>
+                    <div class="day-number">18 <span class="day-name">Σάββατο</span></div>
                     <div class="event-details">
                         <div class="event-title">ΜΕΑΠ vs Νεα Σαλαμίνα</div>
                         <div class="event-subtitle">👨⚽ - 15:30</div>
@@ -287,7 +426,7 @@
                 <div class="calendar-day"><div class="day-number">23</div></div>
                 <div class="calendar-day"><div class="day-number">24</div></div>
                 <div class="calendar-day event">
-                    <div class="day-number">25</div>
+                    <div class="day-number">25 <span class="day-name">Σάββατο</span></div>
                     <div class="event-details">
                         <div class="event-title">Νεα Σαλαμίνα vs Χαλκάνορας Ιδαλίου</div>
                         <div class="event-subtitle">👨⚽ - 15:00</div>
@@ -326,7 +465,7 @@
                 <div class="calendar-day empty"></div>
                 <div class="calendar-day empty"></div>
                 <div class="calendar-day event">
-                    <div class="day-number">1</div>
+                    <div class="day-number">1 <span class="day-name">Σάββατο</span></div>
                     <div class="event-details">
                         <div class="event-title">ΑΣΙΛ Λύσης vs Νέα Σαλαμίνα</div>
                         <div class="event-subtitle">👨⚽ - 14:30</div>
@@ -338,14 +477,14 @@
                 <div class="calendar-day"><div class="day-number">5</div></div>
                 <div class="calendar-day"><div class="day-number">6</div></div>
                 <div class="calendar-day event">
-                    <div class="day-number">7</div>
+                    <div class="day-number">7 <span class="day-name">Παρασκευή</span></div>
                     <div class="event-details">
                         <div class="event-title">Νέα Σαλαμίνα vs Ανόρθωσης</div>
                         <div class="event-subtitle">👨🏐 - 20:00</div>
                     </div>
                 </div>
                 <div class="calendar-day event">
-                    <div class="day-number">8</div>
+                    <div class="day-number">8 <span class="day-name">Σάββατο</span></div>
                     <div class="event-details">
                         <div class="event-title">Νέα Σαλαμίνα vs ΑΕΖ</div>
                         <div class="event-subtitle">👨⚽ - 14:30</div>
@@ -358,7 +497,7 @@
                 <div class="calendar-day"><div class="day-number">13</div></div>
                 <div class="calendar-day"><div class="day-number">14</div></div>
                 <div class="calendar-day event">
-                    <div class="day-number">15</div>
+                    <div class="day-number">15 <span class="day-name">Σάββατο</span></div>
                     <div class="event-details">
                         <div class="event-title">Νέα Σαλαμίνα vs Απόλλων</div>
                         <div class="event-subtitle">👩🏻🏐 - 18:00</div>
@@ -370,7 +509,7 @@
                 <div class="calendar-day"><div class="day-number">19</div></div>
                 <div class="calendar-day"><div class="day-number">20</div></div>
                 <div class="calendar-day event">
-                    <div class="day-number">21</div>
+                    <div class="day-number">21 <span class="day-name">Παρασκευή</span></div>
                     <div class="event-details">
                         <div class="event-title">Νέα Σαλαμίνα vs Αναγέννηση Δερύνειας</div>
                         <div class="event-subtitle">👨🏐 - 20:00</div>
@@ -384,7 +523,7 @@
                 <div class="calendar-day"><div class="day-number">27</div></div>
                 <div class="calendar-day"><div class="day-number">28</div></div>
                 <div class="calendar-day event">
-                    <div class="day-number">29</div>
+                    <div class="day-number">29 <span class="day-name">Σάββατο</span></div>
                     <div class="event-details">
                         <div class="event-title">Νέα Σαλαμίνα vs Λεμεσός</div>
                         <div class="event-subtitle">👩🏻🏐 - 18:00</div>
