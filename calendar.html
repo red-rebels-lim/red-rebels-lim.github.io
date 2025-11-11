@@ -322,8 +322,9 @@
     </div>
 
     <div class="month-toggle">
-        <button class="btn btn-month active" onclick="showMonth('october')">Οκτώβριος</button>
-        <button class="btn btn-month" onclick="showMonth('november')">Νοέμβριος</button>
+        <button class="btn btn-month" onclick="showMonth('october')">Οκτώβριος</button>
+        <button class="btn btn-month active" onclick="showMonth('november')">Νοέμβριος</button>
+        <button class="btn btn-month" onclick="showMonth('december')">Δεκέμβριος</button>
     </div>
 
     <!-- October Calendar -->
@@ -515,6 +516,93 @@
             </div>
         </div>
     </div>
+
+    <!-- December Calendar -->
+    <div id="december-calendar" class="calendar-container">
+        <div class="calendar-wrapper">
+            <div class="calendar-header">
+                <div>Δευτέρα</div>
+                <div>Τρίτη</div>
+                <div>Τετάρτη</div>
+                <div>Πέμπτη</div>
+                <div>Παρασκευή</div>
+                <div>Σάββατο</div>
+                <div>Κυριακή</div>
+            </div>
+            <div class="calendar-grid">
+                <div class="calendar-day"><div class="day-number">1</div></div>
+                <div class="calendar-day"><div class="day-number">2</div></div>
+                <div class="calendar-day"><div class="day-number">3</div></div>
+                <div class="calendar-day"><div class="day-number">4</div></div>
+                <div class="calendar-day"><div class="day-number">5</div></div>
+                <div class="calendar-day event">
+                    <div class="day-number">6 <span class="day-name">Σάββατο</span></div>
+                    <div class="event-details">
+                        <div class="event-title">Σπάρτακος Κιτίου vs Νέα Σαλαμίνα</div>
+                        <div class="event-subtitle">👨⚽ - 14:30</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-title">Νέα Σαλαμίνα vs RoboMarkets ΑΕΛ</div>
+                        <div class="event-subtitle">👩🏻🏐 - 18:00</div>
+                    </div>
+
+                </div>
+                <div class="calendar-day"><div class="day-number">7</div></div>
+                <div class="calendar-day"><div class="day-number">8</div></div>
+                <div class="calendar-day"><div class="day-number">9</div></div>
+                <div class="calendar-day"><div class="day-number">10</div></div>
+                <div class="calendar-day"><div class="day-number">11</div></div>
+                <div class="calendar-day event">
+                    <div class="day-number">12 <span class="day-name">Παρασκευή</span></div>
+                    <div class="event-details">
+                        <div class="event-title">Νέα Σαλαμίνα vs Καρμιώτισσα</div>
+                        <div class="event-subtitle">👨⚽ - 19:00</div>
+                    </div>
+                </div>
+                <div class="calendar-day"><div class="day-number">13</div></div>
+                <div class="calendar-day"><div class="day-number">14</div></div>
+                <div class="calendar-day"><div class="day-number">15</div></div>
+                <div class="calendar-day"><div class="day-number">16</div></div>
+                <div class="calendar-day"><div class="day-number">17</div></div>
+                <div class="calendar-day"><div class="day-number">18</div></div>
+                <div class="calendar-day event">
+                    <div class="day-number">19 <span class="day-name">Παρασκευή</span></div>
+                    <div class="event-details">
+                        <div class="event-title">Νέα Σαλαμίνα vs Ομόνοια</div>
+                        <div class="event-subtitle">👨🏐 - 20:00</div>
+                    </div>
+                </div>
+                <div class="calendar-day event">
+                    <div class="day-number">20 <span class="day-name">Σάββατο</span></div>
+                    <div class="event-details">
+                        <div class="event-title">Νέα Σαλαμίνα vs ΑΕΚ Λάρνακας</div>
+                        <div class="event-subtitle">👩🏻🏐 - 18:00</div>
+                    </div>
+                </div>
+                <div class="calendar-day"><div class="day-number">21</div></div>
+                <div class="calendar-day"><div class="day-number">22</div></div>
+                <div class="calendar-day"><div class="day-number">23</div></div>
+                <div class="calendar-day"><div class="day-number">24</div></div>
+                <div class="calendar-day"><div class="day-number">25</div></div>
+                <div class="calendar-day"><div class="day-number">26</div></div>
+                <div class="calendar-day"><div class="day-number">27</div></div>
+                <div class="calendar-day"><div class="day-number">28</div></div>
+                <div class="calendar-day"><div class="day-number">29</div></div>
+                <div class="calendar-day event">
+                    <div class="day-number">20 <span class="day-name">Τρίτη</span></div>
+                    <div class="event-details">
+                        <div class="event-title">Νέα Σαλαμίνα vs Κούρης Ερήμης</div>
+                        <div class="event-subtitle">👩🏻🏐 - 18:00</div>
+                    </div>
+                </div>
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
@@ -558,6 +646,9 @@ function showMonth(month) {
         event.target.classList.add('active');
     } else if (month === 'november') {
         document.getElementById('november-calendar').classList.add('active');
+        event.target.classList.add('active');
+    } else if (month === 'december') {
+        document.getElementById('december-calendar').classList.add('active');
         event.target.classList.add('active');
     }
 }
