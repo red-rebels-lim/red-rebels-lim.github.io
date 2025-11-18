@@ -1,159 +1,144 @@
-// Calendar data for each month
+// Simple event data format
+// Format: "day sport location opponent time"
+// sport: football-men, volleyball-men, volleyball-women, meeting
+// location: home, away
+// Example: "12 football-men home Καρμιώτισσα 19:00"
 
-const calendarData = {
-    october: {
-        days: [
-            { empty: true },
-            { empty: true },
-            { number: 1, name: 'Τετάρτη', events: [
-                { title: 'ΕΝΥ Υψωνας vs Νεα Σαλαμίνα', subtitle: '👨⚽ - 19:00' }
-            ]},
-            { number: 2 },
-            { number: 3 },
-            { number: 4 },
-            { number: 5, name: 'Κυριακή', events: [
-                { title: 'Νεα Σαλαμίνα vs ΠΟ Αχυρώνας Ονήσιλος', subtitle: '👨⚽ - 16:00' }
-            ]},
-            { number: 6 },
-            { number: 7, name: 'Τρίτη', events: [
-                { title: 'Συνεδρία Συνδέσμου Λεμεσού', subtitle: 'Meeting - 19:30' }
-            ]},
-            { number: 8 },
-            { number: 9 },
-            { number: 10 },
-            { number: 11 },
-            { number: 12 },
-            { number: 13 },
-            { number: 14 },
-            { number: 15 },
-            { number: 16 },
-            { number: 17, name: 'Παρασκευή', events: [
-                { title: 'Νεα Σαλαμίνα vs Παφιακός', subtitle: '👨🏐 - 20:30' }
-            ]},
-            { number: 18, name: 'Σάββατο', events: [
-                { title: 'ΜΕΑΠ vs Νεα Σαλαμίνα', subtitle: '👨⚽ - 15:30' }
-            ]},
-            { number: 19 },
-            { number: 20 },
-            { number: 21 },
-            { number: 22 },
-            { number: 23 },
-            { number: 24 },
-            { number: 25, name: 'Σάββατο', events: [
-                { title: 'Νεα Σαλαμίνα vs Χαλκάνορας Ιδαλίου', subtitle: '👨⚽ - 15:00' },
-                { title: 'Νεα Σαλαμίνα vs Ανόρθωσης', subtitle: '👩🏻🏐 - 18:00' }
-            ]},
-            { number: 26 },
-            { number: 27 },
-            { number: 28 },
-            { number: 29 },
-            { number: 30 },
-            { number: 31 }
-        ]
-    },
-    november: {
-        days: [
-            { empty: true },
-            { empty: true },
-            { empty: true },
-            { empty: true },
-            { empty: true },
-            { number: 1, name: 'Σάββατο', events: [
-                { title: 'ΑΣΙΛ Λύσης vs Νέα Σαλαμίνα', subtitle: '👨⚽ - 14:30' }
-            ]},
-            { number: 2 },
-            { number: 3 },
-            { number: 4 },
-            { number: 5 },
-            { number: 6 },
-            { number: 7, name: 'Παρασκευή', events: [
-                { title: 'Νέα Σαλαμίνα vs Ανόρθωσης', subtitle: '👨🏐 - 20:00' }
-            ]},
-            { number: 8, name: 'Σάββατο', events: [
-                { title: 'Νέα Σαλαμίνα vs ΑΕΖ', subtitle: '👨⚽ - 14:30' }
-            ]},
-            { number: 9 },
-            { number: 10 },
-            { number: 11 },
-            { number: 12 },
-            { number: 13 },
-            { number: 14 },
-            { number: 15, name: 'Σάββατο', events: [
-                { title: 'Νέα Σαλαμίνα vs Απόλλων', subtitle: '👩🏻🏐 - 18:00' }
-            ]},
-            { number: 16 },
-            { number: 17 },
-            { number: 18 },
-            { number: 19 },
-            { number: 20 },
-            { number: 21, name: 'Παρασκευή', events: [
-                { title: 'Νέα Σαλαμίνα vs Αναγέννηση Δερύνειας', subtitle: '👨🏐 - 20:00' }
-            ]},
-            { number: 22, name: 'Σάββατο', events: [
-                { title: 'Ομόνοια 29ης Μαϊου vs Νέα Σαλαμίνα', subtitle: '👨⚽ - 17:00' }
-            ]},
-            { number: 23 },
-            { number: 24 },
-            { number: 25 },
-            { number: 26 },
-            { number: 27 },
-            { number: 28, name: 'Παρασκευή', events: [
-                { title: 'Νέα Σαλαμίνα vs ΠΑΕΕΚ Κερύνειας', subtitle: '👨⚽ - 19:00' }
-            ]},
-            { number: 29, name: 'Σάββατο', events: [
-                { title: 'Νέα Σαλαμίνα vs Λεμεσός', subtitle: '👩🏻🏐 - 18:00' }
-            ]},
-            { number: 30 }
-        ]
-    },
-    december: {
-        days: [
-            { number: 1 },
-            { number: 2 },
-            { number: 3 },
-            { number: 4 },
-            { number: 5 },
-            { number: 6, name: 'Σάββατο', events: [
-                { title: 'Σπάρτακος Κιτίου vs Νέα Σαλαμίνα', subtitle: '👨⚽ - 14:30' },
-                { title: 'Νέα Σαλαμίνα vs RoboMarkets ΑΕΛ', subtitle: '👩🏻🏐 - 18:00' }
-            ]},
-            { number: 7 },
-            { number: 8 },
-            { number: 9 },
-            { number: 10 },
-            { number: 11 },
-            { number: 12, name: 'Παρασκευή', events: [
-                { title: 'Νέα Σαλαμίνα vs Καρμιώτισσα', subtitle: '👨⚽ - 19:00' }
-            ]},
-            { number: 13 },
-            { number: 14 },
-            { number: 15 },
-            { number: 16 },
-            { number: 17 },
-            { number: 18 },
-            { number: 19, name: 'Παρασκευή', events: [
-                { title: 'Νέα Σαλαμίνα vs Ομόνοια', subtitle: '👨🏐 - 20:00' }
-            ]},
-            { number: 20, name: 'Σάββατο', events: [
-                { title: 'Νέα Σαλαμίνα vs ΑΕΚ Λάρνακας', subtitle: '👩🏻🏐 - 18:00' }
-            ]},
-            { number: 21 },
-            { number: 22 },
-            { number: 23 },
-            { number: 24 },
-            { number: 25 },
-            { number: 26 },
-            { number: 27 },
-            { number: 28 },
-            { number: 29 },
-            { number: 30, name: 'Τρίτη', events: [
-                { title: 'Νέα Σαλαμίνα vs Κούρης Ερήμης', subtitle: '👩🏻🏐 - 18:00' }
-            ]},
-            { empty: true },
-            { empty: true },
-            { empty: true },
-            { empty: true },
-            { empty: true }
-        ]
-    }
+const eventData = {
+    october: [
+        "1 football-men away ΕΝΥ Υψωνας 19:00",
+        "5 football-men home ΠΟ Αχυρώνας Ονήσιλος 16:00",
+        "7 meeting home Συνεδρία Συνδέσμου Λεμεσού 19:30",
+        "17 volleyball-men home Παφιακός 20:30",
+        "18 football-men away ΜΕΑΠ 15:30",
+        "25 football-men home Χαλκάνορας Ιδαλίου 15:00",
+        "25 volleyball-women home Ανόρθωσης 18:00"
+    ],
+    november: [
+        "1 football-men away ΑΣΙΛ Λύσης 14:30",
+        "7 volleyball-men home Ανόρθωσης 20:00",
+        "8 football-men home ΑΕΖ 14:30",
+        "15 volleyball-women home Απόλλων 18:00",
+        "21 volleyball-men home Αναγέννηση Δερύνειας 20:00",
+        "22 football-men away Ομόνοια 29ης Μαϊου 17:00",
+        "28 football-men home ΠΑΕΕΚ Κερύνειας 19:00",
+        "29 volleyball-women home Λεμεσός 18:00"
+    ],
+    december: [
+        "6 football-men away Σπάρτακος Κιτίου 14:30",
+        "6 volleyball-women home RoboMarkets ΑΕΛ 18:00",
+        "12 football-men home Καρμιώτισσα 19:00",
+        "19 volleyball-men home Ομόνοια 20:00",
+        "20 volleyball-women home ΑΕΚ Λάρνακας 18:00",
+        "30 volleyball-women home Κούρης Ερήμης 18:00"
+    ]
 };
+
+// Configuration for sports and emojis
+const sportConfig = {
+    'football-men': { emoji: '👨⚽', name: 'Ανδρικό Ποδόσφαιρο' },
+    'volleyball-men': { emoji: '👨🏐', name: 'Ανδρικό Βόλεϊ' },
+    'volleyball-women': { emoji: '👩🏻🏐', name: 'Γυναικείο Βόλεϊ' },
+    'meeting': { emoji: '', name: 'Meeting' }
+};
+
+// Get day name in Greek for a specific date
+function getDayName(year, month, day) {
+    const dayNames = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο'];
+    const date = new Date(year, month, day);
+    return dayNames[date.getDay()];
+}
+
+// Parse a simple event string and create event object
+function parseEvent(eventString) {
+    const parts = eventString.split(' ');
+    const day = parseInt(parts[0]);
+    const sport = parts[1];
+    const location = parts[2];
+    const time = parts[parts.length - 1];
+    const opponent = parts.slice(3, -1).join(' ');
+
+    const sportInfo = sportConfig[sport];
+    const teamName = 'Νέα Σαλαμίνα';
+
+    let title;
+    if (sport === 'meeting') {
+        title = opponent;
+    } else if (location === 'home') {
+        title = `${teamName} vs ${opponent}`;
+    } else {
+        title = `${opponent} vs ${teamName}`;
+    }
+
+    const subtitle = sportInfo.emoji ? `${sportInfo.emoji} - ${time}` : `${sportInfo.name} - ${time}`;
+
+    return {
+        day,
+        title,
+        subtitle
+    };
+}
+
+// Build calendar data from simple event strings
+function buildCalendarData() {
+    const monthMap = {
+        'october': { monthIndex: 9, daysInMonth: 31, startDay: 2 }, // Oct 2025 starts on Wednesday (day 2)
+        'november': { monthIndex: 10, daysInMonth: 30, startDay: 5 }, // Nov 2025 starts on Saturday (day 5)
+        'december': { monthIndex: 11, daysInMonth: 31, startDay: 0 } // Dec 2025 starts on Monday (day 0)
+    };
+
+    const calendar = {};
+
+    for (const [monthName, events] of Object.entries(eventData)) {
+        const monthInfo = monthMap[monthName];
+        const days = [];
+
+        // Add empty days at the start
+        for (let i = 0; i < monthInfo.startDay; i++) {
+            days.push({ empty: true });
+        }
+
+        // Parse events and group by day
+        const eventsByDay = {};
+        events.forEach(eventString => {
+            const event = parseEvent(eventString);
+            if (!eventsByDay[event.day]) {
+                eventsByDay[event.day] = [];
+            }
+            eventsByDay[event.day].push({
+                title: event.title,
+                subtitle: event.subtitle
+            });
+        });
+
+        // Add all days in the month
+        for (let day = 1; day <= monthInfo.daysInMonth; day++) {
+            const dayData = { number: day };
+
+            // Add events if any
+            if (eventsByDay[day]) {
+                dayData.events = eventsByDay[day];
+                // Add day name for days with events
+                dayData.name = getDayName(2025, monthInfo.monthIndex, day);
+            }
+
+            days.push(dayData);
+        }
+
+        // Add empty days at the end for December
+        if (monthName === 'december') {
+            const totalCells = days.length;
+            const cellsNeeded = Math.ceil(totalCells / 7) * 7;
+            for (let i = totalCells; i < cellsNeeded; i++) {
+                days.push({ empty: true });
+            }
+        }
+
+        calendar[monthName] = { days };
+    }
+
+    return calendar;
+}
+
+// Generate the full calendar data
+const calendarData = buildCalendarData();
