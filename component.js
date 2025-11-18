@@ -15,10 +15,54 @@ function createCalendarHeader() {
 }
 
 function createEventDetail(title, subtitle) {
+    // Check if it's a meeting (no "vs" in title)
+    const isMeeting = !title.includes(' vs ');
+
+    if (isMeeting) {
+        // For meetings, use the title as is
+        const time = subtitle.split(' - ')[1];
+
+        return `
+            <div class="event-details">
+                <div class="event-compact">
+                    <span class="event-emoji">📅</span>
+                    <span class="event-opponent">${title}</span>
+                </div>
+                <div class="event-expanded">
+                    <div class="event-full-title">${title}</div>
+                    <div class="event-info">
+                        <span class="event-time">⏰ ${time}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // For sports events
+    // Extract opponent name (remove "Νέα Σαλαμίνα vs " or "... vs Νέα Σαλαμίνα")
+    const opponent = title.replace('Νέα Σαλαμίνα vs ', '').replace(/ vs Νέα Σαλαμίνα/, '');
+
+    // Extract emoji and time from subtitle
+    const emoji = subtitle.split(' - ')[0];
+    const time = subtitle.split(' - ')[1];
+
+    // Determine if home or away
+    const isHome = title.startsWith('Νέα Σαλαμίνα vs');
+    const location = isHome ? '🏠 Home' : '✈️ Away';
+
     return `
         <div class="event-details">
-            <div class="event-title">${title}</div>
-            <div class="event-subtitle">${subtitle}</div>
+            <div class="event-compact">
+                <span class="event-emoji">${emoji}</span>
+                <span class="event-opponent">${opponent}</span>
+            </div>
+            <div class="event-expanded">
+                <div class="event-full-title">${title}</div>
+                <div class="event-info">
+                    <span class="event-time">⏰ ${time}</span>
+                    <span class="event-location">${location}</span>
+                </div>
+            </div>
         </div>
     `;
 }
@@ -30,7 +74,7 @@ function createCalendarDay(dayNumber, dayName = '', events = [], isEmpty = false
 
     const hasEvents = events.length > 0;
     const eventClass = hasEvents ? 'event' : '';
-    const dayNameSpan = dayName ? `<span class="day-name">${dayName}</span>` : '';
+    const dayNameSpan = dayName ? `<div class="day-name">${dayName}</div>` : '';
 
     const eventsHTML = events.map(event =>
         createEventDetail(event.title, event.subtitle)
@@ -38,7 +82,7 @@ function createCalendarDay(dayNumber, dayName = '', events = [], isEmpty = false
 
     return `
         <div class="calendar-day ${eventClass}">
-            <div class="day-number">${dayNumber} ${dayNameSpan}</div>
+            <div class="day-number">${dayNumber}${dayNameSpan}</div>
             ${eventsHTML}
         </div>
     `;
