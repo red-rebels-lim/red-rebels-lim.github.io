@@ -1,5 +1,18 @@
 // Load and display a month's calendar
 function loadMonth(month) {
+    // Check if dependencies are loaded
+    if (typeof calendarData === 'undefined') {
+        console.error('calendarData is not defined. Make sure data.js is loaded.');
+        document.getElementById('calendar-display').innerHTML = '<p style="color: white;">Error: Calendar data not loaded</p>';
+        return;
+    }
+    
+    if (typeof createCalendar === 'undefined') {
+        console.error('createCalendar is not defined. Make sure components.js is loaded.');
+        document.getElementById('calendar-display').innerHTML = '<p style="color: white;">Error: Calendar components not loaded</p>';
+        return;
+    }
+
     const monthData = calendarData[month];
 
     if (!monthData) {
@@ -9,8 +22,7 @@ function loadMonth(month) {
     }
 
     // Generate calendar HTML using components
-    const calendarHTML = createCalendar(monthData);
-    document.getElementById('calendar-display').innerHTML = calendarHTML;
+    document.getElementById('calendar-display').innerHTML = createCalendar(monthData);
 
     // After loading, highlight today's date for the current month only
     highlightToday(month);
