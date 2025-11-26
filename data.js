@@ -28,6 +28,7 @@ const eventData = {
         "6 football-men away Σπάρτακος Κιτίου 14:30",
         "6 volleyball-women home RoboMarkets ΑΕΛ 18:00",
         "12 football-men home Καρμιώτισσα 19:00",
+        "17 football-men home Διγενής Μόρφου 19:00",
         "19 volleyball-men home Ομόνοια 20:00",
         "20 volleyball-women home ΑΕΚ Λάρνακας 18:00",
         "30 volleyball-women home Κούρης Ερήμης 18:00"
