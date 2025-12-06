@@ -241,7 +241,9 @@ const eventsData = {
             "sport": "volleyball-women",
             "location": "home",
             "opponent": "RoboMarkets ΑΕΛ",
-            "time": "18:00"
+            "time": "18:00",
+            "status":"played",
+            "score":"1-3"
         },
         {
             "day": 6,
@@ -268,9 +270,7 @@ const eventsData = {
             "sport": "volleyball-women",
             "location": "away",
             "opponent": "Ανόρθωσης",
-            "time": "18:00",
-            "status":"played",
-            "score":"1-3"
+            "time": "18:00"
         },
         {
             "day": 19,
