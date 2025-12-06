@@ -232,7 +232,9 @@ const eventsData = {
             "location": "away",
             "opponent": "Παφιακός",
             "status": "upcoming",
-            "time": "20:00"
+            "time": "20:00",
+            "status": "played",
+            "score": "3-0"
         },
         {
             "day": 6,
@@ -248,7 +250,9 @@ const eventsData = {
             "opponent": "ΣΠΑΡΤΑΚΟΣ ΚΙΤΙΟΥ",
             "time": "14:30",
             "venue": "ΚΟΙΝΟΤΙΚΟ ΣΤΑΔΙΟ ΔΡΟΜΟΛΑΞΙΑΣ",
-            "logo": "assets/images/team_logos/ΣΠΑΡΤΑΚΟΣ_ΚΙΤΙΟΥ.png"
+            "logo": "assets/images/team_logos/ΣΠΑΡΤΑΚΟΣ_ΚΙΤΙΟΥ.png",
+            "status": "played",
+            "score": "0-2"
         },
         {
             "day": 12,
@@ -264,7 +268,9 @@ const eventsData = {
             "sport": "volleyball-women",
             "location": "away",
             "opponent": "Ανόρθωσης",
-            "time": "18:00"
+            "time": "18:00",
+            "status":"played",
+            "score":"1-3"
         },
         {
             "day": 19,
