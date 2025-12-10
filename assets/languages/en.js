@@ -29,13 +29,12 @@
     nav: {
         calendar: 'Calendar',
         stats: 'Statistics',
-        options: 'Options',
+        options: 'Tools',
         toggleDarkMode: 'Toggle Dark Mode'
     },
 
     // Navigation Options Menu
     navOptions: {
-        jumpToToday: 'Jump to Today',
         export: 'Export (.ics)',
         print: 'Print'
     },
@@ -44,7 +43,18 @@
     monthNav: {
         previous: 'Previous',
         next: 'Next',
-        today: 'Today'
+        jumpToToday: 'Today',
+    },
+
+    // Day Names
+    days: {
+        monday: 'Monday',
+        tuesday: 'Tuesday',
+        wednesday: 'Wednesday',
+        thursday: 'Thursday',
+        friday: 'Friday',
+        saturday: 'Saturday',
+        sunday: 'Sunday'
     },
 
     // Month Names

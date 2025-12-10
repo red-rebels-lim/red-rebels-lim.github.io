@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nea Salamis - Team Overview</title>
+    <!-- Shared theme CSS variables for page layout -->
+    <link rel="stylesheet" href="assets/styles/shared-theme.css">
+    <link rel="stylesheet" href="assets/styles/team-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section - Web Component -->
+<!--        <team-header -->
+<!--            team-id="8590" -->
+<!--            country-code="CYP"-->
+<!--            assets-base="assets/images/team_logos">-->
+<!--        </team-header>-->
+
+        <!-- Navigation Tabs - Web Component -->
+<!--        <team-tabs -->
+<!--            tabs='["overview", "table", "fixtures", "stats", "transfers", "history"]'-->
+<!--            active-tab="overview">-->
+<!--        </team-tabs>-->
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Team Form Card - Web Component -->
+<!--                <team-form -->
+<!--                    team-id="8590" -->
+<!--                    country-code="CYP"-->
+<!--                    matches-count="5"-->
+<!--                    assets-base="assets/images/team_logos">-->
+<!--                </team-form>-->
+
+                <!-- League Table Card - Web Component -->
+                <team-table 
+                    team-id="8590" 
+                    country-code="CYP"
+                    assets-base="assets/images/team_logos">
+                </team-table>
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Next Match Card - Web Component -->
+                <team-next-match 
+                    team-id="8590" 
+                    country-code="CYP"
+                    assets-base="assets/images/team_logos">
+                </team-next-match>
+
+                <!-- Fixtures List - Web Component -->
+                <team-fixtures 
+                    team-id="8590" 
+                    country-code="CYP"
+                    limit="5"
+                    status="upcoming"
+                    assets-base="assets/images/team_logos">
+                </team-fixtures>
+
+                <!-- Stadium Card - Web Component -->
+                <team-stadium 
+                    team-id="8590" 
+                    country-code="CYP">
+                </team-stadium>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load all team components -->
+    <script type="module" src="assets/components/micro-frontends/components-loader.js"></script>
+</body>
+</html>
+

@@ -7,8 +7,6 @@
         calendar: {
             name: 'calendar',
             options: [
-                { labelPath: 'navOptions.jumpToToday', icon: 'icons.calendar', action: 'jumpToToday()' },
-                { divider: true },
                 { labelPath: 'navOptions.export', icon: 'icons.export', action: 'exportToCalendar()' },
                 { labelPath: 'navOptions.print', icon: 'icons.print', action: 'window.print()' }
             ]
@@ -31,7 +29,14 @@
     // Load a component from file
     async function loadComponent(componentName) {
         try {
-            const response = await fetch(`assets/components/${componentName}.html`);
+            const response = await fetch(`assets/components/${componentName}.html`, {
+                cache: 'no-store',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            });
             if (!response.ok) throw new Error(`Failed to load ${componentName}`);
             return await response.text();
         } catch (error) {
@@ -93,6 +98,18 @@
     async function initComponents() {
         const currentPage = getCurrentPage();
 
+        // Load calendar component
+        const calendarContainer = document.getElementById('calendar-component');
+        if (calendarContainer) {
+            const calendarHTML = await loadComponent('calendar');
+            calendarContainer.innerHTML = calendarHTML;
+
+            // Apply labels to calendar
+            if (window.applyLabels) {
+                window.applyLabels();
+            }
+        }
+
         // Load navbar
         const navbarContainer = document.getElementById('navbar-container');
         if (navbarContainer) {
@@ -130,6 +147,9 @@
                 window.applyLabels();
             }
         }
+
+        // Dispatch event to signal that all components are loaded
+        document.dispatchEvent(new CustomEvent('componentsLoaded'));
     }
 
     // Run when DOM is ready

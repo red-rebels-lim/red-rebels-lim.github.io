@@ -1,0 +1,648 @@
+/* FotMob-inspired Team Page Styles */
+
+:root {
+    /* Colors - Dark Theme */
+    --color-bg-primary: #1d1d1d;
+    --color-bg-secondary: #222222;
+    --color-bg-card: #1a1a1a;
+    --color-bg-card-hover: #252525;
+    --color-bg-input: #333333;
+    
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #9f9f9f;
+    --color-text-tertiary: #717171;
+    
+    --color-border: #333333;
+    --color-border-light: #464646;
+    
+    --color-accent: #00985f;
+    --color-accent-hover: #00774a;
+    
+    --color-win: #00985f;
+    --color-draw: #596470;
+    --color-lose: #dd3636;
+    
+    --color-promotion: #FFD908;
+    --color-relegation: #FFA72F;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+}
+
+/* Header Section */
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.team-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.team-logo-container {
+    width: 80px;
+    height: 80px;
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+}
+
+.team-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.team-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.team-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.team-country {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+}
+
+.team-actions {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.btn-sync,
+.btn-follow {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--color-bg-input);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-sync:hover,
+.btn-follow:hover {
+    background-color: var(--color-border-light);
+}
+
+.btn-follow {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.btn-follow:hover {
+    background-color: var(--color-accent-hover);
+}
+
+/* Navigation Tabs */
+.tabs-nav {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 2px solid var(--color-border);
+    overflow-x: auto;
+}
+
+.tab-btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    color: var(--color-text-primary);
+}
+
+.tab-btn.active {
+    color: var(--color-text-primary);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--color-accent);
+}
+
+/* Content Grid */
+.content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-xl);
+}
+
+.left-column,
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+/* Card Styles */
+.card {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--color-border);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.league-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.badge {
+    padding: var(--spacing-xs) var(--spacing-md);
+    background-color: var(--color-bg-input);
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Team Form */
+.team-form {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.form-result {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    position: relative;
+}
+
+.form-result.win {
+    background-color: rgba(0, 152, 95, 0.15);
+    color: var(--color-win);
+}
+
+.form-result.draw {
+    background-color: rgba(89, 100, 112, 0.15);
+    color: var(--color-draw);
+}
+
+.form-result.lose {
+    background-color: rgba(221, 54, 54, 0.15);
+    color: var(--color-lose);
+}
+
+.form-result img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+/* League Table */
+.table-container {
+    overflow-x: auto;
+}
+
+.league-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.league-table thead tr {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.league-table th {
+    padding: var(--spacing-md) var(--spacing-sm);
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.league-table th.text-left {
+    text-align: left;
+}
+
+.league-table tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s ease;
+}
+
+.league-table tbody tr:hover {
+    background-color: var(--color-bg-card-hover);
+}
+
+.league-table tbody tr.featured {
+    background-color: rgba(0, 152, 95, 0.05);
+}
+
+.league-table td {
+    padding: var(--spacing-md) var(--spacing-sm);
+    text-align: center;
+}
+
+.league-table td.text-left {
+    text-align: left;
+}
+
+.table-position {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--color-text-secondary);
+    font-weight: 600;
+}
+
+.position-indicator {
+    width: 4px;
+    height: 24px;
+    border-radius: var(--radius-sm);
+}
+
+.team-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.team-cell img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.team-cell span {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.form-badges {
+    display: flex;
+    gap: 2px;
+}
+
+.form-badge {
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    font-weight: 700;
+}
+
+.form-badge.W {
+    background-color: var(--color-win);
+    color: white;
+}
+
+.form-badge.D {
+    background-color: var(--color-draw);
+    color: white;
+}
+
+.form-badge.L {
+    background-color: var(--color-lose);
+    color: white;
+}
+
+.table-legend {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-sm);
+}
+
+.legend-text {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+/* Next Match */
+.next-match {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.match-teams {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg) 0;
+}
+
+.match-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex: 1;
+}
+
+.match-team img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+}
+
+.match-team-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.match-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 0 var(--spacing-lg);
+}
+
+.match-time-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.match-date {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+/* Fixtures List */
+.fixtures-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.fixture-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    transition: background-color 0.2s ease;
+}
+
+.fixture-item:hover {
+    background-color: var(--color-bg-card-hover);
+}
+
+.fixture-date {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    min-width: 80px;
+}
+
+.fixture-date-day {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+.fixture-date-time {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.fixture-teams {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex: 1;
+}
+
+.fixture-team {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex: 1;
+}
+
+.fixture-team img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.fixture-team-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.fixture-league-badge {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-bg-input);
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+}
+
+/* Stadium Info */
+.stadium-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.stadium-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.stadium-location {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.stadium-stats {
+    display: flex;
+    gap: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.stadium-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.stadium-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.stadium-stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+}
+
+/* Navigation Arrows */
+.nav-arrow {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.nav-arrow:hover {
+    color: var(--color-text-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-md);
+    }
+    
+    .team-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-lg);
+    }
+    
+    .team-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+    
+    .btn-sync,
+    .btn-follow {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .team-name {
+        font-size: 1.5rem;
+    }
+    
+    .tabs-nav {
+        gap: var(--spacing-sm);
+    }
+    
+    .tab-btn {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.875rem;
+    }
+}
+

@@ -20,13 +20,13 @@ function truncateTeamName(name, maxLength = 15) {
 function createCalendarHeader() {
     return `
         <div class="calendar-header">
-            <div>Δευτέρα</div>
-            <div>Τρίτη</div>
-            <div>Τετάρτη</div>
-            <div>Πέμπτη</div>
-            <div>Παρασκευή</div>
-            <div>Σάββατο</div>
-            <div>Κυριακή</div>
+            <div data-label="days.monday">Δευτέρα</div>
+            <div data-label="days.tuesday">Τρίτη</div>
+            <div data-label="days.wednesday">Τετάρτη</div>
+            <div data-label="days.thursday">Πέμπτη</div>
+            <div data-label="days.friday">Παρασκευή</div>
+            <div data-label="days.saturday">Σάββατο</div>
+            <div data-label="days.sunday">Κυριακή</div>
         </div>
     `;
 }

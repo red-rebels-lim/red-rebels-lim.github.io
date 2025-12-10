@@ -1,5 +1,7 @@
 // Track current month being displayed
-let currentMonth = 'november';
+let months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
+let date = new Date();
+let currentMonth = months[date.getMonth()];
 
 // Dark Mode Functionality
 function initializeDarkMode() {
@@ -35,7 +37,10 @@ const monthOrder = ['september', 'october', 'november', 'december', 'january', '
 function updateMonthLabel(month) {
     const monthLabel = document.getElementById('month-label');
     if (monthLabel) {
-        // Use the labels system to get the month name
+        // Get current language from localStorage (fallback to 'en')
+        const currentLanguage = localStorage.getItem('language') || 'en';
+
+        // Use the labels system to get the month name in the selected language
         const monthName = window.getLabel ? window.getLabel(`months.${month}`, month) : month;
         monthLabel.textContent = monthName;
     }
@@ -199,7 +204,7 @@ function highlightToday(displayedMonth) {
                 day.classList.add('today');
                 // Add "Σήμερα" next to the date
                 const todayLabel = document.createElement('span');
-                todayLabel.textContent = ' - Σήμερα';
+                // todayLabel.textContent = ' - Σήμερα';
                 todayLabel.style.color = '#ff4444';
                 todayLabel.style.fontWeight = 'bold';
                 todayLabel.style.fontSize = '0.9rem';
@@ -277,25 +282,22 @@ function initTouchGestures() {
     }, { passive: true });
 }
 
-// Register Service Worker for PWA
+// Service Worker disabled - unregister any existing service workers
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-                console.log('ServiceWorker registered successfully:', registration.scope);
-            })
-            .catch(error => {
-                console.log('ServiceWorker registration failed:', error);
-            });
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (let registration of registrations) {
+            registration.unregister();
+            console.log('Service Worker unregistered');
+        }
     });
 }
 
-// Load events and calendar on page load
-window.addEventListener('DOMContentLoaded', () => {
+// Load events and calendar after components are loaded
+document.addEventListener('componentsLoaded', () => {
     // Load events from events-data.js
     loadEvents();
     // Then load the calendar
-    loadMonth('november');
+    loadMonth(currentMonth);
     // Start countdown timers
     startCountdownTimer();
     // Initialize touch gestures for mobile

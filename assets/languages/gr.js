@@ -30,13 +30,12 @@
     nav: {
         calendar: 'Ημερολόγιο',
         stats: 'Στατιστικά',
-        options: 'Επιλογές',
+        options: 'Εργαλεία',
         toggleDarkMode: 'Toggle Dark Mode'
     },
 
     // Navigation Options Menu
     navOptions: {
-        jumpToToday: 'Μετάβαση σε Σήμερα',
         export: 'Εξαγωγή (.ics)',
         print: 'Εκτύπωση'
     },
@@ -45,7 +44,18 @@
     monthNav: {
         previous: 'Προηγούμενος',
         next: 'Επόμενος',
-        today: 'Σήμερα'
+        jumpToToday: 'Σήμερα',
+    },
+
+    // Day Names (Greek)
+    days:{
+        monday: 'Δευτέρα',
+        tuesday: 'Τρίτη',
+        wednesday: 'Τετάρτη',
+        thursday: 'Πέμπτη',
+        friday: 'Παρασκευή',
+        saturday: 'Σαββάτο',
+        sunday: 'Κυριακή',
     },
 
     // Month Names (Greek)

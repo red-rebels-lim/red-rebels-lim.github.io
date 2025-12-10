@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Stadium Component - Standalone</title>
+    <link rel="stylesheet" href="../../../styles/shared-theme.css">
+    <style>
+        body {
+            font-family: var(--font-family);
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            margin-bottom: 2rem;
+            color: var(--color-text-primary);
+        }
+        .demo-section {
+            margin-bottom: 3rem;
+        }
+        .code-example {
+            background-color: var(--color-bg-card);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Team Stadium Component</h1>
+    <p>Standalone demo of the team-stadium Web Component</p>
+    
+    <div class="demo-section">
+        <h2>Default Usage</h2>
+        <team-stadium 
+            team-id="8590" 
+            country-code="CYP">
+        </team-stadium>
+        
+        <div class="code-example">
+&lt;team-stadium 
+    team-id="8590" 
+    country-code="CYP"&gt;
+&lt;/team-stadium&gt;
+        </div>
+    </div>
+
+    <script type="module" src="./team-stadium.js"></script>
+</body>
+</html>
+

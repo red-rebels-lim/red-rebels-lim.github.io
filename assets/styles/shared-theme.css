@@ -1,0 +1,63 @@
+/**
+ * Shared Theme CSS Variables
+ * Can be imported by components or used in host pages for theming
+ */
+
+:root {
+  /* Colors - Dark Theme */
+  --color-bg-primary: #1d1d1d;
+  --color-bg-secondary: #222222;
+  --color-bg-card: #1a1a1a;
+  --color-bg-card-hover: #252525;
+  --color-bg-input: #333333;
+  
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #9f9f9f;
+  --color-text-tertiary: #717171;
+  
+  --color-border: #333333;
+  --color-border-light: #464646;
+  
+  --color-accent: #00985f;
+  --color-accent-hover: #00774a;
+  
+  --color-win: #00985f;
+  --color-draw: #596470;
+  --color-lose: #dd3636;
+  
+  --color-promotion: #FFD908;
+  --color-relegation: #FFA72F;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Light theme variant (optional) */
+[data-theme="light"] {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f5f5f5;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #f0f0f0;
+  --color-bg-input: #e0e0e0;
+  
+  --color-text-primary: #1d1d1d;
+  --color-text-secondary: #666666;
+  --color-text-tertiary: #999999;
+  
+  --color-border: #e0e0e0;
+  --color-border-light: #d0d0d0;
+}
+

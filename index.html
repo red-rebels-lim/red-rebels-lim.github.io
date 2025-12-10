@@ -17,6 +17,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/styles/styles.css">
+
+    <!-- Shared theme CSS variables for page layout -->
+    <link rel="stylesheet" href="assets/styles/shared-theme.css">
+    <link rel="stylesheet" href="assets/styles/team-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -26,56 +33,35 @@
 
     <!-- Calendar Component -->
     <div id="calendar-component" class="page-component">
-        <!-- Month Navigation -->
-        <div class="navigation-controls">
-            <div class="month-navigation">
-                <button class="btn btn-arrow" onclick="navigatePrevious()" data-label-title="monthNav.previous" title="Previous Month">
-                    ◀ <span data-label="monthNav.previous">Προηγούμενος</span>
-                </button>
-                <div class="month-label" id="month-label">Νοέμβριος</div>
-                <button class="btn btn-arrow" onclick="navigateNext()" data-label-title="monthNav.next" title="Next Month">
-                    <span data-label="monthNav.next">Επόμενος</span> ▶
-                </button>
-            </div>
-        </div>
-
-        <!-- Event Filters -->
-        <div class="filters-container">
-            <!-- Collapsible Filter Panel -->
-            <div class="filters-panel" id="filters-panel">
-                <div class="filter-rows-container" id="filter-rows-container">
-                    <!-- Filter rows will be added dynamically -->
-                </div>
-
-                <!-- Filter Actions -->
-                <div class="filter-actions">
-                    <button class="filter-action-btn filter-add-btn" onclick="addFilterRow()">
-                        <span>+</span>
-                        <span data-label="filters.addMore">Add More</span>
-                    </button>
-                    <button class="filter-action-btn filter-clear-btn" onclick="clearFilters()">
-                        <span>×</span>
-                        <span data-label="filters.clearAll">Clear All</span>
-                    </button>
-                    <button class="filter-action-btn filter-apply-btn" onclick="applyFiltersAndClose()">
-                        <span>✓</span>
-                        <span data-label="filters.apply">Apply</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Calendar Container -->
-        <div id="calendar-display"></div>
-
-        <!-- Event Popover -->
-        <div id="event-popover" class="event-popover">
-            <div class="event-popover-content">
-                <button class="event-popover-close" onclick="closeEventPopover()">&times;</button>
-                <div id="event-popover-body"></div>
-            </div>
-        </div>
+        <team-calendar events-data-url="assets/scripts/events-data.js" show-filters="true"> </team-calendar>
     </div>
+
+    <!-- Main Content Grid -->
+<!--    <div id="stats-component" class="page-component" style="display: none;">-->
+
+<!--        &lt;!&ndash; Next Match Card - Web Component &ndash;&gt;-->
+<!--        <team-next-match-->
+<!--                team-id="8590"-->
+<!--                country-code="CYP"-->
+<!--                assets-base="assets/images/team_logos">-->
+<!--        </team-next-match>-->
+
+<!--        &lt;!&ndash; League Table Card - Web Component &ndash;&gt;-->
+<!--        <team-table-->
+<!--                team-id="8590"-->
+<!--                country-code="CYP"-->
+<!--                assets-base="assets/images/team_logos">-->
+<!--        </team-table>-->
+
+<!--        &lt;!&ndash; Team Form Card - Web Component &ndash;&gt;-->
+<!--        <team-form-->
+<!--                team-id="8590"-->
+<!--                country-code="CYP"-->
+<!--                matches-count="5"-->
+<!--                assets-base="assets/images/team_logos">-->
+<!--        </team-form>-->
+
+<!--    </div>-->
 
     <!-- Stats Component -->
     <div id="stats-component" class="page-component" style="display: none;">
@@ -114,6 +100,8 @@
 <script src="assets/scripts/components.js?v=6" onerror="console.error('Failed to load components.js')"></script>
 <!-- Filters Module -->
 <script src="assets/scripts/filters.js?v=6" onerror="console.error('Failed to load filters.js')"></script>
+<!-- Load all team components -->
+<script type="module" src="assets/components/micro-frontends/components-loader.js"></script>
 <!-- Main Script -->
 <script src="assets/scripts/script.js?v=6" onerror="console.error('Failed to load script.js')"></script>
 

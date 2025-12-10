@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    container_name: calendar-web
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/usr/share/nginx/html:ro
+    restart: unless-stopped
+    networks:
+      - calendar-network
+
+networks:
+  calendar-network:
+    driver: bridge
+

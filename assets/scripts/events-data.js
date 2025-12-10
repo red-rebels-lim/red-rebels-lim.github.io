@@ -231,7 +231,6 @@ const eventsData = {
             "sport": "volleyball-men",
             "location": "away",
             "opponent": "Παφιακός",
-            "status": "upcoming",
             "time": "20:00",
             "status": "played",
             "score": "3-0"
@@ -363,15 +362,6 @@ const eventsData = {
             "location": "home",
             "opponent": "ΑΠΟΕΛ",
             "time": "20:00"
-        },
-        {
-            "day": 21,
-            "sport": "football-men",
-            "location": "home",
-            "opponent": "ΔΙΓΕΝΗΣ ΑΚΡΙΤΑΣ ΜΟΡΦΟΥ",
-            "time": "17:00",
-            "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
-            "logo": "assets/images/team_logos/ΔΙΓΕΝΗΣ_ΑΚΡΙΤΑΣ_ΜΟΡΦΟΥ.png"
         },
         {
             "day": 24,

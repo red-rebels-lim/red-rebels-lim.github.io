@@ -1,6 +1,6 @@
 const CACHE_NAME = 'red-rebels-calendar-v5';
 const urlsToCache = [
-  './home.html',
+  './index.html',
   './assets/components/calendar.html',
   './assets/components/stats.html',
   './assets/styles/styles.css',
