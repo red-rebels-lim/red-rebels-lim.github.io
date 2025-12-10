@@ -1,16 +1,21 @@
 <!-- Month Navigation -->
 <div class="navigation-controls">
     <div class="month-navigation">
-        <button class="btn btn-arrow" onclick="navigatePrevious()" data-label-title="monthNav.previous" title="Previous Month">
-            ◀ <span data-label="monthNav.previous">Προηγούμενος</span>
-        </button>
-        <div class="month-label" id="month-label">Νοέμβριος</div>
-        <button class="btn btn-arrow" onclick="navigateNext()" data-label-title="monthNav.next" title="Next Month">
-            <span data-label="monthNav.next">Επόμενος</span> ▶
-        </button>
-        <button class="btn btn-arrow" onclick="jumpToToday()" data-label-title="monthNav.jumpToToday" title="Today">
-            <span data-label="monthNav.jumpToToday">Σήμερα</span> 📅
-        </button>
+        <div class="month-label-row">
+            <div class="month-label" id="month-label">Νοέμβριος</div>
+        </div>
+        <div class="month-buttons-row">
+            <button class="btn btn-arrow" onclick="navigatePrevious()" data-label-title="monthNav.previous" title="Previous Month">
+                ◀ <span data-label="monthNav.previous">Προηγούμενος</span>
+            </button>
+            <div class="month-label" id="month-label-desktop">Νοέμβριος</div>
+            <button class="btn btn-arrow" onclick="navigateNext()" data-label-title="monthNav.next" title="Next Month">
+                <span data-label="monthNav.next">Επόμενος</span> ▶
+            </button>
+            <button class="btn btn-arrow" onclick="jumpToToday()" data-label-title="monthNav.jumpToToday" title="Today">
+                <span data-label="monthNav.jumpToToday">Σήμερα</span> 📅
+            </button>
+        </div>
     </div>
 </div>
 

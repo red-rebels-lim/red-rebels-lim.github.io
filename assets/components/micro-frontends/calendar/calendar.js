@@ -301,17 +301,24 @@ class TeamCalendarComponent extends HTMLElement {
   }
 
   updateMonthLabel(month) {
+    const monthNames = {
+      'january': 'Ιανουάριος', 'february': 'Φεβρουάριος',
+      'march': 'Μάρτιος', 'april': 'Απρίλιος',
+      'may': 'Μάιος', 'june': 'Ιούνιος',
+      'july': 'Ιούλιος', 'august': 'Αύγουστος',
+      'september': 'Σεπτέμβριος', 'october': 'Οκτώβριος',
+      'november': 'Νοέμβριος', 'december': 'Δεκέμβριος'
+    };
+    const monthLabelText = monthNames[month] || month;
+    
     const monthLabel = this.shadowRoot.querySelector('#month-label');
     if (monthLabel) {
-      const monthNames = {
-        'january': 'Ιανουάριος', 'february': 'Φεβρουάριος',
-        'march': 'Μάρτιος', 'april': 'Απρίλιος',
-        'may': 'Μάιος', 'june': 'Ιούνιος',
-        'july': 'Ιούλιος', 'august': 'Αύγουστος',
-        'september': 'Σεπτέμβριος', 'october': 'Οκτώβριος',
-        'november': 'Νοέμβριος', 'december': 'Δεκέμβριος'
-      };
-      monthLabel.textContent = monthNames[month] || month;
+      monthLabel.textContent = monthLabelText;
+    }
+    
+    const monthLabelDesktop = this.shadowRoot.querySelector('#month-label-desktop');
+    if (monthLabelDesktop) {
+      monthLabelDesktop.textContent = monthLabelText;
     }
   }
 
@@ -359,6 +366,44 @@ class TeamCalendarComponent extends HTMLElement {
           justify-content: center;
           gap: 1rem;
           flex-wrap: wrap;
+        }
+
+        .month-label-row {
+          width: 100%;
+          display: none;
+          justify-content: center;
+          margin-bottom: 0.75rem;
+        }
+
+        .month-buttons-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+        }
+
+        .month-buttons-row .month-label {
+          display: block;
+        }
+
+        @media (max-width: 768px) {
+          .month-navigation {
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .month-label-row {
+            display: flex;
+          }
+
+          .month-buttons-row .month-label {
+            display: none;
+          }
+
+          .month-label-row .month-label {
+            display: block;
+          }
         }
 
         .btn {
@@ -559,16 +604,21 @@ class TeamCalendarComponent extends HTMLElement {
       <div class="calendar-container">
         <div class="navigation-controls">
           <div class="month-navigation">
-            <button class="btn btn-arrow" data-action="previous">
-              ◀ Προηγούμενος
-            </button>
-            <div class="month-label" id="month-label">Νοέμβριος</div>
-            <button class="btn btn-arrow" data-action="next">
-              Επόμενος ▶
-            </button>
-            <button class="btn btn-arrow" data-action="today">
-              Σήμερα 📅
-            </button>
+            <div class="month-label-row">
+              <div class="month-label" id="month-label">Νοέμβριος</div>
+            </div>
+            <div class="month-buttons-row">
+              <button class="btn btn-arrow" data-action="previous">
+                ◀ Προηγούμενος
+              </button>
+              <div class="month-label" id="month-label-desktop">Νοέμβριος</div>
+              <button class="btn btn-arrow" data-action="next">
+                Επόμενος ▶
+              </button>
+              <button class="btn btn-arrow" data-action="today">
+                Σήμερα 📅
+              </button>
+            </div>
           </div>
         </div>
 

@@ -35,14 +35,20 @@ const monthOrder = ['september', 'october', 'november', 'december', 'january', '
 
 // Update the month label display (uses labels from labels system)
 function updateMonthLabel(month) {
+    // Get current language from localStorage (fallback to 'en')
+    const currentLanguage = localStorage.getItem('language') || 'en';
+
+    // Use the labels system to get the month name in the selected language
+    const monthName = window.getLabel ? window.getLabel(`months.${month}`, month) : month;
+    
     const monthLabel = document.getElementById('month-label');
     if (monthLabel) {
-        // Get current language from localStorage (fallback to 'en')
-        const currentLanguage = localStorage.getItem('language') || 'en';
-
-        // Use the labels system to get the month name in the selected language
-        const monthName = window.getLabel ? window.getLabel(`months.${month}`, month) : month;
         monthLabel.textContent = monthName;
+    }
+    
+    const monthLabelDesktop = document.getElementById('month-label-desktop');
+    if (monthLabelDesktop) {
+        monthLabelDesktop.textContent = monthName;
     }
 }
 
