@@ -273,6 +273,15 @@ const eventsData = {
         },
         {
             "day": 19,
+            "sport": "football-men",
+            "location": "away",
+            "opponent": "ΕΘΝΙΚΟΣ ΛΑΤΣΙΩΝ",
+            "time": "19:00",
+            "venue": "ΣΤΑΔΙΟ \"ΚΑΤΩΚΟΠΙΑ\" ΠΕΡΙΣΤΕΡΩΝΑ",
+            "logo": "assets/images/team_logos/ΕΘΝΙΚΟΣ_ΛΑΤΣΙΩΝ.png"
+        },
+        {
+            "day": 19,
             "sport": "volleyball-men",
             "location": "home",
             "opponent": "Ομόνοια",
@@ -284,15 +293,6 @@ const eventsData = {
             "location": "home",
             "opponent": "ΑΕΚ Λάρνακας",
             "time": "18:00"
-        },
-        {
-            "day": 20,
-            "sport": "football-men",
-            "location": "away",
-            "opponent": "ΕΘΝΙΚΟΣ ΛΑΤΣΙΩΝ",
-            "time": "14:30",
-            "venue": "ΣΤΑΔΙΟ \"ΚΑΤΩΚΟΠΙΑ\" ΠΕΡΙΣΤΕΡΩΝΑ",
-            "logo": "assets/images/team_logos/ΕΘΝΙΚΟΣ_ΛΑΤΣΙΩΝ.png"
         },
         {
             "day": 29,
