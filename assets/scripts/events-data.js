@@ -261,6 +261,8 @@ const eventsData = {
             "location": "home",
             "opponent": "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
             "time": "19:00",
+            "status":"palyed",
+            "score":"0-0",
             "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
             "logo": "assets/images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.png"
         },
@@ -269,7 +271,9 @@ const eventsData = {
             "sport": "volleyball-women",
             "location": "away",
             "opponent": "Ανόρθωσης",
-            "time": "18:00"
+            "time": "18:00",
+            "status":"played",
+            "score":"0-3"
         },
         {
             "day": 19,
