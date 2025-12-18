@@ -261,7 +261,7 @@ const eventsData = {
             "location": "home",
             "opponent": "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
             "time": "19:00",
-            "status":"palyed",
+            "status":"played",
             "score":"0-0",
             "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
             "logo": "assets/images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.png"
@@ -289,7 +289,7 @@ const eventsData = {
             "sport": "volleyball-men",
             "location": "home",
             "opponent": "Ομόνοια",
-            "time": "20:00"
+            "time": "20:30"
         },
         {
             "day": 20,
