@@ -312,7 +312,7 @@ const eventsData = {
             "time": "20:00"
         },
         {
-            "day": 30,
+            "day": 23,
             "sport": "volleyball-women",
             "location": "home",
             "opponent": "Κούρης Ερήμης",
@@ -330,20 +330,6 @@ const eventsData = {
             "logo": "assets/images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png"
         },
         {
-            "day": 5,
-            "sport": "volleyball-men",
-            "location": "home",
-            "opponent": "ΑΕΚ Καραβά",
-            "time": "20:00"
-        },
-        {
-            "day": 10,
-            "sport": "volleyball-women",
-            "location": "away",
-            "opponent": "Απόλλων Λεμεσός",
-            "time": "18:00"
-        },
-        {
             "day": 10,
             "sport": "football-men",
             "location": "home",
@@ -353,21 +339,28 @@ const eventsData = {
             "logo": "assets/images/team_logos/ΑΠΕΑ_ΑΚΡΩΤΗΡΙΟΥ.png"
         },
         {
-            "day": 12,
+            "day": 16,
+            "sport": "volleyball-men",
+            "location": "home",
+            "opponent": "ΑΕΚ Καραβά",
+            "time": "20:00"
+        },
+        {
+            "day": 17,
+            "sport": "volleyball-women",
+            "location": "away",
+            "opponent": "Απόλλων Λεμεσός",
+            "time": "18:00"
+        },
+        {
+            "day": 19,
             "sport": "volleyball-men",
             "location": "away",
             "opponent": "Αναγέννηση Δερύνειας",
             "time": "20:00"
         },
         {
-            "day": 17,
-            "sport": "volleyball-women",
-            "location": "home",
-            "opponent": "Ολυμπιάδα Νεάπολης",
-            "time": "18:00"
-        },
-        {
-            "day": 19,
+            "day": 23,
             "sport": "volleyball-men",
             "location": "home",
             "opponent": "ΑΠΟΕΛ",
@@ -375,6 +368,13 @@ const eventsData = {
         },
         {
             "day": 24,
+            "sport": "volleyball-women",
+            "location": "home",
+            "opponent": "Ολυμπιάδα Νεάπολης",
+            "time": "18:00"
+        },
+        {
+            "day": 31,
             "sport": "volleyball-women",
             "location": "away",
             "opponent": "Λεμεσός",
