@@ -282,24 +282,30 @@ const eventsData = {
             "opponent": "ΕΘΝΙΚΟΣ ΛΑΤΣΙΩΝ",
             "time": "19:00",
             "venue": "ΣΤΑΔΙΟ \"ΚΑΤΩΚΟΠΙΑ\" ΠΕΡΙΣΤΕΡΩΝΑ",
-            "logo": "assets/images/team_logos/ΕΘΝΙΚΟΣ_ΛΑΤΣΙΩΝ.png"
+            "logo": "assets/images/team_logos/ΕΘΝΙΚΟΣ_ΛΑΤΣΙΩΝ.png",
+            "status":"played",
+            "score":"0-2"
         },
         {
             "day": 19,
             "sport": "volleyball-men",
             "location": "home",
             "opponent": "Ομόνοια",
-            "time": "20:30"
+            "time": "20:30",
+            "status":"played",
+            "score":"3-1"
         },
         {
             "day": 20,
             "sport": "volleyball-women",
             "location": "home",
             "opponent": "ΑΕΚ Λάρνακας",
-            "time": "18:00"
+            "time": "18:00",
+            "status":"played",
+            "score":"3-0"
         },
         {
-            "day": 29,
+            "day": 22,
             "sport": "volleyball-men",
             "location": "away",
             "opponent": "Ανόρθωσης",
