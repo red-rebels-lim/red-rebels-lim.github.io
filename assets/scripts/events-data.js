@@ -309,14 +309,18 @@ const eventsData = {
             "sport": "volleyball-men",
             "location": "away",
             "opponent": "Ανόρθωσης",
-            "time": "20:00"
+            "time": "20:00",
+            "status":"played",
+            "score":"3-0"
         },
         {
             "day": 23,
             "sport": "volleyball-women",
             "location": "home",
             "opponent": "Κούρης Ερήμης",
-            "time": "18:00"
+            "time": "18:00",
+            "status":"played",
+            "score":"3-0"
         }
     ],
     "january": [
@@ -326,6 +330,8 @@ const eventsData = {
             "location": "away",
             "opponent": "ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ",
             "time": "14:30",
+            "status":"played",
+            "score":"0-2",
             "venue": "ΔΗΜΟΤΙΚΟ ΣΤΑΔΙΟ ΑΓΙΑΣ ΝΑΠΑΣ",
             "logo": "assets/images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png"
         },
