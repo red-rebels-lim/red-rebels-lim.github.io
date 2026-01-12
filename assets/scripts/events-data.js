@@ -341,6 +341,8 @@ const eventsData = {
             "location": "home",
             "opponent": "ΑΠΕΑ ΑΚΡΩΤΗΡΙΟΥ",
             "time": "14:30",
+            "status":"played",
+            "score":"2-0",
             "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
             "logo": "assets/images/team_logos/ΑΠΕΑ_ΑΚΡΩΤΗΡΙΟΥ.png"
         },
