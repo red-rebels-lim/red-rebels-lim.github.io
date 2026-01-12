@@ -71,7 +71,7 @@ const eventsData = {
             "sport": "football-men",
             "location": "away",
             "opponent": "ΜΕΑΠ ΠΕΡΑ ΧΩΡΙΟΥ ΝΗΣΟΥ",
-            "time": "1-4",
+            "time": "15:00",
             "venue": "ΚΟΙΝΟΤΙΚΟ ΣΤΑΔΙΟ ΠΕΡΑ ΧΩΡΙΟΥ ΝΗΣΟΥ - ΘΕΟΔΩΡΕΙΟΝ",
             "logo": "assets/images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.png",
             "status": "played",
@@ -359,6 +359,15 @@ const eventsData = {
             "location": "away",
             "opponent": "Απόλλων Λεμεσός",
             "time": "18:00"
+        },
+        {
+            "day": 18,
+            "sport": "football-men",
+            "location": "home",
+            "opponent": "ΜΕΑΠ ΠΕΡΑ ΧΩΡΙΟΥ ΝΗΣΟΥ",
+            "time": "14:30",
+            "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
+            "logo": "assets/images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.png",
         },
         {
             "day": 19,
