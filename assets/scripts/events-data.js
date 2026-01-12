@@ -377,6 +377,15 @@ const eventsData = {
             "time": "20:00"
         },
         {
+            "day": 21,
+            "sport": "football-men",
+            "location": "home",
+            "opponent": "ΔΙΓΕΝΗΣ ΑΚΡΙΤΑΣ ΜΟΡΦΟΥ",
+            "time": "17:00",
+            "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
+            "logo": "assets/images/team_logos/ΔΙΓΕΝΗΣ_ΑΚΡΙΤΑΣ_ΜΟΡΦΟΥ.png"
+        },
+        {
             "day": 23,
             "sport": "volleyball-men",
             "location": "home",
