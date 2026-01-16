@@ -400,6 +400,15 @@ const eventsData = {
             "time": "18:00"
         },
         {
+            "day": 25,
+            "sport": "football-men",
+            "location": "home",
+            "opponent": "ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ",
+            "time": "14:30",
+            "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
+            "logo": "assets/images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.png"
+        },
+        {
             "day": 31,
             "sport": "volleyball-women",
             "location": "away",
