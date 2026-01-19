@@ -351,14 +351,18 @@ const eventsData = {
             "sport": "volleyball-men",
             "location": "home",
             "opponent": "ΑΕΚ Καραβά",
-            "time": "20:00"
+            "time": "20:00",
+            "status": "played",
+            "score": "3-0"
         },
         {
             "day": 17,
             "sport": "volleyball-women",
             "location": "away",
             "opponent": "Απόλλων Λεμεσός",
-            "time": "18:00"
+            "time": "18:00",
+            "status": "played",
+            "score": "3-0"
         },
         {
             "day": 18,
@@ -366,6 +370,8 @@ const eventsData = {
             "location": "home",
             "opponent": "ΜΕΑΠ ΠΕΡΑ ΧΩΡΙΟΥ ΝΗΣΟΥ",
             "time": "14:30",
+            "status": "played",
+            "score": "1-0",
             "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
             "logo": "assets/images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.png",
         },
