@@ -380,7 +380,9 @@ const eventsData = {
             "sport": "volleyball-men",
             "location": "away",
             "opponent": "Αναγέννηση Δερύνειας",
-            "time": "20:00"
+            "time": "20:00",
+            "status": "played",
+            "score": "1-3"
         },
         {
             "day": 21,
@@ -389,6 +391,8 @@ const eventsData = {
             "opponent": "ΔΙΓΕΝΗΣ ΑΚΡΙΤΑΣ ΜΟΡΦΟΥ",
             "time": "17:00",
             "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
+            "status": "played",
+            "score": "2-2 (3-4)",
             "logo": "assets/images/team_logos/ΔΙΓΕΝΗΣ_ΑΚΡΙΤΑΣ_ΜΟΡΦΟΥ.png"
         },
         {
