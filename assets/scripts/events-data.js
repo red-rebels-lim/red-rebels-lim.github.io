@@ -179,9 +179,9 @@ const eventsData = {
             "day": 22,
             "sport": "football-men",
             "location": "away",
-            "opponent": "ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ",
             "time": "17:00",
             "venue": "ΣΤΑΔΙΟ \"ΚΑΤΩΚΟΠΙΑ\" ΠΕΡΙΣΤΕΡΩΝΑ",
+            "opponent": "ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ",
             "logo": "assets/images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.png",
             "status": "played",
             "score": "2-3"
@@ -441,7 +441,17 @@ const eventsData = {
             "time": "18:00"
         }
     ],
-    "february": [],
+    "february": [
+        {
+            "day": 7,
+            "sport": "football-men",
+            "location": "home",
+            "time": "15:00",
+            "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
+            "opponent": "ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ",
+            "logo": "assets/images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.png"
+        },
+    ],
     "march": [],
     "april": [],
     "may": [],
