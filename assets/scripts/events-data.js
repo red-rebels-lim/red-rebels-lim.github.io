@@ -400,14 +400,18 @@ const eventsData = {
             "sport": "volleyball-men",
             "location": "home",
             "opponent": "ΑΠΟΕΛ",
-            "time": "20:00"
+            "time": "20:00",
+            "status": "played",
+            "score": "3-0"
         },
         {
             "day": 24,
             "sport": "volleyball-women",
             "location": "home",
             "opponent": "Ολυμπιάδα Νεάπολης",
-            "time": "18:00"
+            "time": "18:00",
+            "status": "played",
+            "score": "1-3"
         },
         {
             "day": 25,
@@ -416,7 +420,18 @@ const eventsData = {
             "opponent": "ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ",
             "time": "14:30",
             "venue": "ΑΜΜΟΧΩΣΤΟΣ- ΕΠΙΣΤΡΟΦΗ",
-            "logo": "assets/images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.png"
+            "logo": "assets/images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.png",
+            "status": "played",
+            "score": "4-1"
+        },
+        {
+            "day": 30,
+            "sport": "football-men",
+            "location": "away",
+            "opponent": "ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ",
+            "time": "19:00",
+            "venue": "ΣΤΑΔΙΟ \"ΚΑΤΩΚΟΠΙΑ\" ΠΕΡΙΣΤΕΡΩΝΑ",
+            "logo": "assets/images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.png"
         },
         {
             "day": 31,
