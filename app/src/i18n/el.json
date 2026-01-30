@@ -1,0 +1,188 @@
+{
+  "common": {
+    "appName": "Red Rebels",
+    "brandText": "Red Rebels 25/26"
+  },
+  "nav": {
+    "calendar": "Ημερολόγιο",
+    "stats": "Στατιστικά",
+    "options": "Εργαλεία",
+    "export": "Εξαγωγή (.ics)",
+    "print": "Εκτύπωση"
+  },
+  "monthNav": {
+    "previous": "Προηγούμενος",
+    "next": "Επόμενος",
+    "jumpToToday": "Σήμερα"
+  },
+  "days": {
+    "monday": "Δευτέρα",
+    "tuesday": "Τρίτη",
+    "wednesday": "Τετάρτη",
+    "thursday": "Πέμπτη",
+    "friday": "Παρασκευή",
+    "saturday": "Σαββάτο",
+    "sunday": "Κυριακή"
+  },
+  "months": {
+    "september": "Σεπτέμβριος",
+    "october": "Οκτώβριος",
+    "november": "Νοέμβριος",
+    "december": "Δεκέμβριος",
+    "january": "Ιανουάριος",
+    "february": "Φεβρουάριος",
+    "march": "Μάρτιος",
+    "april": "Απρίλιος",
+    "may": "Μάιος",
+    "june": "Ιούνιος",
+    "july": "Ιούλιος",
+    "august": "Αύγουστος"
+  },
+  "filters": {
+    "title": "Φίλτρα Εκδηλώσεων",
+    "addFilter": "+ Φίλτρο",
+    "column": "Στήλη",
+    "value": "Τιμή",
+    "sport": "Άθλημα",
+    "location": "Τοποθεσία",
+    "status": "Κατάσταση",
+    "searchOpponent": "Αναζήτηση Αντιπάλου",
+    "searchPlaceholder": "Αναζήτηση...",
+    "clear": "Καθαρισμός",
+    "all": "Όλα",
+    "apply": "Εφαρμογή",
+    "pleaseSelect": "Παρακαλώ επιλέξτε",
+    "selectColumnFirst": "Επιλέξτε πρώτα στήλη",
+    "clearAll": "Καθαρισμός Όλων"
+  },
+  "sports": {
+    "footballMen": "Ανδρικό Ποδόσφαιρο",
+    "volleyballMen": "Ανδρικό Βόλεϊ",
+    "volleyballWomen": "Γυναικείο Βόλεϊ",
+    "meeting": "Συνεδρίες"
+  },
+  "locations": {
+    "home": "Εντός Έδρας",
+    "away": "Εκτός Έδρας"
+  },
+  "status": {
+    "upcoming": "Επερχόμενες",
+    "played": "Ολοκληρωμένες"
+  },
+  "legend": {
+    "title": "Υπόμνημα"
+  },
+  "stats": {
+    "matches": "Αγώνες",
+    "wins": "Νίκες",
+    "draws": "Ισοπαλίες",
+    "losses": "Ήττες",
+    "points": "Βαθμοί",
+    "goals": "Γκολ",
+    "goalDifference": "Διαφορά",
+    "overallStats": "Συνολική Απόδοση",
+    "homeVsAway": "Εντός vs Εκτός Έδρας",
+    "home": "Εντός Έδρας",
+    "away": "Εκτός Έδρας",
+    "recentForm": "Πρόσφατη Φόρμα (Τελευταίοι 5 Αγώνες)",
+    "headToHead": "Κόντρα με Κόντρα (Top 10)",
+    "opponent": "Αντίπαλος",
+    "played": "Αγ.",
+    "w": "Ν",
+    "d": "Ι",
+    "l": "Η",
+    "goalsCol": "Γκολ",
+    "winPct": "Ν%",
+    "noData": "Δεν υπάρχουν δεδομένα",
+    "cleanSheets": "Μηδέν Παθητικό",
+    "avgGoalsFor": "Μ.Ο. Γκολ Υπέρ",
+    "avgGoalsAgainst": "Μ.Ο. Γκολ Κατά",
+    "goalDistribution": "Κατανομή Γκολ",
+    "scored": "Υπέρ",
+    "conceded": "Κατά",
+    "streaks": "Σερί",
+    "currentStreak": "Τρέχον",
+    "longestWinStreak": "Καλύτερο Σερί Νικών",
+    "longestUnbeatenStreak": "Καλύτερο Αήττητο Σερί",
+    "records": "Ρεκόρ",
+    "biggestWin": "Μεγαλύτερη Νίκη",
+    "heaviestDefeat": "Βαρύτερη Ήττα",
+    "seasonProgress": "Πορεία Σεζόν",
+    "matchday": "Αγωνιστική",
+    "leagueStanding": "Βαθμολογία",
+    "team": "Ομάδα",
+    "topScorers": "Κορυφαίοι Σκόρερ",
+    "goalsLabel": "Γκολ",
+    "leagueRankings": "Κατάταξη στο Πρωτάθλημα",
+    "outOf": "από {{total}} ομάδες",
+    "ranking": {},
+    "venueInfo": "Γήπεδο",
+    "venueCity": "Πόλη",
+    "venueCapacity": "Χωρητικότητα",
+    "venueSurface": "Επιφάνεια",
+    "venueYear": "Έτος Κατασκευής",
+    "nextMatch": "Επόμενος Αγώνας",
+    "homeMatch": "Εντός Έδρας",
+    "awayMatch": "Εκτός Έδρας"
+  },
+  "fotmob": {
+    "teams": {
+      "Nea Salamis": "Νέα Σαλαμίνα",
+      "PAEEK": "ΠΑΕΕΚ",
+      "Doxa Katokopia": "Δόξα Κατωκοπιάς",
+      "Omonia 29 Maiou": "Ομόνοια 29ης Μαΐου",
+      "Ayia Napa": "Αγία Νάπα",
+      "Karmiotissa Pano Polemidion": "Καρμιώτισσα Πάνω Πολεμιδιών",
+      "ASIL Lysi": "ΑΣΙΛ Λύσης",
+      "MEAP Nisou": "ΜΕΑΠ Νήσου",
+      "Digenis Morphou": "Διγενής Μόρφου",
+      "APEA Akrotiri": "ΑΠΕΑ Ακρωτηρίου",
+      "Chalkanoras Idaliou": "Χαλκάνορας Ιδαλίου",
+      "Spartakos Kitiou": "Σπάρτακος Κιτίου",
+      "Iraklis Gerolakkou": "Ηρακλής Γερόλακκου",
+      "Ethnikos Latsion": "Εθνικός Λατσιών",
+      "AEZ Zakakiou": "ΑΕΖ Ζακακίου",
+      "PO Achyronas-Onisilos": "ΠΟ Αχυρώνας-Ονήσιλος"
+    },
+    "players": {
+      "Panagiotis Louka": "Παναγιώτης Λούκα",
+      "Georgios Christodoulou": "Γεώργιος Χριστοδούλου",
+      "Konstantinos Anthimou": "Κωνσταντίνος Ανθίμου"
+    },
+    "leagues": {
+      "2. Division": "Β' Κατηγορία",
+      "Promotion Group": "Όμιλος Ανόδου",
+      "Relegation Group": "Όμιλος Υποβιβασμού"
+    },
+    "legendEntries": {
+      "Promotion qualification": "Πρόκριση ανόδου",
+      "Relegation qualification": "Πρόκριση υποβιβασμού",
+      "Promotion": "Άνοδος",
+      "Relegation": "Υποβιβασμός"
+    },
+    "venue": {
+      "Stadio Vitex Ammochostos Epistrofi": "Στάδιο Βίτεξ Αμμόχωστος Επιστροφή",
+      "Lárnaka (Larnaca)": "Λάρνακα",
+      "Grass": "Χλοοτάπητας"
+    },
+    "statHeaders": {
+      "Goals per match": "Γκολ ανά αγώνα",
+      "Goals conceded per match": "Γκολ εις βάρος ανά αγώνα",
+      "Clean sheets": "Μηδέν παθητικό",
+      "Red cards": "Κόκκινες κάρτες"
+    }
+  },
+  "popover": {
+    "time": "Ώρα",
+    "location": "Τοποθεσία",
+    "venue": "Γήπεδο",
+    "homeGround": "Εντός Έδρας",
+    "awayGround": "Εκτός Έδρας",
+    "win": "Νίκη",
+    "draw": "Ισοπαλία",
+    "loss": "Ήττα",
+    "completed": "Ολοκληρωμένο",
+    "upcoming": "Επερχόμενο",
+    "tbd": "ΑΚ"
+  }
+}

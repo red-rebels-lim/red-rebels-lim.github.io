@@ -1,0 +1,188 @@
+{
+  "common": {
+    "appName": "Red Rebels",
+    "brandText": "Red Rebels 25/26"
+  },
+  "nav": {
+    "calendar": "Calendar",
+    "stats": "Statistics",
+    "options": "Tools",
+    "export": "Export (.ics)",
+    "print": "Print"
+  },
+  "monthNav": {
+    "previous": "Previous",
+    "next": "Next",
+    "jumpToToday": "Today"
+  },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "months": {
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December",
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August"
+  },
+  "filters": {
+    "title": "Event Filters",
+    "addFilter": "+ Filter",
+    "column": "Column",
+    "value": "Value",
+    "sport": "Sport",
+    "location": "Location",
+    "status": "Status",
+    "searchOpponent": "Search Opponent",
+    "searchPlaceholder": "Search...",
+    "clear": "Clear",
+    "all": "All",
+    "apply": "Apply",
+    "pleaseSelect": "Please select",
+    "selectColumnFirst": "Select column first",
+    "clearAll": "Clear All"
+  },
+  "sports": {
+    "footballMen": "Men's Football",
+    "volleyballMen": "Men's Volleyball",
+    "volleyballWomen": "Women's Volleyball",
+    "meeting": "Meetings"
+  },
+  "locations": {
+    "home": "Home",
+    "away": "Away"
+  },
+  "status": {
+    "upcoming": "Upcoming",
+    "played": "Completed"
+  },
+  "legend": {
+    "title": "Legend"
+  },
+  "stats": {
+    "matches": "Matches",
+    "wins": "Wins",
+    "draws": "Draws",
+    "losses": "Losses",
+    "points": "Points",
+    "goals": "Goals",
+    "goalDifference": "Difference",
+    "overallStats": "Overall Performance",
+    "homeVsAway": "Home vs Away",
+    "home": "Home",
+    "away": "Away",
+    "recentForm": "Recent Form (Last 5 Matches)",
+    "headToHead": "Head-to-Head (Top 10)",
+    "opponent": "Opponent",
+    "played": "Pld",
+    "w": "W",
+    "d": "D",
+    "l": "L",
+    "goalsCol": "Goals",
+    "winPct": "W%",
+    "noData": "No data available",
+    "cleanSheets": "Clean Sheets",
+    "avgGoalsFor": "Avg Goals Scored",
+    "avgGoalsAgainst": "Avg Goals Conceded",
+    "goalDistribution": "Goal Distribution",
+    "scored": "Scored",
+    "conceded": "Conceded",
+    "streaks": "Streaks",
+    "currentStreak": "Current",
+    "longestWinStreak": "Best Win Streak",
+    "longestUnbeatenStreak": "Best Unbeaten Run",
+    "records": "Records",
+    "biggestWin": "Biggest Win",
+    "heaviestDefeat": "Heaviest Defeat",
+    "seasonProgress": "Season Progress",
+    "matchday": "Matchday",
+    "leagueStanding": "League Standing",
+    "team": "Team",
+    "topScorers": "Top Scorers",
+    "goalsLabel": "Goals",
+    "leagueRankings": "League Rankings",
+    "outOf": "out of {{total}} teams",
+    "ranking": {},
+    "venueInfo": "Venue",
+    "venueCity": "City",
+    "venueCapacity": "Capacity",
+    "venueSurface": "Surface",
+    "venueYear": "Year Opened",
+    "nextMatch": "Next Match",
+    "homeMatch": "Home",
+    "awayMatch": "Away"
+  },
+  "fotmob": {
+    "teams": {
+      "Nea Salamis": "Nea Salamis",
+      "PAEEK": "PAEEK",
+      "Doxa Katokopia": "Doxa Katokopia",
+      "Omonia 29 Maiou": "Omonia 29 Maiou",
+      "Ayia Napa": "Ayia Napa",
+      "Karmiotissa Pano Polemidion": "Karmiotissa Pano Polemidion",
+      "ASIL Lysi": "ASIL Lysi",
+      "MEAP Nisou": "MEAP Nisou",
+      "Digenis Morphou": "Digenis Morphou",
+      "APEA Akrotiri": "APEA Akrotiri",
+      "Chalkanoras Idaliou": "Chalkanoras Idaliou",
+      "Spartakos Kitiou": "Spartakos Kitiou",
+      "Iraklis Gerolakkou": "Iraklis Gerolakkou",
+      "Ethnikos Latsion": "Ethnikos Latsion",
+      "AEZ Zakakiou": "AEZ Zakakiou",
+      "PO Achyronas-Onisilos": "PO Achyronas-Onisilos"
+    },
+    "players": {
+      "Panagiotis Louka": "Panagiotis Louka",
+      "Georgios Christodoulou": "Georgios Christodoulou",
+      "Konstantinos Anthimou": "Konstantinos Anthimou"
+    },
+    "leagues": {
+      "2. Division": "2. Division",
+      "Promotion Group": "Promotion Group",
+      "Relegation Group": "Relegation Group"
+    },
+    "legendEntries": {
+      "Promotion qualification": "Promotion qualification",
+      "Relegation qualification": "Relegation qualification",
+      "Promotion": "Promotion",
+      "Relegation": "Relegation"
+    },
+    "venue": {
+      "Stadio Vitex Ammochostos Epistrofi": "Stadio Vitex Ammochostos Epistrofi",
+      "Lárnaka (Larnaca)": "Larnaca",
+      "Grass": "Grass"
+    },
+    "statHeaders": {
+      "Goals per match": "Goals per match",
+      "Goals conceded per match": "Goals conceded per match",
+      "Clean sheets": "Clean sheets",
+      "Red cards": "Red cards"
+    }
+  },
+  "popover": {
+    "time": "Time",
+    "location": "Location",
+    "venue": "Venue",
+    "homeGround": "Home",
+    "awayGround": "Away",
+    "win": "Win",
+    "draw": "Draw",
+    "loss": "Loss",
+    "completed": "Completed",
+    "upcoming": "Upcoming",
+    "tbd": "TBD"
+  }
+}

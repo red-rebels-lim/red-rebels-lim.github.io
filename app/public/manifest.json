@@ -1,0 +1,23 @@
+{
+  "name": "Red Rebels Calendar 2025",
+  "short_name": "Red Rebels",
+  "description": "Event schedule calendar for Red Rebels Limassol - Football and Volleyball matches",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a1810",
+  "theme_color": "#E02520",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./images/clear_logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["sports", "entertainment"],
+  "lang": "el-GR",
+  "dir": "ltr",
+  "scope": "./",
+  "prefer_related_applications": false
+}

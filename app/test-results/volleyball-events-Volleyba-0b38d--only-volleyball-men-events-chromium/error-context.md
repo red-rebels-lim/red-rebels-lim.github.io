@@ -1,0 +1,197 @@
+# Page snapshot
+
+```yaml
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - navigation:
+          - generic:
+            - link:
+              - /url: "#/"
+              - img
+              - generic: Red Rebels 25/26
+            - generic:
+              - link:
+                - /url: "#/"
+                - text: Calendar
+              - link:
+                - /url: "#/stats"
+                - text: Statistics
+            - generic:
+              - button: Event Filters
+              - button: Tools
+              - button: EN
+              - button: 🌙
+        - generic:
+          - button: Previous
+          - generic: October
+          - button: Next
+          - button: Today
+        - generic:
+          - heading [level=3]: Event Filters
+          - generic:
+            - generic:
+              - generic: Sport
+              - combobox [expanded]:
+                - generic: All
+                - img
+            - generic:
+              - generic: Location
+              - combobox:
+                - generic: All
+                - img
+            - generic:
+              - generic: Status
+              - combobox:
+                - generic: All
+                - img
+            - generic:
+              - generic: Search Opponent
+              - textbox:
+                - /placeholder: Search...
+          - generic:
+            - button: Clear All
+        - generic:
+          - generic:
+            - generic: Monday
+            - generic: Tuesday
+            - generic: Wednesday
+            - generic: Thursday
+            - generic: Friday
+            - generic: Saturday
+            - generic: Sunday
+          - generic:
+            - generic:
+              - generic: "1"
+            - generic:
+              - generic: "2"
+            - generic:
+              - generic: "3"
+            - generic:
+              - generic: "4"
+            - generic:
+              - generic:
+                - text: "5"
+                - generic: Κυριακή
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨⚽
+                    - img
+                    - generic: Π.Ο. ΑΧΥΡΩΝ…
+                    - generic: 3-0
+            - generic:
+              - generic: "6"
+            - generic:
+              - generic: "7"
+            - generic:
+              - generic: "8"
+            - generic:
+              - generic: "9"
+            - generic:
+              - generic: "10"
+            - generic:
+              - generic: "11"
+            - generic:
+              - generic: "12"
+            - generic:
+              - generic: "13"
+            - generic:
+              - generic: "14"
+            - generic:
+              - generic: "15"
+            - generic:
+              - generic: "16"
+            - generic:
+              - generic:
+                - text: "17"
+                - generic: Παρασκευή
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨🏐
+                    - generic: ΠΑΦΙΑΚΟΣ
+                    - generic: 1-3
+            - generic:
+              - generic:
+                - text: "18"
+                - generic: Σάββατο
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨⚽
+                    - img
+                    - generic: ΠΕΡΑ ΧΩΡΙΟΥ…
+                    - generic: 1-4
+                - generic:
+                  - generic:
+                    - generic: 👩🏻🏐
+                    - generic: ΑΕΛ (Γ)
+                    - generic: 3-2
+            - generic:
+              - generic: "19"
+            - generic:
+              - generic: "20"
+            - generic:
+              - generic: "21"
+            - generic:
+              - generic: "22"
+            - generic:
+              - generic: "23"
+            - generic:
+              - generic: "24"
+            - generic:
+              - generic:
+                - text: "25"
+                - generic: Σάββατο
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨⚽
+                    - img
+                    - generic: ΧΑΛΚΑΝΟΡΑΣ …
+                    - generic: 1-0
+                - generic:
+                  - generic:
+                    - generic: 👩🏻🏐
+                    - generic: ΑΝΟΡΘΩΣΙΣ (…
+                    - generic: 1-3
+            - generic:
+              - generic: "26"
+            - generic:
+              - generic: "27"
+            - generic:
+              - generic: "28"
+            - generic:
+              - generic: "29"
+            - generic:
+              - generic: "30"
+            - generic:
+              - generic: "31"
+        - contentinfo:
+          - heading [level=3]: Legend
+          - generic:
+            - generic:
+              - generic: 👨⚽
+              - generic: Men's Football
+            - generic:
+              - generic: 👨🏐
+              - generic: Men's Volleyball
+            - generic:
+              - generic: 👩🏻🏐
+              - generic: Women's Volleyball
+  - listbox [ref=e1]:
+    - option "All" [active] [selected] [ref=e2]:
+      - generic [ref=e4]:
+        - img
+      - generic [ref=e5]: All
+    - option "Men's Football" [ref=e6]:
+      - generic [ref=e8]: Men's Football
+    - option "Men's Volleyball" [ref=e9]:
+      - generic [ref=e11]: Men's Volleyball
+    - option "Women's Volleyball" [ref=e12]:
+      - generic [ref=e14]: Women's Volleyball
+    - option "Meetings" [ref=e15]:
+      - generic [ref=e17]: Meetings
+```
