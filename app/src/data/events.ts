@@ -423,6 +423,16 @@ export const eventsData: EventsData = {
       logo: 'images/team_logos/ΑΝΑΓΕΝΝΗΣΗ.png'
     },
     {
+      day: 21,
+      sport: 'football-men',
+      location: 'home',
+      opponent: 'ΔΙΓΕΝΗΣ ΑΚΡΙΤΑΣ ΜΟΡΦΟΥ',
+      time: '',
+      logo: 'images/team_logos/ΔΙΓΕΝΗΣ_ΑΚΡΙΤΑΣ_ΜΟΡΦΟΥ.png',
+      status: 'played',
+      score: '5-6'
+    },
+    {
       day: 23,
       sport: 'volleyball-men',
       location: 'home',
@@ -458,17 +468,21 @@ export const eventsData: EventsData = {
       sport: 'football-men',
       location: 'away',
       opponent: 'ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ',
-      time: '19:00',
-      logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.png'
+      time: '',
+      logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.png',
+      status: 'played',
+      score: '0-2'
     },
     {
       day: 31,
       sport: 'volleyball-women',
       location: 'away',
       opponent: 'LEMESOS VOLLEYBALL (Γ)',
-      time: '18:00',
+      time: '',
       venue: 'Λύκειο Πολεμιδιών',
-      logo: 'images/team_logos/LEMESOS VOLLEYBALL.png'
+      logo: 'images/team_logos/LEMESOS VOLLEYBALL.png',
+      status: 'played',
+      score: '3-0'
     }
   ],
   february: [
