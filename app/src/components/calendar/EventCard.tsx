@@ -22,7 +22,7 @@ interface EventCardProps {
 }
 
 export const EventCard = memo(function EventCard({ event, dayNumber, monthName, onClick }: EventCardProps) {
-  const result = event.status === 'played' ? getMatchResult(event.score, event.location) : null;
+  const result = event.status === 'played' ? getMatchResult(event.score, event.location, event.penalties) : null;
 
   const bgClass = event.isMeeting
     ? 'bg-gradient-to-br from-gray-400 to-gray-500'
@@ -69,8 +69,11 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
         </span>
         {event.status === 'played' && event.score && (
           <span className="ml-auto font-extrabold text-[0.65rem] text-yellow-300 whitespace-nowrap px-1 py-0.5 bg-black/30 rounded shrink-0">
-            {event.score}
+            {event.score}{event.penalties ? ' (πεν)' : ''}
           </span>
+        )}
+        {event.competition === 'cup' && (
+          <span className="text-[0.6rem] shrink-0" title="Κύπελλο">🏆</span>
         )}
       </div>
       {countdownTimestamp && <CountdownTimer timestamp={countdownTimestamp} />}

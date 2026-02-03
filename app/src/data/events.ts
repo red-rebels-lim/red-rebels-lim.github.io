@@ -37,6 +37,18 @@ export const eventsData: EventsData = {
   ],
   october: [
     {
+      day: 1,
+      sport: 'football-men',
+      location: 'away',
+      opponent: 'ΚΡΑΣΑΒΑ ΥΨΩΝΑ',
+      time: '',
+      venue: 'Stadio Vitex Ammochostos Epistrofi',
+      status: 'played',
+      score: '1-1',
+      competition: 'cup',
+      penalties: '1-3'
+    },
+    {
       day: 5,
       sport: 'football-men',
       location: 'home',
@@ -430,7 +442,9 @@ export const eventsData: EventsData = {
       time: '',
       logo: 'images/team_logos/ΔΙΓΕΝΗΣ_ΑΚΡΙΤΑΣ_ΜΟΡΦΟΥ.png',
       status: 'played',
-      score: '5-6'
+      score: '2-2',
+      competition: 'cup',
+      penalties: '3-4'
     },
     {
       day: 23,

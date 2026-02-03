@@ -1,6 +1,7 @@
 export type Sport = 'football-men' | 'volleyball-men' | 'volleyball-women' | 'meeting';
 export type Location = 'home' | 'away';
 export type MatchStatus = 'played' | 'upcoming';
+export type Competition = 'league' | 'cup';
 
 export interface SportEvent {
   day: number;
@@ -12,6 +13,8 @@ export interface SportEvent {
   logo?: string;
   status?: MatchStatus;
   score?: string;
+  competition?: Competition;
+  penalties?: string;
 }
 
 export interface CalendarEvent {
@@ -25,6 +28,8 @@ export interface CalendarEvent {
   sport: Sport;
   day: number;
   isMeeting: boolean;
+  competition?: Competition;
+  penalties?: string;
 }
 
 export interface CalendarDay {

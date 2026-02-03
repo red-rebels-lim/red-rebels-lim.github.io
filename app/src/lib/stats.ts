@@ -16,13 +16,22 @@ function parseScore(scoreStr: string, location: string): [number | null, number 
 
 export function getMatchResult(
   score: string | undefined,
-  location: string | undefined
+  location: string | undefined,
+  penalties?: string
 ): 'win' | 'draw' | 'loss' | null {
   if (!score || !location || !score.includes('-')) return null;
   const [gf, ga] = parseScore(score, location);
   if (gf === null || ga === null) return null;
   if (gf > ga) return 'win';
   if (gf < ga) return 'loss';
+  // For draws, check if there were penalties
+  if (penalties && penalties.includes('-')) {
+    const [penFor, penAgainst] = parseScore(penalties, location);
+    if (penFor !== null && penAgainst !== null) {
+      if (penFor > penAgainst) return 'win';
+      if (penFor < penAgainst) return 'loss';
+    }
+  }
   return 'draw';
 }
 
@@ -55,7 +64,8 @@ export function calculateStatistics(): FormattedStats {
   for (const monthName of MONTH_ORDER) {
     const events = eventsData[monthName] || [];
     for (const ev of events) {
-      if (ev.sport === 'football-men' && ev.status === 'played' && ev.score) {
+      // Only include league matches (exclude cup games from stats)
+      if (ev.sport === 'football-men' && ev.status === 'played' && ev.score && ev.competition !== 'cup') {
         matches.push({
           month: monthName,
           day: ev.day,

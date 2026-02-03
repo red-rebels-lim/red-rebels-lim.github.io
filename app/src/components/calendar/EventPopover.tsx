@@ -14,7 +14,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   if (!event) return null;
 
-  const result = event.status === 'played' ? getMatchResult(event.score, event.location) : null;
+  const result = event.status === 'played' ? getMatchResult(event.score, event.location, event.penalties) : null;
   const opponent = event.title.replace('Νέα Σαλαμίνα vs ', '').replace(/ vs Νέα Σαλαμίνα/, '');
   const subtitleParts = event.subtitle.split(' - ');
   const emoji = subtitleParts[0] ?? '';
@@ -71,10 +71,26 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
               </div>
             </div>
 
+            {/* Competition badge */}
+            {event.competition === 'cup' && (
+              <div className="text-center my-2">
+                <span className="bg-amber-500/20 text-amber-400 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg inline-block border border-amber-500/30">
+                  🏆 Κύπελλο
+                </span>
+              </div>
+            )}
+
             {/* Score */}
             {event.status === 'played' && event.score && (
-              <div className="text-3xl font-black text-yellow-300 text-center py-3 bg-yellow-300/10 border-2 border-yellow-300/30 rounded-xl my-4">
-                {'\u26BD'} {event.score}
+              <div className="text-center py-3 bg-yellow-300/10 border-2 border-yellow-300/30 rounded-xl my-4">
+                <div className="text-3xl font-black text-yellow-300">
+                  {'\u26BD'} {event.score}
+                </div>
+                {event.penalties && (
+                  <div className="text-sm font-bold text-yellow-300/80 mt-1">
+                    Πέναλτι: {event.penalties}
+                  </div>
+                )}
               </div>
             )}
 
