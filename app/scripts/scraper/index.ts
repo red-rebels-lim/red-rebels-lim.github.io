@@ -642,8 +642,23 @@ function fixtureToEvent(fixture: Fixture): { monthName: string; event: SportEven
   return { monthName, event };
 }
 
+interface ChangeLog {
+  added: string[];
+  scoreUpdated: string[];
+  timeUpdated: string[];
+  venueUpdated: string[];
+  unchanged: number;
+}
+
 function updateCalendarData(fixtures: Fixture[]): void {
   const existingEvents = loadExistingEvents();
+  const changes: ChangeLog = {
+    added: [],
+    scoreUpdated: [],
+    timeUpdated: [],
+    venueUpdated: [],
+    unchanged: 0,
+  };
 
   // Build scraped events indexed by month
   const scrapedByMonth: Record<string, SportEvent[]> = {};
@@ -683,6 +698,36 @@ function updateCalendarData(fixtures: Fixture[]): void {
       const scrapedEvent = scrapedKeys.get(key);
 
       if (scrapedEvent) {
+        const eventDesc = `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${existingEvent.day}: ${existingEvent.sport} vs ${existingEvent.opponent}`;
+        let hasChanges = false;
+
+        // Track score updates
+        if (scrapedEvent.score && scrapedEvent.score !== existingEvent.score) {
+          const oldScore = existingEvent.score || 'none';
+          changes.scoreUpdated.push(`${eventDesc} (${oldScore} → ${scrapedEvent.score})`);
+          hasChanges = true;
+        }
+
+        // Track time updates
+        if (scrapedEvent.time !== existingEvent.time) {
+          const oldTime = existingEvent.time || 'TBD';
+          const newTime = scrapedEvent.time || 'TBD';
+          if (oldTime !== newTime) {
+            changes.timeUpdated.push(`${eventDesc} (${oldTime} → ${newTime})`);
+            hasChanges = true;
+          }
+        }
+
+        // Track venue updates
+        if (scrapedEvent.venue && scrapedEvent.venue !== existingEvent.venue) {
+          changes.venueUpdated.push(`${eventDesc} (${existingEvent.venue || 'none'} → ${scrapedEvent.venue})`);
+          hasChanges = true;
+        }
+
+        if (!hasChanges) {
+          changes.unchanged++;
+        }
+
         // Update existing with scraped data (score, time, status)
         existingEvent.time = scrapedEvent.time;
         if (scrapedEvent.status) existingEvent.status = scrapedEvent.status;
@@ -701,6 +746,8 @@ function updateCalendarData(fixtures: Fixture[]): void {
     // Add new scraped events that didn't match any existing event
     for (const [key, scrapedEvent] of scrapedKeys) {
       if (!matchedKeys.has(key)) {
+        const eventDesc = `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${scrapedEvent.day}: ${scrapedEvent.sport} vs ${scrapedEvent.opponent}`;
+        changes.added.push(eventDesc);
         preserved.push(scrapedEvent);
       }
     }
@@ -726,7 +773,54 @@ export const eventsData: EventsData = `;
   tsContent += ';\n';
 
   fs.writeFileSync(EVENTS_FILE, tsContent, 'utf-8');
-  console.log(`✓ Calendar events.ts synced with ${fixtures.length} fixtures (preserving manual edits)`);
+
+  // Print detailed change summary
+  console.log();
+  console.log('📋 CHANGE SUMMARY');
+  console.log('-'.repeat(60));
+
+  if (changes.added.length > 0) {
+    console.log();
+    console.log(`✨ NEW EVENTS ADDED (${changes.added.length}):`);
+    for (const event of changes.added) {
+      console.log(`   + ${event}`);
+    }
+  }
+
+  if (changes.scoreUpdated.length > 0) {
+    console.log();
+    console.log(`🏆 SCORES UPDATED (${changes.scoreUpdated.length}):`);
+    for (const event of changes.scoreUpdated) {
+      console.log(`   ↻ ${event}`);
+    }
+  }
+
+  if (changes.timeUpdated.length > 0) {
+    console.log();
+    console.log(`🕐 TIMES UPDATED (${changes.timeUpdated.length}):`);
+    for (const event of changes.timeUpdated) {
+      console.log(`   ↻ ${event}`);
+    }
+  }
+
+  if (changes.venueUpdated.length > 0) {
+    console.log();
+    console.log(`🏟️  VENUES UPDATED (${changes.venueUpdated.length}):`);
+    for (const event of changes.venueUpdated) {
+      console.log(`   ↻ ${event}`);
+    }
+  }
+
+  const totalChanges = changes.added.length + changes.scoreUpdated.length +
+                       changes.timeUpdated.length + changes.venueUpdated.length;
+
+  console.log();
+  if (totalChanges === 0) {
+    console.log('ℹ️  No changes detected - all events are up to date');
+  } else {
+    console.log(`📊 Total: ${totalChanges} change(s), ${changes.unchanged} unchanged`);
+  }
+  console.log('-'.repeat(60));
 }
 
 function saveToJson(fixtures: Fixture[]): void {
