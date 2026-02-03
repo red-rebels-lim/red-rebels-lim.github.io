@@ -564,14 +564,6 @@ export const eventsData: EventsData = {
       logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png'
     },
     {
-      day: 14,
-      sport: 'football-men',
-      location: 'away',
-      opponent: 'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ',
-      time: '15:00',
-      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png'
-    },
-    {
       day: 17,
       sport: 'volleyball-women',
       location: 'home',
