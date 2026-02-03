@@ -491,9 +491,11 @@ export const eventsData: EventsData = {
       sport: 'volleyball-men',
       location: 'away',
       opponent: 'ΟΜΟΝΟΙΑ',
-      time: '20:00',
+      time: '',
       venue: 'Ελευθερία',
-      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.png'
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.png',
+      status: 'played',
+      score: '3-0'
     },
     {
       day: 5,
@@ -513,6 +515,15 @@ export const eventsData: EventsData = {
       logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.png'
     },
     {
+      day: 7,
+      sport: 'volleyball-women',
+      location: 'home',
+      opponent: 'ΑΝΟΡΘΩΣΙΣ (Γ)',
+      time: '18:00',
+      venue: 'Γυμνάσιο Αγίου Νεοφύτου',
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
+    },
+    {
       day: 9,
       sport: 'volleyball-men',
       location: 'home',
@@ -522,12 +533,37 @@ export const eventsData: EventsData = {
       logo: 'images/team_logos/ΠΑΦΙΑΚΟΣ.png'
     },
     {
+      day: 10,
+      sport: 'volleyball-women',
+      location: 'away',
+      opponent: 'ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)',
+      time: '20:00',
+      venue: 'Κίτιον',
+      logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.png'
+    },
+    {
+      day: 13,
+      sport: 'football-men',
+      location: 'away',
+      opponent: 'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ',
+      time: '19:00',
+      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png'
+    },
+    {
       day: 14,
       sport: 'football-men',
       location: 'away',
       opponent: 'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ',
       time: '15:00',
       logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png'
+    },
+    {
+      day: 17,
+      sport: 'volleyball-women',
+      location: 'home',
+      opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ',
+      time: '20:00',
+      venue: 'Σπύρος Κυπριανού'
     },
     {
       day: 21,
