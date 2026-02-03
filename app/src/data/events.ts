@@ -519,7 +519,7 @@ export const eventsData: EventsData = {
       sport: 'volleyball-women',
       location: 'home',
       opponent: 'ΑΝΟΡΘΩΣΙΣ (Γ)',
-      time: '18:00',
+      time: '19:00',
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
     },
