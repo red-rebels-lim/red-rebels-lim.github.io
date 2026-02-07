@@ -1,4 +1,4 @@
-no// Auto-generated events data
+// Auto-generated events data
 // This file is automatically updated by the scraper
 import type { EventsData } from '@/types/events';
 
