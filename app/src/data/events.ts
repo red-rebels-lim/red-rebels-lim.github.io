@@ -525,8 +525,10 @@ export const eventsData: EventsData = {
       sport: 'football-men',
       location: 'home',
       opponent: 'ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ',
-      time: '15:00',
-      logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.png'
+      time: '',
+      logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.png',
+      status: 'played',
+      score: '2-1'
     },
     {
       day: 7,
