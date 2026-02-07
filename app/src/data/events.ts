@@ -1,4 +1,4 @@
-// Auto-generated events data
+no// Auto-generated events data
 // This file is automatically updated by the scraper
 import type { EventsData } from '@/types/events';
 
@@ -517,6 +517,8 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΑΝΟΡΘΩΣΙΣ',
       time: '20:00',
+      status:'played',
+      score:'3-2',
       venue: 'Θεμιστόκλειο',
       logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
     },
@@ -536,6 +538,8 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΑΝΟΡΘΩΣΙΣ (Γ)',
       time: '19:00',
+      status:'played',
+      score:'2-3',
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
     },
