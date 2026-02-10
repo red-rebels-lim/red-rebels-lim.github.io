@@ -549,6 +549,8 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΠΑΦΙΑΚΟΣ',
       time: '20:30',
+      status:'played',
+      score:'3-1',
       venue: 'Αγίου Αθανασίου',
       logo: 'images/team_logos/ΠΑΦΙΑΚΟΣ.png'
     },
