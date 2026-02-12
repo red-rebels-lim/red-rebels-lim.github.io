@@ -517,8 +517,8 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΑΝΟΡΘΩΣΙΣ',
       time: '20:00',
-      status:'played',
-      score:'3-2',
+      status: 'played',
+      score: '3-2',
       venue: 'Θεμιστόκλειο',
       logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
     },
@@ -538,8 +538,8 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΑΝΟΡΘΩΣΙΣ (Γ)',
       time: '19:00',
-      status:'played',
-      score:'2-3',
+      status: 'played',
+      score: '2-3',
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
     },
@@ -549,8 +549,8 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΠΑΦΙΑΚΟΣ',
       time: '20:30',
-      status:'played',
-      score:'3-1',
+      status: 'played',
+      score: '3-1',
       venue: 'Αγίου Αθανασίου',
       logo: 'images/team_logos/ΠΑΦΙΑΚΟΣ.png'
     },
