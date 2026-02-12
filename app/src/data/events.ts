@@ -561,6 +561,8 @@ export const eventsData: EventsData = {
       opponent: 'ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)',
       time: '20:00',
       venue: 'Κίτιον',
+      status:'played',
+      score:'2-3',
       logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.png'
     },
     {
