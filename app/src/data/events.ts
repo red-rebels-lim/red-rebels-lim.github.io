@@ -516,7 +516,7 @@ export const eventsData: EventsData = {
       sport: 'volleyball-men',
       location: 'away',
       opponent: 'ΑΝΟΡΘΩΣΙΣ',
-      time: '20:00',
+      time: '',
       status: 'played',
       score: '3-2',
       venue: 'Θεμιστόκλειο',
@@ -537,7 +537,7 @@ export const eventsData: EventsData = {
       sport: 'volleyball-women',
       location: 'home',
       opponent: 'ΑΝΟΡΘΩΣΙΣ (Γ)',
-      time: '19:00',
+      time: '',
       status: 'played',
       score: '2-3',
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
@@ -548,7 +548,7 @@ export const eventsData: EventsData = {
       sport: 'volleyball-men',
       location: 'home',
       opponent: 'ΠΑΦΙΑΚΟΣ',
-      time: '20:30',
+      time: '',
       status: 'played',
       score: '3-1',
       venue: 'Αγίου Αθανασίου',
@@ -559,19 +559,32 @@ export const eventsData: EventsData = {
       sport: 'volleyball-women',
       location: 'away',
       opponent: 'ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)',
-      time: '20:00',
+      time: '',
       venue: 'Κίτιον',
-      status:'played',
-      score:'2-3',
+      status: 'played',
+      score: '2-3',
       logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.png'
     },
     {
       day: 13,
+      sport: 'volleyball-men',
+      location: 'home',
+      opponent: 'ΑΝΑΓΕΝΝΗΣΗ',
+      time: '',
+      venue: 'Αγίου Αθανασίου',
+      logo: 'images/team_logos/ΑΝΑΓΕΝΝΗΣΗ.png',
+      status: 'played',
+      score: '3-0'
+    },
+    {
+      day: 14,
       sport: 'football-men',
       location: 'away',
       opponent: 'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ',
-      time: '19:00',
-      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png'
+      time: '',
+      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png',
+      status: 'played',
+      score: '0-2'
     },
     {
       day: 17,
@@ -579,7 +592,16 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ',
       time: '20:00',
-      venue: 'Σπύρος Κυπριανού'
+      venue: 'Γυμνάσιο Αγίου Νεοφύτου'
+    },
+    {
+      day: 20,
+      sport: 'volleyball-men',
+      location: 'away',
+      opponent: 'ΟΜΟΝΟΙΑ',
+      time: '20:00',
+      venue: 'Ελευθερία',
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.png'
     },
     {
       day: 21,
@@ -588,6 +610,15 @@ export const eventsData: EventsData = {
       opponent: 'ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ',
       time: '15:00',
       logo: 'images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.png'
+    },
+    {
+      day: 27,
+      sport: 'volleyball-men',
+      location: 'home',
+      opponent: 'ΟΜΟΝΟΙΑ',
+      time: '20:00',
+      venue: 'Αγίου Αθανασίου',
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.png'
     },
     {
       day: 28,

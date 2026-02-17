@@ -63,13 +63,17 @@ test.describe('Stats Page', () => {
     });
 
     test('shows form badges (W/D/L)', async ({ page }) => {
-      // Form badges show W, D, or L text
-      const section = page.locator('section').nth(2);
-      // Look for the colored badge elements that contain single-letter results
-      const formBadges = section.locator('div').filter({ hasText: /^[WDL]$/ });
-      const count = await formBadges.count();
-      // Should have form badges (result indicators + legend indicators)
-      expect(count).toBeGreaterThan(0);
+      // Form badges are small colored squares with W, D, or L text
+      // The section contains both the result badges and the legend badges
+      const recentFormSection = page.locator('section').filter({ hasText: 'Recent Form' }).first();
+      // The legend always shows W, D, L badges even if no matches played
+      // Look for the legend badge elements that contain exactly W, D, or L
+      const legendW = recentFormSection.locator('div', { hasText: /^W$/ }).first();
+      const legendD = recentFormSection.locator('div', { hasText: /^D$/ }).first();
+      const legendL = recentFormSection.locator('div', { hasText: /^L$/ }).first();
+      await expect(legendW).toBeVisible();
+      await expect(legendD).toBeVisible();
+      await expect(legendL).toBeVisible();
     });
 
     test('displays the Streaks subsection', async ({ page }) => {
@@ -179,8 +183,14 @@ test.describe('Calendar EventCard / EventPopover TBD', () => {
   test('event popover shows TBD or valid time for upcoming matches', async ({ page }) => {
     // Navigate to calendar (root)
     await page.goto('/');
-    // Find an event card and click it to open the popover
-    const eventCard = page.locator('[class*="rounded-lg"][class*="cursor-pointer"]').first();
+    // On mobile, event cards are inside the md:hidden container; on desktop
+    // they are in the default grid. Scope to the visible container so
+    // .first() picks a card that is actually rendered.
+    const isMobile = (page.viewportSize()?.width ?? 1280) < 768;
+    const container = isMobile
+      ? page.locator('.md\\:hidden')
+      : page;
+    const eventCard = container.locator('[class*="rounded-lg"][class*="cursor-pointer"]').first();
     const cardExists = await eventCard.count();
     if (cardExists === 0) {
       test.skip();

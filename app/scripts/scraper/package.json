@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "scrape": "tsx index.ts"
+    "scrape": "tsx index.ts",
+    "test": "vitest run"
   },
   "dependencies": {
     "cheerio": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "tsx": "^4.0.0"
+    "tsx": "^4.0.0",
+    "vitest": "^3.0.0"
   }
 }

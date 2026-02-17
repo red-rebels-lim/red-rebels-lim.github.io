@@ -36,7 +36,7 @@ const SCRAPED_SPORTS = ['football-men', 'volleyball-men', 'volleyball-women'];
 const LOGOS_DIR = path.resolve(__dirname, '../../public/images/team_logos');
 const EVENTS_FILE = path.resolve(__dirname, '../../src/data/events.ts');
 
-interface Fixture {
+export interface Fixture {
   date: string;
   homeTeam: string;
   homeLogo: string | null;
@@ -49,7 +49,7 @@ interface Fixture {
   matchTime?: string;       // Actual kick-off/start time
 }
 
-interface SportEvent {
+export interface SportEvent {
   day: number;
   sport: string;
   location: string;
@@ -106,7 +106,7 @@ function hasExistingLogos(): boolean {
   }
 }
 
-function makeSafeFilename(teamName: string): string {
+export function makeSafeFilename(teamName: string): string {
   return teamName
     .replace(/[^\p{L}\p{N}\s-]/gu, '')
     .trim()
@@ -160,21 +160,21 @@ async function downloadLogo(
   }
 }
 
-function parseFixtureDate(dateStr: string): { day: number; monthNum: number } | null {
+export function parseFixtureDate(dateStr: string): { day: number; monthNum: number } | null {
   // CFA format: "DD GreekMonth YYYY"
   const cfaParts = dateStr.split(' ');
   if (cfaParts.length >= 2 && GREEK_MONTHS[cfaParts[1]]) {
     return { day: parseInt(cfaParts[0]), monthNum: GREEK_MONTHS[cfaParts[1]] };
   }
-  // Volleyball format: "DD/MM/YYYY"
-  const slashMatch = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  // Volleyball format: "DD/MM/YYYY" or "DD/MM"
+  const slashMatch = dateStr.match(/^(\d{1,2})\/(\d{1,2})(\/\d{4})?$/);
   if (slashMatch) {
     return { day: parseInt(slashMatch[1]), monthNum: parseInt(slashMatch[2]) };
   }
   return null;
 }
 
-function deduplicateCfaFixtures(fixtures: Fixture[]): Fixture[] {
+export function deduplicateCfaFixtures(fixtures: Fixture[]): Fixture[] {
   const seen = new Map<string, Fixture>();
   for (const f of fixtures) {
     const key = `${f.date}|${f.homeTeam}|${f.awayTeam}`;
@@ -371,12 +371,15 @@ async function scrapeVolleyballFixtures(
     const venue = venueCell.find('a').text().trim() || venueCell.text().trim();
 
     // Filter to senior matches only (category starts with Α)
-    if (!category.startsWith('Α\'') && !category.startsWith("Α\u2019")) return;
+    if (!category.startsWith('Α\'') && !category.startsWith("Α\u2019") && !category.startsWith("Α\u0384")) return;
 
     // Parse match: "TEAM A — TEAM B" (em-dash) or "TEAM A VS TEAM B"
     let teams = matchText.split(' — ');
     if (teams.length !== 2) {
       teams = matchText.split(/ VS /i);
+    }
+    if (teams.length !== 2) {
+      teams = matchText.split(' - ');
     }
     if (teams.length !== 2) return;
 
@@ -428,7 +431,7 @@ async function scrapeVolleyballFixtures(
   return fixtures;
 }
 
-function findExistingLogo(teamName: string): string | null {
+export function findExistingLogo(teamName: string): string | null {
   // Strip women's team marker (Γ)
   const cleanName = teamName.replace(/\s*\(Γ\)\s*$/, '').trim();
   const extensions = ['png', 'jpg', 'jpeg', 'svg', 'gif'];
@@ -530,7 +533,7 @@ async function scrapeDataprojectFixtures(
   return fixtures;
 }
 
-function mergeVolleyballFixtures(
+export function mergeVolleyballFixtures(
   primary: Fixture[],
   secondary: Fixture[],
 ): Fixture[] {
@@ -600,11 +603,11 @@ function loadExistingEvents(): Record<string, SportEvent[]> {
   return {};
 }
 
-function normalizeOpponent(opponent: string): string {
+export function normalizeOpponent(opponent: string): string {
   return opponent.toUpperCase().replace(/\s*\(Γ\)\s*$/, '').trim();
 }
 
-function fixtureToEvent(fixture: Fixture): { monthName: string; event: SportEvent } | null {
+export function fixtureToEvent(fixture: Fixture): { monthName: string; event: SportEvent } | null {
   const parsed = parseFixtureDate(fixture.date);
   if (!parsed) return null;
 
@@ -937,4 +940,9 @@ async function main() {
   }
 }
 
-main();
+// Only run when executed directly (not when imported by tests)
+const isDirectRun = process.argv[1] &&
+  (process.argv[1].endsWith('/index.ts') || process.argv[1].endsWith('/scraper'));
+if (isDirectRun) {
+  main();
+}

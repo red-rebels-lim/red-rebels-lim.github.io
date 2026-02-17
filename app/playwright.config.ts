@@ -11,6 +11,7 @@ export default defineConfig({
   },
   projects: [
     { name: 'chromium', use: { browserName: 'chromium' } },
+    { name: 'mobile', use: { browserName: 'chromium', viewport: { width: 390, height: 844 } } },
   ],
   webServer: {
     command: 'npm run dev',

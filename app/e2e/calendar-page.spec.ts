@@ -1,4 +1,29 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+
+function isMobile(page: Page): boolean {
+  return (page.viewportSize()?.width ?? 1280) < 768;
+}
+
+/** On mobile, nav links live inside a Sheet — open the hamburger first. */
+async function openMobileMenu(page: Page) {
+  const hamburger = page.locator('nav button.md\\:hidden');
+  await hamburger.click();
+  await page.waitForTimeout(300);
+}
+
+/**
+ * The calendar renders event cards in both a desktop grid (hidden on mobile)
+ * and a mobile list (hidden on desktop). Return a locator scoped to whichever
+ * container is currently visible so `.first()` picks a visible card.
+ */
+function visibleEventCards(page: Page) {
+  const selector = '[class*="cursor-pointer"][class*="rounded-lg"]';
+  if (isMobile(page)) {
+    // Mobile list container has md:hidden class — visible below md breakpoint
+    return page.locator('.md\\:hidden').locator(selector);
+  }
+  return page.locator(selector);
+}
 
 test.describe('Calendar Page', () => {
   test.beforeEach(async ({ page }) => {
@@ -16,27 +41,35 @@ test.describe('Calendar Page', () => {
       await expect(page.getByText('Red Rebels 25/26')).toBeVisible();
     });
 
-    test('has navigation links for Calendar, Statistics, Team', async ({ page }) => {
+    test('has navigation links for Calendar and Statistics', async ({ page }) => {
+      if (isMobile(page)) await openMobileMenu(page);
       await expect(page.getByRole('link', { name: /calendar/i })).toBeVisible();
       await expect(page.getByRole('link', { name: /statistics/i })).toBeVisible();
-      await expect(page.getByRole('link', { name: /team/i })).toBeVisible();
     });
 
     test('Calendar link is active on the calendar page', async ({ page }) => {
+      if (isMobile(page)) await openMobileMenu(page);
       const calendarLink = page.getByRole('link', { name: /calendar/i });
       await expect(calendarLink).toBeVisible();
     });
 
     test('navigates to Stats page when clicking Statistics link', async ({ page }) => {
+      if (isMobile(page)) await openMobileMenu(page);
       await page.getByRole('link', { name: /statistics/i }).click();
       await expect(page.getByText('Overall Performance')).toBeVisible();
     });
 
-    test('navigates to Team page when clicking Team link', async ({ page }) => {
-      await page.getByRole('link', { name: /team/i }).click();
-      // Team page should change the URL hash
-      await page.waitForURL('**/team', { timeout: 5000 }).catch(() => {});
-      await expect(page).toHaveURL(/#\/team/);
+    test('navigates back to Calendar from Stats page', async ({ page }) => {
+      // Go to stats first
+      if (isMobile(page)) await openMobileMenu(page);
+      await page.getByRole('link', { name: /statistics/i }).click();
+      await expect(page.getByText('Overall Performance')).toBeVisible();
+
+      // Navigate back to calendar
+      if (isMobile(page)) await openMobileMenu(page);
+      await page.getByRole('link', { name: /calendar/i }).click();
+      await expect(page.getByText('Previous')).toBeVisible();
+      await expect(page).toHaveURL(/#\//);
     });
 
     test('language toggle switches between EN and GR', async ({ page }) => {
@@ -205,14 +238,14 @@ test.describe('Calendar Page', () => {
 
   test.describe('Event Popover', () => {
     test('clicking an event card opens a dialog', async ({ page }) => {
-      const eventCard = page.locator('[class*="cursor-pointer"][class*="rounded-lg"]').first();
+      const eventCard = visibleEventCards(page).first();
       await eventCard.click();
       const dialog = page.locator('[role="dialog"]');
       await expect(dialog).toBeVisible({ timeout: 5000 });
     });
 
     test('dialog shows event title with team name', async ({ page }) => {
-      const eventCard = page.locator('[class*="cursor-pointer"][class*="rounded-lg"]').first();
+      const eventCard = visibleEventCards(page).first();
       await eventCard.click();
       const dialog = page.locator('[role="dialog"]');
       await expect(dialog).toBeVisible({ timeout: 5000 });
@@ -222,7 +255,7 @@ test.describe('Calendar Page', () => {
     });
 
     test('dialog shows time or TBD', async ({ page }) => {
-      const eventCard = page.locator('[class*="cursor-pointer"][class*="rounded-lg"]').first();
+      const eventCard = visibleEventCards(page).first();
       await eventCard.click();
       const dialog = page.locator('[role="dialog"]');
       await expect(dialog).toBeVisible({ timeout: 5000 });
@@ -234,7 +267,7 @@ test.describe('Calendar Page', () => {
     });
 
     test('dialog shows location (Home or Away)', async ({ page }) => {
-      const eventCard = page.locator('[class*="cursor-pointer"][class*="rounded-lg"]').first();
+      const eventCard = visibleEventCards(page).first();
       await eventCard.click();
       const dialog = page.locator('[role="dialog"]');
       await expect(dialog).toBeVisible({ timeout: 5000 });
@@ -253,7 +286,7 @@ test.describe('Calendar Page', () => {
         await page.waitForTimeout(200);
       }
 
-      const eventCard = page.locator('[class*="cursor-pointer"][class*="rounded-lg"]').first();
+      const eventCard = visibleEventCards(page).first();
       await eventCard.click();
       const dialog = page.locator('[role="dialog"]');
       await expect(dialog).toBeVisible({ timeout: 5000 });
@@ -271,7 +304,7 @@ test.describe('Calendar Page', () => {
         await page.waitForTimeout(200);
       }
 
-      const eventCard = page.locator('[class*="cursor-pointer"][class*="rounded-lg"]').first();
+      const eventCard = visibleEventCards(page).first();
       await eventCard.click();
       const dialog = page.locator('[role="dialog"]');
       await expect(dialog).toBeVisible({ timeout: 5000 });
@@ -281,7 +314,7 @@ test.describe('Calendar Page', () => {
     });
 
     test('dialog can be closed with Escape', async ({ page }) => {
-      const eventCard = page.locator('[class*="cursor-pointer"][class*="rounded-lg"]').first();
+      const eventCard = visibleEventCards(page).first();
       await eventCard.click();
       const dialog = page.locator('[role="dialog"]');
       await expect(dialog).toBeVisible({ timeout: 5000 });
