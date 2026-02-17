@@ -8,7 +8,8 @@
     "stats": "Statistics",
     "options": "Tools",
     "export": "Export (.ics)",
-    "print": "Print"
+    "print": "Print",
+    "settings": "Settings"
   },
   "monthNav": {
     "previous": "Previous",
@@ -171,6 +172,31 @@
       "Clean sheets": "Clean sheets",
       "Red cards": "Red cards"
     }
+  },
+  "settings": {
+    "title": "Notification Settings",
+    "notifications": "Push Notifications",
+    "notSupported": "Push notifications are not supported by your browser.",
+    "permissionDenied": "Blocked",
+    "deniedHelp": "Notifications are blocked. Please enable them in your browser settings and reload the page.",
+    "enabled": "Active",
+    "disabled": "Inactive",
+    "enable": "Enable Notifications",
+    "disable": "Disable Notifications",
+    "processing": "Please wait...",
+    "pauseAll": "Notifications Active",
+    "pauseAllDesc": "Turn off to pause all notifications without unsubscribing",
+    "eventTypes": "Event Types",
+    "newEvents": "New Matches",
+    "timeChanges": "Time Changes",
+    "scoreUpdates": "Score Updates",
+    "sports": "Sports",
+    "reminders": "Match Reminders",
+    "reminder24h": "24 hours before",
+    "reminder12h": "12 hours before",
+    "reminder2h": "2 hours before",
+    "reminder1h": "1 hour before",
+    "iosTip": "On iOS, add this app to your Home Screen first to receive push notifications."
   },
   "popover": {
     "time": "Time",

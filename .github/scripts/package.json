@@ -1,0 +1,9 @@
+{
+  "name": "red-rebels-notification-scripts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "web-push": "^3.6.7",
+    "parse": "^5.3.0"
+  }
+}
