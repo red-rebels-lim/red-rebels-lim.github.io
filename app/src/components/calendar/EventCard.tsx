@@ -4,6 +4,7 @@ import { getMatchResult } from '@/lib/stats';
 import { CountdownTimer } from './CountdownTimer';
 import { monthMap } from '@/data/month-config';
 import type { MonthName } from '@/types/events';
+import { trackEvent } from '@/lib/analytics';
 
 function truncateTeamName(name: string, maxLength = 12): string {
   if (!name) return '';
@@ -51,7 +52,7 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
   return (
     <div
       className={`${bgClass} text-white py-1.5 px-2 rounded-lg text-xs mb-1 border border-white/20 shadow-md cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg`}
-      onClick={onClick}
+      onClick={() => { trackEvent('view_match', { opponent, status: event.status }); onClick(); }}
     >
       <div className="flex items-center gap-1.5">
         <span className="text-base leading-none shrink-0">

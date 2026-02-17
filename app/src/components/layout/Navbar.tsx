@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { exportToCalendar } from '@/lib/ics-export';
+import { trackEvent } from '@/lib/analytics';
 
 interface NavbarProps {
   onToggleFilters?: () => void;
@@ -27,6 +28,7 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
     const newLang = i18n.language === 'en' ? 'el' : 'en';
     i18n.changeLanguage(newLang);
     localStorage.setItem('language', newLang === 'el' ? 'gr' : 'en');
+    trackEvent('toggle_language', { language: newLang });
   };
 
   const langCode = i18n.language === 'el' ? 'GR' : 'EN';
@@ -98,11 +100,11 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-[rgba(26,15,15,0.95)] backdrop-blur-xl border-[rgba(224,37,32,0.3)]">
               {isCalendar && (
-                <DropdownMenuItem onClick={exportToCalendar} className="text-foreground hover:text-[#E02520] cursor-pointer">
+                <DropdownMenuItem onClick={() => { exportToCalendar(); trackEvent('export_calendar'); }} className="text-foreground hover:text-[#E02520] cursor-pointer">
                   {t('nav.export')}
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem onClick={() => window.print()} className="text-foreground hover:text-[#E02520] cursor-pointer">
+              <DropdownMenuItem onClick={() => { window.print(); trackEvent('print_calendar'); }} className="text-foreground hover:text-[#E02520] cursor-pointer">
                 {t('nav.print')}
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -121,7 +123,7 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
           <Button
             variant="outline"
             size="icon"
-            onClick={toggleTheme}
+            onClick={() => { toggleTheme(); trackEvent('toggle_theme', { theme: isDark ? 'light' : 'dark' }); }}
             className="hidden md:inline-flex w-11 h-11 rounded-full border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground text-xl"
           >
             {isDark ? '\u{1F319}' : '\u2600\uFE0F'}
@@ -158,7 +160,7 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
                 {/* Theme toggle */}
                 <Button
                   variant="outline"
-                  onClick={() => { toggleTheme(); setMobileOpen(false); }}
+                  onClick={() => { toggleTheme(); trackEvent('toggle_theme', { theme: isDark ? 'light' : 'dark' }); setMobileOpen(false); }}
                   className="border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground justify-start gap-3"
                 >
                   <span className="text-xl">{isDark ? '\u{1F319}' : '\u2600\uFE0F'}</span>
@@ -169,7 +171,7 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
                 {isCalendar && (
                   <Button
                     variant="outline"
-                    onClick={() => { exportToCalendar(); setMobileOpen(false); }}
+                    onClick={() => { exportToCalendar(); trackEvent('export_calendar'); setMobileOpen(false); }}
                     className="border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground justify-start"
                   >
                     {t('nav.export')}
