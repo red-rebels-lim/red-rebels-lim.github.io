@@ -653,7 +653,7 @@ interface ChangeLog {
   unchanged: number;
 }
 
-function updateCalendarData(fixtures: Fixture[]): void {
+function updateCalendarData(fixtures: Fixture[]): ChangeLog {
   const existingEvents = loadExistingEvents();
   const changes: ChangeLog = {
     added: [],
@@ -824,6 +824,13 @@ export const eventsData: EventsData = `;
     console.log(`📊 Total: ${totalChanges} change(s), ${changes.unchanged} unchanged`);
   }
   console.log('-'.repeat(60));
+
+  // Write changes.json for notification system
+  const changesPath = path.resolve(__dirname, '../../../changes.json');
+  fs.writeFileSync(changesPath, JSON.stringify(changes, null, 2), 'utf-8');
+  console.log(`✓ Changes written to changes.json`);
+
+  return changes;
 }
 
 function saveToJson(fixtures: Fixture[]): void {

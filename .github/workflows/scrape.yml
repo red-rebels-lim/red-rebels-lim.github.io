@@ -41,6 +41,21 @@ jobs:
             echo "changes_detected=true" >> $GITHUB_OUTPUT
           fi
 
+      - name: Install notification dependencies
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        run: npm install
+        working-directory: .github/scripts
+
+      - name: Send push notifications
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        run: node send-notifications.js
+        working-directory: .github/scripts
+        env:
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          BACK4APP_APP_ID: ${{ secrets.BACK4APP_APP_ID }}
+          BACK4APP_MASTER_KEY: ${{ secrets.BACK4APP_MASTER_KEY }}
+
       - name: Commit and push changes
         if: steps.check_changes.outputs.changes_detected == 'true'
         run: |

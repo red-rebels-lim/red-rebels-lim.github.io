@@ -11,6 +11,7 @@ app/node_modules
 app/dist
 app/dist-ssr
 *.local
+verify-*.png
 
 # Editor directories and files
 .vscode/*
@@ -26,6 +27,10 @@ app/dist-ssr
 # Scraper
 app/scripts/scraper/node_modules
 cfa_fixtures.json
+changes.json
+
+# GitHub Actions notification scripts
+.github/scripts/node_modules
 
 # Test coverage
 app/coverage

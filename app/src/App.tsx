@@ -7,6 +7,7 @@ import { Spinner } from '@/components/Spinner';
 import { trackEvent } from '@/lib/analytics';
 
 const StatsPage = lazy(() => import('@/pages/StatsPage'));
+const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
 
 function PageViewTracker() {
   const location = useLocation();
@@ -27,6 +28,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<CalendarPage />} />
               <Route path="/stats" element={<StatsPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

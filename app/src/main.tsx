@@ -7,6 +7,19 @@ import App from './App.tsx';
 
 initAnalytics();
 
+// Register service worker for PWA + push notifications
+if ('serviceWorker' in navigator) {
+  import('virtual:pwa-register').then(({ registerSW }) => {
+    registerSW({
+      onRegisteredSW(_swUrl: string, registration: ServiceWorkerRegistration | undefined) {
+        if (registration) {
+          window.__swRegistration = registration;
+        }
+      },
+    });
+  });
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
