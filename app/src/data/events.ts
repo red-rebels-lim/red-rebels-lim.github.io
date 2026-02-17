@@ -577,6 +577,14 @@ export const eventsData: EventsData = {
       score: '3-0'
     },
     {
+      day: 13,
+      sport: 'football-men',
+      location: 'away',
+      opponent: 'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ',
+      time: '19:00',
+      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png'
+    },
+    {
       day: 14,
       sport: 'football-men',
       location: 'away',
