@@ -275,8 +275,8 @@ export default function StatsPage() {
           <h2 className="text-red-300 text-xl font-extrabold uppercase tracking-wide mb-5">
             {t('stats.goalDistribution')}
           </h2>
-          <div className="w-full" style={{ height: 300 }}>
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="w-full h-[300px]">
+            <ResponsiveContainer width="100%" height="100%" debounce={50}>
               <BarChart data={stats.goalDistribution} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                 <XAxis dataKey="match" tick={{ fill: '#9ca3af', fontSize: 11 }} angle={-45} textAnchor="end" height={60} />
                 <YAxis tick={{ fill: '#9ca3af' }} allowDecimals={false} />
@@ -324,8 +324,8 @@ export default function StatsPage() {
           <h2 className="text-red-300 text-xl font-extrabold uppercase tracking-wide mb-5">
             {t('stats.seasonProgress')}
           </h2>
-          <div className="w-full" style={{ height: 300 }}>
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="w-full h-[300px]">
+            <ResponsiveContainer width="100%" height="100%" debounce={50}>
               <LineChart data={stats.pointsProgression} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(224,37,32,0.15)" />
                 <XAxis

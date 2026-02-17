@@ -64,7 +64,7 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
         {/* Brand */}
         <NavLink to="/" className="flex items-center gap-3 text-foreground font-bold text-xl no-underline hover:text-[#E02520] transition-all">
           <img src="/images/clear_logo.png" alt="Red Rebels" className="w-10 h-10 drop-shadow-[0_4px_8px_rgba(224,37,32,0.3)]" />
-          <span className="tracking-wide">{t('common.brandText')}</span>
+          <span className="hidden md:inline tracking-wide">{t('common.brandText')}</span>
         </NavLink>
 
         {/* Desktop nav */}
@@ -85,12 +85,13 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
             </Button>
           )}
 
+          {/* Tools dropdown — desktop only */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
                 size="sm"
-                className="border-[rgba(224,37,32,0.4)] bg-[rgba(224,37,32,0.2)] hover:bg-[rgba(224,37,32,0.3)] hover:border-[#E02520] text-foreground font-semibold"
+                className="hidden md:flex min-h-[44px] border-[rgba(224,37,32,0.4)] bg-[rgba(224,37,32,0.2)] hover:bg-[rgba(224,37,32,0.3)] hover:border-[#E02520] text-foreground font-semibold"
               >
                 {t('nav.options')}
               </Button>
@@ -111,16 +112,17 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
             variant="outline"
             size="icon"
             onClick={toggleLanguage}
-            className="w-10 h-10 rounded-full border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground font-bold text-sm"
+            className="w-11 h-11 rounded-full border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground font-bold text-sm"
           >
             {langCode}
           </Button>
 
+          {/* Theme toggle — desktop only */}
           <Button
             variant="outline"
             size="icon"
             onClick={toggleTheme}
-            className="w-10 h-10 rounded-full border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground text-xl"
+            className="hidden md:inline-flex w-11 h-11 rounded-full border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground text-xl"
           >
             {isDark ? '\u{1F319}' : '\u2600\uFE0F'}
           </Button>
@@ -131,7 +133,7 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
               <Button
                 variant="outline"
                 size="icon"
-                className="md:hidden w-10 h-10 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground"
+                className="md:hidden w-11 h-11 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 5h14M3 10h14M3 15h14" />
@@ -150,6 +152,36 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
                     {t('filters.title')}
                   </Button>
                 )}
+
+                <div className="border-t border-[rgba(224,37,32,0.2)] my-2" />
+
+                {/* Theme toggle */}
+                <Button
+                  variant="outline"
+                  onClick={() => { toggleTheme(); setMobileOpen(false); }}
+                  className="border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground justify-start gap-3"
+                >
+                  <span className="text-xl">{isDark ? '\u{1F319}' : '\u2600\uFE0F'}</span>
+                  {isDark ? t('nav.lightMode', 'Light Mode') : t('nav.darkMode', 'Dark Mode')}
+                </Button>
+
+                {/* Tools */}
+                {isCalendar && (
+                  <Button
+                    variant="outline"
+                    onClick={() => { exportToCalendar(); setMobileOpen(false); }}
+                    className="border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground justify-start"
+                  >
+                    {t('nav.export')}
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  onClick={() => { window.print(); setMobileOpen(false); }}
+                  className="border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground justify-start"
+                >
+                  {t('nav.print')}
+                </Button>
               </div>
             </SheetContent>
           </Sheet>

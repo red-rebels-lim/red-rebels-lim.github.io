@@ -61,19 +61,20 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
           <img
             src={`/${event.logo}`}
             alt={opponent}
+            loading="lazy"
             className="w-5 h-5 object-contain rounded bg-white/90 p-0.5 shrink-0"
           />
         )}
-        <span className="font-bold text-[0.7rem] leading-tight overflow-hidden text-ellipsis whitespace-nowrap">
+        <span className="font-bold text-xs leading-tight overflow-hidden text-ellipsis whitespace-nowrap">
           {event.isMeeting ? event.title : truncateTeamName(opponent)}
         </span>
         {event.status === 'played' && event.score && (
-          <span className="ml-auto font-extrabold text-[0.65rem] text-yellow-300 whitespace-nowrap px-1 py-0.5 bg-black/30 rounded shrink-0">
+          <span className="ml-auto font-extrabold text-xs text-yellow-300 whitespace-nowrap px-1 py-0.5 bg-black/30 rounded shrink-0">
             {event.score}{event.penalties ? ' (πεν)' : ''}
           </span>
         )}
         {event.competition === 'cup' && (
-          <span className="text-[0.6rem] shrink-0" title="Κύπελλο">🏆</span>
+          <span className="text-xs shrink-0" title="Κύπελλο">🏆</span>
         )}
       </div>
       {countdownTimestamp && <CountdownTimer timestamp={countdownTimestamp} />}
