@@ -17,6 +17,7 @@ verify-*.png
 .vscode/*
 !.vscode/extensions.json
 .idea
+.claude
 .DS_Store
 *.suo
 *.ntvs*
@@ -36,6 +37,5 @@ changes.json
 app/coverage
 *.lcov
 
-.claude
 scripts
 e2e-snapshots
