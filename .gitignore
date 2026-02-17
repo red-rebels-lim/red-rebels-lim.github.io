@@ -38,3 +38,4 @@ app/coverage
 
 .claude
 scripts
+e2e-snapshots
