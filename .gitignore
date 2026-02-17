@@ -35,3 +35,6 @@ changes.json
 # Test coverage
 app/coverage
 *.lcov
+
+.claude
+scripts
