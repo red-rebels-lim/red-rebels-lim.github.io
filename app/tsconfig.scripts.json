@@ -28,5 +28,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["scripts"]
+  "include": ["scripts"],
+  "exclude": ["scripts/**/vitest.config.ts", "scripts/**/*.test.ts"]
 }
