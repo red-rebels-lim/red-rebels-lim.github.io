@@ -11,6 +11,7 @@ app/node_modules
 app/dist
 app/dist-ssr
 *.local
+verify-*.png
 
 # Editor directories and files
 .vscode/*
