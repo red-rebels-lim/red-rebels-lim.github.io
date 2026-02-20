@@ -10,7 +10,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ',
       time: '',
-      logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.png',
+      logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp',
       status: 'played',
       score: '0-1'
     },
@@ -20,7 +20,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΗΡΑΚΛΗΣ ΓΕΡΟΛΑΚΚΟΥ',
       time: '',
-      logo: 'images/team_logos/ΗΡΑΚΛΗΣ_ΓΕΡΟΛΑΚΚΟΥ.png',
+      logo: 'images/team_logos/ΗΡΑΚΛΗΣ_ΓΕΡΟΛΑΚΚΟΥ.webp',
       status: 'played',
       score: '0-0'
     },
@@ -30,7 +30,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΔΙΓΕΝΗΣ ΑΚΡΙΤΑΣ ΜΟΡΦΟΥ',
       time: '',
-      logo: 'images/team_logos/ΔΙΓΕΝΗΣ_ΑΚΡΙΤΑΣ_ΜΟΡΦΟΥ.png',
+      logo: 'images/team_logos/ΔΙΓΕΝΗΣ_ΑΚΡΙΤΑΣ_ΜΟΡΦΟΥ.webp',
       status: 'played',
       score: '0-2'
     }
@@ -54,7 +54,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'Π.Ο. ΑΧΥΡΩΝΑΣ ΟΝΗΣΙΛΟΣ',
       time: '',
-      logo: 'images/team_logos/ΠΟ_ΑΧΥΡΩΝΑΣ_ΟΝΗΣΙΛΟΣ.png',
+      logo: 'images/team_logos/ΠΟ_ΑΧΥΡΩΝΑΣ_ΟΝΗΣΙΛΟΣ.webp',
       status: 'played',
       score: '3-0'
     },
@@ -75,7 +75,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΜΕΑΠ ΠΕΡΑ ΧΩΡΙΟΥ ΝΗΣΟΥ',
       time: '',
-      logo: 'images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.png',
+      logo: 'images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.webp',
       status: 'played',
       score: '1-4'
     },
@@ -96,7 +96,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΧΑΛΚΑΝΟΡΑΣ ΙΔΑΛΙΟΥ',
       time: '',
-      logo: 'images/team_logos/ΧΑΛΚΑΝΟΡΑΣ_ΙΔΑΛΙΟΥ.png',
+      logo: 'images/team_logos/ΧΑΛΚΑΝΟΡΑΣ_ΙΔΑΛΙΟΥ.webp',
       status: 'played',
       score: '1-0'
     },
@@ -130,7 +130,7 @@ export const eventsData: EventsData = {
       opponent: 'ΑΣΙΛ ΛΥΣΗΣ',
       time: '',
       venue: 'ΓΗΠΕΔΟ ΟΛΥΜΠΙΑΔΑΣ ΛΥΜΠΙΩΝ',
-      logo: 'images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.png',
+      logo: 'images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.webp',
       status: 'played',
       score: '0-1'
     },
@@ -172,7 +172,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΑΕΖ ΖΑΚΑΚΙΟΥ',
       time: '',
-      logo: 'images/team_logos/ΑΕΖ_ΖΑΚΑΚΙΟΥ.png',
+      logo: 'images/team_logos/ΑΕΖ_ΖΑΚΑΚΙΟΥ.webp',
       status: 'played',
       score: '2-1'
     },
@@ -215,7 +215,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ',
       time: '',
-      logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.png',
+      logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp',
       status: 'played',
       score: '2-3'
     },
@@ -235,7 +235,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ',
       time: '',
-      logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.png',
+      logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.webp',
       status: 'played',
       score: '2-1'
     },
@@ -280,7 +280,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΣΠΑΡΤΑΚΟΣ ΚΙΤΙΟΥ',
       time: '',
-      logo: 'images/team_logos/ΣΠΑΡΤΑΚΟΣ_ΚΙΤΙΟΥ.png',
+      logo: 'images/team_logos/ΣΠΑΡΤΑΚΟΣ_ΚΙΤΙΟΥ.webp',
       status: 'played',
       score: '0-2'
     },
@@ -301,7 +301,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ',
       time: '',
-      logo: 'images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.png',
+      logo: 'images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp',
       status: 'played',
       score: '0-0'
     },
@@ -322,7 +322,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΕΘΝΙΚΟΣ ΛΑΤΣΙΩΝ',
       time: '',
-      logo: 'images/team_logos/ΕΘΝΙΚΟΣ_ΛΑΤΣΙΩΝ.png',
+      logo: 'images/team_logos/ΕΘΝΙΚΟΣ_ΛΑΤΣΙΩΝ.webp',
       status: 'played',
       score: '0-2'
     },
@@ -377,7 +377,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ',
       time: '',
-      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png',
+      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.webp',
       status: 'played',
       score: '0-2'
     },
@@ -387,7 +387,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΑΠΕΑ ΑΚΡΩΤΗΡΙΟΥ',
       time: '',
-      logo: 'images/team_logos/ΑΠΕΑ_ΑΚΡΩΤΗΡΙΟΥ.png',
+      logo: 'images/team_logos/ΑΠΕΑ_ΑΚΡΩΤΗΡΙΟΥ.webp',
       status: 'played',
       score: '2-0'
     },
@@ -419,7 +419,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΜΕΑΠ ΠΕΡΑ ΧΩΡΙΟΥ ΝΗΣΟΥ',
       time: '',
-      logo: 'images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.png',
+      logo: 'images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.webp',
       status: 'played',
       score: '1-0'
     },
@@ -440,7 +440,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΔΙΓΕΝΗΣ ΑΚΡΙΤΑΣ ΜΟΡΦΟΥ',
       time: '',
-      logo: 'images/team_logos/ΔΙΓΕΝΗΣ_ΑΚΡΙΤΑΣ_ΜΟΡΦΟΥ.png',
+      logo: 'images/team_logos/ΔΙΓΕΝΗΣ_ΑΚΡΙΤΑΣ_ΜΟΡΦΟΥ.webp',
       status: 'played',
       score: '2-2',
       competition: 'cup',
@@ -473,7 +473,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ',
       time: '',
-      logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.png',
+      logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.webp',
       status: 'played',
       score: '4-1'
     },
@@ -483,7 +483,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ',
       time: '',
-      logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.png',
+      logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp',
       status: 'played',
       score: '0-2'
     },
@@ -494,7 +494,7 @@ export const eventsData: EventsData = {
       opponent: 'LEMESOS VOLLEYBALL (Γ)',
       time: '',
       venue: 'Λύκειο Πολεμιδιών',
-      logo: 'images/team_logos/LEMESOS VOLLEYBALL.png',
+      logo: 'images/team_logos/LEMESOS VOLLEYBALL.webp',
       status: 'played',
       score: '3-0'
     }
@@ -507,7 +507,7 @@ export const eventsData: EventsData = {
       opponent: 'ΟΜΟΝΟΙΑ',
       time: '',
       venue: 'Ελευθερία',
-      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.png',
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp',
       status: 'played',
       score: '3-0'
     },
@@ -528,7 +528,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ',
       time: '',
-      logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.png',
+      logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp',
       status: 'played',
       score: '2-1'
     },
@@ -572,7 +572,7 @@ export const eventsData: EventsData = {
       opponent: 'ΑΝΑΓΕΝΝΗΣΗ',
       time: '',
       venue: 'Αγίου Αθανασίου',
-      logo: 'images/team_logos/ΑΝΑΓΕΝΝΗΣΗ.png',
+      logo: 'images/team_logos/ΑΝΑΓΕΝΝΗΣΗ.webp',
       status: 'played',
       score: '3-0'
     },
@@ -582,7 +582,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ',
       time: '',
-      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png',
+      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.webp',
       status: 'played',
       score: '0-2'
     },

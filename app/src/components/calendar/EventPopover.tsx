@@ -59,6 +59,8 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
                   src={`/${event.logo}`}
                   alt={opponent}
                   loading="lazy"
+                  width={56}
+                  height={56}
                   className="w-14 h-14 object-contain rounded-lg bg-white/95 p-1 shrink-0"
                 />
               )}

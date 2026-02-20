@@ -63,6 +63,8 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
             src={`/${event.logo}`}
             alt={opponent}
             loading="lazy"
+            width={20}
+            height={20}
             className="w-5 h-5 object-contain rounded bg-white/90 p-0.5 shrink-0"
           />
         )}

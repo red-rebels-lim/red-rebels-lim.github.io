@@ -26,8 +26,8 @@ self.addEventListener('push', (event: PushEvent) => {
 
   const options: NotificationOptions = {
     body: payload.body,
-    icon: payload.icon || '/images/clear_logo.png',
-    badge: '/images/clear_logo.png',
+    icon: payload.icon || '/images/clear_logo_192.png',
+    badge: '/images/clear_logo_192.png',
     tag: payload.tag,
     data: { url: payload.url || '/' },
   };
