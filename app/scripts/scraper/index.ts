@@ -95,7 +95,7 @@ const MONTH_NAMES: Record<number, string> = {
 function hasExistingLogos(): boolean {
   if (!fs.existsSync(LOGOS_DIR)) return false;
 
-  const imageExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.gif'];
+  const imageExtensions = ['.webp', '.png', '.jpg', '.jpeg', '.svg', '.gif'];
   try {
     const files = fs.readdirSync(LOGOS_DIR);
     return files.some(file =>
@@ -296,8 +296,8 @@ async function scrapeCfaFixtures(
       if (homeLogoUrl) homeLogo = await downloadLogo(homeLogoUrl, homeTeam, 'https://cfa.com.cy');
       if (awayLogoUrl) awayLogo = await downloadLogo(awayLogoUrl, awayTeam, 'https://cfa.com.cy');
     } else {
-      if (homeLogoUrl) homeLogo = `images/team_logos/${makeSafeFilename(homeTeam)}.png`;
-      if (awayLogoUrl) awayLogo = `images/team_logos/${makeSafeFilename(awayTeam)}.png`;
+      if (homeLogoUrl) homeLogo = findExistingLogo(homeTeam);
+      if (awayLogoUrl) awayLogo = findExistingLogo(awayTeam);
     }
 
     const fixture: Fixture = {
@@ -434,7 +434,7 @@ async function scrapeVolleyballFixtures(
 export function findExistingLogo(teamName: string): string | null {
   // Strip women's team marker (Γ)
   const cleanName = teamName.replace(/\s*\(Γ\)\s*$/, '').trim();
-  const extensions = ['png', 'jpg', 'jpeg', 'svg', 'gif'];
+  const extensions = ['webp', 'png', 'jpg', 'jpeg', 'svg', 'gif'];
 
   // Try exact name first (logos uploaded with Greek names and spaces)
   for (const ext of extensions) {

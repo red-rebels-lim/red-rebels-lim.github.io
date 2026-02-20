@@ -67,7 +67,7 @@ export const eventsData: EventsData = {
       venue: 'Αγίου Αθανασίου',
       status: 'played',
       score: '1-3',
-      logo: 'images/team_logos/ΠΑΦΙΑΚΟΣ.png'
+      logo: 'images/team_logos/ΠΑΦΙΑΚΟΣ.webp'
     },
     {
       day: 18,
@@ -88,7 +88,7 @@ export const eventsData: EventsData = {
       venue: 'Σπύρος Κυπριανού',
       status: 'played',
       score: '3-2',
-      logo: 'images/team_logos/ΑΕΛ.png'
+      logo: 'images/team_logos/ΑΕΛ.webp'
     },
     {
       day: 25,
@@ -109,7 +109,7 @@ export const eventsData: EventsData = {
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       status: 'played',
       score: '1-3',
-      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
     },
     {
       day: 31,
@@ -143,7 +143,7 @@ export const eventsData: EventsData = {
       venue: 'Κίτιον',
       status: 'played',
       score: '2-3',
-      logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.png'
+      logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp'
     },
     {
       day: 7,
@@ -154,7 +154,7 @@ export const eventsData: EventsData = {
       venue: 'Αγίου Αθανασίου',
       status: 'played',
       score: '3-2',
-      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
     },
     {
       day: 7,
@@ -185,7 +185,7 @@ export const eventsData: EventsData = {
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       status: 'played',
       score: '1-3',
-      logo: 'images/team_logos/ΑΠΟΛΛΩΝ.png'
+      logo: 'images/team_logos/ΑΠΟΛΛΩΝ.webp'
     },
     {
       day: 17,
@@ -196,7 +196,7 @@ export const eventsData: EventsData = {
       venue: 'Σπύρος Κυπριανού',
       status: 'played',
       score: '1-3',
-      logo: 'images/team_logos/ΑΕ ΚΑΡΑΒΑ.png'
+      logo: 'images/team_logos/ΑΕ ΚΑΡΑΒΑ.webp'
     },
     {
       day: 21,
@@ -207,7 +207,7 @@ export const eventsData: EventsData = {
       venue: 'Αγίου Αθανασίου',
       status: 'played',
       score: '3-0',
-      logo: 'images/team_logos/ΑΝΑΓΕΝΝΗΣΗ.png'
+      logo: 'images/team_logos/ΑΝΑΓΕΝΝΗΣΗ.webp'
     },
     {
       day: 22,
@@ -248,7 +248,7 @@ export const eventsData: EventsData = {
       venue: 'Λευκόθεο',
       status: 'played',
       score: '0-3',
-      logo: 'images/team_logos/ΑΠΟΕΛ.png'
+      logo: 'images/team_logos/ΑΠΟΕΛ.webp'
     },
     {
       day: 29,
@@ -259,7 +259,7 @@ export const eventsData: EventsData = {
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       status: 'played',
       score: '0-3',
-      logo: 'images/team_logos/LEMESOS VOLLEYBALL.png'
+      logo: 'images/team_logos/LEMESOS VOLLEYBALL.webp'
     }
   ],
   december: [
@@ -272,7 +272,7 @@ export const eventsData: EventsData = {
       venue: 'Αφροδίτη',
       status: 'played',
       score: '3-0',
-      logo: 'images/team_logos/ΠΑΦΙΑΚΟΣ.png'
+      logo: 'images/team_logos/ΠΑΦΙΑΚΟΣ.webp'
     },
     {
       day: 6,
@@ -293,7 +293,7 @@ export const eventsData: EventsData = {
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       status: 'played',
       score: '1-3',
-      logo: 'images/team_logos/ΑΕΛ.png'
+      logo: 'images/team_logos/ΑΕΛ.webp'
     },
     {
       day: 12,
@@ -314,7 +314,7 @@ export const eventsData: EventsData = {
       venue: 'Σωτήρειον',
       status: 'played',
       score: '0-3',
-      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
     },
     {
       day: 19,
@@ -335,7 +335,7 @@ export const eventsData: EventsData = {
       venue: 'Αγίου Αθανασίου',
       status: 'played',
       score: '3-1',
-      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.png'
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp'
     },
     {
       day: 20,
@@ -346,7 +346,7 @@ export const eventsData: EventsData = {
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       status: 'played',
       score: '3-0',
-      logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.png'
+      logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp'
     },
     {
       day: 22,
@@ -357,7 +357,7 @@ export const eventsData: EventsData = {
       venue: 'Θεμιστόκλειο',
       status: 'played',
       score: '3-0',
-      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
     },
     {
       day: 23,
@@ -400,7 +400,7 @@ export const eventsData: EventsData = {
       venue: 'Αγίου Αθανασίου',
       status: 'played',
       score: '3-0',
-      logo: 'images/team_logos/ΑΕ ΚΑΡΑΒΑ.png'
+      logo: 'images/team_logos/ΑΕ ΚΑΡΑΒΑ.webp'
     },
     {
       day: 17,
@@ -411,7 +411,7 @@ export const eventsData: EventsData = {
       venue: 'Απόλλων',
       status: 'played',
       score: '3-0',
-      logo: 'images/team_logos/ΑΠΟΛΛΩΝ.png'
+      logo: 'images/team_logos/ΑΠΟΛΛΩΝ.webp'
     },
     {
       day: 18,
@@ -432,7 +432,7 @@ export const eventsData: EventsData = {
       venue: 'Δερύνειας',
       status: 'played',
       score: '1-3',
-      logo: 'images/team_logos/ΑΝΑΓΕΝΝΗΣΗ.png'
+      logo: 'images/team_logos/ΑΝΑΓΕΝΝΗΣΗ.webp'
     },
     {
       day: 21,
@@ -455,7 +455,7 @@ export const eventsData: EventsData = {
       venue: 'Αγίου Αθανασίου',
       status: 'played',
       score: '3-0',
-      logo: 'images/team_logos/ΑΠΟΕΛ.png'
+      logo: 'images/team_logos/ΑΠΟΕΛ.webp'
     },
     {
       day: 24,
@@ -520,7 +520,7 @@ export const eventsData: EventsData = {
       status: 'played',
       score: '3-2',
       venue: 'Θεμιστόκλειο',
-      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
     },
     {
       day: 7,
@@ -541,7 +541,7 @@ export const eventsData: EventsData = {
       status: 'played',
       score: '2-3',
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
-      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.png'
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
     },
     {
       day: 9,
@@ -552,7 +552,7 @@ export const eventsData: EventsData = {
       status: 'played',
       score: '3-1',
       venue: 'Αγίου Αθανασίου',
-      logo: 'images/team_logos/ΠΑΦΙΑΚΟΣ.png'
+      logo: 'images/team_logos/ΠΑΦΙΑΚΟΣ.webp'
     },
     {
       day: 10,
@@ -563,7 +563,7 @@ export const eventsData: EventsData = {
       venue: 'Κίτιον',
       status: 'played',
       score: '2-3',
-      logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.png'
+      logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp'
     },
     {
       day: 13,
@@ -591,10 +591,10 @@ export const eventsData: EventsData = {
       sport: 'volleyball-women',
       location: 'home',
       opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ',
-      time: '20:00',
+      time: '',
+      venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       status: 'played',
-      score: '3-0',
-      venue: 'Γυμνάσιο Αγίου Νεοφύτου'
+      score: '3-0'
     },
     {
       day: 20,
@@ -603,7 +603,7 @@ export const eventsData: EventsData = {
       opponent: 'ΟΜΟΝΟΙΑ',
       time: '20:00',
       venue: 'Ελευθερία',
-      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.png'
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp'
     },
     {
       day: 21,
@@ -611,16 +611,34 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ',
       time: '15:00',
-      logo: 'images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.png'
+      logo: 'images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp'
+    },
+    {
+      day: 21,
+      sport: 'volleyball-women',
+      location: 'away',
+      opponent: 'ΑΕΛ (Γ)',
+      time: '18:00',
+      venue: 'Σπύρος Κυπριανού',
+      logo: 'images/team_logos/ΑΕΛ.webp'
+    },
+    {
+      day: 25,
+      sport: 'volleyball-women',
+      location: 'home',
+      opponent: 'ΑΕΛ (Γ)',
+      time: '20:00',
+      venue: 'Γυμνάσιο Αγίου Νεοφύτου',
+      logo: 'images/team_logos/ΑΕΛ.webp'
     },
     {
       day: 27,
       sport: 'volleyball-men',
       location: 'home',
       opponent: 'ΟΜΟΝΟΙΑ',
-      time: '20:00',
+      time: '20:30',
       venue: 'Αγίου Αθανασίου',
-      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.png'
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp'
     },
     {
       day: 28,
@@ -629,17 +647,26 @@ export const eventsData: EventsData = {
       opponent: 'ΑΣΙΛ ΛΥΣΗΣ',
       time: '15:00',
       venue: 'ΓΗΠΕΔΟ ΟΛΥΜΠΙΑΔΑΣ ΛΥΜΠΙΩΝ',
-      logo: 'images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.png'
+      logo: 'images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.webp'
     }
   ],
   march: [
+    {
+      day: 2,
+      sport: 'volleyball-men',
+      location: 'away',
+      opponent: 'ΟΜΟΝΟΙΑ',
+      time: '20:00',
+      venue: 'Ελευθερία',
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp'
+    },
     {
       day: 7,
       sport: 'football-men',
       location: 'away',
       opponent: 'ΜΕΑΠ ΠΕΡΑ ΧΩΡΙΟΥ ΝΗΣΟΥ',
       time: '15:30',
-      logo: 'images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.png'
+      logo: 'images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.webp'
     },
     {
       day: 14,
@@ -648,7 +675,7 @@ export const eventsData: EventsData = {
       opponent: 'ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ',
       time: '15:30',
       venue: 'ΓΗΠΕΔΟ \'ΚΕΡΥΝΕΙΑ-ΕΠΙΣΤΡΟΦΗ\'',
-      logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.png'
+      logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.webp'
     },
     {
       day: 18,
@@ -656,7 +683,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ',
       time: '15:30',
-      logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.png'
+      logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp'
     },
     {
       day: 21,
@@ -664,7 +691,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ',
       time: '15:30',
-      logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.png'
+      logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp'
     }
   ],
   april: [
@@ -674,7 +701,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ',
       time: '16:30',
-      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.png'
+      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.webp'
     },
     {
       day: 18,
@@ -683,7 +710,7 @@ export const eventsData: EventsData = {
       opponent: 'ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ',
       time: '16:30',
       venue: 'ΚΟΙΝΟΤΙΚΟ ΓΗΠΕΔΟ ΠΑΝΩ ΠΟΛΕΜΙΔΙΩΝ',
-      logo: 'images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.png'
+      logo: 'images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp'
     },
     {
       day: 25,
@@ -691,7 +718,7 @@ export const eventsData: EventsData = {
       location: 'home',
       opponent: 'ΑΣΙΛ ΛΥΣΗΣ',
       time: '16:30',
-      logo: 'images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.png'
+      logo: 'images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.webp'
     }
   ],
   may: [],
