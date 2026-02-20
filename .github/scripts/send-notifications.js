@@ -15,6 +15,7 @@ import Parse from 'parse/node.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CHANGES_PATH = path.resolve(__dirname, '../../changes.json');
+const EVENTS_FILE = path.resolve(__dirname, '../../app/src/data/events.ts');
 
 // --- Init ---
 
@@ -42,6 +43,42 @@ Parse.masterKey = BACK4APP_MASTER_KEY;
 
 // --- Helpers ---
 
+function sportEmoji(sport) {
+  switch (sport) {
+    case 'football-men': return '\u{1F468}\u26BD';
+    case 'volleyball-men': return '\u{1F468}\u{1F3D0}';
+    case 'volleyball-women': return '\u{1F469}\u{1F3FB}\u{1F3D0}';
+    default: return '';
+  }
+}
+
+function parseEventsFile() {
+  try {
+    const content = fs.readFileSync(EVENTS_FILE, 'utf-8');
+    const match = content.match(/export const eventsData[^=]*=\s*({[\s\S]*});?\s*$/);
+    if (!match) return {};
+    const fn = new Function(`return ${match[1]}`);
+    return fn();
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Look up event location from events.ts by parsing the change description.
+ * Desc format: "February 20: football-men vs OPPONENT"
+ */
+function lookupLocation(desc, eventsData) {
+  const m = desc.match(/^(\w+)\s+(\d+):\s*([\w-]+)\s+vs\s+(.+?)(?:\s*\(|$)/);
+  if (!m) return null;
+  const [, monthName, day, sport, opponent] = m;
+  const monthEvents = eventsData[monthName.toLowerCase()] || [];
+  const event = monthEvents.find(
+    e => e.day === parseInt(day) && e.sport === sport && e.opponent === opponent.trim()
+  );
+  return event?.location || null;
+}
+
 /**
  * Extract sport key from a change description string.
  * E.g. "January 15: football-men vs Omonia" → "football-men"
@@ -54,15 +91,18 @@ function extractSport(desc) {
 /**
  * Build notification payload for a change type.
  */
-function buildPayload(type, desc) {
+function buildPayload(type, desc, sport, location) {
   const sportMatch = desc.match(/:\s*\S+\s+vs\s+(.+?)(?:\s*\(|$)/);
   const opponent = sportMatch ? sportMatch[1].trim() : '';
+  const emoji = sportEmoji(sport);
+  const prefix = emoji ? `${emoji} ` : '';
+  const ha = location === 'home' ? ' (H)' : location === 'away' ? ' (A)' : '';
 
   switch (type) {
     case 'added': {
       return {
-        title: 'New Match',
-        body: opponent ? `vs ${opponent}` : desc,
+        title: `${prefix}New Match`,
+        body: opponent ? `vs ${opponent}${ha}` : desc,
         tag: `new-${desc.replace(/\s+/g, '-').toLowerCase()}`,
         url: '/',
       };
@@ -70,8 +110,8 @@ function buildPayload(type, desc) {
     case 'scoreUpdated': {
       const scoreMatch = desc.match(/\(([^)]+)\)/);
       return {
-        title: 'Score Update',
-        body: opponent && scoreMatch ? `vs ${opponent} — ${scoreMatch[1]}` : desc,
+        title: `${prefix}Score Update`,
+        body: opponent && scoreMatch ? `vs ${opponent}${ha} — ${scoreMatch[1]}` : desc,
         tag: `score-${desc.replace(/\s+/g, '-').toLowerCase()}`,
         url: '/',
       };
@@ -79,8 +119,8 @@ function buildPayload(type, desc) {
     case 'timeUpdated': {
       const timeMatch = desc.match(/\(([^)]+)\)/);
       return {
-        title: 'Time Changed',
-        body: opponent && timeMatch ? `vs ${opponent} — ${timeMatch[1]}` : desc,
+        title: `${prefix}Time Changed`,
+        body: opponent && timeMatch ? `vs ${opponent}${ha} — ${timeMatch[1]}` : desc,
         tag: `time-${desc.replace(/\s+/g, '-').toLowerCase()}`,
         url: '/',
       };
@@ -117,6 +157,8 @@ async function main() {
 
   console.log(`Found ${totalChanges} change(s) to notify about`);
 
+  const eventsData = parseEventsFile();
+
   // 2. Query all active subscriptions with preferences
   const PushSubscription = Parse.Object.extend('PushSubscription');
   const NotifPreference = Parse.Object.extend('NotifPreference');
@@ -146,7 +188,8 @@ async function main() {
 
     for (const desc of items) {
       const sport = extractSport(desc);
-      const payload = buildPayload(changeType, desc);
+      const location = lookupLocation(desc, eventsData);
+      const payload = buildPayload(changeType, desc, sport, location);
       if (!payload) continue;
 
       for (const pref of prefs) {
