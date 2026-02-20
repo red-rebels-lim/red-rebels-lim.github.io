@@ -1,4 +1,14 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+vi.mock('@/lib/parse', () => {
+  const mockParse = {
+    initialize: vi.fn(),
+    Object: { extend: vi.fn(() => vi.fn()) },
+    Query: vi.fn(),
+  };
+  return { default: mockParse };
+});
+
 import { isPushSupported, getSubscriptionStatus, getStoredSubscriptionId } from '@/lib/push';
 
 describe('isPushSupported', () => {

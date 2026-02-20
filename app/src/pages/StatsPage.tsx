@@ -46,6 +46,17 @@ function parseFotMobData(data: FotMobTeamData): FotMobParsed {
   };
 }
 
+function LoadingSkeleton() {
+  return (
+    <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg">
+      <div className="animate-pulse space-y-4">
+        <div className="h-6 bg-[rgba(224,37,32,0.15)] rounded w-1/3" />
+        <div className="h-32 bg-[rgba(224,37,32,0.1)] rounded" />
+      </div>
+    </section>
+  );
+}
+
 export default function StatsPage() {
   const { t } = useTranslation();
   const stats = useMemo(() => calculateStatistics(), []);
@@ -81,16 +92,6 @@ export default function StatsPage() {
       case 'unbeaten': return `${s.count} ${t('stats.longestUnbeatenStreak').toLowerCase()}`;
     }
   };
-
-  // Loading skeleton for FotMob sections
-  const LoadingSkeleton = () => (
-    <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg">
-      <div className="animate-pulse space-y-4">
-        <div className="h-6 bg-[rgba(224,37,32,0.15)] rounded w-1/3" />
-        <div className="h-32 bg-[rgba(224,37,32,0.1)] rounded" />
-      </div>
-    </section>
-  );
 
   return (
     <div className="max-w-[1800px] w-[95%] mx-auto">

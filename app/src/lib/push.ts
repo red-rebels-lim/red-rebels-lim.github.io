@@ -75,6 +75,8 @@ export async function subscribeToPush(): Promise<string | null> {
   }
 
   const objectId = parseObj.id;
+  if (!objectId) return null;
+
   localStorage.setItem(STORAGE_KEY, objectId);
 
   // Create default preferences if they don't exist yet
