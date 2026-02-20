@@ -12,12 +12,17 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { exportToCalendar } from '@/lib/ics-export';
 import { trackEvent } from '@/lib/analytics';
+import type { MonthName } from '@/types/events';
 
 interface NavbarProps {
   onToggleFilters?: () => void;
+  currentMonth?: MonthName;
+  onPrevious?: () => void;
+  onNext?: () => void;
+  onToday?: () => void;
 }
 
-export function Navbar({ onToggleFilters }: NavbarProps) {
+export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onToday }: NavbarProps) {
   const { t, i18n } = useTranslation();
   const { isDark, toggle: toggleTheme } = useTheme();
   const location = useLocation();
@@ -76,7 +81,7 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
   );
 
   return (
-    <nav className="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl border-2 border-[rgba(224,37,32,0.3)] rounded-2xl p-4 mb-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+    <nav className="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl border-2 border-[rgba(224,37,32,0.3)] rounded-2xl p-4 mb-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)] sticky top-4 z-50 md:relative md:top-0 md:z-auto">
       <div className="flex items-center justify-between">
         {/* Brand */}
         <NavLink to="/" className="flex items-center gap-3 text-foreground font-bold text-xl no-underline hover:text-[#E02520] transition-all">
@@ -204,6 +209,40 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
           </Sheet>
         </div>
       </div>
+
+      {/* Mobile month navigation */}
+      {isCalendar && currentMonth && onPrevious && onNext && onToday && (
+        <div className="flex md:hidden items-center justify-between mt-3 pt-3 border-t border-[rgba(224,37,32,0.2)]">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => { trackEvent('navigate_month', { direction: 'previous' }); onPrevious(); }}
+            className="w-10 h-10 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </Button>
+
+          <div className="text-center px-4 py-1.5 text-base font-extrabold uppercase tracking-wide text-foreground">
+            {t(`months.${currentMonth}`)}
+          </div>
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => { trackEvent('navigate_month', { direction: 'next' }); onNext(); }}
+            className="w-10 h-10 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </Button>
+
+          <Button
+            onClick={() => { trackEvent('navigate_month', { direction: 'today' }); onToday(); }}
+            className="ml-2 h-10 px-3 bg-gradient-to-br from-[#E02520] to-[#b91c1c] text-white border-2 border-[#E02520] font-bold text-sm uppercase shadow-[0_4px_12px_rgba(224,37,32,0.4)] hover:from-[#b91c1c] hover:to-[#991b1b]"
+          >
+            {t('monthNav.jumpToToday')}
+          </Button>
+        </div>
+      )}
     </nav>
   );
 }

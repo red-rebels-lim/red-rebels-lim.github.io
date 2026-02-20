@@ -49,8 +49,8 @@ export function MonthNavigation({ currentMonth, onPrevious, onNext, onToday }: M
         </Button>
       </div>
 
-      {/* Mobile: month on top, buttons below */}
-      <div className="flex flex-col items-center gap-3 md:hidden">
+      {/* Mobile: now rendered inside Navbar, hidden here */}
+      <div className="hidden">
         <div className="min-w-[180px] text-center px-6 py-3 text-xl font-extrabold uppercase tracking-wide text-foreground bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)] backdrop-blur-sm border-2 border-[rgba(224,37,32,0.4)] rounded-xl">
           {t(`months.${currentMonth}`)}
         </div>

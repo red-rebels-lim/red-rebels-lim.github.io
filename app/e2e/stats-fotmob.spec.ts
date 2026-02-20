@@ -15,7 +15,7 @@ test.describe('Stats Page - FotMob Sections', () => {
       // Navigate fresh and check for animated skeletons before data loads
       await page.goto('/#/stats');
       // The skeleton has animate-pulse class
-      const skeletons = page.locator('.animate-pulse');
+      page.locator('.animate-pulse');
       // At least one skeleton should appear briefly (may already be gone if data loaded fast)
       // We just verify the page doesn't crash
       const bodyText = await page.locator('body').textContent();

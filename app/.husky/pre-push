@@ -1,0 +1,10 @@
+cd app
+
+echo "Running lint..."
+npm run lint
+
+echo "Running tests..."
+npm run test
+
+echo "Running type-check and build..."
+npm run build

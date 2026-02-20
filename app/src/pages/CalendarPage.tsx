@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useCalendar } from '@/hooks/useCalendar';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
 import { Navbar } from '@/components/layout/Navbar';
@@ -22,15 +22,38 @@ export function CalendarPage() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const swipe = useSwipeNavigation(navigateNext, navigatePrevious);
 
+  const scrollToToday = useCallback(() => {
+    const el = document.querySelector('[data-today]');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, []);
+
+  // Scroll to today on initial mount
+  useEffect(() => {
+    const timer = setTimeout(scrollToToday, 300);
+    return () => clearTimeout(timer);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleJumpToToday = useCallback(() => {
+    const monthChanged = jumpToToday();
+    // If month changed, wait for re-render before scrolling
+    setTimeout(scrollToToday, monthChanged ? 350 : 50);
+  }, [jumpToToday, scrollToToday]);
+
   return (
     <div className="max-w-[1800px] w-[95%] mx-auto" {...swipe}>
-      <Navbar onToggleFilters={() => setFiltersOpen((o) => !o)} />
+      <Navbar
+        onToggleFilters={() => setFiltersOpen((o) => !o)}
+        currentMonth={currentMonth}
+        onPrevious={navigatePrevious}
+        onNext={navigateNext}
+        onToday={handleJumpToToday}
+      />
 
       <MonthNavigation
         currentMonth={currentMonth}
         onPrevious={navigatePrevious}
         onNext={navigateNext}
-        onToday={jumpToToday}
+        onToday={handleJumpToToday}
       />
 
       <FilterPanel

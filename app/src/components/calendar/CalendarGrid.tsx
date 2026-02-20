@@ -57,6 +57,7 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
             return (
               <div
                 key={`day-${day.number}`}
+                {...(isToday ? { 'data-today': '' } : {})}
                 className={`
                   aspect-square min-h-[120px] max-h-[180px] p-2 rounded-2xl border-2 flex flex-col transition-all overflow-hidden
                   ${hasEvents
@@ -103,6 +104,7 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
               return (
                 <div
                   key={`mobile-${day.number}`}
+                  {...(isToday ? { 'data-today': '' } : {})}
                   className={`
                     p-4 rounded-2xl border-2
                     ${isToday

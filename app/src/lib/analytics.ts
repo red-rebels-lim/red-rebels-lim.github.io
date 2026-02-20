@@ -28,11 +28,9 @@ export function initAnalytics() {
 
   // Microsoft Clarity
   if (CLARITY_ID) {
-    window.clarity = window.clarity || function () {
-      // eslint-disable-next-line prefer-rest-params
-      (window.clarity as unknown as { q: IArguments[] }).q = (window.clarity as unknown as { q: IArguments[] }).q || [];
-      // eslint-disable-next-line prefer-rest-params
-      (window.clarity as unknown as { q: IArguments[] }).q.push(arguments);
+    window.clarity = window.clarity || function (...args: unknown[]) {
+      (window.clarity as unknown as { q: unknown[][] }).q = (window.clarity as unknown as { q: unknown[][] }).q || [];
+      (window.clarity as unknown as { q: unknown[][] }).q.push(args);
     };
     const script = document.createElement('script');
     script.async = true;

@@ -1,8 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
-
-function isMobile(page: Page): boolean {
-  return (page.viewportSize()?.width ?? 1280) < 768;
-}
+import { test, expect } from '@playwright/test';
 
 test.describe('Toolbar Actions - Desktop', () => {
   test.beforeEach(async ({ page }) => {
