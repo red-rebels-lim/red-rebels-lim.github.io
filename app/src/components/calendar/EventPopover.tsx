@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { getMatchResult } from '@/lib/stats';
 import type { CalendarEvent } from '@/types/events';
 
@@ -37,6 +37,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="bg-gradient-to-br from-[#1a0f0f] to-[#0a1810] border-3 border-[rgba(224,37,32,0.6)] rounded-3xl max-w-lg shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_100px_rgba(224,37,32,0.3)]">
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
+        <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
 
         {event.isMeeting ? (
           <div className="text-center py-4">
