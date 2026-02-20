@@ -85,7 +85,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
       <div className="flex items-center justify-between">
         {/* Brand */}
         <NavLink to="/" className="flex items-center gap-3 text-foreground font-bold text-xl no-underline hover:text-[#E02520] transition-all">
-          <img src="/images/clear_logo_sm.webp" alt="Red Rebels" width={40} height={40} className="w-10 h-10 drop-shadow-[0_4px_8px_rgba(224,37,32,0.3)]" />
+          <img src="/images/clear_logo_sm.webp" alt="Red Rebels" width={40} height={40} fetchPriority="high" className="w-10 h-10 drop-shadow-[0_4px_8px_rgba(224,37,32,0.3)]" />
           <span className="hidden md:inline tracking-wide">{t('common.brandText')}</span>
         </NavLink>
 
@@ -155,6 +155,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
               <Button
                 variant="outline"
                 size="icon"
+                aria-label="Open menu"
                 className="md:hidden w-11 h-11 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">

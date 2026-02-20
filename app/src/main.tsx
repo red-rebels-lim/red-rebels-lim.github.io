@@ -5,7 +5,11 @@ import './i18n';
 import { initAnalytics } from '@/lib/analytics';
 import App from './App.tsx';
 
-initAnalytics();
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(() => initAnalytics());
+} else {
+  setTimeout(initAnalytics, 2000);
+}
 
 // Register service worker for PWA + push notifications
 if ('serviceWorker' in navigator) {
