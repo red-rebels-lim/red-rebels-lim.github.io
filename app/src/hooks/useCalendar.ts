@@ -145,8 +145,11 @@ export function useCalendar() {
   }, [currentMonth]);
 
   const jumpToToday = useCallback(() => {
-    setCurrentMonth(getCurrentMonthName());
-  }, []);
+    const todayMonth = getCurrentMonthName();
+    const changed = todayMonth !== currentMonth;
+    setCurrentMonth(todayMonth);
+    return changed;
+  }, [currentMonth]);
 
   const applyFilters = useCallback((newFilters: FilterState) => {
     setFilters(newFilters);
