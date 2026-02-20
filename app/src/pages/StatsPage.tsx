@@ -48,7 +48,7 @@ function parseFotMobData(data: FotMobTeamData): FotMobParsed {
 
 function LoadingSkeleton() {
   return (
-    <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg">
+    <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg min-h-[180px]">
       <div className="animate-pulse space-y-4">
         <div className="h-6 bg-[rgba(224,37,32,0.15)] rounded w-1/3" />
         <div className="h-32 bg-[rgba(224,37,32,0.1)] rounded" />
@@ -98,14 +98,12 @@ export default function StatsPage() {
       <Navbar />
 
       {/* 1. Next Match (FotMob) */}
-      {loading && <LoadingSkeleton />}
-      {fotmob?.nextMatch && <NextMatch match={fotmob.nextMatch} />}
+      {loading ? <LoadingSkeleton /> : fotmob?.nextMatch ? <NextMatch match={fotmob.nextMatch} /> : null}
 
       {/* 2. League Standing (FotMob) */}
-      {loading && <LoadingSkeleton />}
-      {fotmob && fotmob.tables.length > 0 && (
+      {loading ? <LoadingSkeleton /> : fotmob && fotmob.tables.length > 0 ? (
         <LeagueTable tables={fotmob.tables} />
-      )}
+      ) : null}
 
       {/* 3. Overall stats (existing) */}
       <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg">
@@ -130,16 +128,14 @@ export default function StatsPage() {
       </section>
 
       {/* 4. League Rankings (FotMob) */}
-      {loading && <LoadingSkeleton />}
-      {fotmob && fotmob.rankings.length > 0 && (
+      {loading ? <LoadingSkeleton /> : fotmob && fotmob.rankings.length > 0 ? (
         <LeagueRankings rankings={fotmob.rankings} />
-      )}
+      ) : null}
 
       {/* 5. Top Scorers (FotMob) */}
-      {loading && <LoadingSkeleton />}
-      {fotmob && fotmob.topScorers.length > 0 && (
+      {loading ? <LoadingSkeleton /> : fotmob && fotmob.topScorers.length > 0 ? (
         <TopScorers scorers={fotmob.topScorers} />
-      )}
+      ) : null}
 
       {/* 6. Home vs Away (existing) */}
       <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg">

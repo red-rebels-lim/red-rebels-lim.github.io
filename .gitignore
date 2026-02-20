@@ -39,3 +39,4 @@ app/coverage
 
 scripts
 e2e-snapshots
+lighthouse-report

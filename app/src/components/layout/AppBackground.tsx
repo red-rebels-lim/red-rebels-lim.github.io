@@ -8,7 +8,7 @@ export function AppBackground() {
       />
       {/* Mobile background */}
       <div
-        className="fixed inset-0 -z-10 md:hidden bg-cover bg-center bg-no-repeat bg-fixed opacity-75 pointer-events-none"
+        className="fixed inset-0 -z-10 md:hidden bg-cover bg-center bg-no-repeat opacity-75 pointer-events-none"
         style={{ backgroundImage: 'url(/images/mobile.webp)' }}
       />
       {/* Dark overlay */}
