@@ -17,11 +17,32 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.ts',
       injectManifest: {
-        globPatterns: ['**/*.{js,css,html,ico}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,webp}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-radix': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-select',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-tooltip',
+          ],
+          'vendor-i18n': ['i18next', 'react-i18next'],
+          'vendor-charts': ['recharts'],
+          'vendor-parse': ['parse/dist/parse.min.js'],
+        },
+      },
+    },
+    minify: 'esbuild',
+    target: 'es2020',
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

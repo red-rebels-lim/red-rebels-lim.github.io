@@ -80,7 +80,7 @@ export function Navbar({ onToggleFilters }: NavbarProps) {
       <div className="flex items-center justify-between">
         {/* Brand */}
         <NavLink to="/" className="flex items-center gap-3 text-foreground font-bold text-xl no-underline hover:text-[#E02520] transition-all">
-          <img src="/images/clear_logo.png" alt="Red Rebels" className="w-10 h-10 drop-shadow-[0_4px_8px_rgba(224,37,32,0.3)]" />
+          <img src="/images/clear_logo_sm.webp" alt="Red Rebels" width={40} height={40} className="w-10 h-10 drop-shadow-[0_4px_8px_rgba(224,37,32,0.3)]" />
           <span className="hidden md:inline tracking-wide">{t('common.brandText')}</span>
         </NavLink>
 
