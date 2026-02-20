@@ -1,0 +1,84 @@
+# Page snapshot
+
+```yaml
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - navigation [ref=e5]:
+      - generic [ref=e6]:
+        - link "Red Rebels Red Rebels 25/26" [ref=e7] [cursor=pointer]:
+          - /url: "#/"
+          - img "Red Rebels" [ref=e8]
+          - generic [ref=e9]: Red Rebels 25/26
+        - generic [ref=e10]:
+          - link "Calendar" [ref=e11] [cursor=pointer]:
+            - /url: "#/"
+          - link "Statistics" [ref=e12] [cursor=pointer]:
+            - /url: "#/stats"
+          - link "Settings" [ref=e13] [cursor=pointer]:
+            - /url: "#/settings"
+            - img [ref=e14]
+            - text: Settings
+        - generic [ref=e17]:
+          - button "Event Filters" [ref=e18]
+          - button "Tools" [ref=e19]
+          - button "EN" [ref=e20]
+          - button "🌙" [ref=e21]
+    - generic [ref=e23]:
+      - button "Previous" [ref=e24]
+      - generic [ref=e25]: August
+      - button "Next" [active] [ref=e26]
+      - button "Today" [ref=e27]
+    - generic [ref=e28]:
+      - generic [ref=e29]:
+        - generic [ref=e30]: Monday
+        - generic [ref=e31]: Tuesday
+        - generic [ref=e32]: Wednesday
+        - generic [ref=e33]: Thursday
+        - generic [ref=e34]: Friday
+        - generic [ref=e35]: Saturday
+        - generic [ref=e36]: Sunday
+      - generic [ref=e37]:
+        - generic [ref=e44]: "1"
+        - generic [ref=e47]: "2"
+        - generic [ref=e50]: "3"
+        - generic [ref=e53]: "4"
+        - generic [ref=e56]: "5"
+        - generic [ref=e59]: "6"
+        - generic [ref=e62]: "7"
+        - generic [ref=e65]: "8"
+        - generic [ref=e68]: "9"
+        - generic [ref=e71]: "10"
+        - generic [ref=e74]: "11"
+        - generic [ref=e77]: "12"
+        - generic [ref=e80]: "13"
+        - generic [ref=e83]: "14"
+        - generic [ref=e86]: "15"
+        - generic [ref=e89]: "16"
+        - generic [ref=e92]: "17"
+        - generic [ref=e95]: "18"
+        - generic [ref=e98]: "19"
+        - generic [ref=e101]: "20"
+        - generic [ref=e104]: "21"
+        - generic [ref=e107]: "22"
+        - generic [ref=e110]: "23"
+        - generic [ref=e113]: "24"
+        - generic [ref=e116]: "25"
+        - generic [ref=e119]: "26"
+        - generic [ref=e122]: "27"
+        - generic [ref=e125]: "28"
+        - generic [ref=e128]: "29"
+        - generic [ref=e131]: "30"
+        - generic [ref=e134]: "31"
+    - generic [ref=e142]:
+      - heading "Legend" [level=3] [ref=e143]
+      - generic [ref=e144]:
+        - generic [ref=e145]:
+          - generic [ref=e146]: 👨⚽
+          - generic [ref=e147]: Men's Football
+        - generic [ref=e148]:
+          - generic [ref=e149]: 👨🏐
+          - generic [ref=e150]: Men's Volleyball
+        - generic [ref=e151]:
+          - generic [ref=e152]: 👩🏻🏐
+          - generic [ref=e153]: Women's Volleyball
+```

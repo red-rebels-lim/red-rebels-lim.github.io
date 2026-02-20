@@ -1,0 +1,250 @@
+# Page snapshot
+
+```yaml
+- generic:
+  - generic:
+    - main:
+      - generic:
+        - navigation:
+          - generic:
+            - link:
+              - /url: "#/"
+              - img
+              - generic: Red Rebels 25/26
+            - generic:
+              - link:
+                - /url: "#/"
+                - text: Calendar
+              - link:
+                - /url: "#/stats"
+                - text: Statistics
+              - link:
+                - /url: "#/settings"
+                - img
+                - text: Settings
+            - generic:
+              - button: Event Filters
+              - button [expanded]: Tools
+              - button: EN
+              - button: 🌙
+        - generic:
+          - generic:
+            - button: Previous
+            - generic: February
+            - button: Next
+            - button: Today
+        - generic:
+          - generic:
+            - generic: Monday
+            - generic: Tuesday
+            - generic: Wednesday
+            - generic: Thursday
+            - generic: Friday
+            - generic: Saturday
+            - generic: Sunday
+          - generic:
+            - generic:
+              - generic: "1"
+            - generic:
+              - generic:
+                - text: "2"
+                - generic: Δευτέρα
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨🏐
+                    - img
+                    - generic: ΟΜΟΝΟΙΑ
+                    - generic: 3-0
+            - generic:
+              - generic: "3"
+            - generic:
+              - generic: "4"
+            - generic:
+              - generic:
+                - text: "5"
+                - generic: Πέμπτη
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨🏐
+                    - img
+                    - generic: ΑΝΟΡΘΩΣΙΣ
+                    - generic: 3-2
+            - generic:
+              - generic: "6"
+            - generic:
+              - generic:
+                - text: "7"
+                - generic: Σάββατο
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨⚽
+                    - img
+                    - generic: ΟΜΟΝΟΙΑ 29 Μ
+                    - generic: 2-1
+                - generic:
+                  - generic:
+                    - generic: 👩🏻🏐
+                    - img
+                    - generic: ΑΝΟΡΘΩΣΙΣ (…
+                    - generic: 2-3
+            - generic:
+              - generic: "8"
+            - generic:
+              - generic:
+                - text: "9"
+                - generic: Δευτέρα
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨🏐
+                    - img
+                    - generic: ΠΑΦΙΑΚΟΣ
+                    - generic: 3-1
+            - generic:
+              - generic:
+                - text: "10"
+                - generic: Τρίτη
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👩🏻🏐
+                    - img
+                    - generic: ΑΕΚ ΛΑΡΝΑΚΑ…
+                    - generic: 2-3
+            - generic:
+              - generic: "11"
+            - generic:
+              - generic: "12"
+            - generic:
+              - generic:
+                - text: "13"
+                - generic: Παρασκευή
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨🏐
+                    - img
+                    - generic: ΑΝΑΓΕΝΝΗΣΗ
+                    - generic: 3-0
+                - generic:
+                  - generic:
+                    - generic: 👨⚽
+                    - img
+                    - generic: ΑΓΙΑΣ ΝΑΠΑΣ
+            - generic:
+              - generic:
+                - text: "14"
+                - generic: Σάββατο
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨⚽
+                    - img
+                    - generic: ΑΓΙΑΣ ΝΑΠΑΣ
+                    - generic: 0-2
+            - generic:
+              - generic: "15"
+            - generic:
+              - generic: "16"
+            - generic:
+              - generic:
+                - text: "17"
+                - generic: Τρίτη
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👩🏻🏐
+                    - generic: ΚΟΥΡΗΣ ΕΡΗΜ…
+                    - generic: 3-0
+            - generic:
+              - generic: "18"
+            - generic:
+              - generic: "19"
+            - generic:
+              - generic:
+                - text: "20"
+                - generic: Παρασκευή
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨🏐
+                    - img
+                    - generic: ΟΜΟΝΟΙΑ
+                  - generic: ⏱ 1h 40m
+            - generic:
+              - generic:
+                - text: "21"
+                - generic: Σάββατο
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨⚽
+                    - img
+                    - generic: ΚΑΡΜΙΩΤΙΣΣΑ…
+                  - generic: ⏱ 20h 40m
+                - generic:
+                  - generic:
+                    - generic: 👩🏻🏐
+                    - img
+                    - generic: ΑΕΛ (Γ)
+                  - generic: ⏱ 23h 40m
+            - generic:
+              - generic: "22"
+            - generic:
+              - generic: "23"
+            - generic:
+              - generic: "24"
+            - generic:
+              - generic:
+                - text: "25"
+                - generic: Τετάρτη
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👩🏻🏐
+                    - img
+                    - generic: ΑΕΛ (Γ)
+                  - generic: ⏱ 5d 1h
+            - generic:
+              - generic: "26"
+            - generic:
+              - generic:
+                - text: "27"
+                - generic: Παρασκευή
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨🏐
+                    - img
+                    - generic: ΟΜΟΝΟΙΑ
+                  - generic: ⏱ 7d 2h
+            - generic:
+              - generic:
+                - text: "28"
+                - generic: Σάββατο
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: 👨⚽
+                    - img
+                    - generic: ΑΣΙΛ ΛΥΣΗΣ
+                  - generic: ⏱ 7d 20h
+        - generic:
+          - heading [level=3]: Legend
+          - generic:
+            - generic:
+              - generic: 👨⚽
+              - generic: Men's Football
+            - generic:
+              - generic: 👨🏐
+              - generic: Men's Volleyball
+            - generic:
+              - generic: 👩🏻🏐
+              - generic: Women's Volleyball
+  - menu "Tools" [active] [ref=e1]:
+    - menuitem "Export (.ics)" [ref=e2] [cursor=pointer]
+    - menuitem "Print" [ref=e3] [cursor=pointer]
+```
