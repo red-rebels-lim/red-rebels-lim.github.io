@@ -217,6 +217,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
           <Button
             variant="outline"
             size="icon"
+            aria-label="Previous"
             onClick={() => { trackEvent('navigate_month', { direction: 'previous' }); onPrevious(); }}
             className="w-10 h-10 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground"
           >
@@ -230,6 +231,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
           <Button
             variant="outline"
             size="icon"
+            aria-label="Next"
             onClick={() => { trackEvent('navigate_month', { direction: 'next' }); onNext(); }}
             className="w-10 h-10 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground"
           >
