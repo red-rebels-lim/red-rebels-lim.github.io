@@ -42,6 +42,15 @@ Parse.masterKey = BACK4APP_MASTER_KEY;
 
 // --- Helpers ---
 
+function sportEmoji(sport) {
+  switch (sport) {
+    case 'football-men': return '\u{1F468}\u26BD';
+    case 'volleyball-men': return '\u{1F468}\u{1F3D0}';
+    case 'volleyball-women': return '\u{1F469}\u{1F3FB}\u{1F3D0}';
+    default: return '';
+  }
+}
+
 const MONTH_TO_INDEX = {
   september: 8, october: 9, november: 10, december: 11,
   january: 0, february: 1, march: 2, april: 3,
@@ -151,9 +160,12 @@ async function main() {
 
       const prefs = await prefQuery.find({ useMasterKey: true });
 
+      const emoji = sportEmoji(match.sport);
+      const prefix = emoji ? `${emoji} ` : '';
+
       const payload = JSON.stringify({
-        title: `Match in ${tier}h`,
-        body: `vs ${match.opponent}${match.venue ? ` at ${match.venue}` : ''} — ${match.time}`,
+        title: `${prefix}Match in ${tier}h`,
+        body: `vs ${match.opponent} (${match.location === 'home' ? 'H' : 'A'})${match.venue ? ` at ${match.venue}` : ''} — ${match.time}`,
         icon: '/images/clear_logo.png',
         tag: `reminder-${tier}h-${match.eventKey}`,
         url: '/',

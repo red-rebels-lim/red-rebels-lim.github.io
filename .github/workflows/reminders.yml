@@ -25,6 +25,7 @@ jobs:
         run: node send-reminders.js
         working-directory: .github/scripts
         env:
+          TZ: Europe/Nicosia
           VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           BACK4APP_APP_ID: ${{ secrets.BACK4APP_APP_ID }}
