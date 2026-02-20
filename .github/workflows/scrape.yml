@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: scraper
@@ -57,11 +58,20 @@ jobs:
           BACK4APP_APP_ID: ${{ secrets.BACK4APP_APP_ID }}
           BACK4APP_MASTER_KEY: ${{ secrets.BACK4APP_MASTER_KEY }}
 
-      - name: Commit and push changes
+      - name: Create PR with changes
         if: steps.check_changes.outputs.changes_detected == 'true'
         run: |
+          BRANCH="scraper/update-events-$(date +%Y%m%d-%H%M%S)"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          git checkout -b "$BRANCH"
           git add -A
           git commit -m "chore: update events from scraper"
-          git push
+          git push -u origin "$BRANCH"
+          gh pr create \
+            --title "chore: update events from scraper" \
+            --body "Automated event data update from scraper workflow." \
+            --base main \
+            --head "$BRANCH"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
