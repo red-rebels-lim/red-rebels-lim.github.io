@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 /**
  * Verify volleyball events are visible in the calendar app.
@@ -19,25 +19,31 @@ const SCREENSHOT_DIR = 'e2e/screenshots/volleyball';
 // Using shadow-md to disambiguate from nav links which don't have it.
 const EVENT_CARD_SELECTOR = '[class*="shadow-md"][class*="cursor-pointer"][class*="rounded-lg"]';
 
+/** Check if a month name is currently visible on the page (respects CSS visibility). */
+async function isMonthVisible(page: Page, month: RegExp): Promise<boolean> {
+  const text = await page.locator('body').innerText();
+  return month.test(text);
+}
+
 /** Helper: navigate to a target month by clicking Previous/Next from the current view. */
-async function navigateToMonth(page: import('@playwright/test').Page, targetMonth: RegExp) {
-  if (await page.getByText(targetMonth).isVisible().catch(() => false)) return;
+async function navigateToMonth(page: Page, targetMonth: RegExp) {
+  if (await isMonthVisible(page, targetMonth)) return;
 
-  const prevButton = page.getByText('Previous');
+  const prevButton = page.getByRole('button', { name: 'Previous' });
   for (let i = 0; i < 12; i++) {
-    if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
+    if (await isMonthVisible(page, /september/i)) break;
     await prevButton.click();
-    await page.waitForTimeout(150);
+    await page.waitForTimeout(200);
   }
 
-  const nextButton = page.getByText('Next');
+  const nextButton = page.getByRole('button', { name: 'Next' });
   for (let i = 0; i < 12; i++) {
-    if (await page.getByText(targetMonth).isVisible().catch(() => false)) break;
+    if (await isMonthVisible(page, targetMonth)) break;
     await nextButton.click();
-    await page.waitForTimeout(150);
+    await page.waitForTimeout(200);
   }
 
-  await expect(page.getByText(targetMonth)).toBeVisible();
+  expect(await isMonthVisible(page, targetMonth)).toBe(true);
 }
 
 test.describe('Volleyball Events Verification', () => {

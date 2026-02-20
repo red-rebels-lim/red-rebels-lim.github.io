@@ -25,6 +25,33 @@ function visibleEventCards(page: Page) {
   return page.locator(selector);
 }
 
+/** Check if a month name is currently visible on the page (respects CSS visibility). */
+async function isMonthVisible(page: Page, month: RegExp): Promise<boolean> {
+  const text = await page.locator('body').innerText();
+  return month.test(text);
+}
+
+/** Navigate to a target month by clicking Previous/Next from the current view. */
+async function navigateToMonth(page: Page, targetMonth: RegExp) {
+  if (await isMonthVisible(page, targetMonth)) return;
+
+  const prevButton = page.getByRole('button', { name: 'Previous' });
+  for (let i = 0; i < 12; i++) {
+    if (await isMonthVisible(page, /september/i)) break;
+    await prevButton.click();
+    await page.waitForTimeout(200);
+  }
+
+  const nextButton = page.getByRole('button', { name: 'Next' });
+  for (let i = 0; i < 12; i++) {
+    if (await isMonthVisible(page, targetMonth)) break;
+    await nextButton.click();
+    await page.waitForTimeout(200);
+  }
+
+  expect(await isMonthVisible(page, targetMonth)).toBe(true);
+}
+
 test.describe('Calendar Page', () => {
   test.beforeEach(async ({ page }) => {
     // Clear localStorage to ensure consistent language (English)
@@ -38,7 +65,13 @@ test.describe('Calendar Page', () => {
 
   test.describe('Navbar', () => {
     test('displays the brand text', async ({ page }) => {
-      await expect(page.getByText('Red Rebels 25/26')).toBeVisible();
+      if (isMobile(page)) {
+        // On mobile, brand text is hidden but logo is visible
+        await expect(page.getByAltText('Red Rebels')).toBeVisible();
+      } else {
+        const bodyText = await page.locator('body').innerText();
+        expect(bodyText).toContain('Red Rebels 25/26');
+      }
     });
 
     test('has navigation links for Calendar and Statistics', async ({ page }) => {
@@ -68,7 +101,7 @@ test.describe('Calendar Page', () => {
       // Navigate back to calendar
       if (isMobile(page)) await openMobileMenu(page);
       await page.getByRole('link', { name: /calendar/i }).click();
-      await expect(page.getByText('Previous')).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Previous' })).toBeVisible();
       await expect(page).toHaveURL(/#\//);
     });
 
@@ -88,9 +121,16 @@ test.describe('Calendar Page', () => {
     });
 
     test('theme toggle button is visible', async ({ page }) => {
-      // Theme toggle shows sun or moon emoji
-      const themeButton = page.getByRole('button', { name: /[☀🌙]/u });
-      await expect(themeButton).toBeVisible();
+      if (isMobile(page)) {
+        // On mobile, theme toggle is inside the hamburger menu
+        await openMobileMenu(page);
+        const themeBtn = page.getByRole('button', { name: /(light mode|dark mode)/i });
+        await expect(themeBtn).toBeVisible();
+      } else {
+        // Theme toggle shows sun or moon emoji on desktop
+        const themeButton = page.getByRole('button', { name: /[☀🌙]/u });
+        await expect(themeButton).toBeVisible();
+      }
     });
   });
 
@@ -98,85 +138,60 @@ test.describe('Calendar Page', () => {
 
   test.describe('Month Navigation', () => {
     test('displays a month name', async ({ page }) => {
-      const monthNames = [
-        'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER',
-        'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL',
-        'MAY', 'JUNE', 'JULY', 'AUGUST',
-      ];
-      const monthNav = page.locator('text=/^(' + monthNames.join('|') + ')$/i');
-      await expect(monthNav.first()).toBeVisible();
+      const monthPattern = /\b(september|october|november|december|january|february|march|april|may|june|july|august)\b/i;
+      const bodyText = await page.locator('body').innerText();
+      expect(monthPattern.test(bodyText)).toBe(true);
     });
 
     test('Previous and Next buttons are visible', async ({ page }) => {
-      await expect(page.getByText('Previous')).toBeVisible();
-      await expect(page.getByText('Next')).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Previous' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Next' })).toBeVisible();
     });
 
     test('Today button is visible', async ({ page }) => {
-      await expect(page.getByText('Today')).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Today' })).toBeVisible();
     });
 
     test('clicking Next changes the month name', async ({ page }) => {
       // Navigate to September first
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
-      await expect(page.getByText(/september/i)).toBeVisible();
+      await navigateToMonth(page, /september/i);
+      expect(await isMonthVisible(page, /september/i)).toBe(true);
 
       // Click Next
-      await page.getByText('Next').click();
-      await expect(page.getByText(/october/i)).toBeVisible();
+      await page.getByRole('button', { name: 'Next' }).click();
+      expect(await isMonthVisible(page, /october/i)).toBe(true);
     });
 
     test('clicking Previous changes the month name', async ({ page }) => {
       // Navigate to October first
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
-      await page.getByText('Next').click();
-      await expect(page.getByText(/october/i)).toBeVisible();
+      await navigateToMonth(page, /october/i);
+      expect(await isMonthVisible(page, /october/i)).toBe(true);
 
       // Click Previous to go back
-      await prevButton.click();
-      await expect(page.getByText(/september/i)).toBeVisible();
+      await page.getByRole('button', { name: 'Previous' }).click();
+      expect(await isMonthVisible(page, /september/i)).toBe(true);
     });
 
     test('Previous at September does not change the month', async ({ page }) => {
       // Navigate to September
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
-      await expect(page.getByText(/september/i)).toBeVisible();
+      await navigateToMonth(page, /september/i);
+      expect(await isMonthVisible(page, /september/i)).toBe(true);
 
       // Click Previous again - should stay on September
-      await prevButton.click();
+      await page.getByRole('button', { name: 'Previous' }).click();
       await page.waitForTimeout(300);
-      await expect(page.getByText(/september/i)).toBeVisible();
+      expect(await isMonthVisible(page, /september/i)).toBe(true);
     });
 
     test('Next at August does not change the month', async ({ page }) => {
       // Navigate to August
-      const nextButton = page.getByText('Next');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/august/i).isVisible().catch(() => false)) break;
-        await nextButton.click();
-        await page.waitForTimeout(200);
-      }
-      await expect(page.getByText(/august/i)).toBeVisible();
+      await navigateToMonth(page, /august/i);
+      expect(await isMonthVisible(page, /august/i)).toBe(true);
 
       // Click Next again - should stay on August
-      await nextButton.click();
+      await page.getByRole('button', { name: 'Next' }).click();
       await page.waitForTimeout(300);
-      await expect(page.getByText(/august/i)).toBeVisible();
+      expect(await isMonthVisible(page, /august/i)).toBe(true);
     });
   });
 
@@ -192,13 +207,7 @@ test.describe('Calendar Page', () => {
     });
 
     test('September shows football events', async ({ page }) => {
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
-      await expect(page.getByText(/september/i)).toBeVisible();
+      await navigateToMonth(page, /september/i);
 
       const eventCards = page.locator('[class*="cursor-pointer"][class*="rounded-lg"]');
       const count = await eventCards.count();
@@ -206,14 +215,7 @@ test.describe('Calendar Page', () => {
     });
 
     test('October shows multiple sport events', async ({ page }) => {
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
-      await page.getByText('Next').click();
-      await expect(page.getByText(/october/i)).toBeVisible();
+      await navigateToMonth(page, /october/i);
 
       const eventCards = page.locator('[class*="cursor-pointer"][class*="rounded-lg"]');
       const count = await eventCards.count();
@@ -221,12 +223,7 @@ test.describe('Calendar Page', () => {
     });
 
     test('played matches show scores on the event card', async ({ page }) => {
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
+      await navigateToMonth(page, /september/i);
 
       const scoreElements = page.locator('[class*="rounded-lg"] >> text=/\\d+-\\d+/');
       const count = await scoreElements.count();
@@ -279,12 +276,7 @@ test.describe('Calendar Page', () => {
 
     test('dialog shows result badge for played matches', async ({ page }) => {
       // Navigate to September (all played)
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
+      await navigateToMonth(page, /september/i);
 
       const eventCard = visibleEventCards(page).first();
       await eventCard.click();
@@ -297,12 +289,7 @@ test.describe('Calendar Page', () => {
     });
 
     test('dialog shows score for played matches', async ({ page }) => {
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
+      await navigateToMonth(page, /september/i);
 
       const eventCard = visibleEventCards(page).first();
       await eventCard.click();
@@ -355,12 +342,7 @@ test.describe('Calendar Page', () => {
       await page.setViewportSize({ width: 1280, height: 800 });
 
       // Navigate to September (all played)
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
+      await navigateToMonth(page, /september/i);
 
       const eventsBefore = await page.locator('[class*="cursor-pointer"][class*="rounded-lg"]').count();
       expect(eventsBefore).toBeGreaterThan(0);
@@ -411,14 +393,7 @@ test.describe('Calendar Page', () => {
       await page.setViewportSize({ width: 1280, height: 800 });
 
       // Navigate to October (7 events)
-      const prevButton = page.getByText('Previous');
-      for (let i = 0; i < 12; i++) {
-        if (await page.getByText(/september/i).isVisible().catch(() => false)) break;
-        await prevButton.click();
-        await page.waitForTimeout(200);
-      }
-      await page.getByText('Next').click();
-      await page.waitForTimeout(300);
+      await navigateToMonth(page, /october/i);
 
       const eventsBefore = await page.locator('[class*="cursor-pointer"][class*="rounded-lg"]').count();
 
