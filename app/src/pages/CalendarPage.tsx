@@ -7,6 +7,10 @@ import { MonthNavigation } from '@/components/calendar/MonthNavigation';
 import { CalendarGrid } from '@/components/calendar/CalendarGrid';
 import { FilterPanel } from '@/components/filters/FilterPanel';
 
+const INITIAL_SCROLL_DELAY_MS = 300;
+const MONTH_CHANGE_SCROLL_DELAY_MS = 350;
+const SAME_MONTH_SCROLL_DELAY_MS = 50;
+
 export function CalendarPage() {
   const {
     currentMonth,
@@ -35,14 +39,14 @@ export function CalendarPage() {
 
   // Scroll to today on initial mount
   useEffect(() => {
-    const timer = setTimeout(scrollToToday, 300);
+    const timer = setTimeout(scrollToToday, INITIAL_SCROLL_DELAY_MS);
     return () => clearTimeout(timer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleJumpToToday = useCallback(() => {
     const monthChanged = jumpToToday();
     // If month changed, wait for re-render before scrolling
-    setTimeout(scrollToToday, monthChanged ? 350 : 50);
+    setTimeout(scrollToToday, monthChanged ? MONTH_CHANGE_SCROLL_DELAY_MS : SAME_MONTH_SCROLL_DELAY_MS);
   }, [jumpToToday, scrollToToday]);
 
   return (
