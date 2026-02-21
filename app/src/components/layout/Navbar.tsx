@@ -14,6 +14,11 @@ import { exportToCalendar } from '@/lib/ics-export';
 import { trackEvent } from '@/lib/analytics';
 import type { MonthName } from '@/types/events';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 interface NavbarProps {
   onToggleFilters?: () => void;
   currentMonth?: MonthName;
@@ -28,12 +33,12 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
   const location = useLocation();
   const isCalendar = location.pathname === '/' || location.pathname === '';
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
     const onBeforeInstall = (e: Event) => {
       e.preventDefault();
-      setInstallPrompt(e);
+      setInstallPrompt(e as BeforeInstallPromptEvent);
     };
     const onInstalled = () => setInstallPrompt(null);
 
@@ -47,10 +52,14 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
 
   const handleInstall = async () => {
     if (!installPrompt) return;
-    (installPrompt as any).prompt();
-    const result = await (installPrompt as any).userChoice;
-    if (result.outcome === 'accepted') setInstallPrompt(null);
-    trackEvent('install_app', { outcome: result.outcome });
+    try {
+      installPrompt.prompt();
+      const result = await installPrompt.userChoice;
+      if (result.outcome === 'accepted') setInstallPrompt(null);
+      trackEvent('install_app', { outcome: result.outcome });
+    } catch {
+      setInstallPrompt(null);
+    }
   };
 
   const toggleLanguage = () => {

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { MonthData, CalendarEvent, CalendarDay, MonthName } from '@/types/events';
 import { EventCard } from './EventCard';
@@ -28,9 +28,10 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
   const hasEvents = events.length > 0;
   const isCarousel = events.length > 1;
   const [activeIdx, setActiveIdx] = useState(0);
+  const safeIdx = Math.min(activeIdx, Math.max(events.length - 1, 0));
 
-  const prev = useCallback(() => setActiveIdx((i) => (i - 1 + events.length) % events.length), [events.length]);
-  const next = useCallback(() => setActiveIdx((i) => (i + 1) % events.length), [events.length]);
+  const prev = () => setActiveIdx((i) => (i - 1 + events.length) % events.length);
+  const next = () => setActiveIdx((i) => (i + 1) % events.length);
 
   return (
     <div
@@ -62,11 +63,11 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
         <div className="flex-1 flex flex-col min-h-0">
           <div className="flex-1 min-h-0">
             <EventCard
-              key={activeIdx}
-              event={events[activeIdx]}
+              key={safeIdx}
+              event={events[safeIdx]}
               dayNumber={day.number!}
               monthName={currentMonth}
-              onClick={() => onSelectEvent(events[activeIdx])}
+              onClick={() => onSelectEvent(events[safeIdx])}
             />
           </div>
           {/* Carousel controls */}
@@ -82,7 +83,7 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
               <button
                 key={i}
                 onClick={(e) => { e.stopPropagation(); setActiveIdx(i); }}
-                className={`w-1.5 h-1.5 rounded-full transition-all ${i === activeIdx ? 'bg-[#E02520] scale-125' : 'bg-slate-500 hover:bg-slate-400'}`}
+                className={`w-1.5 h-1.5 rounded-full transition-all ${i === safeIdx ? 'bg-[#E02520] scale-125' : 'bg-slate-500 hover:bg-slate-400'}`}
                 aria-label={`Event ${i + 1} of ${events.length}`}
               />
             ))}
@@ -128,6 +129,20 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
 
   const isCurrentMonth = monthIndexMap[currentMonth] === todayMonth && yearMap[currentMonth] === todayYear;
 
+  const { eventDays, nearestIdx } = useMemo(() => {
+    const days = monthData.days.filter(
+      (day) => !day.empty && day.events && day.events.length > 0,
+    );
+
+    let nearest = -1;
+    if (isCurrentMonth) {
+      nearest = days.findIndex((d) => d.number! >= todayDay);
+      if (nearest === -1) nearest = days.length - 1;
+    }
+
+    return { eventDays: days, nearestIdx: nearest };
+  }, [monthData.days, isCurrentMonth, todayDay]);
+
   return (
     <>
       <div className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-2 border-[rgba(224,37,32,0.3)] overflow-hidden">
@@ -161,55 +176,42 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
 
         {/* Mobile: single column, events only */}
         <div className="md:hidden p-4 space-y-4">
-          {(() => {
-            const eventDays = monthData.days.filter(
-              (day) => !day.empty && day.events && day.events.length > 0,
-            );
-
-            // Find the nearest event day to today (>= today, or last day if all past)
-            let nearestIdx = -1;
-            if (isCurrentMonth) {
-              nearestIdx = eventDays.findIndex((d) => d.number! >= todayDay);
-              if (nearestIdx === -1) nearestIdx = eventDays.length - 1;
-            }
-
-            return eventDays.map((day, idx) => {
-              const isToday = isCurrentMonth && day.number === todayDay;
-              const isNearest = idx === nearestIdx;
-              return (
-                <div
-                  key={`mobile-${day.number}`}
-                  {...(isToday ? { 'data-today': '' } : {})}
-                  {...(isNearest ? { 'data-nearest-event': '' } : {})}
-                  className={`
-                    p-4 rounded-2xl border-2
-                    ${isToday
-                      ? 'bg-gradient-to-br from-[rgba(224,37,32,0.3)] to-[rgba(185,28,28,0.2)] border-[#E02520] shadow-[0_0_50px_rgba(224,37,32,0.5)]'
-                      : 'bg-[rgba(224,37,32,0.15)] border-[rgba(224,37,32,0.4)]'
-                    }
-                  `}
-                >
-                  <div className={`text-2xl font-extrabold inline-block pr-3 ${isToday ? 'text-[#E02520]' : 'text-red-300'}`}>
-                    {day.number}
-                    {day.name && (
-                      <span className="inline text-lg font-bold text-red-300 ml-2">
-                        {day.name}
-                      </span>
-                    )}
-                  </div>
-                  {day.events?.map((event, i) => (
-                    <EventCard
-                      key={i}
-                      event={event}
-                      dayNumber={day.number!}
-                      monthName={currentMonth}
-                      onClick={() => setSelectedEvent(event)}
-                    />
-                  ))}
+          {eventDays.map((day, idx) => {
+            const isToday = isCurrentMonth && day.number === todayDay;
+            const isNearest = idx === nearestIdx;
+            return (
+              <div
+                key={`mobile-${day.number}`}
+                {...(isToday ? { 'data-today': '' } : {})}
+                {...(isNearest ? { 'data-nearest-event': '' } : {})}
+                className={`
+                  p-4 rounded-2xl border-2
+                  ${isToday
+                    ? 'bg-gradient-to-br from-[rgba(224,37,32,0.3)] to-[rgba(185,28,28,0.2)] border-[#E02520] shadow-[0_0_50px_rgba(224,37,32,0.5)]'
+                    : 'bg-[rgba(224,37,32,0.15)] border-[rgba(224,37,32,0.4)]'
+                  }
+                `}
+              >
+                <div className={`text-2xl font-extrabold inline-block pr-3 ${isToday ? 'text-[#E02520]' : 'text-red-300'}`}>
+                  {day.number}
+                  {day.name && (
+                    <span className="inline text-lg font-bold text-red-300 ml-2">
+                      {day.name}
+                    </span>
+                  )}
                 </div>
-              );
-            });
-          })()}
+                {day.events?.map((event, i) => (
+                  <EventCard
+                    key={i}
+                    event={event}
+                    dayNumber={day.number!}
+                    monthName={currentMonth}
+                    onClick={() => setSelectedEvent(event)}
+                  />
+                ))}
+              </div>
+            );
+          })}
         </div>
       </div>
 
