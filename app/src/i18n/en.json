@@ -9,6 +9,7 @@
     "options": "Tools",
     "export": "Export (.ics)",
     "print": "Print",
+    "install": "Install App",
     "settings": "Settings"
   },
   "monthNav": {

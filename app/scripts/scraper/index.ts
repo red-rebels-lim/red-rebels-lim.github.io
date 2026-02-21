@@ -701,45 +701,53 @@ function updateCalendarData(fixtures: Fixture[]): ChangeLog {
       const scrapedEvent = scrapedKeys.get(key);
 
       if (scrapedEvent) {
-        const eventDesc = `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${existingEvent.day}: ${existingEvent.sport} vs ${existingEvent.opponent}`;
-        let hasChanges = false;
+        // Never overwrite played matches — they may contain manually-added
+        // fields (competition, penalties) that the scraper doesn't know about.
+        if (existingEvent.status === 'played') {
+          changes.unchanged++;
+          matchedKeys.add(key);
+          preserved.push(existingEvent);
+        } else {
+          const eventDesc = `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${existingEvent.day}: ${existingEvent.sport} vs ${existingEvent.opponent}`;
+          let hasChanges = false;
 
-        // Track score updates
-        if (scrapedEvent.score && scrapedEvent.score !== existingEvent.score) {
-          const oldScore = existingEvent.score || 'none';
-          changes.scoreUpdated.push(`${eventDesc} (${oldScore} → ${scrapedEvent.score})`);
-          hasChanges = true;
-        }
-
-        // Track time updates
-        if (scrapedEvent.time !== existingEvent.time) {
-          const oldTime = existingEvent.time || 'TBD';
-          const newTime = scrapedEvent.time || 'TBD';
-          if (oldTime !== newTime) {
-            changes.timeUpdated.push(`${eventDesc} (${oldTime} → ${newTime})`);
+          // Track score updates
+          if (scrapedEvent.score && scrapedEvent.score !== existingEvent.score) {
+            const oldScore = existingEvent.score || 'none';
+            changes.scoreUpdated.push(`${eventDesc} (${oldScore} → ${scrapedEvent.score})`);
             hasChanges = true;
           }
-        }
 
-        // Track venue updates
-        if (scrapedEvent.venue && scrapedEvent.venue !== existingEvent.venue) {
-          changes.venueUpdated.push(`${eventDesc} (${existingEvent.venue || 'none'} → ${scrapedEvent.venue})`);
-          hasChanges = true;
-        }
+          // Track time updates
+          if (scrapedEvent.time !== existingEvent.time) {
+            const oldTime = existingEvent.time || 'TBD';
+            const newTime = scrapedEvent.time || 'TBD';
+            if (oldTime !== newTime) {
+              changes.timeUpdated.push(`${eventDesc} (${oldTime} → ${newTime})`);
+              hasChanges = true;
+            }
+          }
 
-        if (!hasChanges) {
-          changes.unchanged++;
-        }
+          // Track venue updates
+          if (scrapedEvent.venue && scrapedEvent.venue !== existingEvent.venue) {
+            changes.venueUpdated.push(`${eventDesc} (${existingEvent.venue || 'none'} → ${scrapedEvent.venue})`);
+            hasChanges = true;
+          }
 
-        // Update existing with scraped data (score, time, status)
-        existingEvent.time = scrapedEvent.time;
-        if (scrapedEvent.status) existingEvent.status = scrapedEvent.status;
-        if (scrapedEvent.score) existingEvent.score = scrapedEvent.score;
-        if (scrapedEvent.logo) existingEvent.logo = scrapedEvent.logo;
-        if (scrapedEvent.venue) existingEvent.venue = scrapedEvent.venue;
-        existingEvent.location = scrapedEvent.location;
-        matchedKeys.add(key);
-        preserved.push(existingEvent);
+          if (!hasChanges) {
+            changes.unchanged++;
+          }
+
+          // Update existing with scraped data (score, time, status)
+          existingEvent.time = scrapedEvent.time;
+          if (scrapedEvent.status) existingEvent.status = scrapedEvent.status;
+          if (scrapedEvent.score) existingEvent.score = scrapedEvent.score;
+          if (scrapedEvent.logo) existingEvent.logo = scrapedEvent.logo;
+          if (scrapedEvent.venue) existingEvent.venue = scrapedEvent.venue;
+          existingEvent.location = scrapedEvent.location;
+          matchedKeys.add(key);
+          preserved.push(existingEvent);
+        }
       } else {
         // No matching scraped event — preserve manually-added event
         preserved.push(existingEvent);

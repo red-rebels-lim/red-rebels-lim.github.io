@@ -23,7 +23,13 @@ export function CalendarPage() {
   const swipe = useSwipeNavigation(navigateNext, navigatePrevious);
 
   const scrollToToday = useCallback(() => {
-    const el = document.querySelector('[data-today]');
+    // Multiple elements may carry data-today (desktop grid + mobile list).
+    // Pick the first one that is actually visible (has layout dimensions).
+    const candidates = [
+      ...document.querySelectorAll('[data-today]'),
+      ...document.querySelectorAll('[data-nearest-event]'),
+    ];
+    const el = candidates.find((e) => (e as HTMLElement).offsetHeight > 0);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, []);
 
