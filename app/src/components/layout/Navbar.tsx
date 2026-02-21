@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '@/hooks/useTheme';
@@ -14,6 +14,11 @@ import { exportToCalendar } from '@/lib/ics-export';
 import { trackEvent } from '@/lib/analytics';
 import type { MonthName } from '@/types/events';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 interface NavbarProps {
   onToggleFilters?: () => void;
   currentMonth?: MonthName;
@@ -28,6 +33,34 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
   const location = useLocation();
   const isCalendar = location.pathname === '/' || location.pathname === '';
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+
+  useEffect(() => {
+    const onBeforeInstall = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+    };
+    const onInstalled = () => setInstallPrompt(null);
+
+    window.addEventListener('beforeinstallprompt', onBeforeInstall);
+    window.addEventListener('appinstalled', onInstalled);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstall);
+      window.removeEventListener('appinstalled', onInstalled);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    try {
+      installPrompt.prompt();
+      const result = await installPrompt.userChoice;
+      if (result.outcome === 'accepted') setInstallPrompt(null);
+      trackEvent('install_app', { outcome: result.outcome });
+    } catch {
+      setInstallPrompt(null);
+    }
+  };
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'el' : 'en';
@@ -127,6 +160,11 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
               <DropdownMenuItem onClick={() => { window.print(); trackEvent('print_calendar'); }} className="text-foreground hover:text-[#E02520] cursor-pointer">
                 {t('nav.print')}
               </DropdownMenuItem>
+              {installPrompt && (
+                <DropdownMenuItem onClick={handleInstall} className="text-foreground hover:text-[#E02520] cursor-pointer">
+                  {t('nav.install')}
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -205,6 +243,20 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
                 >
                   {t('nav.print')}
                 </Button>
+                {installPrompt && (
+                  <Button
+                    variant="outline"
+                    onClick={() => { handleInstall(); setMobileOpen(false); }}
+                    className="border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground justify-start gap-2"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    {t('nav.install')}
+                  </Button>
+                )}
               </div>
             </SheetContent>
           </Sheet>

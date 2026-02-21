@@ -7,6 +7,10 @@ import { MonthNavigation } from '@/components/calendar/MonthNavigation';
 import { CalendarGrid } from '@/components/calendar/CalendarGrid';
 import { FilterPanel } from '@/components/filters/FilterPanel';
 
+const INITIAL_SCROLL_DELAY_MS = 300;
+const MONTH_CHANGE_SCROLL_DELAY_MS = 350;
+const SAME_MONTH_SCROLL_DELAY_MS = 50;
+
 export function CalendarPage() {
   const {
     currentMonth,
@@ -23,20 +27,26 @@ export function CalendarPage() {
   const swipe = useSwipeNavigation(navigateNext, navigatePrevious);
 
   const scrollToToday = useCallback(() => {
-    const el = document.querySelector('[data-today]');
+    // Multiple elements may carry data-today (desktop grid + mobile list).
+    // Pick the first one that is actually visible (has layout dimensions).
+    const candidates = [
+      ...document.querySelectorAll('[data-today]'),
+      ...document.querySelectorAll('[data-nearest-event]'),
+    ];
+    const el = candidates.find((e) => (e as HTMLElement).offsetHeight > 0);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, []);
 
   // Scroll to today on initial mount
   useEffect(() => {
-    const timer = setTimeout(scrollToToday, 300);
+    const timer = setTimeout(scrollToToday, INITIAL_SCROLL_DELAY_MS);
     return () => clearTimeout(timer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleJumpToToday = useCallback(() => {
     const monthChanged = jumpToToday();
     // If month changed, wait for re-render before scrolling
-    setTimeout(scrollToToday, monthChanged ? 350 : 50);
+    setTimeout(scrollToToday, monthChanged ? MONTH_CHANGE_SCROLL_DELAY_MS : SAME_MONTH_SCROLL_DELAY_MS);
   }, [jumpToToday, scrollToToday]);
 
   return (
