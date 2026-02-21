@@ -609,26 +609,32 @@ export const eventsData: EventsData = {
       sport: 'volleyball-men',
       location: 'away',
       opponent: 'ΟΜΟΝΟΙΑ',
-      time: '20:00',
+      time: '',
       venue: 'Ελευθερία',
-      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp'
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp',
+      status: 'played',
+      score: '3-1'
     },
     {
       day: 21,
       sport: 'football-men',
       location: 'home',
       opponent: 'ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ',
-      time: '15:00',
-      logo: 'images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp'
+      time: '',
+      logo: 'images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp',
+      status: 'played',
+      score: '1-0'
     },
     {
       day: 21,
       sport: 'volleyball-women',
       location: 'away',
       opponent: 'ΑΕΛ (Γ)',
-      time: '18:00',
+      time: '',
       venue: 'Σπύρος Κυπριανού',
-      logo: 'images/team_logos/ΑΕΛ.webp'
+      logo: 'images/team_logos/ΑΕΛ.webp',
+      status: 'played',
+      score: '2-1'
     },
     {
       day: 25,
