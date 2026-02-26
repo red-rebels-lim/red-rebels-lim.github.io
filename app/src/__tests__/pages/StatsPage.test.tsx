@@ -185,7 +185,7 @@ describe('StatsPage', () => {
       tabs: { overview: { leagueTable: null, rankings: null } },
       squad: {},
     };
-    vi.mocked(fetchTeamData).mockResolvedValue(mockTeamData as Parameters<typeof fetchTeamData>[0] extends undefined ? never : Awaited<ReturnType<typeof fetchTeamData>>);
+    vi.mocked(fetchTeamData).mockResolvedValue(mockTeamData as Awaited<ReturnType<typeof fetchTeamData>>);
     await act(async () => {
       render(<StatsPage />);
     });

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
+import type { CalendarEvent } from '@/types/events';
 
 // Mock eventsData to include a meeting event so the isMeeting branch is covered
 vi.mock('@/data/events', () => ({
@@ -28,7 +29,7 @@ describe('useCalendar with meeting events', () => {
     expect(feb).toBeDefined();
     // Find the day with the event (day 10)
     const dayCell = feb.days.find(
-      (d): d is { number: number; name?: string; events?: unknown[] } =>
+      (d): d is { number: number; name?: string; events?: CalendarEvent[] } =>
         'number' in d && (d as { number: number }).number === 10
     );
     expect(dayCell).toBeDefined();
