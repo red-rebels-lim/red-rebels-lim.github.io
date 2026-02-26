@@ -577,14 +577,6 @@ export const eventsData: EventsData = {
       score: '3-0'
     },
     {
-      day: 13,
-      sport: 'football-men',
-      location: 'away',
-      opponent: 'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ',
-      time: '19:00',
-      logo: 'images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.webp'
-    },
-    {
       day: 14,
       sport: 'football-men',
       location: 'away',
@@ -634,16 +626,7 @@ export const eventsData: EventsData = {
       venue: 'Σπύρος Κυπριανού',
       logo: 'images/team_logos/ΑΕΛ.webp',
       status: 'played',
-      score: '2-1'
-    },
-    {
-      day: 25,
-      sport: 'volleyball-women',
-      location: 'home',
-      opponent: 'ΑΕΛ (Γ)',
-      time: '20:00',
-      venue: 'Γυμνάσιο Αγίου Νεοφύτου',
-      logo: 'images/team_logos/ΑΕΛ.webp'
+      score: '3-1'
     },
     {
       day: 27,
@@ -662,6 +645,15 @@ export const eventsData: EventsData = {
       time: '15:00',
       venue: 'ΓΗΠΕΔΟ ΟΛΥΜΠΙΑΔΑΣ ΛΥΜΠΙΩΝ',
       logo: 'images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.webp'
+    },
+    {
+      day: 28,
+      sport: 'volleyball-women',
+      location: 'away',
+      opponent: 'ΑΝΟΡΘΩΣΙΣ (Γ)',
+      time: '18:00',
+      venue: 'Σωτήρειον',
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
     }
   ],
   march: [
@@ -682,6 +674,33 @@ export const eventsData: EventsData = {
       time: '15:30',
       logo: 'images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.webp'
     },
+      {
+          day: 7,
+          sport: 'volleyball-women',
+          location: 'away',
+          opponent: 'ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)',
+          time: '17:00',
+          venue: 'Κίτιον',
+          logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp'
+      },
+      {
+          day: 10,
+          sport: 'volleyball-women',
+          location: 'home',
+          opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ',
+          time: '20:00',
+          venue: 'Γυμνάσιο Αγίου Νεοφύτου',
+          logo: 'images/team_logos/ΚΟΥΡΗΣ ΕΡΗΜΗΣ.webp'
+      },
+      {
+          day: 14,
+          sport: 'volleyball-women',
+          location: 'home',
+          opponent: 'ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)',
+          time: '18:00',
+          venue: 'Γυμνάσιο Αγίου Νεοφύτου',
+          logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp'
+      },
     {
       day: 14,
       sport: 'football-men',
@@ -691,6 +710,15 @@ export const eventsData: EventsData = {
       venue: 'ΓΗΠΕΔΟ \'ΚΕΡΥΝΕΙΑ-ΕΠΙΣΤΡΟΦΗ\'',
       logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.webp'
     },
+      {
+          day: 17,
+          sport: 'volleyball-women',
+          location: 'away',
+          opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ (Γ)',
+          time: '20:00',
+          venue: 'Θεμιστόκλειο',
+          logo: 'images/team_logos/ΚΟΥΡΗΣ ΕΡΗΜΗΣ.webp'
+      },
     {
       day: 18,
       sport: 'football-men',
@@ -699,6 +727,15 @@ export const eventsData: EventsData = {
       time: '15:30',
       logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp'
     },
+      {
+          day: 21,
+          sport: 'volleyball-women',
+          location: 'home',
+          opponent: 'ΑΝΟΡΘΩΣΙΣ (Γ)',
+          time: '18:00',
+          venue: 'Γυμνάσιο Αγίου Νεοφύτου',
+          logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
+      },
     {
       day: 21,
       sport: 'football-men',
