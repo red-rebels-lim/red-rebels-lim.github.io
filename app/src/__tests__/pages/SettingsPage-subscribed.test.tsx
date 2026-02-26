@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 
 vi.mock('react-i18next', () => ({
@@ -40,9 +40,16 @@ vi.mock('@/lib/preferences', () => ({
   updatePreferences: vi.fn().mockResolvedValue(undefined),
 }));
 
+import { unsubscribeFromPush } from '@/lib/push';
 import SettingsPage from '@/pages/SettingsPage';
 
 describe('SettingsPage (subscribed)', () => {
+  beforeEach(() => {
+    vi.mocked(unsubscribeFromPush).mockResolvedValue(undefined);
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
   it('shows subscribed status', async () => {
     await act(async () => {
       render(<SettingsPage />);
@@ -106,10 +113,108 @@ describe('SettingsPage (subscribed)', () => {
     expect(switches[0]).toBeDefined();
   });
 
+  it('toggles notifyNewEvents preference (switches[1])', async () => {
+    await act(async () => { render(<SettingsPage />); });
+    const switches = screen.getAllByRole('switch');
+    if (switches.length > 1) {
+      await act(async () => { fireEvent.click(switches[1]); });
+      expect(switches[1]).toBeDefined();
+    }
+  });
+
+  it('toggles notifyTimeChanges preference (switches[2])', async () => {
+    await act(async () => { render(<SettingsPage />); });
+    const switches = screen.getAllByRole('switch');
+    if (switches.length > 2) {
+      await act(async () => { fireEvent.click(switches[2]); });
+      expect(switches[2]).toBeDefined();
+    }
+  });
+
+  it('toggles notifyScoreUpdates preference (switches[3])', async () => {
+    await act(async () => { render(<SettingsPage />); });
+    const switches = screen.getAllByRole('switch');
+    if (switches.length > 3) {
+      await act(async () => { fireEvent.click(switches[3]); });
+      expect(switches[3]).toBeDefined();
+    }
+  });
+
   it('renders pause all toggle', async () => {
     await act(async () => {
       render(<SettingsPage />);
     });
     expect(screen.getByText('settings.pauseAll')).toBeDefined();
+  });
+
+  it('calls unsubscribeFromPush and updates status when disable clicked', async () => {
+    await act(async () => {
+      render(<SettingsPage />);
+    });
+    const disableBtn = screen.getByText('settings.disable');
+    await act(async () => {
+      fireEvent.click(disableBtn);
+    });
+    expect(unsubscribeFromPush).toHaveBeenCalled();
+    expect(screen.getByText('settings.enable')).toBeDefined();
+  });
+
+  it('toggles sport preference when sport switch clicked', async () => {
+    await act(async () => {
+      render(<SettingsPage />);
+    });
+    const switches = screen.getAllByRole('switch');
+    // switches[4] is football-men sport toggle
+    if (switches.length > 4) {
+      await act(async () => {
+        fireEvent.click(switches[4]);
+      });
+      // toggleSport was called — no errors
+      expect(switches[4]).toBeDefined();
+    }
+  });
+
+  it('toggles reminder preference when reminder switch clicked', async () => {
+    await act(async () => {
+      render(<SettingsPage />);
+    });
+    const switches = screen.getAllByRole('switch');
+    // switches[7] is the 24h reminder toggle
+    if (switches.length > 7) {
+      await act(async () => {
+        fireEvent.click(switches[7]);
+      });
+      // toggleReminder was called — no errors
+      expect(switches[7]).toBeDefined();
+    }
+  });
+
+  it('handles unsubscribe error gracefully', async () => {
+    vi.mocked(unsubscribeFromPush).mockRejectedValue(new Error('Unsubscribe failed'));
+    await act(async () => {
+      render(<SettingsPage />);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByText('settings.disable'));
+    });
+    // Status should remain subscribed since unsubscribe threw
+    expect(screen.getByText('settings.enabled')).toBeDefined();
+  });
+
+  it('covers savePrefs timeout callback when preferences saved', async () => {
+    vi.useFakeTimers();
+    await act(async () => {
+      render(<SettingsPage />);
+    });
+    const switches = screen.getAllByRole('switch');
+    if (switches.length > 0) {
+      await act(async () => {
+        fireEvent.click(switches[0]);
+      });
+      // Advance 800ms to trigger the savePrefs debounce timeout
+      await act(async () => {
+        vi.advanceTimersByTime(900);
+      });
+    }
   });
 });

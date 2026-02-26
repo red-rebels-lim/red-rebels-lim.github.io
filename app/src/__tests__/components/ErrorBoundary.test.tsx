@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 function ThrowingComponent(): React.ReactNode {
@@ -31,6 +31,27 @@ describe('ErrorBoundary', () => {
 
     expect(screen.getByText('Something went wrong')).toBeDefined();
     expect(screen.getByText('Reload the page')).toBeDefined();
+
+    consoleSpy.mockRestore();
+  });
+
+  it('calls window.location.reload when reload link clicked', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const reloadMock = vi.fn();
+    Object.defineProperty(window, 'location', {
+      value: { reload: reloadMock },
+      writable: true,
+      configurable: true,
+    });
+
+    render(
+      <ErrorBoundary>
+        <ThrowingComponent />
+      </ErrorBoundary>
+    );
+
+    fireEvent.click(screen.getByText('Reload the page'));
+    expect(reloadMock).toHaveBeenCalled();
 
     consoleSpy.mockRestore();
   });

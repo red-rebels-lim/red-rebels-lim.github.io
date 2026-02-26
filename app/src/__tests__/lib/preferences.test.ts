@@ -60,6 +60,22 @@ describe('getPreferences', () => {
       disabled: false,
     });
   });
+
+  it('uses DEFAULTS when Parse fields return undefined', async () => {
+    mockFirst.mockResolvedValue({
+      get: () => undefined,
+    });
+
+    const result = await getPreferences('sub-123');
+    expect(result).toEqual({
+      notifyNewEvents: true,
+      notifyTimeChanges: true,
+      notifyScoreUpdates: true,
+      reminderHours: [24, 2],
+      enabledSports: ['football-men', 'volleyball-men', 'volleyball-women'],
+      disabled: false,
+    });
+  });
 });
 
 describe('updatePreferences', () => {

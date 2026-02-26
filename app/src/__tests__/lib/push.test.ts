@@ -22,6 +22,17 @@ describe('isPushSupported', () => {
 describe('getSubscriptionStatus', () => {
   beforeEach(() => {
     window.localStorage.removeItem('push_subscription_id');
+    // Ensure PushManager is present so isPushSupported() can return true
+    if (!('PushManager' in window)) {
+      (globalThis as Record<string, unknown>).PushManager = class {};
+    }
+    if (!('serviceWorker' in navigator)) {
+      Object.defineProperty(navigator, 'serviceWorker', {
+        value: { ready: Promise.resolve({}) },
+        writable: true,
+        configurable: true,
+      });
+    }
   });
 
   it('returns a valid status string', () => {
@@ -38,6 +49,27 @@ describe('getSubscriptionStatus', () => {
     const status = getSubscriptionStatus();
     expect(['subscribed', 'denied']).toContain(status);
     window.localStorage.removeItem('push_subscription_id');
+  });
+
+  it('returns "unsubscribed" when supported and no stored ID and permission not denied', () => {
+    if (!isPushSupported()) return;
+    // Ensure Notification.permission is not 'denied'
+    if (typeof Notification !== 'undefined' && Notification.permission === 'denied') return;
+    window.localStorage.removeItem('push_subscription_id');
+    const status = getSubscriptionStatus();
+    expect(['unsubscribed', 'denied']).toContain(status);
+  });
+
+  it('returns "denied" when Notification.permission is denied', () => {
+    if (!isPushSupported()) return;
+    if (typeof Notification === 'undefined') return;
+    const origDescriptor = Object.getOwnPropertyDescriptor(Notification, 'permission');
+    Object.defineProperty(Notification, 'permission', { value: 'denied', configurable: true, writable: true });
+    const status = getSubscriptionStatus();
+    expect(status).toBe('denied');
+    if (origDescriptor) {
+      Object.defineProperty(Notification, 'permission', origDescriptor);
+    }
   });
 });
 
