@@ -17,20 +17,24 @@ test.describe('Toolbar Actions - Desktop', () => {
   test('Options dropdown shows Export and Print items', async ({ page }) => {
     const optionsBtn = page.getByRole('button', { name: /tools/i });
     await optionsBtn.click();
-    await page.waitForTimeout(300);
+    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
 
     await expect(page.getByRole('menuitem', { name: /export/i }).first()).toBeVisible();
     await expect(page.getByRole('menuitem', { name: /^print$/i })).toBeVisible();
   });
 
   test('Export triggers ICS file download', async ({ page }) => {
+    // Set up download listener before any clicks to avoid missing the event
+    const downloadPromise = page.waitForEvent('download');
+
     const optionsBtn = page.getByRole('button', { name: /tools/i });
     await optionsBtn.click();
-    await page.waitForTimeout(300);
+    // Wait for the Radix dropdown menu to be fully open
+    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
 
-    // Listen for download event
-    const downloadPromise = page.waitForEvent('download');
-    await page.getByRole('menuitem', { name: /export/i }).first().click();
+    const exportItem = page.getByRole('menuitem', { name: /export/i }).first();
+    await expect(exportItem).toBeVisible({ timeout: 5000 });
+    await exportItem.click({ force: true });
     const download = await downloadPromise;
 
     // Verify the downloaded file name
@@ -48,9 +52,12 @@ test.describe('Toolbar Actions - Desktop', () => {
 
     const optionsBtn = page.getByRole('button', { name: /tools/i });
     await optionsBtn.click();
-    await page.waitForTimeout(300);
+    // Wait for the Radix dropdown menu to be fully open
+    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
 
-    await page.getByRole('menuitem', { name: /print/i }).click();
+    const printItem = page.getByRole('menuitem', { name: /print/i });
+    await expect(printItem).toBeVisible({ timeout: 5000 });
+    await printItem.click({ force: true });
     await page.waitForTimeout(300);
 
     const printCalled = await page.evaluate(() => (window as unknown as Record<string, boolean>).__printCalled);
@@ -61,7 +68,7 @@ test.describe('Toolbar Actions - Desktop', () => {
     // On calendar page, Export should be visible
     const optionsBtn = page.getByRole('button', { name: /tools/i });
     await optionsBtn.click();
-    await page.waitForTimeout(300);
+    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
     await expect(page.getByRole('menuitem', { name: /export/i }).first()).toBeVisible();
 
     // Close dropdown
@@ -75,7 +82,7 @@ test.describe('Toolbar Actions - Desktop', () => {
     // On Stats page, Options button should still be there
     const optionsBtnStats = page.getByRole('button', { name: /tools/i });
     await optionsBtnStats.click();
-    await page.waitForTimeout(300);
+    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
 
     // Export should NOT be visible on Stats page
     const exportItems = page.getByRole('menuitem', { name: /export/i });

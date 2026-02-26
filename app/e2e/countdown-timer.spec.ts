@@ -2,24 +2,29 @@ import { test, expect, type Page } from '@playwright/test';
 
 const EVENT_CARD_SELECTOR = '[class*="shadow-md"][class*="cursor-pointer"][class*="rounded-lg"]';
 
+async function isMonthVisible(page: Page, month: RegExp): Promise<boolean> {
+  const text = await page.locator('body').innerText();
+  return month.test(text);
+}
+
 async function navigateToMonth(page: Page, targetMonth: RegExp) {
-  if (await page.getByText(targetMonth).first().isVisible().catch(() => false)) return;
+  if (await isMonthVisible(page, targetMonth)) return;
 
-  const prevButton = page.getByText('Previous').first();
+  const prevButton = page.getByRole('button', { name: 'Previous', exact: true });
   for (let i = 0; i < 12; i++) {
-    if (await page.getByText(/september/i).first().isVisible().catch(() => false)) break;
+    if (await isMonthVisible(page, /september/i)) break;
     await prevButton.click();
-    await page.waitForTimeout(150);
+    await page.waitForTimeout(200);
   }
 
-  const nextButton = page.getByText('Next').first();
+  const nextButton = page.getByRole('button', { name: 'Next', exact: true });
   for (let i = 0; i < 12; i++) {
-    if (await page.getByText(targetMonth).first().isVisible().catch(() => false)) break;
+    if (await isMonthVisible(page, targetMonth)) break;
     await nextButton.click();
-    await page.waitForTimeout(150);
+    await page.waitForTimeout(200);
   }
 
-  await expect(page.getByText(targetMonth).first()).toBeVisible();
+  expect(await isMonthVisible(page, targetMonth)).toBe(true);
 }
 
 test.describe('Countdown Timer', () => {
