@@ -8,6 +8,20 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
+vi.mock('@/components/ui/select', () => ({
+  Select: ({ value, onValueChange, children }: { value: string; onValueChange: (v: string) => void; children: React.ReactNode }) => (
+    <select value={value} onChange={(e) => onValueChange(e.target.value)}>
+      {children}
+    </select>
+  ),
+  SelectTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  SelectValue: () => null,
+  SelectContent: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  SelectItem: ({ value, children }: { value: string; children: React.ReactNode }) => (
+    <option value={value}>{children as React.ReactNode}</option>
+  ),
+}));
+
 import { FilterPanel } from '@/components/filters/FilterPanel';
 
 const defaultFilters = { sport: 'all', location: 'all', status: 'all', search: '' };
@@ -54,5 +68,29 @@ describe('FilterPanel', () => {
     const input = screen.getByPlaceholderText('filters.searchPlaceholder');
     fireEvent.change(input, { target: { value: 'APOEL' } });
     expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ search: 'APOEL' }));
+  });
+
+  it('calls onApply with updated sport when sport select changes', () => {
+    const onApply = vi.fn();
+    render(<FilterPanel open={true} filters={defaultFilters} onApply={onApply} onClear={vi.fn()} />);
+    const selects = screen.getAllByRole('combobox');
+    fireEvent.change(selects[0], { target: { value: 'football-men' } });
+    expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ sport: 'football-men' }));
+  });
+
+  it('calls onApply with updated location when location select changes', () => {
+    const onApply = vi.fn();
+    render(<FilterPanel open={true} filters={defaultFilters} onApply={onApply} onClear={vi.fn()} />);
+    const selects = screen.getAllByRole('combobox');
+    fireEvent.change(selects[1], { target: { value: 'home' } });
+    expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ location: 'home' }));
+  });
+
+  it('calls onApply with updated status when status select changes', () => {
+    const onApply = vi.fn();
+    render(<FilterPanel open={true} filters={defaultFilters} onApply={onApply} onClear={vi.fn()} />);
+    const selects = screen.getAllByRole('combobox');
+    fireEvent.change(selects[2], { target: { value: 'played' } });
+    expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ status: 'played' }));
   });
 });

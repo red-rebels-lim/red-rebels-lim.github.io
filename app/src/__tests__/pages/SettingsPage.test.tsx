@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -38,9 +38,16 @@ vi.mock('@/lib/preferences', () => ({
   updatePreferences: vi.fn().mockResolvedValue(undefined),
 }));
 
+import { isPushSupported, getSubscriptionStatus, subscribeToPush } from '@/lib/push';
 import SettingsPage from '@/pages/SettingsPage';
 
 describe('SettingsPage', () => {
+  beforeEach(() => {
+    vi.mocked(isPushSupported).mockReturnValue(true);
+    vi.mocked(getSubscriptionStatus).mockReturnValue('unsubscribed');
+    vi.mocked(subscribeToPush).mockResolvedValue('test-id');
+  });
+
   it('renders page title', () => {
     render(<SettingsPage />);
     expect(screen.getByText('settings.title')).toBeDefined();
@@ -60,4 +67,59 @@ describe('SettingsPage', () => {
     render(<SettingsPage />);
     expect(screen.getByText('settings.disabled')).toBeDefined();
   });
+
+  it('shows not supported message when push not supported', () => {
+    vi.mocked(isPushSupported).mockReturnValue(false);
+    render(<SettingsPage />);
+    expect(screen.getByText('settings.notSupported')).toBeDefined();
+  });
+
+  it('shows denied message when push permission is denied', () => {
+    vi.mocked(getSubscriptionStatus).mockReturnValue('denied');
+    render(<SettingsPage />);
+    expect(screen.getByText('settings.permissionDenied')).toBeDefined();
+    expect(screen.getByText('settings.deniedHelp')).toBeDefined();
+  });
+
+  it('shows processing state and calls subscribeToPush when enable clicked', async () => {
+    render(<SettingsPage />);
+    const enableBtn = screen.getByText('settings.enable');
+    await act(async () => {
+      fireEvent.click(enableBtn);
+    });
+    expect(subscribeToPush).toHaveBeenCalled();
+  });
+
+  it('updates status to subscribed after successful subscribe', async () => {
+    vi.mocked(subscribeToPush).mockResolvedValue('new-sub-id');
+    render(<SettingsPage />);
+    await act(async () => {
+      fireEvent.click(screen.getByText('settings.enable'));
+    });
+    expect(screen.getByText('settings.enabled')).toBeDefined();
+  });
+
+  it('sets denied status when subscribe returns null and Notification permission is denied', async () => {
+    vi.mocked(subscribeToPush).mockResolvedValue(null);
+    // Replace the Notification global so permission returns 'denied'
+    vi.stubGlobal('Notification', { permission: 'denied', requestPermission: vi.fn() });
+    render(<SettingsPage />);
+    await act(async () => {
+      fireEvent.click(screen.getByText('settings.enable'));
+    });
+    // status should be 'denied' now — permissionDenied message shown
+    expect(screen.getByText('settings.permissionDenied')).toBeDefined();
+    vi.unstubAllGlobals();
+  });
+
+  it('handles subscribe error gracefully and restores button', async () => {
+    vi.mocked(subscribeToPush).mockRejectedValue(new Error('Subscribe failed'));
+    render(<SettingsPage />);
+    await act(async () => {
+      fireEvent.click(screen.getByText('settings.enable'));
+    });
+    // Should not crash - loading state restored
+    expect(screen.getByText('settings.enable')).toBeDefined();
+  });
+
 });

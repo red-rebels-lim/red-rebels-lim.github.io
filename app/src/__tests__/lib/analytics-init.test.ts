@@ -42,6 +42,19 @@ describe('initAnalytics', () => {
     expect(window.clarity).toBeDefined();
   });
 
+  it('invokes the Clarity stub function body when called after init', async () => {
+    vi.stubEnv('VITE_GA_MEASUREMENT_ID', '');
+    vi.stubEnv('VITE_CLARITY_PROJECT_ID', 'CLARITY123');
+
+    vi.resetModules();
+    const { initAnalytics } = await import('@/lib/analytics');
+    initAnalytics();
+
+    // Calling window.clarity() exercises the stub function body (lines 32-33)
+    window.clarity!('set', 'key', 'value');
+    expect((window.clarity as unknown as { q: unknown[][] }).q).toBeDefined();
+  });
+
   it('does nothing when no IDs are configured', async () => {
     vi.stubEnv('VITE_GA_MEASUREMENT_ID', '');
     vi.stubEnv('VITE_CLARITY_PROJECT_ID', '');

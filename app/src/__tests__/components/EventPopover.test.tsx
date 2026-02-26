@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -90,5 +90,12 @@ describe('EventPopover', () => {
     render(<EventPopover event={cupEvent} open={true} onClose={vi.fn()} />);
     const dialog = document.querySelector('[role="dialog"]');
     expect(dialog?.textContent).toContain('Κύπελλο');
+  });
+
+  it('calls onClose when dialog is dismissed via Escape key', () => {
+    const onClose = vi.fn();
+    render(<EventPopover event={baseEvent} open={true} onClose={onClose} />);
+    fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
+    expect(onClose).toHaveBeenCalled();
   });
 });
