@@ -35,14 +35,14 @@ async function isMonthVisible(page: Page, month: RegExp): Promise<boolean> {
 async function navigateToMonth(page: Page, targetMonth: RegExp) {
   if (await isMonthVisible(page, targetMonth)) return;
 
-  const prevButton = page.getByRole('button', { name: 'Previous' });
+  const prevButton = page.getByRole('button', { name: 'Previous', exact: true });
   for (let i = 0; i < 12; i++) {
     if (await isMonthVisible(page, /september/i)) break;
     await prevButton.click();
     await page.waitForTimeout(200);
   }
 
-  const nextButton = page.getByRole('button', { name: 'Next' });
+  const nextButton = page.getByRole('button', { name: 'Next', exact: true });
   for (let i = 0; i < 12; i++) {
     if (await isMonthVisible(page, targetMonth)) break;
     await nextButton.click();
@@ -101,7 +101,7 @@ test.describe('Calendar Page', () => {
       // Navigate back to calendar
       if (isMobile(page)) await openMobileMenu(page);
       await page.getByRole('link', { name: /calendar/i }).click();
-      await expect(page.getByRole('button', { name: 'Previous' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeVisible();
       await expect(page).toHaveURL(/#\//);
     });
 
@@ -144,8 +144,8 @@ test.describe('Calendar Page', () => {
     });
 
     test('Previous and Next buttons are visible', async ({ page }) => {
-      await expect(page.getByRole('button', { name: 'Previous' })).toBeVisible();
-      await expect(page.getByRole('button', { name: 'Next' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeVisible();
     });
 
     test('Today button is visible', async ({ page }) => {
@@ -158,7 +158,7 @@ test.describe('Calendar Page', () => {
       expect(await isMonthVisible(page, /september/i)).toBe(true);
 
       // Click Next
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.getByRole('button', { name: 'Next', exact: true }).click();
       expect(await isMonthVisible(page, /october/i)).toBe(true);
     });
 
@@ -168,7 +168,7 @@ test.describe('Calendar Page', () => {
       expect(await isMonthVisible(page, /october/i)).toBe(true);
 
       // Click Previous to go back
-      await page.getByRole('button', { name: 'Previous' }).click();
+      await page.getByRole('button', { name: 'Previous', exact: true }).click();
       expect(await isMonthVisible(page, /september/i)).toBe(true);
     });
 
@@ -178,7 +178,7 @@ test.describe('Calendar Page', () => {
       expect(await isMonthVisible(page, /september/i)).toBe(true);
 
       // Click Previous again - should stay on September
-      await page.getByRole('button', { name: 'Previous' }).click();
+      await page.getByRole('button', { name: 'Previous', exact: true }).click();
       await page.waitForTimeout(300);
       expect(await isMonthVisible(page, /september/i)).toBe(true);
     });
@@ -189,7 +189,7 @@ test.describe('Calendar Page', () => {
       expect(await isMonthVisible(page, /august/i)).toBe(true);
 
       // Click Next again - should stay on August
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.getByRole('button', { name: 'Next', exact: true }).click();
       await page.waitForTimeout(300);
       expect(await isMonthVisible(page, /august/i)).toBe(true);
     });

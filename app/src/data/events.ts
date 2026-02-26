@@ -115,9 +115,10 @@ export const eventsData: EventsData = {
       day: 31,
       sport: 'volleyball-men',
       location: 'away',
-      opponent: 'OMONOIA',
+      opponent: 'ΟΜΟΝΟΙΑ',
       time: '',
       venue: 'Ελευθερία',
+      logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp',
       status: 'played',
       score: '3-1'
     }
@@ -163,6 +164,7 @@ export const eventsData: EventsData = {
       opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ',
       time: '',
       venue: 'Θεμιστόκλειο',
+      logo: 'images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp',
       status: 'played',
       score: '0-3'
     },
@@ -226,6 +228,7 @@ export const eventsData: EventsData = {
       opponent: 'ΟΛΥΜΠΙΑΔΑ Ν. (Γ)',
       time: '',
       venue: 'Νεάπολη-Επιστροφή',
+      logo: 'images/team_logos/ΟΛΥΜΠΙΑΔΑ Ν.webp',
       status: 'played',
       score: '3-0'
     },
@@ -366,6 +369,7 @@ export const eventsData: EventsData = {
       opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ',
       time: '',
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
+      logo: 'images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp',
       status: 'played',
       score: '3-0'
     }
@@ -464,6 +468,7 @@ export const eventsData: EventsData = {
       opponent: 'ΟΛΥΜΠΙΑΔΑ Ν. (Γ)',
       time: '',
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
+      logo: 'images/team_logos/ΟΛΥΜΠΙΑΔΑ Ν.webp',
       status: 'played',
       score: '1-3'
     },
@@ -593,6 +598,7 @@ export const eventsData: EventsData = {
       opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ',
       time: '',
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
+      logo: 'images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp',
       status: 'played',
       score: '3-0'
     },
@@ -690,7 +696,7 @@ export const eventsData: EventsData = {
           opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ',
           time: '20:00',
           venue: 'Γυμνάσιο Αγίου Νεοφύτου',
-          logo: 'images/team_logos/ΚΟΥΡΗΣ ΕΡΗΜΗΣ.webp'
+          logo: 'images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp'
       },
       {
           day: 14,
@@ -717,7 +723,7 @@ export const eventsData: EventsData = {
           opponent: 'ΚΟΥΡΗΣ ΕΡΗΜΗΣ (Γ)',
           time: '20:00',
           venue: 'Θεμιστόκλειο',
-          logo: 'images/team_logos/ΚΟΥΡΗΣ ΕΡΗΜΗΣ.webp'
+          logo: 'images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp'
       },
     {
       day: 18,

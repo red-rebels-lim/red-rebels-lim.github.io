@@ -29,14 +29,14 @@ async function isMonthVisible(page: Page, month: RegExp): Promise<boolean> {
 async function navigateToMonth(page: Page, targetMonth: RegExp) {
   if (await isMonthVisible(page, targetMonth)) return;
 
-  const prevButton = page.getByRole('button', { name: 'Previous' });
+  const prevButton = page.getByRole('button', { name: 'Previous', exact: true });
   for (let i = 0; i < 12; i++) {
     if (await isMonthVisible(page, /september/i)) break;
     await prevButton.click();
     await page.waitForTimeout(200);
   }
 
-  const nextButton = page.getByRole('button', { name: 'Next' });
+  const nextButton = page.getByRole('button', { name: 'Next', exact: true });
   for (let i = 0; i < 12; i++) {
     if (await isMonthVisible(page, targetMonth)) break;
     await nextButton.click();

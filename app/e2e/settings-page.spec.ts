@@ -67,7 +67,7 @@ test.describe('Settings Page', () => {
     if (isMobile(page)) await openMobileMenu(page);
     await page.getByRole('link', { name: /calendar/i }).click();
     // Verify we're on the calendar page by checking for the month navigation
-    await expect(page.getByRole('button', { name: 'Previous' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeVisible();
     await expect(page).toHaveURL(/#\//);
   });
 
