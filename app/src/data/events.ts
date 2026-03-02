@@ -661,6 +661,8 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΑΣΙΛ ΛΥΣΗΣ',
       time: '15:00',
+      status: 'played',
+      score: '1-2',
       venue: 'ΓΗΠΕΔΟ ΟΛΥΜΠΙΑΔΑΣ ΛΥΜΠΙΩΝ',
       logo: 'images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.webp'
     },
@@ -670,6 +672,8 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΑΝΟΡΘΩΣΙΣ (Γ)',
       time: '17:00',
+      status: 'played',
+      score: '1-3',
       venue: 'Σωτήρειον',
       logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
     }
