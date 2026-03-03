@@ -685,6 +685,8 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΟΜΟΝΟΙΑ',
       time: '20:00',
+      status: 'played',
+      score: '3-0',
       venue: 'Ελευθερία',
       logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp'
     },
