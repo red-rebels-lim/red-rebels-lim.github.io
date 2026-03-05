@@ -717,11 +717,29 @@ export const eventsData: EventsData = {
       logo: 'images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp'
     },
     {
+      day: 13,
+      sport: 'football-men',
+      location: 'away',
+      opponent: 'ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ',
+      time: '19:00',
+      venue: 'ΓΗΠΕΔΟ \'ΚΕΡΥΝΕΙΑ-ΕΠΙΣΤΡΟΦΗ\'',
+      logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.webp'
+    },
+    {
+      day: 13,
+      sport: 'volleyball-men',
+      location: 'home',
+      opponent: 'ΑΝΟΡΘΩΣΙΣ',
+      time: '20:30',
+      venue: 'Αγίου Αθανασίου',
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
+    },
+    {
       day: 14,
       sport: 'volleyball-women',
       location: 'home',
       opponent: 'ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)',
-      time: '18:00',
+      time: '19:00',
       venue: 'Γυμνάσιο Αγίου Νεοφύτου',
       logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp'
     },
@@ -731,7 +749,7 @@ export const eventsData: EventsData = {
       location: 'away',
       opponent: 'ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ',
       time: '15:30',
-      venue: 'ΓΗΠΕΔΟ \'ΚΕΡΥΝΕΙΑ-ΕΠΙΣΤΡΟΦΗ\'',
+      venue: 'ΓΗΠΕΔΟ ΚΕΡΥΝΕΙΑ-ΕΠΙΣΤΡΟΦΗ',
       logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.webp'
     },
     {
@@ -752,6 +770,23 @@ export const eventsData: EventsData = {
       logo: 'images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp'
     },
     {
+      day: 20,
+      sport: 'volleyball-men',
+      location: 'home',
+      opponent: 'ΑΝΟΡΘΩΣΙΣ',
+      time: '20:30',
+      venue: 'Αγίου Αθανασίου',
+      competition: 'cup',
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
+    },
+    {
+      day: 20,
+      sport: 'meeting',
+      location: 'home',
+      opponent: 'Red Rebels Annual Party',
+      time: '20:00'
+    },
+    {
       day: 21,
       sport: 'volleyball-women',
       location: 'home',
@@ -767,6 +802,16 @@ export const eventsData: EventsData = {
       opponent: 'ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ',
       time: '15:30',
       logo: 'images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp'
+    },
+    {
+      day: 27,
+      sport: 'volleyball-men',
+      location: 'away',
+      opponent: 'ΑΝΟΡΘΩΣΙΣ',
+      time: '20:30',
+      venue: 'Θεμιστόκλειο',
+      competition: 'cup',
+      logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
     }
   ],
   april: [

@@ -92,6 +92,36 @@ const MONTH_NAMES: Record<number, string> = {
   12: 'december',
 };
 
+const MONTH_NAME_TO_NUM: Record<string, number> = {
+  january: 1, february: 2, march: 3, april: 4,
+  may: 5, june: 6, july: 7, august: 8,
+  september: 9, october: 10, november: 11, december: 12,
+};
+
+/**
+ * Check if an event date (month name + day) is in the past.
+ * Infers year from the sports season: Sep-Dec = previous year, Jan-Aug = current year
+ * (relative to the season end year).
+ */
+export function isEventInPast(monthName: string, day: number, now: Date = new Date()): boolean {
+  const monthNum = MONTH_NAME_TO_NUM[monthName];
+  if (!monthNum) return false;
+
+  // Determine the season's end year based on current date.
+  // If we're in Sep-Dec, the season ends next year. Otherwise it ends this year.
+  const currentMonth = now.getMonth() + 1;
+  const currentYear = now.getFullYear();
+  const seasonEndYear = currentMonth >= 9 ? currentYear + 1 : currentYear;
+
+  // Sep-Dec belong to seasonEndYear - 1, Jan-Aug belong to seasonEndYear
+  const eventYear = monthNum >= 9 ? seasonEndYear - 1 : seasonEndYear;
+  const eventDate = new Date(eventYear, monthNum - 1, day);
+
+  // Compare date only (ignore time)
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return eventDate < today;
+}
+
 function hasExistingLogos(): boolean {
   if (!fs.existsSync(LOGOS_DIR)) return false;
 
@@ -760,9 +790,12 @@ function updateCalendarData(fixtures: Fixture[]): ChangeLog {
       }
     }
 
-    // Add new scraped events that didn't match any existing event
+    // Add new scraped events that didn't match any existing event (only future events)
     for (const [key, scrapedEvent] of scrapedKeys) {
       if (!matchedKeys.has(key)) {
+        if (isEventInPast(monthName, scrapedEvent.day)) {
+          continue;
+        }
         const eventDesc = `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${scrapedEvent.day}: ${scrapedEvent.sport} vs ${scrapedEvent.opponent}`;
         changes.added.push(eventDesc);
         preserved.push(scrapedEvent);
