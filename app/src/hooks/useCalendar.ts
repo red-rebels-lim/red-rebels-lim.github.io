@@ -85,7 +85,8 @@ function buildCalendarData(filters?: FilterState): CalendarData {
 
     const eventsByDay: Record<number, CalendarEvent[]> = {};
     for (const ev of events) {
-      const parsed = parseEvent(ev);
+      if (!ev.sport) continue;
+      const parsed = parseEvent(ev as typeof ev & { sport: string });
       if (!eventsByDay[parsed.day]) eventsByDay[parsed.day] = [];
       eventsByDay[parsed.day].push(parsed);
     }

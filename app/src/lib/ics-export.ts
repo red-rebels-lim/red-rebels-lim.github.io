@@ -23,6 +23,7 @@ export function exportToCalendar() {
     const info = monthMap[monthName as MonthName];
 
     for (const ev of events) {
+      if (!ev.sport) continue;
       const cfg = sportConfig[ev.sport];
       const isMeeting = ev.sport === 'meeting';
 
@@ -66,7 +67,7 @@ export function exportToCalendar() {
         'volleyball-women': 'Γυναικείο Βόλεϊ',
         'meeting': 'Συνάντηση',
       };
-      ics += `CATEGORIES:${sportNames[ev.sport] || 'Εκδήλωση'}\r\n`;
+      ics += `CATEGORIES:${sportNames[ev.sport!] || 'Εκδήλωση'}\r\n`;
       ics += 'END:VEVENT\r\n';
     }
   }

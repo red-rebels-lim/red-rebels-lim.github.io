@@ -5,7 +5,7 @@ export type Competition = 'league' | 'cup';
 
 export interface SportEvent {
   day: number;
-  sport: Sport;
+  sport?: Sport;
   location: Location;
   opponent: string;
   time: string;
