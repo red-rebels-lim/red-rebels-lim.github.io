@@ -744,15 +744,6 @@ export const eventsData: EventsData = {
       logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp'
     },
     {
-      day: 14,
-      sport: 'football-men',
-      location: 'away',
-      opponent: 'ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ',
-      time: '15:30',
-      venue: 'ΓΗΠΕΔΟ ΚΕΡΥΝΕΙΑ-ΕΠΙΣΤΡΟΦΗ',
-      logo: 'images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.webp'
-    },
-    {
       day: 17,
       sport: 'volleyball-women',
       location: 'away',
