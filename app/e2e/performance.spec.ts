@@ -72,6 +72,7 @@ test.describe('Performance metrics', () => {
     expect(elapsed).toBeLessThan(5000);
   });
 
+  // eslint-disable-next-line no-empty-pattern
   test('Bundle size check (production build)', async ({}, testInfo) => {
     const fs = await import('fs');
     const distDir = resolve(__dirname, '../dist/assets');

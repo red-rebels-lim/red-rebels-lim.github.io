@@ -255,7 +255,7 @@ test.describe('J8: Event details for different states', () => {
 
       const dialogText = await dialog.textContent();
       // Played matches show a score pattern (X-X)
-      const hasScore = dialogText?.match(/\d+-\d+/);
+      dialogText?.match(/\d+-\d+/);
 
       // Close and test an upcoming match
       await page.keyboard.press('Escape');

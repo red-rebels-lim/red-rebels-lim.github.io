@@ -17,6 +17,7 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   componentDidCatch(_error: Error, _info: ErrorInfo) {
     // In production, could send to an error reporting service
   }
