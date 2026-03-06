@@ -239,6 +239,9 @@
     "next": "Next",
     "finish": "Got it!"
   },
+  "matchReport": {
+    "title": "Match Report"
+  },
   "popover": {
     "time": "Time",
     "location": "Location",

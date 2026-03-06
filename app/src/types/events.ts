@@ -30,6 +30,8 @@ export interface CalendarEvent {
   isMeeting: boolean;
   competition?: Competition;
   penalties?: string;
+  reportEN?: string;
+  reportEL?: string;
 }
 
 export interface CalendarDay {

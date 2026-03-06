@@ -239,6 +239,9 @@
     "next": "Επόμενο",
     "finish": "Κατάλαβα!"
   },
+  "matchReport": {
+    "title": "Αναφορά Αγώνα"
+  },
   "popover": {
     "time": "Ώρα",
     "location": "Τοποθεσία",

@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/compone
 import { getMatchResult } from '@/lib/stats';
 import { TEAM_NAME } from '@/data/constants';
 import type { CalendarEvent } from '@/types/events';
+import { MatchReport } from './MatchReport';
 
 interface EventPopoverProps {
   event: CalendarEvent | null;
@@ -97,6 +98,11 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
                   </div>
                 )}
               </div>
+            )}
+
+            {/* Match Report */}
+            {event.status === 'played' && (
+              <MatchReport reportEN={event.reportEN} reportEL={event.reportEL} />
             )}
 
             {/* Info grid */}
