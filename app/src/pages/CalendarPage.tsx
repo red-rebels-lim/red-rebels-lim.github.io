@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import { MonthNavigation } from '@/components/calendar/MonthNavigation';
 import { CalendarGrid } from '@/components/calendar/CalendarGrid';
 import { FilterPanel } from '@/components/filters/FilterPanel';
+import { OnboardingTour } from '@/components/OnboardingTour';
 
 const INITIAL_SCROLL_DELAY_MS = 300;
 const MONTH_CHANGE_SCROLL_DELAY_MS = 350;
@@ -77,6 +78,7 @@ export function CalendarPage() {
       <CalendarGrid monthData={monthData} currentMonth={currentMonth} />
 
       <Footer />
+      <OnboardingTour />
     </div>
   );
 }

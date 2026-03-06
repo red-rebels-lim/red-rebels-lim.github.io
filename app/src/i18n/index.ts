@@ -2,10 +2,9 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './en.json';
 import el from './el.json';
+import { detectLanguage } from './detectLanguage';
 
-// Map legacy 'gr' key to 'el'
-const savedLang = localStorage.getItem('language');
-const defaultLng = savedLang === 'gr' ? 'el' : savedLang || 'en';
+const defaultLng = detectLanguage(navigator.language);
 
 i18n.use(initReactI18next).init({
   resources: {

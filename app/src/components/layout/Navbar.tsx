@@ -85,6 +85,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
         {t('nav.calendar')}
       </NavLink>
       <NavLink
+        data-tour="stats"
         to="/stats"
         className={({ isActive }) =>
           `px-4 py-2 rounded-lg font-semibold transition-all hover:bg-[rgba(224,37,32,0.15)] ${
@@ -96,6 +97,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
         {t('nav.stats')}
       </NavLink>
       <NavLink
+        data-tour="settings"
         to="/settings"
         className={({ isActive }) =>
           `px-4 py-2 rounded-lg font-semibold transition-all hover:bg-[rgba(224,37,32,0.15)] flex items-center gap-2 ${
@@ -131,6 +133,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
         <div className="flex items-center gap-2">
           {isCalendar && onToggleFilters && (
             <Button
+              data-tour="filters"
               variant="outline"
               size="sm"
               onClick={onToggleFilters}
@@ -141,7 +144,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
           )}
 
           {/* Tools dropdown — desktop only */}
-          <DropdownMenu>
+          <DropdownMenu data-tour="export">
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
