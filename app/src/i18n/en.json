@@ -222,6 +222,23 @@
     "fetchFailed": "Failed to load live data",
     "retry": "Retry"
   },
+  "onboarding": {
+    "tourLabel": "Welcome tour",
+    "step1Title": "Swipe to Navigate",
+    "step1Desc": "Swipe left or right on the calendar to move between months.",
+    "step2Title": "Filter Events",
+    "step2Desc": "Use filters to show only the sports or locations you care about.",
+    "step3Title": "View Statistics",
+    "step3Desc": "Check out team stats, league standings, and season progress.",
+    "step4Title": "Enable Notifications",
+    "step4Desc": "Get push notifications for upcoming matches and score updates.",
+    "step5Title": "Export Calendar",
+    "step5Desc": "Export matches to your phone or Google Calendar as an .ics file.",
+    "skip": "Skip",
+    "prev": "Back",
+    "next": "Next",
+    "finish": "Got it!"
+  },
   "popover": {
     "time": "Time",
     "location": "Location",

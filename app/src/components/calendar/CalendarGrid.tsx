@@ -138,7 +138,7 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
 
   return (
     <>
-      <div className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-2 border-[rgba(224,37,32,0.3)] overflow-hidden" role="grid" aria-label={t(`months.${currentMonth}`)}>
+      <div className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-2 border-[rgba(224,37,32,0.3)] overflow-hidden" data-tour="calendar" role="grid" aria-label={t(`months.${currentMonth}`)}>
         {/* Header - weekday names (desktop only) */}
         <div className="hidden md:grid grid-cols-7 bg-gradient-to-br from-[#E02520] to-[#b91c1c] py-3" role="row">
           {dayNames.map((day) => (
