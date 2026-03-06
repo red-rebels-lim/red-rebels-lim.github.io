@@ -38,6 +38,4 @@ app/coverage
 *.lcov
 
 scripts
-e2e-snapshots
-lighthouse-report
-.playwright-mcp
+tests
