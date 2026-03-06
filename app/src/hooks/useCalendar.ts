@@ -3,12 +3,11 @@ import type { MonthName, CalendarData, CalendarEvent, FilterState } from '@/type
 import { eventsData } from '@/data/events';
 import { sportConfig } from '@/data/sport-config';
 import { monthMap, MONTH_ORDER } from '@/data/month-config';
-
-const TEAM_NAME = 'Νέα Σαλαμίνα';
+import { TEAM_NAME } from '@/data/constants';
 
 function getDayName(year: number, monthIndex: number, day: number): string {
-  const dayNames = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο'];
-  return dayNames[new Date(year, monthIndex, day).getDay()];
+  const dayKeys = ['days.sunday', 'days.monday', 'days.tuesday', 'days.wednesday', 'days.thursday', 'days.friday', 'days.saturday'];
+  return dayKeys[new Date(year, monthIndex, day).getDay()];
 }
 
 function parseEvent(eventData: {

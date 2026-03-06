@@ -1,5 +1,6 @@
 import Parse from '@/lib/parse';
 import { createDefaultPreferences } from '@/lib/preferences';
+import { logError } from '@/lib/logger';
 
 const STORAGE_KEY = 'push_subscription_id';
 
@@ -31,19 +32,29 @@ export function getSubscriptionStatus(): PushStatus {
   return 'unsubscribed';
 }
 
+function getRegistrationWithTimeout(timeoutMs = 5000): Promise<ServiceWorkerRegistration> {
+  if (window.__swRegistration) return Promise.resolve(window.__swRegistration);
+  return Promise.race([
+    navigator.serviceWorker.ready,
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Service worker not ready within timeout')), timeoutMs)
+    ),
+  ]);
+}
+
 export async function subscribeToPush(): Promise<string | null> {
   if (!isPushSupported()) return null;
+
+  const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+  if (!vapidKey) {
+    logError('VAPID public key not configured');
+    return null;
+  }
 
   const permission = await Notification.requestPermission();
   if (permission !== 'granted') return null;
 
-  const registration = window.__swRegistration ?? await navigator.serviceWorker.ready;
-
-  const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
-  if (!vapidKey) {
-    console.error('VAPID public key not configured');
-    return null;
-  }
+  const registration = await getRegistrationWithTimeout();
 
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
@@ -71,6 +82,10 @@ export async function subscribeToPush(): Promise<string | null> {
     sub.set('endpoint', json.endpoint);
     sub.set('p256dh', keys.p256dh);
     sub.set('auth', keys.auth);
+    const acl = new Parse.ACL();
+    acl.setPublicReadAccess(true);
+    acl.setPublicWriteAccess(false);
+    sub.setACL(acl);
     parseObj = await sub.save();
   }
 
@@ -86,7 +101,7 @@ export async function subscribeToPush(): Promise<string | null> {
 }
 
 export async function unsubscribeFromPush(): Promise<void> {
-  const registration = window.__swRegistration ?? await navigator.serviceWorker.ready;
+  const registration = await getRegistrationWithTimeout();
   const subscription = await registration.pushManager.getSubscription();
   if (subscription) {
     await subscription.unsubscribe();

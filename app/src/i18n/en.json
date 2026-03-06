@@ -199,6 +199,29 @@
     "reminder1h": "1 hour before",
     "iosTip": "On iOS, add this app to your Home Screen first to receive push notifications."
   },
+  "calendar": {
+    "noEvents": "No events this month",
+    "cup": "Cup",
+    "penalties": "Penalties",
+    "penAbbrev": "(pen)"
+  },
+  "ics": {
+    "venue": "Venue",
+    "result": "Result",
+    "sportFootballMen": "Men's Football",
+    "sportVolleyballMen": "Men's Volleyball",
+    "sportVolleyballWomen": "Women's Volleyball",
+    "sportMeeting": "Meeting",
+    "sportEvent": "Event"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "reload": "Reload the page"
+  },
+  "errors": {
+    "fetchFailed": "Failed to load live data",
+    "retry": "Retry"
+  },
   "popover": {
     "time": "Time",
     "location": "Location",

@@ -89,7 +89,7 @@ describe('EventPopover', () => {
     };
     render(<EventPopover event={cupEvent} open={true} onClose={vi.fn()} />);
     const dialog = document.querySelector('[role="dialog"]');
-    expect(dialog?.textContent).toContain('Κύπελλο');
+    expect(dialog?.textContent).toContain('calendar.cup');
   });
 
   it('calls onClose when dialog is dismissed via Escape key', () => {

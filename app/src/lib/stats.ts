@@ -1,11 +1,6 @@
 import type { FormattedStats, TeamStats, HeadToHead, FormMatch, GoalDistributionEntry, PointsProgressionEntry, StreakInfo, RecordResult } from '@/types/events';
 import { eventsData } from '@/data/events';
-
-const MONTH_ORDER = [
-  'september', 'october', 'november', 'december',
-  'january', 'february', 'march', 'april',
-  'may', 'june', 'july', 'august',
-];
+import { MONTH_ORDER } from '@/data/month-config';
 
 function parseScore(scoreStr: string, location: string): [number | null, number | null] {
   if (!scoreStr || !scoreStr.includes('-')) return [null, null];

@@ -199,6 +199,29 @@
     "reminder1h": "1 ώρα πριν",
     "iosTip": "Σε iOS, προσθέστε αυτή την εφαρμογή στην Αρχική Οθόνη πρώτα για να λαμβάνετε push ειδοποιήσεις."
   },
+  "calendar": {
+    "noEvents": "Δεν υπάρχουν εκδηλώσεις αυτόν τον μήνα",
+    "cup": "Κύπελλο",
+    "penalties": "Πέναλτι",
+    "penAbbrev": "(πεν)"
+  },
+  "ics": {
+    "venue": "Γήπεδο",
+    "result": "Αποτέλεσμα",
+    "sportFootballMen": "Ανδρικό Ποδόσφαιρο",
+    "sportVolleyballMen": "Ανδρικό Βόλεϊ",
+    "sportVolleyballWomen": "Γυναικείο Βόλεϊ",
+    "sportMeeting": "Συνάντηση",
+    "sportEvent": "Εκδήλωση"
+  },
+  "error": {
+    "title": "Κάτι πήγε στραβά",
+    "reload": "Ανανέωση σελίδας"
+  },
+  "errors": {
+    "fetchFailed": "Αποτυχία φόρτωσης ζωντανών δεδομένων",
+    "retry": "Επανάληψη"
+  },
   "popover": {
     "time": "Ώρα",
     "location": "Τοποθεσία",

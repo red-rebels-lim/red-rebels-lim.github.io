@@ -122,16 +122,6 @@ export const eventsData: EventsData = {
       status: 'played',
       score: '3-1'
     },
-    {
-      day: 31,
-      sport: 'volleyball-men',
-      location: 'away',
-      opponent: 'OMONOIA',
-      time: '',
-      venue: 'Ελευθερία',
-      status: 'played',
-      score: '3-1'
-    }
   ],
   november: [
     {

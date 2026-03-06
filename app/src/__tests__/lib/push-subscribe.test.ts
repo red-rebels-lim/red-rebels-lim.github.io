@@ -13,12 +13,16 @@ const { mockPushSubscribe, mockGetSubscription, mockUnsubscribe, mockSave, mockD
 
 vi.mock('@/lib/parse', () => {
   function MockParseObject() {
-    return { set: vi.fn(), save: mockSave, destroy: mockDestroy, id: 'obj-123' };
+    return { set: vi.fn(), setACL: vi.fn(), save: mockSave, destroy: mockDestroy, id: 'obj-123' };
   }
   MockParseObject.createWithoutData = vi.fn().mockReturnValue({ id: 'pointer', destroy: mockDestroy });
 
   function MockQuery() {
     return { equalTo: vi.fn(), first: mockFirst, find: mockFind };
+  }
+
+  function MockACL() {
+    return { setPublicReadAccess: vi.fn(), setPublicWriteAccess: vi.fn() };
   }
 
   return {
@@ -28,6 +32,7 @@ vi.mock('@/lib/parse', () => {
         destroyAll: vi.fn().mockResolvedValue(undefined),
       },
       Query: MockQuery,
+      ACL: MockACL,
     },
   };
 });
