@@ -9,7 +9,13 @@ vi.mock('react-i18next', () => ({
 }));
 
 vi.mock('react-router-dom', () => ({
-  NavLink: ({ children, ...props }: Record<string, unknown>) => <a {...props}>{children as React.ReactNode}</a>,
+  NavLink: ({ children, to, ...props }: Record<string, unknown>) => {
+    // NavLink passes className as a function; resolve it to avoid React DOM warning
+    const className = typeof props.className === 'function'
+      ? (props.className as (args: { isActive: boolean }) => string)({ isActive: false })
+      : props.className;
+    return <a href={to as string} className={className as string}>{children as React.ReactNode}</a>;
+  },
   useLocation: () => ({ pathname: '/stats' }),
 }));
 
@@ -59,13 +65,13 @@ describe('StatsPage', () => {
     vi.restoreAllMocks();
   });
 
-  it('renders overall stats section', () => {
-    render(<StatsPage />);
+  it('renders overall stats section', async () => {
+    await act(async () => { render(<StatsPage />); });
     expect(screen.getByText('stats.overallStats')).toBeDefined();
   });
 
-  it('renders stat cards', () => {
-    render(<StatsPage />);
+  it('renders stat cards', async () => {
+    await act(async () => { render(<StatsPage />); });
     expect(screen.getByText('stats.matches')).toBeDefined();
     // wins/draws/losses appear multiple times (stat cards + form legend + home/away)
     expect(screen.getAllByText('stats.wins').length).toBeGreaterThan(0);
@@ -74,25 +80,25 @@ describe('StatsPage', () => {
     expect(screen.getAllByText('stats.points').length).toBeGreaterThan(0);
   });
 
-  it('renders home vs away section', () => {
-    render(<StatsPage />);
+  it('renders home vs away section', async () => {
+    await act(async () => { render(<StatsPage />); });
     expect(screen.getByText('stats.homeVsAway')).toBeDefined();
     expect(screen.getByText('stats.home')).toBeDefined();
     expect(screen.getByText('stats.away')).toBeDefined();
   });
 
-  it('renders recent form section', () => {
-    render(<StatsPage />);
+  it('renders recent form section', async () => {
+    await act(async () => { render(<StatsPage />); });
     expect(screen.getByText('stats.recentForm')).toBeDefined();
   });
 
-  it('renders head to head section', () => {
-    render(<StatsPage />);
+  it('renders head to head section', async () => {
+    await act(async () => { render(<StatsPage />); });
     expect(screen.getByText('stats.headToHead')).toBeDefined();
   });
 
-  it('renders records section when data exists', () => {
-    render(<StatsPage />);
+  it('renders records section when data exists', async () => {
+    await act(async () => { render(<StatsPage />); });
     // Records should exist since we have real events data
     const recordsSection = screen.queryByText('stats.records');
     if (recordsSection) {
@@ -100,14 +106,14 @@ describe('StatsPage', () => {
     }
   });
 
-  it('renders charts', () => {
-    render(<StatsPage />);
+  it('renders charts', async () => {
+    await act(async () => { render(<StatsPage />); });
     const charts = screen.queryAllByTestId('responsive-container');
     // Should have goal distribution and/or season progress charts
     expect(charts.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('renders streak label for draw streak', () => {
+  it('renders streak label for draw streak', async () => {
     vi.spyOn(statsLib, 'calculateStatistics').mockReturnValue({
       overall: { played: 5, wins: 1, draws: 3, losses: 1, goalsFor: 5, goalsAgainst: 4, points: 6 },
       home: { wins: 1, draws: 1, losses: 0, goalsFor: 3, goalsAgainst: 1, goalDifference: 2 },
@@ -126,11 +132,11 @@ describe('StatsPage', () => {
       heaviestDefeat: null,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
-    render(<StatsPage />);
+    await act(async () => { render(<StatsPage />); });
     expect(screen.getByText('stats.currentStreak')).toBeDefined();
   });
 
-  it('renders streak label for loss streak', () => {
+  it('renders streak label for loss streak', async () => {
     vi.spyOn(statsLib, 'calculateStatistics').mockReturnValue({
       overall: { played: 4, wins: 1, draws: 0, losses: 3, goalsFor: 3, goalsAgainst: 7, points: 3 },
       home: { wins: 1, draws: 0, losses: 1, goalsFor: 2, goalsAgainst: 3, goalDifference: -1 },
@@ -149,11 +155,11 @@ describe('StatsPage', () => {
       heaviestDefeat: null,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
-    render(<StatsPage />);
+    await act(async () => { render(<StatsPage />); });
     expect(screen.getByText('stats.currentStreak')).toBeDefined();
   });
 
-  it('renders streak label for unbeaten streak', () => {
+  it('renders streak label for unbeaten streak', async () => {
     vi.spyOn(statsLib, 'calculateStatistics').mockReturnValue({
       overall: { played: 5, wins: 2, draws: 3, losses: 0, goalsFor: 7, goalsAgainst: 2, points: 9 },
       home: { wins: 2, draws: 1, losses: 0, goalsFor: 5, goalsAgainst: 1, goalDifference: 4 },
@@ -172,7 +178,7 @@ describe('StatsPage', () => {
       heaviestDefeat: null,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
-    render(<StatsPage />);
+    await act(async () => { render(<StatsPage />); });
     expect(screen.getByText('stats.currentStreak')).toBeDefined();
   });
 

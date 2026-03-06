@@ -39,6 +39,7 @@ vi.mock('@/components/ui/sheet', () => ({
   SheetContent: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="sheet-content">{children}</div>
   ),
+  SheetTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 // Mock DropdownMenu to always render its content
@@ -259,9 +260,10 @@ describe('Navbar', () => {
 
   it('calls toggleTheme from mobile sheet theme button', () => {
     render(<Navbar />);
-    // Mobile button inside SheetContent has accessible name containing "Light Mode"
-    const mobileThemeBtn = screen.getByRole('button', { name: /light mode/i });
-    fireEvent.click(mobileThemeBtn);
+    // Both desktop (aria-label) and mobile (text) buttons match "light mode";
+    // the mobile button is inside SheetContent — pick the last one.
+    const themeBtns = screen.getAllByRole('button', { name: /light mode/i });
+    fireEvent.click(themeBtns[themeBtns.length - 1]);
     expect(toggleThemeMock).toHaveBeenCalled();
   });
 

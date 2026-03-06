@@ -14,7 +14,7 @@ export function SeasonProgress({ pointsProgression }: SeasonProgressProps) {
   return (
     <section className="stat-section">
       <h2 className="stat-section-title">{t('stats.seasonProgress')}</h2>
-      <div className="w-full h-[300px]">
+      <div className="w-full h-[300px]" role="img" aria-label={t('stats.seasonProgress')}>
         <ResponsiveContainer width="100%" height="100%" debounce={50}>
           <LineChart data={pointsProgression} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(224,37,32,0.15)" />

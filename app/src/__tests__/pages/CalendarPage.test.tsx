@@ -9,7 +9,12 @@ vi.mock('react-i18next', () => ({
 }));
 
 vi.mock('react-router-dom', () => ({
-  NavLink: ({ children, ...props }: Record<string, unknown>) => <a {...props}>{children as React.ReactNode}</a>,
+  NavLink: ({ children, to, ...props }: Record<string, unknown>) => {
+    const className = typeof props.className === 'function'
+      ? (props.className as (args: { isActive: boolean }) => string)({ isActive: false })
+      : props.className;
+    return <a href={to as string} className={className as string}>{children as React.ReactNode}</a>;
+  },
   useLocation: () => ({ pathname: '/' }),
 }));
 
