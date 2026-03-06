@@ -69,7 +69,7 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
               className="w-4 h-4 flex items-center justify-center text-slate-400 hover:text-white opacity-0 group-hover/carousel:opacity-100 transition-opacity"
               aria-label="Previous event"
             >
-              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
             {events.map((_, i) => (
               <button
@@ -84,7 +84,7 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
               className="w-4 h-4 flex items-center justify-center text-slate-400 hover:text-white opacity-0 group-hover/carousel:opacity-100 transition-opacity"
               aria-label="Next event"
             >
-              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
             </button>
           </div>
         </div>
@@ -138,11 +138,11 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
 
   return (
     <>
-      <div className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-2 border-[rgba(224,37,32,0.3)] overflow-hidden">
+      <div className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-2 border-[rgba(224,37,32,0.3)] overflow-hidden" role="grid" aria-label={t(`months.${currentMonth}`)}>
         {/* Header - weekday names (desktop only) */}
-        <div className="hidden md:grid grid-cols-7 bg-gradient-to-br from-[#E02520] to-[#b91c1c] py-3">
+        <div className="hidden md:grid grid-cols-7 bg-gradient-to-br from-[#E02520] to-[#b91c1c] py-3" role="row">
           {dayNames.map((day) => (
-            <div key={day} className="text-center text-white font-bold text-sm uppercase tracking-wider px-2">
+            <div key={day} role="columnheader" className="text-center text-white font-bold text-sm uppercase tracking-wider px-2">
               {t(day)}
             </div>
           ))}

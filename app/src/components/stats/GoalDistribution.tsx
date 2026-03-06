@@ -14,7 +14,7 @@ export function GoalDistribution({ goalDistribution }: GoalDistributionProps) {
   return (
     <section className="stat-section">
       <h2 className="stat-section-title">{t('stats.goalDistribution')}</h2>
-      <div className="w-full h-[300px]">
+      <div className="w-full h-[300px]" role="img" aria-label={t('stats.goalDistribution')}>
         <ResponsiveContainer width="100%" height="100%" debounce={50}>
           <BarChart data={goalDistribution} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
             <XAxis dataKey="match" tick={{ fill: '#9ca3af', fontSize: 11 }} angle={-45} textAnchor="end" height={60} />

@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { exportToCalendar } from '@/lib/ics-export';
 import { trackEvent } from '@/lib/analytics';
 import type { MonthName } from '@/types/events';
@@ -104,7 +104,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
         }
         onClick={() => setMobileOpen(false)}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
           <path d="M13.73 21a2 2 0 0 1-3.46 0" />
         </svg>
@@ -182,6 +182,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
             variant="outline"
             size="icon"
             onClick={() => { toggleTheme(); trackEvent('toggle_theme', { theme: isDark ? 'light' : 'dark' }); }}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
             className="hidden md:inline-flex w-11 h-11 rounded-full border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground text-xl"
           >
             {isDark ? '\u{1F319}' : '\u2600\uFE0F'}
@@ -196,12 +197,13 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
                 aria-label="Open menu"
                 className="md:hidden w-11 h-11 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground"
               >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <path d="M3 5h14M3 10h14M3 15h14" />
                 </svg>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-[#0a1810] border-[rgba(224,37,32,0.3)]">
+            <SheetContent side="right" className="bg-[#0a1810] border-[rgba(224,37,32,0.3)]" aria-describedby={undefined}>
+              <SheetTitle className="sr-only">{t('nav.calendar')}</SheetTitle>
               <div className="flex flex-col gap-4 mt-8">
                 {navLinks}
                 {isCalendar && onToggleFilters && (

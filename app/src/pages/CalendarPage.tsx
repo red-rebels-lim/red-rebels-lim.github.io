@@ -51,6 +51,7 @@ export function CalendarPage() {
 
   return (
     <div className="max-w-[1800px] w-[95%] mx-auto" {...swipe}>
+      <h1 className="sr-only">Red Rebels Calendar</h1>
       <Navbar
         onToggleFilters={() => setFiltersOpen((o) => !o)}
         currentMonth={currentMonth}

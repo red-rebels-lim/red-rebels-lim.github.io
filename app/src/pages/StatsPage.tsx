@@ -90,6 +90,8 @@ export default function StatsPage() {
     <div className="max-w-[1800px] w-[95%] mx-auto">
       <Navbar />
 
+      <h1 className="sr-only">{t('nav.stats')}</h1>
+
       {/* Error banner */}
       {fetchError && !loading && (
         <section className="bg-[rgba(244,67,54,0.1)] backdrop-blur-sm rounded-2xl p-4 mb-6 border-2 border-[rgba(244,67,54,0.3)] flex items-center justify-between gap-4">
