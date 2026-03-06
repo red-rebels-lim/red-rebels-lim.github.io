@@ -97,8 +97,10 @@ Beyond the existing ICS export, add a subscribable calendar URL (`.ics` feed) th
 
 ## Accessibility & UX Polish
 
-### 20. Keyboard Navigation
-Add keyboard shortcuts for month navigation (left/right arrows), jump to today (T key), and toggle filters (F key).
+### 20. ~~Keyboard Navigation~~ [IMPLEMENTED]
+~~Add keyboard shortcuts for month navigation (left/right arrows), jump to today (T key), and toggle filters (F key).~~
+
+> **Status:** `src/hooks/useKeyboardShortcuts.ts` — Arrow keys for month navigation, T for today, F for filters. Disabled when typing in input/textarea fields.
 
 ### 21. Share Match Card
 A share button on EventPopover to share a match card image or link via Web Share API (native share sheet on mobile).

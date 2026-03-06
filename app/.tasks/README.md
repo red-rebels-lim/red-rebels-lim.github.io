@@ -4,9 +4,9 @@
 
 | Status | Count |
 |--------|-------|
-| Done | 4 |
+| Done | 5 |
 | Partially Implemented | 6 |
-| Not Started | 18 |
+| Not Started | 17 |
 | **Total** | **28** |
 
 ## All Tasks
@@ -32,7 +32,7 @@
 | 17 | [Calendar Sync](./17-calendar-sync.md) | Partial | High | Medium | UX & Personalization |
 | 18 | [Onboarding Tour](./18-onboarding-tour.md) | **Done** | - | - | UX & Personalization |
 | 19 | [Language Auto-Detection](./19-language-auto-detection.md) | **Done** | - | - | UX & Personalization |
-| 20 | [Keyboard Navigation](./20-keyboard-navigation.md) | Not Started | Low | Small | Accessibility |
+| 20 | [Keyboard Navigation](./20-keyboard-navigation.md) | **Done** | - | - | Accessibility |
 | 21 | [Share Match Card](./21-share-match-card.md) | Not Started | Medium | Small | Accessibility |
 | 22 | [Offline Match Data](./22-offline-match-data.md) | Partial | Medium | Medium | Accessibility |
 | 23 | [Attendance Tracker](./23-attendance-tracker.md) | Not Started | Low | Medium | Analytics |

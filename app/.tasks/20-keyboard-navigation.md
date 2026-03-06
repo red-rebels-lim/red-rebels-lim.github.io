@@ -1,6 +1,6 @@
 # Task 20: Keyboard Navigation
 
-## Status: Not Started
+## Status: DONE
 ## Priority: Low
 ## Effort: Small
 ## Impact: Medium
@@ -50,8 +50,8 @@ Add keyboard shortcuts for month navigation (left/right arrows), jump to today (
 - None
 
 ## Acceptance Criteria
-- [ ] Arrow keys navigate months on calendar page
-- [ ] `T` jumps to today
-- [ ] `F` toggles filters
-- [ ] Shortcuts disabled when typing in input fields
-- [ ] No conflict with browser default shortcuts
+- [x] Arrow keys navigate months on calendar page
+- [x] `T` jumps to today
+- [x] `F` toggles filters
+- [x] Shortcuts disabled when typing in input fields
+- [x] No conflict with browser default shortcuts
