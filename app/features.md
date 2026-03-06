@@ -88,10 +88,10 @@ Beyond the existing ICS export, add a subscribable calendar URL (`.ics` feed) th
 
 > **Status:** Custom lightweight implementation with `src/hooks/useOnboarding.ts` hook and `src/components/OnboardingTour.tsx`. 5-step tour with localStorage persistence, skip/dismiss, bilingual EN/EL support. No external library needed.
 
-### 19. Language Auto-Detection
-Detect browser language and auto-set Greek or English on first visit (currently likely defaults to one).
+### 19. ~~Language Auto-Detection~~ [IMPLEMENTED]
+~~Detect browser language and auto-set Greek or English on first visit (currently likely defaults to one).~~
 
-> **Note:** `src/i18n/index.ts` reads a saved language from localStorage but does not detect browser language via `navigator.language` on first visit. Falls back to English.
+> **Status:** `src/i18n/detectLanguage.ts` detects browser language via `navigator.language` on first visit. Greek browsers get Greek, others get English. Saved preferences always take priority.
 
 ---
 

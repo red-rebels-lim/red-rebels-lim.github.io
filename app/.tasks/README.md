@@ -4,9 +4,9 @@
 
 | Status | Count |
 |--------|-------|
-| Done | 3 |
+| Done | 4 |
 | Partially Implemented | 6 |
-| Not Started | 19 |
+| Not Started | 18 |
 | **Total** | **28** |
 
 ## All Tasks
@@ -31,7 +31,7 @@
 | 16 | [Favorite Sport Filter](./16-favorite-sport-filter.md) | Not Started | Medium | Small | UX & Personalization |
 | 17 | [Calendar Sync](./17-calendar-sync.md) | Partial | High | Medium | UX & Personalization |
 | 18 | [Onboarding Tour](./18-onboarding-tour.md) | **Done** | - | - | UX & Personalization |
-| 19 | [Language Auto-Detection](./19-language-auto-detection.md) | Not Started | Medium | Small | UX & Personalization |
+| 19 | [Language Auto-Detection](./19-language-auto-detection.md) | **Done** | - | - | UX & Personalization |
 | 20 | [Keyboard Navigation](./20-keyboard-navigation.md) | Not Started | Low | Small | Accessibility |
 | 21 | [Share Match Card](./21-share-match-card.md) | Not Started | Medium | Small | Accessibility |
 | 22 | [Offline Match Data](./22-offline-match-data.md) | Partial | Medium | Medium | Accessibility |

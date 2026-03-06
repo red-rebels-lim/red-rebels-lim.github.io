@@ -1,6 +1,6 @@
 # Task 19: Language Auto-Detection
 
-## Status: Not Started
+## Status: DONE
 ## Priority: Medium
 ## Effort: Small
 ## Impact: Medium
@@ -44,8 +44,8 @@ Detect browser language and auto-set Greek or English on first visit (currently 
 - None
 
 ## Acceptance Criteria
-- [ ] Greek browser users see Greek on first visit
-- [ ] English browser users see English on first visit
-- [ ] Manual language toggle still works and persists
-- [ ] Existing users with saved preference are unaffected
-- [ ] No breaking changes to i18n behavior
+- [x] Greek browser users see Greek on first visit
+- [x] English browser users see English on first visit
+- [x] Manual language toggle still works and persists
+- [x] Existing users with saved preference are unaffected
+- [x] No breaking changes to i18n behavior
