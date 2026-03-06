@@ -15,6 +15,8 @@ export interface SportEvent {
   score?: string;
   competition?: Competition;
   penalties?: string;
+  reportEN?: string;
+  reportEL?: string;
 }
 
 export interface CalendarEvent {
@@ -30,6 +32,8 @@ export interface CalendarEvent {
   isMeeting: boolean;
   competition?: Competition;
   penalties?: string;
+  reportEN?: string;
+  reportEL?: string;
 }
 
 export interface CalendarDay {
