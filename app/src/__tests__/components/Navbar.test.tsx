@@ -215,6 +215,48 @@ describe('Navbar', () => {
     fireEvent.click(settingsLinks[0]);
   });
 
+  it('renders install button after beforeinstallprompt and handles install', async () => {
+    render(<Navbar />);
+    const promptMock = vi.fn().mockResolvedValue(undefined);
+    const userChoiceMock = Promise.resolve({ outcome: 'accepted' as const });
+
+    await act(async () => {
+      const event = new Event('beforeinstallprompt', { cancelable: true });
+      Object.assign(event, { prompt: promptMock, userChoice: userChoiceMock });
+      window.dispatchEvent(event);
+    });
+
+    // Install button should now be visible
+    const installBtns = screen.getAllByText('nav.install');
+    expect(installBtns.length).toBeGreaterThan(0);
+
+    await act(async () => {
+      fireEvent.click(installBtns[0]);
+    });
+
+    expect(promptMock).toHaveBeenCalled();
+    expect(trackEvent).toHaveBeenCalledWith('install_app', { outcome: 'accepted' });
+  });
+
+  it('handles install prompt error gracefully', async () => {
+    render(<Navbar />);
+
+    await act(async () => {
+      const event = new Event('beforeinstallprompt', { cancelable: true });
+      Object.assign(event, {
+        prompt: vi.fn().mockRejectedValue(new Error('User cancelled')),
+        userChoice: Promise.resolve({ outcome: 'dismissed' as const }),
+      });
+      window.dispatchEvent(event);
+    });
+
+    const installBtns = screen.getAllByText('nav.install');
+    await act(async () => {
+      fireEvent.click(installBtns[0]);
+    });
+    // Should not crash — installPrompt cleared via catch
+  });
+
   it('calls toggleTheme from mobile sheet theme button', () => {
     render(<Navbar />);
     // Mobile button inside SheetContent has accessible name containing "Light Mode"

@@ -55,7 +55,7 @@ describe('EventCard', () => {
       penalties: '4-3',
     };
     render(<EventCard event={penEvent} dayNumber={15} monthName="february" onClick={vi.fn()} />);
-    expect(screen.getByText(/πεν/)).toBeDefined();
+    expect(screen.getByText(/calendar\.penAbbrev/)).toBeDefined();
   });
 
   it('shows cup icon for cup matches', () => {

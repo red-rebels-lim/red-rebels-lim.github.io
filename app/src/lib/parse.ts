@@ -17,10 +17,12 @@ if (!resolved || typeof (resolved as Record<string, unknown>).initialize !== 'fu
 
 const Parse = resolved as ParseType;
 
-Parse.initialize(
-  import.meta.env.VITE_BACK4APP_APP_ID,
-  import.meta.env.VITE_BACK4APP_JS_KEY
-);
-(Parse as unknown as { serverURL: string }).serverURL = 'https://parseapi.back4app.com/';
+if (import.meta.env.VITE_BACK4APP_APP_ID) {
+  Parse.initialize(
+    import.meta.env.VITE_BACK4APP_APP_ID,
+    import.meta.env.VITE_BACK4APP_JS_KEY
+  );
+  (Parse as unknown as { serverURL: string }).serverURL = 'https://parseapi.back4app.com/';
+}
 
 export default Parse;

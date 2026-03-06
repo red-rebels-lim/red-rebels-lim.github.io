@@ -1,8 +1,10 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { CalendarEvent } from '@/types/events';
 import { getMatchResult } from '@/lib/stats';
 import { CountdownTimer } from './CountdownTimer';
 import { monthMap } from '@/data/month-config';
+import { TEAM_NAME } from '@/data/constants';
 import type { MonthName } from '@/types/events';
 import { trackEvent } from '@/lib/analytics';
 
@@ -23,6 +25,7 @@ interface EventCardProps {
 }
 
 export const EventCard = memo(function EventCard({ event, dayNumber, monthName, onClick }: EventCardProps) {
+  const { t } = useTranslation();
   const result = event.status === 'played' ? getMatchResult(event.score, event.location, event.penalties) : null;
 
   const bgClass = event.isMeeting
@@ -38,7 +41,7 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
   const subtitleParts = event.subtitle.split(' - ');
   const emoji = subtitleParts[0] ?? '';
   const timePart = subtitleParts[1];
-  const opponent = event.title.replace('Νέα Σαλαμίνα vs ', '').replace(/ vs Νέα Σαλαμίνα/, '');
+  const opponent = event.title.replace(`${TEAM_NAME} vs `, '').replace(` vs ${TEAM_NAME}`, '');
 
   // Compute countdown timestamp for upcoming events
   let countdownTimestamp: number | null = null;
@@ -73,11 +76,11 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
         </span>
         {event.status === 'played' && event.score && (
           <span className="ml-auto font-extrabold text-xs text-yellow-300 whitespace-nowrap px-1 py-0.5 bg-black/30 rounded shrink-0">
-            {event.score}{event.penalties ? ' (πεν)' : ''}
+            {event.score}{event.penalties ? ` ${t('calendar.penAbbrev')}` : ''}
           </span>
         )}
         {event.competition === 'cup' && (
-          <span className="text-xs shrink-0" title="Κύπελλο">🏆</span>
+          <span className="text-xs shrink-0" title={t('calendar.cup')}>🏆</span>
         )}
       </div>
       {countdownTimestamp && <CountdownTimer timestamp={countdownTimestamp} />}

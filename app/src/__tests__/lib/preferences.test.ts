@@ -6,12 +6,16 @@ const mockSave = vi.fn();
 
 vi.mock('@/lib/parse', () => {
   function MockParseObject() {
-    return { set: mockSet, save: mockSave, get: vi.fn() };
+    return { set: mockSet, setACL: vi.fn(), save: mockSave, get: vi.fn() };
   }
   MockParseObject.createWithoutData = vi.fn().mockReturnValue({ id: 'pointer' });
 
   function MockQuery() {
     return { equalTo: vi.fn(), first: mockFirst, find: vi.fn().mockResolvedValue([]) };
+  }
+
+  function MockACL() {
+    return { setPublicReadAccess: vi.fn(), setPublicWriteAccess: vi.fn() };
   }
 
   return {
@@ -20,6 +24,7 @@ vi.mock('@/lib/parse', () => {
         extend: vi.fn().mockReturnValue(MockParseObject),
       },
       Query: MockQuery,
+      ACL: MockACL,
     },
   };
 });

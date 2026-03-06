@@ -23,7 +23,7 @@ export function FilterPanel({ open, filters, onApply, onClear }: FilterPanelProp
   const [localFilters, setLocalFilters] = useState<FilterState>(filters);
 
   const update = useCallback(
-    (key: keyof FilterState, value: string) => {
+    (key: keyof FilterState, value: FilterState[keyof FilterState]) => {
       const next = { ...localFilters, [key]: value };
       setLocalFilters(next);
       onApply(next);

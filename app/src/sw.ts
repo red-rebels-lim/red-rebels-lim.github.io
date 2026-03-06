@@ -40,7 +40,8 @@ self.addEventListener('notificationclick', (event: NotificationEvent) => {
 
   if (event.action === 'dismiss') return;
 
-  const url = (event.notification.data?.url as string) || '/';
+  const rawUrl = (event.notification.data?.url as string) || '/';
+  const safeUrl = rawUrl.startsWith('/') || rawUrl.startsWith(self.location.origin) ? rawUrl : '/';
 
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
@@ -51,7 +52,7 @@ self.addEventListener('notificationclick', (event: NotificationEvent) => {
         }
       }
       // Open new tab
-      return self.clients.openWindow(url);
+      return self.clients.openWindow(safeUrl);
     })
   );
 });

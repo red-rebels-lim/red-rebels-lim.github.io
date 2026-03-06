@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { getMatchResult } from '@/lib/stats';
+import { TEAM_NAME } from '@/data/constants';
 import type { CalendarEvent } from '@/types/events';
 
 interface EventPopoverProps {
@@ -15,13 +16,13 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
   if (!event) return null;
 
   const result = event.status === 'played' ? getMatchResult(event.score, event.location, event.penalties) : null;
-  const opponent = event.title.replace('Νέα Σαλαμίνα vs ', '').replace(/ vs Νέα Σαλαμίνα/, '');
+  const opponent = event.title.replace(`${TEAM_NAME} vs `, '').replace(` vs ${TEAM_NAME}`, '');
   const subtitleParts = event.subtitle.split(' - ');
   const emoji = subtitleParts[0] ?? '';
   const rawTime = subtitleParts[1];
   const hasValidTime = rawTime && rawTime.includes(':');
   const time = hasValidTime ? rawTime : t('popover.tbd');
-  const isHome = event.title.startsWith('Νέα Σαλαμίνα vs');
+  const isHome = event.title.startsWith(`${TEAM_NAME} vs`);
 
   const resultBadge = event.status === 'played'
     ? result === 'win'
@@ -79,7 +80,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
             {event.competition === 'cup' && (
               <div className="text-center my-2">
                 <span className="bg-amber-500/20 text-amber-400 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg inline-block border border-amber-500/30">
-                  🏆 Κύπελλο
+                  🏆 {t('calendar.cup')}
                 </span>
               </div>
             )}
@@ -92,7 +93,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
                 </div>
                 {event.penalties && (
                   <div className="text-sm font-bold text-yellow-300/80 mt-1">
-                    Πέναλτι: {event.penalties}
+                    {t('calendar.penalties')}: {event.penalties}
                   </div>
                 )}
               </div>

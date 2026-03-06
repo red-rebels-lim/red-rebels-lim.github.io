@@ -24,7 +24,9 @@ vi.mock('@/components/ui/select', () => ({
 
 import { FilterPanel } from '@/components/filters/FilterPanel';
 
-const defaultFilters = { sport: 'all', location: 'all', status: 'all', search: '' };
+import type { FilterState } from '@/types/events';
+
+const defaultFilters: FilterState = { sport: 'all', location: 'all', status: 'all', search: '' };
 
 describe('FilterPanel', () => {
   it('renders nothing when closed', () => {

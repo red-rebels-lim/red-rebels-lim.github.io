@@ -1,4 +1,5 @@
 import type { MonthName, MonthInfo } from '@/types/events';
+import { SEASON_START_YEAR, SEASON_END_YEAR } from './constants';
 
 export const MONTH_ORDER: MonthName[] = [
   'september', 'october', 'november', 'december',
@@ -8,18 +9,18 @@ export const MONTH_ORDER: MonthName[] = [
 
 function getMonthInfo(monthName: MonthName): MonthInfo {
   const map: Record<MonthName, { monthIndex: number; year: number }> = {
-    september: { monthIndex: 8, year: 2025 },
-    october: { monthIndex: 9, year: 2025 },
-    november: { monthIndex: 10, year: 2025 },
-    december: { monthIndex: 11, year: 2025 },
-    january: { monthIndex: 0, year: 2026 },
-    february: { monthIndex: 1, year: 2026 },
-    march: { monthIndex: 2, year: 2026 },
-    april: { monthIndex: 3, year: 2026 },
-    may: { monthIndex: 4, year: 2026 },
-    june: { monthIndex: 5, year: 2026 },
-    july: { monthIndex: 6, year: 2026 },
-    august: { monthIndex: 7, year: 2026 },
+    september: { monthIndex: 8, year: SEASON_START_YEAR },
+    october: { monthIndex: 9, year: SEASON_START_YEAR },
+    november: { monthIndex: 10, year: SEASON_START_YEAR },
+    december: { monthIndex: 11, year: SEASON_START_YEAR },
+    january: { monthIndex: 0, year: SEASON_END_YEAR },
+    february: { monthIndex: 1, year: SEASON_END_YEAR },
+    march: { monthIndex: 2, year: SEASON_END_YEAR },
+    april: { monthIndex: 3, year: SEASON_END_YEAR },
+    may: { monthIndex: 4, year: SEASON_END_YEAR },
+    june: { monthIndex: 5, year: SEASON_END_YEAR },
+    july: { monthIndex: 6, year: SEASON_END_YEAR },
+    august: { monthIndex: 7, year: SEASON_END_YEAR },
   };
 
   const { monthIndex, year } = map[monthName];

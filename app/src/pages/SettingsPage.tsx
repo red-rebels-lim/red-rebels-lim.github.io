@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navbar } from '@/components/layout/Navbar';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import {
   type PushStatus,
 } from '@/lib/push';
 import { getPreferences, updatePreferences, type NotifPrefs } from '@/lib/preferences';
+import { logError } from '@/lib/logger';
 
 const SPORTS = [
   { key: 'football-men', labelKey: 'sports.footballMen' },
@@ -30,15 +31,21 @@ export default function SettingsPage() {
   const [status, setStatus] = useState<PushStatus>(() => getSubscriptionStatus());
   const [loading, setLoading] = useState(false);
   const [prefs, setPrefs] = useState<NotifPrefs | null>(null);
-  const [saveTimeout, setSaveTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const supported = isPushSupported();
+
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, []);
 
   // Load preferences
   useEffect(() => {
     const subId = getStoredSubscriptionId();
     if (subId) {
-      getPreferences(subId).then(setPrefs).catch(console.error);
+      getPreferences(subId).then(setPrefs).catch(logError);
     }
   }, [status]);
 
@@ -52,7 +59,7 @@ export default function SettingsPage() {
         setStatus('denied');
       }
     } catch (err) {
-      console.error('Failed to subscribe:', err);
+      logError('Failed to subscribe:', err);
     } finally {
       setLoading(false);
     }
@@ -65,7 +72,7 @@ export default function SettingsPage() {
       setStatus('unsubscribed');
       setPrefs(null);
     } catch (err) {
-      console.error('Failed to unsubscribe:', err);
+      logError('Failed to unsubscribe:', err);
     } finally {
       setLoading(false);
     }
@@ -75,16 +82,15 @@ export default function SettingsPage() {
   const savePrefs = useCallback(
     (updated: NotifPrefs) => {
       setPrefs(updated);
-      if (saveTimeout) clearTimeout(saveTimeout);
-      const timeout = setTimeout(() => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = setTimeout(() => {
         const subId = getStoredSubscriptionId();
         if (subId) {
-          updatePreferences(subId, updated).catch(console.error);
+          updatePreferences(subId, updated).catch(() => {});
         }
       }, 800);
-      setSaveTimeout(timeout);
     },
-    [saveTimeout]
+    []
   );
 
   const togglePref = (key: keyof Pick<NotifPrefs, 'notifyNewEvents' | 'notifyTimeChanges' | 'notifyScoreUpdates' | 'disabled'>) => {
@@ -225,7 +231,7 @@ export default function SettingsPage() {
         )}
 
         {/* iOS tip */}
-        {supported && /iPad|iPhone|iPod/.test(navigator.userAgent) && (
+        {supported && (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && (
           <div className={cardClass}>
             <p className="text-sm text-muted-foreground">{t('settings.iosTip')}</p>
           </div>

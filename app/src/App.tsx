@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppBackground } from '@/components/layout/AppBackground';
 import { CalendarPage } from '@/pages/CalendarPage';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -29,6 +29,7 @@ export default function App() {
               <Route path="/" element={<CalendarPage />} />
               <Route path="/stats" element={<StatsPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

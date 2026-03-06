@@ -72,5 +72,9 @@ export async function createDefaultPreferences(subscriptionId: string): Promise<
   pref.set('reminderHours', DEFAULTS.reminderHours);
   pref.set('enabledSports', DEFAULTS.enabledSports);
   pref.set('disabled', DEFAULTS.disabled);
+  const acl = new Parse.ACL();
+  acl.setPublicReadAccess(true);
+  acl.setPublicWriteAccess(false);
+  pref.setACL(acl);
   await pref.save();
 }

@@ -55,7 +55,7 @@ export type MonthName =
   | 'january' | 'february' | 'march' | 'april'
   | 'may' | 'june' | 'july' | 'august';
 
-export type EventsData = Record<string, SportEvent[]>;
+export type EventsData = Partial<Record<MonthName, SportEvent[]>>;
 export type CalendarData = Record<string, MonthData>;
 
 export interface SportConfig {
@@ -64,9 +64,9 @@ export interface SportConfig {
 }
 
 export interface FilterState {
-  sport: string;
-  location: string;
-  status: string;
+  sport: Sport | 'all';
+  location: Location | 'all';
+  status: MatchStatus | 'all';
   search: string;
 }
 

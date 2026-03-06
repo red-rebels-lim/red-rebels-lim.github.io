@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import type { ReactNode, ErrorInfo } from 'react';
+import i18n from '@/i18n';
 
 interface Props {
   children: ReactNode;
@@ -16,8 +17,9 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('ErrorBoundary caught:', error, info);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  componentDidCatch(_error: Error, _info: ErrorInfo) {
+    // In production, could send to an error reporting service
   }
 
   render() {
@@ -25,13 +27,13 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="min-h-screen flex items-center justify-center bg-[#0a1810] text-white">
           <div className="text-center p-8 rounded-2xl border-2 border-[rgba(224,37,32,0.4)] bg-[rgba(10,24,16,0.6)]">
-            <h1 className="text-2xl font-extrabold text-[#E02520] mb-4">Something went wrong</h1>
+            <h1 className="text-2xl font-extrabold text-[#E02520] mb-4">{i18n.t('error.title')}</h1>
             <a
               href="."
               onClick={() => window.location.reload()}
               className="text-red-300 underline hover:text-white transition-colors"
             >
-              Reload the page
+              {i18n.t('error.reload')}
             </a>
           </div>
         </div>

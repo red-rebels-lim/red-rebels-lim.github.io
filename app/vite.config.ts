@@ -52,7 +52,6 @@ export default defineConfig({
     include: ['parse/dist/parse.min.js'],
   },
   server: {
-    host: '0.0.0.0',
     watch: {
       usePolling: true,
     },

@@ -142,12 +142,13 @@ export function tApi(t: TFunction, category: string, apiString: string): string 
   return translated || apiString;
 }
 
+import { NEA_SALAMINA_ID } from '@/data/constants';
+
 // In-memory cache
 let cachedData: FotMobTeamData | null = null;
 let cacheTimestamp = 0;
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-const NEA_SALAMINA_ID = 8590;
 const API_URL = `https://www.fotmob.com/api/data/teams?id=${NEA_SALAMINA_ID}&ccode3=CYP`;
 
 export async function fetchTeamData(): Promise<FotMobTeamData | null> {
@@ -158,10 +159,7 @@ export async function fetchTeamData(): Promise<FotMobTeamData | null> {
 
   try {
     const res = await fetch(API_URL, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'application/json',
-      },
+      headers: { 'Accept': 'application/json' },
     });
     if (!res.ok) return null;
     const data: FotMobTeamData = await res.json();

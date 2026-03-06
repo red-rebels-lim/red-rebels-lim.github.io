@@ -1,19 +1,10 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { MonthData, CalendarEvent, CalendarDay, MonthName } from '@/types/events';
+import { monthMap } from '@/data/month-config';
 import { EventCard } from './EventCard';
 import { EventPopover } from './EventPopover';
 
-const monthIndexMap: Record<string, number> = {
-  september: 8, october: 9, november: 10, december: 11,
-  january: 0, february: 1, march: 2, april: 3,
-  may: 4, june: 5, july: 6, august: 7,
-};
-const yearMap: Record<string, number> = {
-  september: 2025, october: 2025, november: 2025, december: 2025,
-  january: 2026, february: 2026, march: 2026, april: 2026,
-  may: 2026, june: 2026, july: 2026, august: 2026,
-};
 const dayNames = ['days.monday', 'days.tuesday', 'days.wednesday', 'days.thursday', 'days.friday', 'days.saturday', 'days.sunday'];
 
 interface DesktopDayCellProps {
@@ -24,6 +15,7 @@ interface DesktopDayCellProps {
 }
 
 function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDayCellProps) {
+  const { t } = useTranslation();
   const events = day.events ?? [];
   const hasEvents = events.length > 0;
   const isCarousel = events.length > 1;
@@ -54,7 +46,7 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
         {day.number}
         {day.name && (
           <span className="block text-[0.7rem] font-semibold text-slate-400 uppercase tracking-wide mt-0.5">
-            {day.name}
+            {t(day.name)}
           </span>
         )}
       </div>
@@ -122,12 +114,13 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
   const { t } = useTranslation();
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
-  const today = new Date();
-  const todayDay = today.getDate();
-  const todayMonth = today.getMonth();
-  const todayYear = today.getFullYear();
+  const { todayDay, todayMonth, todayYear } = useMemo(() => {
+    const now = new Date();
+    return { todayDay: now.getDate(), todayMonth: now.getMonth(), todayYear: now.getFullYear() };
+  }, []);
 
-  const isCurrentMonth = monthIndexMap[currentMonth] === todayMonth && yearMap[currentMonth] === todayYear;
+  const monthInfo = monthMap[currentMonth];
+  const isCurrentMonth = monthInfo.monthIndex === todayMonth && monthInfo.year === todayYear;
 
   const { eventDays, nearestIdx } = useMemo(() => {
     const days = monthData.days.filter(
@@ -176,6 +169,9 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
 
         {/* Mobile: single column, events only */}
         <div className="md:hidden p-4 space-y-4">
+          {eventDays.length === 0 && (
+            <p className="text-center text-muted-foreground py-8 text-sm">{t('calendar.noEvents')}</p>
+          )}
           {eventDays.map((day, idx) => {
             const isToday = isCurrentMonth && day.number === todayDay;
             const isNearest = idx === nearestIdx;
@@ -196,7 +192,7 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
                   {day.number}
                   {day.name && (
                     <span className="inline text-lg font-bold text-red-300 ml-2">
-                      {day.name}
+                      {t(day.name)}
                     </span>
                   )}
                 </div>

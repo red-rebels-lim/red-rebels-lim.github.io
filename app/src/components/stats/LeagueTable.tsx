@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import type { LeagueTableData } from '@/lib/fotmob';
 import { tApi } from '@/lib/fotmob';
+import { NEA_SALAMINA_ID } from '@/data/constants';
 
 interface LeagueTableProps {
   tables: LeagueTableData[];
 }
-
-const NEA_SALAMINA_ID = 8590;
 
 const TH_CLASS = 'py-2 px-2 text-center text-red-300 font-extrabold text-xs uppercase tracking-wide bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)]';
 

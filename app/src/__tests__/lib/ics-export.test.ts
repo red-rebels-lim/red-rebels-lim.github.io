@@ -33,9 +33,9 @@ describe('exportToCalendar', () => {
     expect(removeChildSpy).toHaveBeenCalled();
   });
 
-  it('sets the download filename to red-rebels-calendar-2025.ics', () => {
+  it('sets the download filename with season years', () => {
     exportToCalendar();
-    expect(mockLink.download).toBe('red-rebels-calendar-2025.ics');
+    expect(mockLink.download).toBe('red-rebels-calendar-2025-26.ics');
   });
 
   it('creates a blob URL', () => {
@@ -81,15 +81,16 @@ describe('exportToCalendar', () => {
     const blob = createObjectURLSpy.mock.calls[0][0] as Blob;
     const text = await blob.text();
 
-    // Extract first VEVENT
-    const eventMatch = text.match(/BEGIN:VEVENT\r\n([\s\S]*?)END:VEVENT/);
-    expect(eventMatch).not.toBeNull();
+    // Find a timed VEVENT (has DESCRIPTION) rather than an all-day event
+    const eventMatches = [...text.matchAll(/BEGIN:VEVENT\r\n([\s\S]*?)END:VEVENT/g)];
+    const timedEvent = eventMatches.find(m => m[1].includes('DESCRIPTION:'));
+    expect(timedEvent).toBeDefined();
 
-    const eventContent = eventMatch![1];
+    const eventContent = timedEvent![1];
     expect(eventContent).toContain('UID:');
     expect(eventContent).toContain('DTSTAMP:');
-    expect(eventContent).toContain('DTSTART:');
-    expect(eventContent).toContain('DTEND:');
+    expect(eventContent).toMatch(/DTSTART[;:]/);
+    expect(eventContent).toMatch(/DTEND[;:]/);
     expect(eventContent).toContain('SUMMARY:');
     expect(eventContent).toContain('DESCRIPTION:');
     expect(eventContent).toContain('CATEGORIES:');
@@ -115,14 +116,17 @@ describe('exportToCalendar', () => {
     expect(hasStatus).toBe(true);
   });
 
-  it('sport categories include Greek sport names', async () => {
+  it('sport categories include translated sport names', async () => {
     exportToCalendar();
 
     const blob = createObjectURLSpy.mock.calls[0][0] as Blob;
     const text = await blob.text();
 
-    // At least one of these should be present
+    // At least one sport category should be present (EN or EL depending on i18n state)
     const hasCategory =
+      text.includes("CATEGORIES:Men's Football") ||
+      text.includes("CATEGORIES:Men's Volleyball") ||
+      text.includes("CATEGORIES:Women's Volleyball") ||
       text.includes('CATEGORIES:Ανδρικό Ποδόσφαιρο') ||
       text.includes('CATEGORIES:Ανδρικό Βόλεϊ') ||
       text.includes('CATEGORIES:Γυναικείο Βόλεϊ');
