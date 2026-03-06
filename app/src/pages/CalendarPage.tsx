@@ -7,6 +7,7 @@ import { MonthNavigation } from '@/components/calendar/MonthNavigation';
 import { CalendarGrid } from '@/components/calendar/CalendarGrid';
 import { FilterPanel } from '@/components/filters/FilterPanel';
 import { OnboardingTour } from '@/components/OnboardingTour';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 const INITIAL_SCROLL_DELAY_MS = 300;
 const MONTH_CHANGE_SCROLL_DELAY_MS = 350;
@@ -49,6 +50,13 @@ export function CalendarPage() {
     // If month changed, wait for re-render before scrolling
     setTimeout(scrollToToday, monthChanged ? MONTH_CHANGE_SCROLL_DELAY_MS : SAME_MONTH_SCROLL_DELAY_MS);
   }, [jumpToToday, scrollToToday]);
+
+  useKeyboardShortcuts({
+    onPrevious: navigatePrevious,
+    onNext: navigateNext,
+    onToday: handleJumpToToday,
+    onToggleFilters: () => setFiltersOpen((o) => !o),
+  });
 
   return (
     <div className="max-w-[1800px] w-[95%] mx-auto" {...swipe}>
