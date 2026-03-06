@@ -15,6 +15,8 @@ export interface SportEvent {
   score?: string;
   competition?: Competition;
   penalties?: string;
+  reportEN?: string;
+  reportEL?: string;
 }
 
 export interface CalendarEvent {

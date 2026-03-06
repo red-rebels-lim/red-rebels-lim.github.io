@@ -22,6 +22,8 @@ function parseEvent(eventData: {
   score?: string;
   competition?: string;
   penalties?: string;
+  reportEN?: string;
+  reportEL?: string;
 }): CalendarEvent {
   const info = sportConfig[eventData.sport as keyof typeof sportConfig];
   const isMeeting = eventData.sport === 'meeting';
@@ -52,6 +54,8 @@ function parseEvent(eventData: {
     isMeeting,
     competition: eventData.competition as CalendarEvent['competition'],
     penalties: eventData.penalties,
+    reportEN: eventData.reportEN,
+    reportEL: eventData.reportEL,
   };
 }
 
