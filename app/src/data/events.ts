@@ -121,7 +121,7 @@ export const eventsData: EventsData = {
       logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp',
       status: 'played',
       score: '3-1'
-    },
+    }
   ],
   november: [
     {
@@ -752,6 +752,13 @@ export const eventsData: EventsData = {
     },
     {
       day: 20,
+      sport: 'meeting',
+      location: 'home',
+      opponent: 'Red Rebels Annual Party',
+      time: '20:00'
+    },
+    {
+      day: 20,
       sport: 'volleyball-men',
       location: 'home',
       opponent: 'ΑΝΟΡΘΩΣΙΣ',
@@ -759,13 +766,6 @@ export const eventsData: EventsData = {
       venue: 'Αγίου Αθανασίου',
       competition: 'cup',
       logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
-    },
-    {
-      day: 20,
-      sport: 'meeting',
-      location: 'home',
-      opponent: 'Red Rebels Annual Party',
-      time: '20:00'
     },
     {
       day: 21,
