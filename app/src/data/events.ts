@@ -121,7 +121,7 @@ export const eventsData: EventsData = {
       logo: 'images/team_logos/ΟΜΟΝΟΙΑ.webp',
       status: 'played',
       score: '3-1'
-    },
+    }
   ],
   november: [
     {
@@ -685,17 +685,21 @@ export const eventsData: EventsData = {
       sport: 'football-men',
       location: 'away',
       opponent: 'ΜΕΑΠ ΠΕΡΑ ΧΩΡΙΟΥ ΝΗΣΟΥ',
-      time: '15:30',
-      logo: 'images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.webp'
+      time: '',
+      logo: 'images/team_logos/ΜΕΑΠ_ΠΕΡΑ_ΧΩΡΙΟΥ_ΝΗΣΟΥ.webp',
+      status: 'played',
+      score: '2-4'
     },
     {
       day: 7,
       sport: 'volleyball-women',
       location: 'away',
       opponent: 'ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)',
-      time: '17:00',
+      time: '',
       venue: 'Κίτιον',
-      logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp'
+      logo: 'images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp',
+      status: 'played',
+      score: '3-0'
     },
     {
       day: 10,
@@ -752,6 +756,13 @@ export const eventsData: EventsData = {
     },
     {
       day: 20,
+      sport: 'meeting',
+      location: 'home',
+      opponent: 'Red Rebels Annual Party',
+      time: '20:00'
+    },
+    {
+      day: 20,
       sport: 'volleyball-men',
       location: 'home',
       opponent: 'ΑΝΟΡΘΩΣΙΣ',
@@ -759,13 +770,6 @@ export const eventsData: EventsData = {
       venue: 'Αγίου Αθανασίου',
       competition: 'cup',
       logo: 'images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp'
-    },
-    {
-      day: 20,
-      sport: 'meeting',
-      location: 'home',
-      opponent: 'Red Rebels Annual Party',
-      time: '20:00'
     },
     {
       day: 21,
