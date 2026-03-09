@@ -16,6 +16,7 @@ vi.mock('react-router-dom', () => ({
     return <a href={to as string} className={className as string}>{children as React.ReactNode}</a>;
   },
   useLocation: () => ({ pathname: '/' }),
+  useNavigate: () => vi.fn(),
 }));
 
 vi.mock('@/hooks/useTheme', () => ({

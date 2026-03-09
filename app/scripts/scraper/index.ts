@@ -9,6 +9,9 @@ import type { Element } from 'domhandler';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { enrichWithFotMob } from './fotmob-enrichment.js';
+import { enrichWithCfa } from './cfa-enrichment.js';
+import { enrichWithDataproject } from './dataproject-enrichment.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,8 +29,11 @@ const VOLLEYBALL_URLS: Record<string, string> = {
   'volleyball-women': 'https://volleyball.org.cy/all-programs?ajax_post=17960',
 };
 
-const DATAPROJECT_URLS: Record<string, string> = {
-  'volleyball-men': 'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=42&PID=71',
+const DATAPROJECT_URLS: Record<string, string | string[]> = {
+  'volleyball-men': [
+    'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=42&PID=71',
+    'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=42&PID=81',
+  ],
   'volleyball-women': 'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=43&PID=72',
 };
 
@@ -59,6 +65,16 @@ export interface SportEvent {
   logo?: string;
   status?: string;
   score?: string;
+  competition?: string;
+  penalties?: string;
+  reportEN?: string;
+  reportEL?: string;
+  matchday?: number;
+  duration?: string;
+  scorers?: Array<{ name: string; minute: string; team: 'home' | 'away'; type?: 'pen' | 'og' }>;
+  bookings?: Array<{ name: string; minute: string; team: 'home' | 'away'; card: 'yellow' | 'red' }>;
+  lineup?: { home: Array<{ name: string; number?: number; position?: string }>; away: Array<{ name: string; number?: number; position?: string }> };
+  subs?: Array<{ playerOn: string; playerOff: string; minute: string; team: 'home' | 'away' }>;
 }
 
 // Greek month names mapping
@@ -732,7 +748,7 @@ function mergeExistingWithScraped(
   return existingEvent;
 }
 
-function updateCalendarData(fixtures: Fixture[]): ChangeLog {
+function updateCalendarData(fixtures: Fixture[]): Record<string, SportEvent[]> {
   const existingEvents = loadExistingEvents();
   const changes: ChangeLog = {
     added: [],
@@ -809,20 +825,8 @@ function updateCalendarData(fixtures: Fixture[]): ChangeLog {
     }
   }
 
-  // Generate TypeScript output
-  let tsContent = `// Auto-generated events data
-// This file is automatically updated by the scraper
-import type { EventsData } from '@/types/events';
-
-export const eventsData: EventsData = `;
-
-  tsContent += JSON.stringify(existingEvents, null, 2)
-    .replace(/"(\w+)":/g, '$1:')  // Remove quotes from keys
-    .replace(/"/g, "'");          // Use single quotes for strings
-
-  tsContent += ';\n';
-
-  fs.writeFileSync(EVENTS_FILE, tsContent, 'utf-8');
+  // Write events file
+  writeEventsFile(existingEvents);
 
   // Print detailed change summary
   console.log();
@@ -877,7 +881,22 @@ export const eventsData: EventsData = `;
   fs.writeFileSync(changesPath, JSON.stringify(changes, null, 2), 'utf-8');
   console.log(`✓ Changes written to changes.json`);
 
-  return changes;
+  return existingEvents;
+}
+
+export function writeEventsFile(events: Record<string, SportEvent[]>): void {
+  let tsContent = `// Auto-generated events data
+// This file is automatically updated by the scraper
+import type { EventsData } from '@/types/events';
+
+export const eventsData: EventsData = `;
+
+  tsContent += JSON.stringify(events, null, 2)
+    .replace(/"(\w+)":/g, '$1:');  // Remove quotes from object keys only
+
+  tsContent += ';\n';
+
+  fs.writeFileSync(EVENTS_FILE, tsContent, 'utf-8');
 }
 
 function saveToJson(fixtures: Fixture[]): void {
@@ -909,7 +928,10 @@ function saveToJson(fixtures: Fixture[]): void {
   console.log(`✓ JSON data saved to cfa_fixtures.json`);
 }
 
+const NEA_SALAMINA_FOTMOB_ID = 8590;
+
 async function main() {
+  const skipEnrich = process.argv.includes('--no-enrich');
   console.log('🔄 Scraping multi-sport fixtures for Nea Salamina...');
   console.log();
 
@@ -948,13 +970,16 @@ async function main() {
 
     // 4. Scrape dataproject fixtures (secondary/verification)
     const dataprojectFixtures: Fixture[] = [];
-    for (const [sport, url] of Object.entries(DATAPROJECT_URLS)) {
-      try {
-        const fixtures = await scrapeDataprojectFixtures(url, sport);
-        console.log(`  Found ${fixtures.length} ${sport} dataproject fixtures`);
-        dataprojectFixtures.push(...fixtures);
-      } catch (e) {
-        console.warn(`  ⚠ Failed to fetch dataproject ${sport}:`, e);
+    for (const [sport, urlOrUrls] of Object.entries(DATAPROJECT_URLS)) {
+      const dpUrls = Array.isArray(urlOrUrls) ? urlOrUrls : [urlOrUrls];
+      for (const url of dpUrls) {
+        try {
+          const fixtures = await scrapeDataprojectFixtures(url, sport);
+          console.log(`  Found ${fixtures.length} ${sport} dataproject fixtures`);
+          dataprojectFixtures.push(...fixtures);
+        } catch (e) {
+          console.warn(`  ⚠ Failed to fetch dataproject ${sport}:`, e);
+        }
       }
     }
     console.log();
@@ -968,7 +993,35 @@ async function main() {
 
     if (allFixtures.length > 0) {
       saveToJson(allFixtures);
-      updateCalendarData(allFixtures);
+      const existingEvents = updateCalendarData(allFixtures);
+
+      // 7. Enrich played football events with FotMob match details
+      if (!skipEnrich) {
+        console.log();
+        console.log('🔍 Enriching played football matches with FotMob data...');
+        const enrichStats = await enrichWithFotMob(existingEvents, NEA_SALAMINA_FOTMOB_ID);
+        console.log(`  ✓ FotMob — enriched: ${enrichStats.enriched}, skipped: ${enrichStats.skipped}, failed: ${enrichStats.failed}`);
+
+        // 8. Fill remaining gaps with official CFA data
+        console.log();
+        console.log('🔍 Enriching remaining matches with CFA data...');
+        const cfaStats = await enrichWithCfa(existingEvents, CFA_URLS);
+        console.log(`  ✓ CFA — enriched: ${cfaStats.enriched}, skipped: ${cfaStats.skipped}, failed: ${cfaStats.failed}`);
+
+        // 9. Enrich volleyball events with DataProject set scores and top scorers
+        console.log();
+        console.log('🏐 Enriching volleyball matches with DataProject data...');
+        const dpStats = await enrichWithDataproject(existingEvents, DATAPROJECT_URLS, {
+          onProgress: (msg) => console.log(msg),
+        });
+        console.log(`  ✓ DataProject — enriched: ${dpStats.enriched}, skipped: ${dpStats.skipped}, failed: ${dpStats.failed}`);
+
+        // Re-write events.ts with the enriched data
+        writeEventsFile(existingEvents);
+      } else {
+        console.log();
+        console.log('ℹ️  Skipping enrichment (--no-enrich)');
+      }
 
       const footballCount = cfaFixtures.length;
       const vbMenCount = mergedVolleyball.filter(f => f.sport === 'volleyball-men').length;

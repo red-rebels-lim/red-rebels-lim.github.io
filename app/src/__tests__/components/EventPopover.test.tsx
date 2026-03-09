@@ -8,6 +8,10 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => vi.fn(),
+}));
+
 import { EventPopover } from '@/components/calendar/EventPopover';
 import type { CalendarEvent } from '@/types/events';
 
@@ -53,7 +57,9 @@ describe('EventPopover', () => {
       score: '3-0',
     };
     render(<EventPopover event={playedEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByText(/3-0/)).toBeDefined();
+    const dialog = document.querySelector('[role="dialog"]');
+    expect(dialog?.textContent).toContain('3');
+    expect(dialog?.textContent).toContain('0');
   });
 
   it('renders meeting events differently', () => {

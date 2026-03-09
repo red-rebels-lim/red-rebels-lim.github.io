@@ -35,6 +35,9 @@ changes.json
 
 # Test coverage
 app/coverage
+app/.playwright-mcp
+app/e2e
+app/test-results
 *.lcov
 
 scripts

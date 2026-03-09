@@ -12,6 +12,10 @@ vi.mock('@/lib/analytics', () => ({
   trackEvent: vi.fn(),
 }));
 
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => vi.fn(),
+}));
+
 import { CalendarGrid } from '@/components/calendar/CalendarGrid';
 import type { MonthData } from '@/types/events';
 
