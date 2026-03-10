@@ -1,41 +1,27 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navbar } from '@/components/layout/Navbar';
+import { cn } from '@/lib/utils';
 import { calculateStatistics } from '@/lib/stats';
+import { calculateVolleyballStatistics } from '@/lib/volleyball-stats';
 import {
   fetchTeamData,
   parseLeagueTables,
   parseTopScorers,
-  parseLeagueRankings,
-  parseVenueInfo,
   parseNextMatch,
 } from '@/lib/fotmob';
 import type {
   FotMobTeamData,
   LeagueTableData,
   TopScorer,
-  LeagueRanking,
-  VenueInfo as VenueInfoType,
   NextMatchInfo,
 } from '@/lib/fotmob';
-import { LeagueTable } from '@/components/stats/LeagueTable';
-import { TopScorers } from '@/components/stats/TopScorers';
-import { LeagueRankings } from '@/components/stats/LeagueRankings';
-import { VenueInfo } from '@/components/stats/VenueInfo';
-import { NextMatch } from '@/components/stats/NextMatch';
-import { OverallStats } from '@/components/stats/OverallStats';
-import { HomeVsAway } from '@/components/stats/HomeVsAway';
-import { RecentForm } from '@/components/stats/RecentForm';
-import { HeadToHead } from '@/components/stats/HeadToHead';
-import { GoalDistribution } from '@/components/stats/GoalDistribution';
-import { Records } from '@/components/stats/Records';
-import { SeasonProgress } from '@/components/stats/SeasonProgress';
+import { FootballStatsTab } from '@/components/stats/FootballStatsTab';
+import { VolleyballStatsTab } from '@/components/stats/VolleyballStatsTab';
 
 interface FotMobParsed {
   tables: LeagueTableData[];
   topScorers: TopScorer[];
-  rankings: LeagueRanking[];
-  venue: VenueInfoType | null;
   nextMatch: NextMatchInfo | null;
 }
 
@@ -43,27 +29,17 @@ function parseFotMobData(data: FotMobTeamData): FotMobParsed {
   return {
     tables: parseLeagueTables(data),
     topScorers: parseTopScorers(data),
-    rankings: parseLeagueRankings(data),
-    venue: parseVenueInfo(data),
     nextMatch: parseNextMatch(data),
   };
-}
-
-function LoadingSkeleton() {
-  return (
-    <section className="stat-section min-h-[180px]">
-      <div className="animate-pulse space-y-4">
-        <div className="h-6 bg-[rgba(224,37,32,0.15)] rounded w-1/3" />
-        <div className="h-32 bg-[rgba(224,37,32,0.1)] rounded" />
-      </div>
-    </section>
-  );
 }
 
 export default function StatsPage() {
   const { t } = useTranslation();
   const stats = useMemo(() => calculateStatistics(), []);
+  const mensVolleyball = useMemo(() => calculateVolleyballStatistics('volleyball-men'), []);
+  const womensVolleyball = useMemo(() => calculateVolleyballStatistics('volleyball-women'), []);
 
+  const [activeTab, setActiveTab] = useState('football');
   const [fotmob, setFotmob] = useState<FotMobParsed | null>(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState(false);
@@ -105,58 +81,38 @@ export default function StatsPage() {
         </section>
       )}
 
-      {/* 1. Next Match (FotMob) */}
-      {loading ? <LoadingSkeleton /> : fotmob?.nextMatch ? <NextMatch match={fotmob.nextMatch} /> : null}
+      <div role="tablist" className="flex overflow-x-auto border-b border-white/10 dark:border-white/10 light:border-slate-200 no-scrollbar">
+        {[
+          { value: 'football', label: t('stats.mensFootball') },
+          { value: 'volleyball-men', label: t('stats.mensVolleyball') },
+          { value: 'volleyball-women', label: t('stats.womensVolleyball') },
+        ].map((tab) => (
+          <button
+            key={tab.value}
+            role="tab"
+            aria-selected={activeTab === tab.value}
+            onClick={() => setActiveTab(tab.value)}
+            className={cn(
+              'whitespace-nowrap px-2.5 py-3 text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-all border-b-2',
+              activeTab === tab.value
+                ? 'text-white border-[#E02520]'
+                : 'border-transparent text-white/60',
+            )}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-      {/* 2. League Standing (FotMob) */}
-      {loading ? <LoadingSkeleton /> : fotmob && fotmob.tables.length > 0 ? (
-        <LeagueTable tables={fotmob.tables} />
-      ) : null}
-
-      {/* 3. Overall stats */}
-      <OverallStats
-        overall={stats.overall}
-        cleanSheets={stats.cleanSheets}
-        avgGoalsFor={stats.avgGoalsFor}
-        avgGoalsAgainst={stats.avgGoalsAgainst}
-      />
-
-      {/* 4. League Rankings (FotMob) */}
-      {loading ? <LoadingSkeleton /> : fotmob && fotmob.rankings.length > 0 ? (
-        <LeagueRankings rankings={fotmob.rankings} />
-      ) : null}
-
-      {/* 5. Top Scorers (FotMob) */}
-      {loading ? <LoadingSkeleton /> : fotmob && fotmob.topScorers.length > 0 ? (
-        <TopScorers scorers={fotmob.topScorers} />
-      ) : null}
-
-      {/* 6. Home vs Away */}
-      <HomeVsAway home={stats.home} away={stats.away} />
-
-      {/* 7. Recent form + Streaks */}
-      <RecentForm
-        recentForm={stats.recentForm}
-        currentStreak={stats.currentStreak}
-        longestWinStreak={stats.longestWinStreak}
-        longestUnbeatenStreak={stats.longestUnbeatenStreak}
-        hasPlayed={stats.overall.played > 0}
-      />
-
-      {/* 8. Head to Head */}
-      <HeadToHead headToHead={stats.headToHead} />
-
-      {/* 9. Goal Distribution Chart */}
-      <GoalDistribution goalDistribution={stats.goalDistribution} />
-
-      {/* 10. Records */}
-      <Records biggestWin={stats.biggestWin} heaviestDefeat={stats.heaviestDefeat} />
-
-      {/* 11. Season Progress Chart */}
-      <SeasonProgress pointsProgression={stats.pointsProgression} />
-
-      {/* 12. Venue Info (FotMob) */}
-      {fotmob?.venue && <VenueInfo venue={fotmob.venue} />}
+      {activeTab === 'football' && (
+        <FootballStatsTab stats={stats} fotmob={fotmob} loading={loading} />
+      )}
+      {activeTab === 'volleyball-men' && (
+        <VolleyballStatsTab stats={mensVolleyball} />
+      )}
+      {activeTab === 'volleyball-women' && (
+        <VolleyballStatsTab stats={womensVolleyball} />
+      )}
     </div>
   );
 }

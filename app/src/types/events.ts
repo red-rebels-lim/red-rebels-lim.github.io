@@ -203,3 +203,81 @@ export interface FormattedStats {
   pointsProgression: PointsProgressionEntry[];
   error?: string;
 }
+
+// --- Volleyball Stats Types ---
+
+export interface VolleyballTeamStats {
+  played: number;
+  wins: number;
+  losses: number;
+  setsWon: number;
+  setsLost: number;
+  setWinPercentage: number;
+  winPercentage: number;
+  pointsScored: number;
+  pointsConceded: number;
+}
+
+export interface VolleyballSetBreakdown {
+  threeZero: number;
+  threeOne: number;
+  threeTwo: number;
+  zeroThree: number;
+  oneThree: number;
+  twoThree: number;
+}
+
+export interface VolleyballFormMatch {
+  result: 'W' | 'L';
+  opponent: string;
+  score: string;
+  location: 'home' | 'away';
+  month: string;
+  day: number;
+}
+
+export interface VolleyballHeadToHead {
+  opponent: string;
+  played: number;
+  wins: number;
+  losses: number;
+  setsWon: number;
+  setsLost: number;
+}
+
+export interface VolleyballRecordResult {
+  opponent: string;
+  score: string;
+  setScores: string;
+}
+
+export interface VolleyballTopScorer {
+  name: string;
+  totalPoints: number;
+  matchesPlayed: number;
+}
+
+export interface VolleyballProgressionEntry {
+  match: number;
+  setsWon: number;
+  opponent: string;
+}
+
+export interface VolleyballFormattedStats {
+  overall: VolleyballTeamStats;
+  home: VolleyballTeamStats;
+  away: VolleyballTeamStats;
+  setBreakdown: VolleyballSetBreakdown;
+  recentForm: VolleyballFormMatch[];
+  headToHead: VolleyballHeadToHead[];
+  streaks: {
+    currentStreak: StreakInfo;
+    longestWinStreak: number;
+  };
+  records: {
+    biggestWin: VolleyballRecordResult | null;
+    heaviestDefeat: VolleyballRecordResult | null;
+  };
+  topScorers: VolleyballTopScorer[];
+  seasonProgress: VolleyballProgressionEntry[];
+}

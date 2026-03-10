@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { LeagueTableData } from '@/lib/fotmob';
 import { tApi } from '@/lib/fotmob';
@@ -9,10 +10,24 @@ interface LeagueTableProps {
 
 const TH_CLASS = 'py-2 px-2 text-center text-red-300 font-extrabold text-xs uppercase tracking-wide bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)]';
 
+function getCompactRows(
+  rows: LeagueTableData['rows'],
+  nsIndex: number
+): LeagueTableData['rows'] {
+  if (rows.length <= 3) return rows;
+
+  // Show row above, Nea Salamina, row below
+  const start = Math.max(0, nsIndex - 1);
+  const end = Math.min(rows.length, start + 3);
+  const adjustedStart = end - start < 3 ? Math.max(0, end - 3) : start;
+
+  return rows.slice(adjustedStart, adjustedStart + 3);
+}
+
 export function LeagueTable({ tables }: LeagueTableProps) {
   const { t } = useTranslation();
+  const [expanded, setExpanded] = useState(false);
 
-  // Only show tables that contain Nea Salamina
   const relevantTables = tables.filter((tbl) =>
     tbl.rows.some((r) => r.id === NEA_SALAMINA_ID)
   );
@@ -20,84 +35,89 @@ export function LeagueTable({ tables }: LeagueTableProps) {
   if (relevantTables.length === 0) return null;
 
   return (
-    <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg overflow-x-auto">
-      <h2 className="text-red-300 text-xl font-extrabold uppercase tracking-wide mb-5">
-        {t('stats.leagueStanding')}
-      </h2>
+    <section className="stat-section overflow-x-auto">
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="stat-section-title mb-0">{t('stats.leagueStanding')}</h2>
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="text-xs font-bold text-[#E02520] uppercase tracking-wide hover:underline"
+        >
+          {t('stats.viewFull')}
+        </button>
+      </div>
 
       <div className="space-y-8">
-        {relevantTables.map((tbl) => (
-          <div key={tbl.leagueName}>
-            {relevantTables.length > 1 && (
-              <h3 className="text-red-300/80 text-sm font-extrabold uppercase tracking-wide mb-3">
-                {tApi(t, 'leagues', tbl.leagueName)}
-              </h3>
-            )}
-            <table className="w-full border-collapse text-sm">
-              <thead>
-                <tr className="border-b border-[rgba(224,37,32,0.2)]">
-                  <th className={`${TH_CLASS} text-left`}>#</th>
-                  <th className={`${TH_CLASS} text-left`}>{t('stats.team')}</th>
-                  <th className={TH_CLASS}>{t('stats.played')}</th>
-                  <th className={TH_CLASS}>{t('stats.w')}</th>
-                  <th className={TH_CLASS}>{t('stats.d')}</th>
-                  <th className={TH_CLASS}>{t('stats.l')}</th>
-                  <th className={TH_CLASS}>{t('stats.goalDifference')}</th>
-                  <th className={TH_CLASS}>{t('stats.points')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tbl.rows.map((row) => {
-                  const isUs = row.id === NEA_SALAMINA_ID;
-                  return (
-                    <tr
-                      key={row.id}
-                      className={`border-b border-[rgba(224,37,32,0.1)] transition-colors ${
-                        isUs
-                          ? 'bg-gradient-to-r from-[rgba(224,37,32,0.2)] to-[rgba(224,37,32,0.1)] font-bold'
-                          : 'hover:bg-[rgba(224,37,32,0.05)]'
-                      }`}
-                    >
-                      <td className="py-2 px-2">
-                        <span className="flex items-center gap-1.5">
-                          {row.qualColor && (
-                            <span
-                              className="w-2 h-2 rounded-full inline-block"
-                              style={{ backgroundColor: row.qualColor }}
-                            />
-                          )}
-                          <span className={isUs ? 'text-[#E02520]' : 'text-muted-foreground'}>{row.position}</span>
-                        </span>
-                      </td>
-                      <td className={`py-2 px-2 ${isUs ? 'text-[#E02520]' : 'text-foreground'}`}>
-                        <span className="hidden sm:inline">{tApi(t, 'teams', row.name)}</span>
-                        <span className="sm:hidden">{tApi(t, 'teams', row.shortName)}</span>
-                      </td>
-                      <td className="py-2 px-2 text-center text-muted-foreground">{row.played}</td>
-                      <td className="py-2 px-2 text-center text-green-400">{row.wins}</td>
-                      <td className="py-2 px-2 text-center text-yellow-400">{row.draws}</td>
-                      <td className="py-2 px-2 text-center text-red-400">{row.losses}</td>
-                      <td className="py-2 px-2 text-center text-muted-foreground">
-                        {row.goalDifference > 0 ? '+' : ''}{row.goalDifference}
-                      </td>
-                      <td className={`py-2 px-2 text-center font-bold ${isUs ? 'text-[#E02520]' : 'text-foreground'}`}>{row.pts}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            {tbl.legend.length > 0 && (
-              <div className="flex flex-wrap gap-4 mt-3 text-xs text-muted-foreground">
-                {tbl.legend.map((item) => (
-                  <div key={item.title} className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: item.color }} />
-                    {tApi(t, 'legendEntries', item.title)}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+        {relevantTables.map((tbl) => {
+          const nsIndex = tbl.rows.findIndex((r) => r.id === NEA_SALAMINA_ID);
+          const displayRows = expanded
+            ? tbl.rows
+            : getCompactRows(tbl.rows, nsIndex);
+
+          return (
+            <div key={tbl.leagueName}>
+              {relevantTables.length > 1 && (
+                <h3 className="text-red-300/80 text-sm font-extrabold uppercase tracking-wide mb-3">
+                  {tApi(t, 'leagues', tbl.leagueName)}
+                </h3>
+              )}
+              <table className="w-full border-collapse text-sm">
+                <thead>
+                  <tr className="border-b border-[rgba(224,37,32,0.2)]">
+                    <th className={`${TH_CLASS} text-left`}>#</th>
+                    <th className={`${TH_CLASS} text-left`}>{t('stats.team')}</th>
+                    <th className={TH_CLASS}>{t('stats.goalDifference')}</th>
+                    <th className={TH_CLASS}>{t('stats.points')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayRows.map((row) => {
+                    const isUs = row.id === NEA_SALAMINA_ID;
+                    return (
+                      <tr
+                        key={row.id}
+                        className={`border-b border-[rgba(224,37,32,0.1)] transition-colors ${
+                          isUs
+                            ? 'bg-gradient-to-r from-[rgba(224,37,32,0.2)] to-[rgba(224,37,32,0.1)] font-bold'
+                            : 'hover:bg-[rgba(224,37,32,0.05)]'
+                        }`}
+                      >
+                        <td className="py-2 px-2">
+                          <span className="flex items-center gap-1.5">
+                            {row.qualColor && (
+                              <span
+                                className="w-2 h-2 rounded-full inline-block"
+                                style={{ backgroundColor: row.qualColor }}
+                              />
+                            )}
+                            <span className={isUs ? 'text-[#E02520]' : 'text-muted-foreground'}>{row.position}</span>
+                          </span>
+                        </td>
+                        <td className={`py-2 px-2 ${isUs ? 'text-[#E02520]' : 'text-foreground'}`}>
+                          <span className="hidden sm:inline">{tApi(t, 'teams', row.name)}</span>
+                          <span className="sm:hidden">{tApi(t, 'teams', row.shortName)}</span>
+                        </td>
+                        <td className="py-2 px-2 text-center text-muted-foreground">
+                          {row.goalDifference > 0 ? '+' : ''}{row.goalDifference}
+                        </td>
+                        <td className={`py-2 px-2 text-center font-bold ${isUs ? 'text-[#E02520]' : 'text-foreground'}`}>{row.pts}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              {expanded && tbl.legend.length > 0 && (
+                <div className="flex flex-wrap gap-4 mt-3 text-xs text-muted-foreground">
+                  {tbl.legend.map((item) => (
+                    <div key={item.title} className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: item.color }} />
+                      {tApi(t, 'legendEntries', item.title)}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
