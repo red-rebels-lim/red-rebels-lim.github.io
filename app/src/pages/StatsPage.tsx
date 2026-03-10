@@ -81,7 +81,7 @@ export default function StatsPage() {
         </section>
       )}
 
-      <div role="tablist" className="flex gap-2 min-w-max overflow-x-auto no-scrollbar py-2">
+      <div role="tablist" className="flex flex-wrap gap-2 py-2">
         {[
           { value: 'football', label: t('stats.mensFootball') },
           { value: 'volleyball-men', label: t('stats.mensVolleyball') },
