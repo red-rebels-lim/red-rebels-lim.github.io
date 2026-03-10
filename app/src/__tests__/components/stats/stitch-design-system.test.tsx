@@ -64,30 +64,31 @@ describe('TASK-08: Stitch Design System Alignment', () => {
   });
 
   describe('Season Summary — Stitch card system', () => {
-    it('football hero cards do NOT use red gradient background', () => {
-      const { container } = render(<SeasonSummary overall={footballOverall} />);
-      const heroCards = container.querySelectorAll('.grid.grid-cols-2 > div');
-      heroCards.forEach(card => {
+    it('football stat cards do NOT use red gradient background', () => {
+      const { container } = render(<SeasonSummary overall={footballOverall} cleanSheets={5} avgGoalsFor={1.8} avgGoalsAgainst={0.9} />);
+      const cards = container.querySelectorAll('.grid.grid-cols-3 > div');
+      cards.forEach(card => {
         expect(card.className).not.toContain('from-[rgba(224,37,32');
       });
     });
 
-    it('football hero cards use neutral border (slate)', () => {
-      const { container } = render(<SeasonSummary overall={footballOverall} />);
-      const heroCards = container.querySelectorAll('.grid.grid-cols-2 > div');
-      expect(heroCards.length).toBeGreaterThan(0);
-      heroCards.forEach(card => {
+    it('football stat cards use neutral border (slate)', () => {
+      const { container } = render(<SeasonSummary overall={footballOverall} cleanSheets={5} avgGoalsFor={1.8} avgGoalsAgainst={0.9} />);
+      const cards = container.querySelectorAll('.grid.grid-cols-3 > div');
+      expect(cards.length).toBe(9);
+      cards.forEach(card => {
         expect(card.className).toContain('border-slate-');
       });
     });
 
-    it('football mini grid cards use justify-between layout', () => {
-      const { container } = render(<SeasonSummary overall={footballOverall} />);
-      // At least one card should have justify-between
-      const hasJustifyBetween = Array.from(container.querySelectorAll('div')).some(
-        el => el.className.includes('justify-between') && el.textContent?.includes('stats.matches')
+    it('football stat grid uses 3-column layout with text-center', () => {
+      const { container } = render(<SeasonSummary overall={footballOverall} cleanSheets={5} avgGoalsFor={1.8} avgGoalsAgainst={0.9} />);
+      const grid = container.querySelector('.grid.grid-cols-3');
+      expect(grid).toBeTruthy();
+      const hasTextCenter = Array.from(container.querySelectorAll('div')).some(
+        el => el.className.includes('text-center')
       );
-      expect(hasJustifyBetween).toBe(true);
+      expect(hasTextCenter).toBe(true);
     });
 
     it('volleyball hero cards use neutral border (slate)', () => {
@@ -185,12 +186,11 @@ describe('TASK-08: Stitch Design System Alignment', () => {
   });
 
   describe('Shared card styling', () => {
-    it('SeasonSummary hero cards use shadow-sm (Stitch card system)', () => {
-      const { container } = render(<SeasonSummary overall={footballOverall} />);
-      const heroCards = container.querySelectorAll('.grid.grid-cols-2 > div');
-      expect(heroCards.length).toBeGreaterThan(0);
-      // Stitch cards use shadow-sm
-      heroCards.forEach(card => {
+    it('SeasonSummary stat cards use shadow-sm (Stitch card system)', () => {
+      const { container } = render(<SeasonSummary overall={footballOverall} cleanSheets={5} avgGoalsFor={1.8} avgGoalsAgainst={0.9} />);
+      const cards = container.querySelectorAll('.grid.grid-cols-3 > div');
+      expect(cards.length).toBeGreaterThan(0);
+      cards.forEach(card => {
         expect(card.className).toContain('shadow-sm');
       });
     });

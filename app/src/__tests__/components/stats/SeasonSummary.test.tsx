@@ -39,12 +39,12 @@ describe('TASK-04: SeasonSummary', () => {
     expect(screen.getByText('stats.points')).toBeDefined();
   });
 
-  it('displays total goals prominently', () => {
+  it('displays goals in for-against format', () => {
     render(<SeasonSummary {...mockProps} />);
-    expect(screen.getByText('38')).toBeDefined();
+    expect(screen.getByText('38-25')).toBeDefined();
   });
 
-  it('displays matches, wins, draws, losses in grid', () => {
+  it('displays all 9 stat cards in the grid', () => {
     render(<SeasonSummary {...mockProps} />);
     expect(screen.getByText('26')).toBeDefined();
     expect(screen.getByText('14')).toBeDefined();
@@ -54,13 +54,9 @@ describe('TASK-04: SeasonSummary', () => {
     expect(screen.getByText('stats.wins')).toBeDefined();
     expect(screen.getByText('stats.draws')).toBeDefined();
     expect(screen.getByText('stats.losses')).toBeDefined();
-  });
-
-  it('does NOT display cleanSheets, avgGoalsFor, avgGoalsAgainst in UI', () => {
-    render(<SeasonSummary {...mockProps} />);
-    expect(screen.queryByText('stats.cleanSheets')).toBeNull();
-    expect(screen.queryByText('stats.avgGoalsFor')).toBeNull();
-    expect(screen.queryByText('stats.avgGoalsAgainst')).toBeNull();
+    expect(screen.getByText('stats.cleanSheets')).toBeDefined();
+    expect(screen.getByText('stats.avgGoalsFor')).toBeDefined();
+    expect(screen.getByText('stats.avgGoalsAgainst')).toBeDefined();
   });
 
   it('renders with zero stats without errors', () => {

@@ -9,12 +9,14 @@ import {
   parseLeagueTables,
   parseTopScorers,
   parseNextMatch,
+  parseLeagueRankings,
 } from '@/lib/fotmob';
 import type {
   FotMobTeamData,
   LeagueTableData,
   TopScorer,
   NextMatchInfo,
+  LeagueRanking,
 } from '@/lib/fotmob';
 import { FootballStatsTab } from '@/components/stats/FootballStatsTab';
 import { VolleyballStatsTab } from '@/components/stats/VolleyballStatsTab';
@@ -23,6 +25,7 @@ export interface FotMobParsed {
   tables: LeagueTableData[];
   topScorers: TopScorer[];
   nextMatch: NextMatchInfo | null;
+  rankings: LeagueRanking[];
 }
 
 function parseFotMobData(data: FotMobTeamData): FotMobParsed {
@@ -30,6 +33,7 @@ function parseFotMobData(data: FotMobTeamData): FotMobParsed {
     tables: parseLeagueTables(data),
     topScorers: parseTopScorers(data),
     nextMatch: parseNextMatch(data),
+    rankings: parseLeagueRankings(data),
   };
 }
 
