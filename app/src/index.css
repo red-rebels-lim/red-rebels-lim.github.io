@@ -128,7 +128,8 @@
     background-color: var(--background);
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: transparent;
     font-family: 'Montserrat', 'Inter', sans-serif;
   }
 }
