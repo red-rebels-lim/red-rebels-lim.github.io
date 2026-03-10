@@ -1,39 +1,49 @@
 import { useTranslation } from 'react-i18next';
-import type { TopScorer } from '@/lib/fotmob';
 import { tApi } from '@/lib/fotmob';
 
-interface TopScorersProps {
-  scorers: TopScorer[];
+interface ScorerItem {
+  name: string;
+  goals?: number;
+  value?: number;
 }
 
-const MEDALS = ['🥇', '🥈', '🥉'];
+interface TopScorersProps {
+  scorers: ScorerItem[];
+  unit?: 'goals' | 'points';
+}
 
-export function TopScorers({ scorers }: TopScorersProps) {
+export function TopScorers({ scorers, unit = 'goals' }: TopScorersProps) {
   const { t } = useTranslation();
 
   if (scorers.length === 0) return null;
 
   return (
-    <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg">
-      <h2 className="text-red-300 text-xl font-extrabold uppercase tracking-wide mb-5">
-        {t('stats.topScorers')}
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {scorers.map((scorer, i) => (
-          <div
-            key={scorer.name}
-            className={`bg-gradient-to-br from-[rgba(224,37,32,0.15)] to-[rgba(185,28,28,0.1)] border-2 border-[rgba(224,37,32,0.3)] rounded-xl p-5 text-center transition-all hover:-translate-y-1 hover:shadow-lg ${
-              i === 0 ? 'sm:order-2 sm:scale-105' : i === 1 ? 'sm:order-1' : 'sm:order-3'
-            }`}
-          >
-            <div className="text-3xl mb-2">{MEDALS[i]}</div>
-            <div className="text-2xl font-black text-[#E02520] mb-1 drop-shadow-[0_2px_10px_rgba(224,37,32,0.5)]">
-              {scorer.goals}
+    <section className="stat-section">
+      <h2 className="stat-section-title">{t('stats.topScorers')}</h2>
+      <div className="space-y-2">
+        {scorers.map((scorer, i) => {
+          const displayValue = scorer.value ?? scorer.goals ?? 0;
+          const displayName = unit === 'goals' ? tApi(t, 'players', scorer.name) : scorer.name;
+          const isFirst = i === 0;
+
+          return (
+            <div
+              key={scorer.name}
+              className={`rounded-lg bg-white/5 dark:bg-[#1a1a1a]/50 ${isFirst ? 'border-primary' : 'border-slate-200 dark:border-slate-800'} border p-3 flex items-center justify-between backdrop-blur-sm`}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-slate-400 font-medium text-sm w-4">{i + 1}</span>
+                <div className="w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
+                  <span className="text-slate-500 text-[18px]">👤</span>
+                </div>
+                <span className="font-medium">{displayName}</span>
+              </div>
+              <span className={`font-bold ${isFirst ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>
+                {displayValue}
+              </span>
             </div>
-            <div className="text-sm font-bold text-foreground">{tApi(t, 'players', scorer.name)}</div>
-            <div className="text-xs text-muted-foreground uppercase mt-1">{t('stats.goalsLabel')}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

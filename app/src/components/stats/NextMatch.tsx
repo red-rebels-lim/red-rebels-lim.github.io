@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { NextMatchInfo } from '@/lib/fotmob';
 import { tApi } from '@/lib/fotmob';
+import { TEAM_LOGOS } from '@/data/constants';
 
 interface NextMatchProps {
   match: NextMatchInfo;
@@ -26,23 +27,44 @@ export function NextMatch({ match }: NextMatchProps) {
   const { t, i18n } = useTranslation();
 
   return (
-    <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg">
-      <h2 className="text-red-300 text-xl font-extrabold uppercase tracking-wide mb-5">
-        {t('stats.nextMatch')}
-      </h2>
-      <div className="bg-gradient-to-br from-[rgba(224,37,32,0.15)] to-[rgba(185,28,28,0.1)] border-2 border-[rgba(224,37,32,0.3)] rounded-xl p-5 text-center">
-        <div className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-3">
+    <section className="stat-section">
+      <h2 className="stat-section-title">{t('stats.nextMatch')}</h2>
+      <div className="rounded-lg bg-white/5 dark:bg-[#1a1a1a]/50 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+        <div className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3 text-center">
           {match.isHome ? t('stats.homeMatch') : t('stats.awayMatch')}
         </div>
-        <div className="text-sm font-bold text-muted-foreground mb-1">
-          {tApi(t, 'teams', 'Nea Salamis')}
-        </div>
-        <div className="text-xs text-muted-foreground/70 mb-2">vs</div>
-        <div className="text-xl font-black text-foreground mb-3">
-          {tApi(t, 'teams', match.opponentName)}
+        <div className="flex items-center justify-center gap-4">
+          <div className="text-center">
+            <div className="w-14 h-14 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center mx-auto mb-2 overflow-hidden border border-slate-200 dark:border-slate-700">
+              <img
+                src={TEAM_LOGOS['Nea Salamis']}
+                alt="Nea Salamis"
+                className="w-full h-full object-contain p-1"
+              />
+            </div>
+            <div className="text-sm font-bold">{tApi(t, 'teams', 'Nea Salamis')}</div>
+          </div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">vs</div>
+          <div className="text-center">
+            <div className="w-14 h-14 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center mx-auto mb-2 overflow-hidden border border-slate-200 dark:border-slate-700">
+              {TEAM_LOGOS[match.opponentName] ? (
+                <img
+                  src={TEAM_LOGOS[match.opponentName]}
+                  alt={match.opponentName}
+                  loading="lazy"
+                  className="w-full h-full object-contain p-1"
+                />
+              ) : (
+                <span className="text-lg font-bold text-slate-600 dark:text-slate-300">
+                  {match.opponentName.substring(0, 2).toUpperCase()}
+                </span>
+              )}
+            </div>
+            <div className="text-sm font-bold">{tApi(t, 'teams', match.opponentName)}</div>
+          </div>
         </div>
         {match.utcTime && (
-          <div className="text-sm font-bold text-[#E02520]">
+          <div className="text-sm font-bold text-primary text-center mt-3">
             {formatMatchDate(match.utcTime, i18n.language)}
           </div>
         )}

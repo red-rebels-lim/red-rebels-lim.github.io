@@ -100,24 +100,15 @@
   --chart-5: #9C27B0;
 }
 
-/* Shared stats section styles */
+/* Shared stats section styles — Stitch design system */
 .stat-section {
-  background: rgba(10, 24, 16, 0.2);
-  backdrop-filter: blur(4px);
-  border-radius: 1rem;
-  padding: 1.5rem;
   margin-bottom: 1.5rem;
-  border: 2px solid rgba(224, 37, 32, 0.3);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .stat-section-title {
-  color: #fca5a5;
-  font-size: 1.25rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 1.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
 @layer base {

@@ -46,16 +46,16 @@ describe('LeagueTable', () => {
     expect(screen.getByText('APOEL')).toBeDefined();
   });
 
-  it('renders table header columns', () => {
+  it('renders compact table header columns (# / Team / GD / PTS)', () => {
     render(<LeagueTable tables={[mockTable]} />);
     expect(screen.getByText('stats.team')).toBeDefined();
-    expect(screen.getByText('stats.played')).toBeDefined();
+    expect(screen.getByText('stats.goalDifference')).toBeDefined();
     expect(screen.getByText('stats.points')).toBeDefined();
   });
 
-  it('renders legend items', () => {
+  it('has View Full button', () => {
     render(<LeagueTable tables={[mockTable]} />);
-    expect(screen.getByText('Promotion')).toBeDefined();
+    expect(screen.getByText('stats.viewFull')).toBeDefined();
   });
 
   it('renders multiple tables with sub-headings', () => {
