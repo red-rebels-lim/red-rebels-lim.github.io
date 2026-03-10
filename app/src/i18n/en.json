@@ -253,6 +253,23 @@
     "loss": "Loss",
     "completed": "Completed",
     "upcoming": "Upcoming",
-    "tbd": "TBD"
+    "tbd": "TBD",
+    "matchResult": "MATCH RESULT",
+    "goalscorers": "GOALSCORERS",
+    "bookings": "BOOKINGS",
+    "competition": "Cyprus 2nd Division",
+    "matchday": "MATCHDAY",
+    "pen": "pen",
+    "og": "og",
+    "viewAllStats": "View All Statistics",
+    "readFullReport": "READ FULL REPORT",
+    "lineup": "LINEUPS",
+    "substitutions": "SUBSTITUTIONS",
+    "sub": "Sub",
+    "shareMatch": "Share",
+    "matchSummary": "{{home}} {{score}} {{away}}",
+    "sets": "SETS",
+    "set": "SET",
+    "vbScorers": "TOP SCORERS"
   }
 }

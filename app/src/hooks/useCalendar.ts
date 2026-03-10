@@ -24,6 +24,14 @@ function parseEvent(eventData: {
   penalties?: string;
   reportEN?: string;
   reportEL?: string;
+  scorers?: CalendarEvent['scorers'];
+  bookings?: CalendarEvent['bookings'];
+  duration?: string;
+  matchday?: number;
+  lineup?: CalendarEvent['lineup'];
+  subs?: CalendarEvent['subs'];
+  sets?: CalendarEvent['sets'];
+  vbScorers?: CalendarEvent['vbScorers'];
 }): CalendarEvent {
   const info = sportConfig[eventData.sport as keyof typeof sportConfig];
   const isMeeting = eventData.sport === 'meeting';
@@ -56,6 +64,14 @@ function parseEvent(eventData: {
     penalties: eventData.penalties,
     reportEN: eventData.reportEN,
     reportEL: eventData.reportEL,
+    scorers: eventData.scorers,
+    bookings: eventData.bookings,
+    duration: eventData.duration,
+    matchday: eventData.matchday,
+    lineup: eventData.lineup,
+    subs: eventData.subs,
+    sets: eventData.sets,
+    vbScorers: eventData.vbScorers,
   };
 }
 

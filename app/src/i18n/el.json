@@ -253,6 +253,23 @@
     "loss": "Ήττα",
     "completed": "Ολοκληρωμένο",
     "upcoming": "Επερχόμενο",
-    "tbd": "ΑΚ"
+    "tbd": "ΑΚ",
+    "matchResult": "ΑΠΟΤΕΛΕΣΜΑ ΑΓΩΝΑ",
+    "goalscorers": "ΣΚΟΡΕΡ",
+    "bookings": "ΚΑΡΤΕΣ",
+    "competition": "Κύπρος 2η Κατηγορία",
+    "matchday": "ΑΓΩΝΙΣΤΙΚΗ",
+    "pen": "πεν",
+    "og": "αγ",
+    "viewAllStats": "Όλα τα Στατιστικά",
+    "readFullReport": "ΔΙΑΒΑΣΕ ΟΛΟΚΛΗΡΟ",
+    "lineup": "ΕΝΔΕΚΑΔΕΣ",
+    "substitutions": "ΑΛΛΑΓΕΣ",
+    "sub": "Αλλ",
+    "shareMatch": "Κοινοποίηση",
+    "matchSummary": "{{home}} {{score}} {{away}}",
+    "sets": "ΣΕΤ",
+    "set": "ΣΕΤ",
+    "vbScorers": "ΣΚΟΡΕΡ"
   }
 }

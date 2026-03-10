@@ -3,6 +3,44 @@ export type Location = 'home' | 'away';
 export type MatchStatus = 'played' | 'upcoming';
 export type Competition = 'league' | 'cup';
 
+export interface Scorer {
+  name: string;
+  minute: string;
+  team: 'home' | 'away';
+  type?: 'pen' | 'og';
+}
+
+export interface Booking {
+  name: string;
+  minute: string;
+  team: 'home' | 'away';
+  card: 'yellow' | 'red';
+}
+
+export interface LineupPlayer {
+  name: string;
+  number?: number;
+  position?: string;
+}
+
+export interface Substitution {
+  playerOn: string;
+  playerOff: string;
+  minute: string;
+  team: 'home' | 'away';
+}
+
+export interface VolleyballSet {
+  home: number;
+  away: number;
+}
+
+export interface VolleyballScorer {
+  name: string;
+  points: number;
+  team: 'home' | 'away';
+}
+
 export interface SportEvent {
   day: number;
   sport?: Sport;
@@ -17,6 +55,14 @@ export interface SportEvent {
   penalties?: string;
   reportEN?: string;
   reportEL?: string;
+  scorers?: Scorer[];
+  bookings?: Booking[];
+  duration?: string;
+  matchday?: number;
+  lineup?: { home: LineupPlayer[]; away: LineupPlayer[] };
+  subs?: Substitution[];
+  sets?: VolleyballSet[];
+  vbScorers?: VolleyballScorer[];
 }
 
 export interface CalendarEvent {
@@ -34,6 +80,14 @@ export interface CalendarEvent {
   penalties?: string;
   reportEN?: string;
   reportEL?: string;
+  scorers?: Scorer[];
+  bookings?: Booking[];
+  duration?: string;
+  matchday?: number;
+  lineup?: { home: LineupPlayer[]; away: LineupPlayer[] };
+  subs?: Substitution[];
+  sets?: VolleyballSet[];
+  vbScorers?: VolleyballScorer[];
 }
 
 export interface CalendarDay {
