@@ -179,9 +179,8 @@ function LineupsSection({
 
 // ── Substitutions two-column layout ──────────────────────────────────────────
 
-function SubstitutionsSection({ subs, isHome, homeTeam, awayTeam }: {
+function SubstitutionsSection({ subs, homeTeam, awayTeam }: {
   subs: Substitution[];
-  isHome: boolean;
   homeTeam: string;
   awayTeam: string;
 }) {
@@ -365,7 +364,7 @@ function MatchDetailTabs({
       {/* Substitutions */}
       {event.subs && event.subs.length > 0 && (
         <TabsContent value="subs">
-          <SubstitutionsSection subs={event.subs} isHome={isHome} homeTeam={homeTeam} awayTeam={awayTeam} />
+          <SubstitutionsSection subs={event.subs} homeTeam={homeTeam} awayTeam={awayTeam} />
         </TabsContent>
       )}
     </Tabs>
