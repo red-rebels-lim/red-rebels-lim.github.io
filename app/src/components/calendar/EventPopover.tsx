@@ -316,7 +316,7 @@ function MatchDetailTabs({
   if (tabs.length === 0) return null;
 
   return (
-    <Tabs defaultValue={tabs[0].id} className="mt-3 -mx-5">
+    <Tabs defaultValue={tabs[0].id} className="mt-3">
       <TabsList>
         {tabs.map((tab) => (
           <TabsTrigger key={tab.id} value={tab.id}>
@@ -449,7 +449,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="bg-gradient-to-br from-[#1a0f0f] to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-lg sm:max-w-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-hidden max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-gradient-to-br from-[#1a0f0f] to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]">
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
         <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
 
@@ -460,7 +460,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           </span>
         </div>
 
-        <div className="px-5 pb-5 space-y-0">
+        <div className="px-5 pb-5 space-y-0 min-w-0 overflow-hidden">
 
           {/* ── Teams + result badge ── */}
           <div className="flex items-center justify-between gap-3 py-2">
