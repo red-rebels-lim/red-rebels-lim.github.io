@@ -13,6 +13,11 @@ if ('requestIdleCallback' in window) {
 
 // Register service worker for PWA + push notifications
 if ('serviceWorker' in navigator) {
+  // Reload the page when a new SW takes control so users always get the latest version
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload();
+  });
+
   import('virtual:pwa-register').then(({ registerSW }) => {
     registerSW({
       onRegisteredSW(_swUrl: string, registration: ServiceWorkerRegistration | undefined) {

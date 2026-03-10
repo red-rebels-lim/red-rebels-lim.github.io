@@ -6,6 +6,16 @@ declare const self: ServiceWorkerGlobalScope;
 // Workbox precaching — injected by vite-plugin-pwa at build time
 precacheAndRoute(self.__WB_MANIFEST);
 
+// Skip waiting so the new SW activates immediately when deployed
+self.addEventListener('install', () => {
+  self.skipWaiting();
+});
+
+// Claim all open tabs so they use the new SW right away
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
 interface PushPayload {
   title: string;
   body: string;
