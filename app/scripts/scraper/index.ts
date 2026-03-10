@@ -9,9 +9,9 @@ import type { Element } from 'domhandler';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import { enrichWithFotMob } from './fotmob-enrichment.js';
-import { enrichWithCfa } from './cfa-enrichment.js';
-import { enrichWithDataproject } from './dataproject-enrichment.js';
+import { enrichWithFotMob } from './fotmob-enrichment.ts';
+import { enrichWithCfa } from './cfa-enrichment.ts';
+import { enrichWithDataproject } from './dataproject-enrichment.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
