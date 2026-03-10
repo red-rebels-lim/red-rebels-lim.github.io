@@ -57,7 +57,7 @@ export function SetBreakdown({ setsWon, setsLost, breakdown }: SetBreakdownProps
           { label: 'stats.threeTwo', value: breakdown.threeTwo },
         ].map((item) => (
           <div key={item.label} className="bg-white/[0.03] border border-[rgba(224,37,32,0.15)] rounded-lg p-3 text-center">
-            <div className="text-lg font-black text-foreground">{item.label === 'stats.threeZero' ? t('stats.threeZero') : item.label === 'stats.threeOne' ? t('stats.threeOne') : t('stats.threeTwo')}</div>
+            <div className="text-lg font-black text-foreground">{t(item.label)}</div>
             <div className="text-xl font-black text-[#E02520]">{item.value}</div>
             <div className="text-xs text-muted-foreground">{t('stats.winsCount')}</div>
           </div>

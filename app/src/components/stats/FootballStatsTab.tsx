@@ -1,6 +1,5 @@
-import { useTranslation } from 'react-i18next';
 import type { FormattedStats } from '@/types/events';
-import type { LeagueTableData, TopScorer, NextMatchInfo } from '@/lib/fotmob';
+import type { FotMobParsed } from '@/pages/StatsPage';
 import { LeagueTable } from '@/components/stats/LeagueTable';
 import { TopScorers } from '@/components/stats/TopScorers';
 import { NextMatch } from '@/components/stats/NextMatch';
@@ -8,12 +7,6 @@ import { SeasonSummary } from '@/components/stats/SeasonSummary';
 import { PerformanceSplit } from '@/components/stats/PerformanceSplit';
 import { RecentForm } from '@/components/stats/RecentForm';
 import { HeadToHead } from '@/components/stats/HeadToHead';
-
-interface FotMobParsed {
-  tables: LeagueTableData[];
-  topScorers: TopScorer[];
-  nextMatch: NextMatchInfo | null;
-}
 
 function LoadingSkeleton() {
   return (
@@ -33,8 +26,6 @@ interface FootballStatsTabProps {
 }
 
 export function FootballStatsTab({ stats, fotmob, loading }: FootballStatsTabProps) {
-  useTranslation();
-
   return (
     <>
       {/* 1. Next Match (FotMob) */}
@@ -50,12 +41,7 @@ export function FootballStatsTab({ stats, fotmob, loading }: FootballStatsTabPro
       />
 
       {/* 3. Season Summary */}
-      <SeasonSummary
-        overall={stats.overall}
-        cleanSheets={stats.cleanSheets}
-        avgGoalsFor={stats.avgGoalsFor}
-        avgGoalsAgainst={stats.avgGoalsAgainst}
-      />
+      <SeasonSummary overall={stats.overall} />
 
       {/* 4. League Table (FotMob) */}
       {loading ? <LoadingSkeleton /> : fotmob && fotmob.tables.length > 0 ? (

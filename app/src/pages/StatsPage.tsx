@@ -19,7 +19,7 @@ import type {
 import { FootballStatsTab } from '@/components/stats/FootballStatsTab';
 import { VolleyballStatsTab } from '@/components/stats/VolleyballStatsTab';
 
-interface FotMobParsed {
+export interface FotMobParsed {
   tables: LeagueTableData[];
   topScorers: TopScorer[];
   nextMatch: NextMatchInfo | null;
@@ -95,8 +95,8 @@ export default function StatsPage() {
             className={cn(
               'whitespace-nowrap px-2.5 py-3 text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-all border-b-2',
               activeTab === tab.value
-                ? 'text-white border-[#E02520]'
-                : 'border-transparent text-white/60',
+                ? 'text-foreground border-[#E02520]'
+                : 'border-transparent text-muted-foreground',
             )}
           >
             {tab.label}

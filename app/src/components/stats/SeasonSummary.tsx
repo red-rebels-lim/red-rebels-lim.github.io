@@ -3,9 +3,6 @@ import type { TeamStatsWithPercentage } from '@/types/events';
 
 interface SeasonSummaryProps {
   overall: TeamStatsWithPercentage;
-  cleanSheets: number;
-  avgGoalsFor: number;
-  avgGoalsAgainst: number;
 }
 
 export function SeasonSummary({ overall }: SeasonSummaryProps) {
