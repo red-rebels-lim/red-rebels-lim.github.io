@@ -1,14 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with this repository.
 
 ## General Behavior
 
 When asked to implement a feature or fix, proceed directly to implementation. Do NOT spend extended time in planning/discovery mode unless explicitly asked for a plan. If exploration is needed, timebox it to 2-3 minutes before starting code changes.
-
-## Environment & Configuration
-
-Never hardcode environment variables or API keys in code or PRs. Follow existing project patterns for env var injection — check CI/CD configs, Dockerfiles, and existing `NEXT_PUBLIC_*` usage patterns first before introducing new variables.
 
 ## Code Style
 
@@ -16,367 +12,165 @@ When making UI/style changes, match the existing design exactly. Do not introduc
 
 ## Before Committing
 
-After making code changes, always verify the build passes before committing. Run the project's type check, lint, and test commands (e.g., `pnpm type-check`, `pnpm lint`, `pnpm test`) before pushing or creating a PR.
+After making code changes, always verify the build passes before committing. Run:
+
+```bash
+cd app
+npm run lint
+npm test
+npm run build
+```
+
+The pre-push hook runs these automatically and will block the push if any fail.
 
 ## Tech Stack & Constraints
 
-This is primarily a TypeScript/Next.js project. Be aware of Next.js-specific constraints: Edge Runtime cannot use Node.js modules, dynamic imports may be needed for env validation, and strict pnpm hoisting can cause module resolution issues.
-
-## PR Review Workflow
-
-When working with PR reviews: fetch comments, fix all issues in one pass, run tests, and push. Do not stop to re-plan between individual fixes.
+- **React 19 + TypeScript 5.9**, built with **Vite 7**
+- **Radix UI** primitives wrapped in `src/components/ui/`
+- **Tailwind CSS 4** + CVA for component variants
+- **React Router v7** (hash-based routing)
+- **Parse/Back4App** for push subscriptions and user preferences
+- **i18next** for EN/EL bilingual support
+- **Recharts** for statistics charts
+- **Vitest + React Testing Library** for unit/integration tests
+- **Playwright** for E2E tests
+- Package manager: **npm** (not pnpm — ignore the leftover `pnpm-lock.yaml`)
 
 ## Project Overview
 
-CamsFinder is an SEO-driven discovery platform for live cam models. This is a monorepo rebuild migrating from legacy AWS infrastructure (~$8k/month) to a modern, cost-effective platform (~$250/month MojoHost + Cloudflare).
-
-**Key business context:**
-- Generates ~$150k/year in affiliate revenue through organic search traffic
-- SEO preservation is **critical** — zero organic traffic loss is the primary success metric
-- 60% mobile / 40% desktop traffic split
+Red Rebels Calendar is a PWA for Nea Salamina FC (Cyprus) that displays football and volleyball fixtures, statistics, and match details. It supports push notifications for match reminders, dark/light theme, keyboard navigation, and swipe gestures.
 
 ## Commands
 
 ```bash
-# Development
-pnpm install              # Install dependencies
-cp .env.local.template .env.local  # Setup env (no API keys needed for staging)
-pnpm dev                  # Start dev server (http://localhost:3000)
-
-# Build & Quality
-pnpm build                # Build all packages (Turborepo cached)
-pnpm type-check           # TypeScript validation
-pnpm lint                 # ESLint check
-pnpm lint:fix             # Auto-fix lint issues
-pnpm test                 # Run Vitest tests
-pnpm format               # Prettier formatting
-pnpm clean                # Remove all build artifacts
-
-# Docker (Next.js + Redis)
-pnpm docker:compose:build && pnpm docker:compose:up  # Start production-like env
-pnpm docker:compose:logs                              # Follow logs
-pnpm docker:compose:down                              # Stop services
+# Development (run from app/)
+npm run dev              # Vite dev server at http://localhost:5173
+npm run build            # tsc -b && vite build
+npm run lint             # ESLint check
+npm run lint --fix       # Auto-fix lint issues
+npm test                 # Vitest single run
+npm run test:watch       # Vitest watch mode
+npm run test:coverage    # Vitest with V8 coverage report
+npm run preview          # Preview production build locally
 ```
 
 ## Architecture
 
-**Pattern:** Single Next.js 16 app with logical API boundary (no separate backend service)
-
 ```
-apps/web/
-├── src/app/              # Next.js App Router pages
-├── src/components/       # React components
-├── src/server/           # Logical API layer (STRICT BOUNDARY)
-│   ├── api/              # Public data access interface
-│   ├── services/         # CrakLabel client, Redis cache, circuit breaker
-│   ├── site/             # Multi-site configuration
-│   └── affiliate/        # Affiliate link generation
-└── Dockerfile            # Multi-stage production build
-
-packages/
-├── types/                # @camsfinder/types - shared TypeScript types
-├── seo/                  # @camsfinder/seo - URL normalization, meta generation
-├── config/               # @camsfinder/config - filters, providers, compliance
-└── ui/                   # @camsfinder/ui - shadcn/ui components
-```
-
-**Import boundary rule (ESLint enforced):** Pages/components import only from `server/api/*`, never directly from `server/services/*`.
-
-## SEO-Critical URL System
-
-**This is the most important technical aspect of the project.** See `.docs/requirements/url-mapping-strategy.md` for full specification.
-
-**Canonical URL structure:**
-```
-/{gender}/{site?}/{ageTag?}/{hair?}/{eye?}/{ethnicity|language?}
-```
-
-**Key rules:**
-- Gender is mandatory (girl, guy, couple, trans)
-- Ethnicity and language are mutually exclusive in URLs
-- `page` is the ONLY indexable query parameter
-- Multi-selection states must NOT generate crawlable URLs
-- Non-canonical URLs → 301 redirect to canonical
-- `noindex,follow` must ALWAYS be paired with canonical for non-indexable URLs
-
-**Normalization examples:**
-- `/asian/girl` → 301 to `/girl/asian`
-- `/girl/chaturbate?sort=new` → canonical `/girl/chaturbate` + `noindex,follow`
-
-## Key Documentation
-
-| Document | Purpose |
-|----------|---------|
-| `.docs/requirements/PRD.md` | Product requirements, features, acceptance criteria |
-| `.docs/requirements/TRD.md` | Technical architecture, API contracts, data models |
-| `.docs/requirements/url-mapping-strategy.md` | **SEO URL rules** (single source of truth) |
-| `.docs/ROADMAP.md` | Project phases and milestones |
-| `.docs/AGENTS.md` | AI agent guidelines, changelog requirements |
-| `.docs/craklabel/*.md` | CrakLabel API endpoint documentation |
-| `.docs/task-management/` | **Task management & Jira sync** documentation |
-
-## Development Workflow
-
-### Task Lifecycle (Recommended)
-
-```bash
-/list-tasks          # See available tasks
-/start-task SEO-005  # Claim task, mark in_progress
-# ... do work ...
-/complete-task       # Mark done, update CHANGELOG, .done, README
-/commit              # Commit with task reference
-git push             # Pre-push validates quality (type-check, lint, build)
+app/src/
+├── components/
+│   ├── calendar/         # CalendarGrid, EventCard, EventPopover, MatchReport, CountdownTimer
+│   ├── filters/          # FilterPanel
+│   ├── layout/           # Navbar, Footer, AppBackground
+│   ├── stats/            # OverallStats, LeagueTable, TopScorers, NextMatch, etc.
+│   └── ui/               # Radix UI wrappers (button, dialog, sheet, select, etc.)
+├── hooks/
+│   ├── useCalendar.ts    # Core calendar state and event filtering
+│   ├── useCountdown.ts   # Match countdown timer
+│   ├── useTheme.ts       # Light/dark theme toggle
+│   ├── useKeyboardShortcuts.ts
+│   └── useSwipeNavigation.ts
+├── lib/
+│   ├── fotmob.ts         # FotMob API: live scores, standings, venue info
+│   ├── stats.ts          # W/D/L, streaks, head-to-head calculations
+│   ├── push.ts           # Web Push subscription
+│   ├── preferences.ts    # localStorage + Parse backend for user settings
+│   ├── analytics.ts      # Google Analytics + Microsoft Clarity
+│   └── ics-export.ts     # iCalendar (.ics) export
+├── data/
+│   ├── events.ts         # All match data (~6500 lines, updated by scraper)
+│   ├── constants.ts      # Venue info, team colors
+│   ├── month-config.ts   # Month metadata
+│   └── sport-config.ts   # Sport types
+├── pages/                # CalendarPage, StatsPage (lazy), SettingsPage (lazy)
+├── types/events.ts       # Shared TypeScript interfaces
+└── i18n/                 # i18next config + language detection
 ```
 
-### Available Skills
+**Data flow:** Static `events.ts` → `useCalendar` hook → `CalendarPage` → grid + cards + popover. Stats come from `lib/stats.ts` (calculations) and `lib/fotmob.ts` (live API).
 
-| Skill | Purpose |
-|-------|---------|
-| `/list-tasks` | Show available, in-progress, and blocked tasks |
-| `/start-task TASK-ID` | Claim a task and start working on it |
-| `/complete-task` | Finish current task, update all tracking files |
-| `/project-status` | Regenerate README.md status section |
-| `/sync-jira` | Bidirectional sync with Jira (preview mode) |
-| `/instinct-status` | Show learned instincts with confidence scores |
-| `/evolve` | Cluster instincts into skills/commands/agents |
+## Testing
 
-### Project-Local Agents
+Tests live in `app/src/__tests__/`. Coverage targets: 80%+ branches, 89%+ statements.
 
-Customized agents in `.claude/agents/` for CamsFinder-specific reviews:
+### Key patterns
 
-| Agent | Purpose |
-|-------|---------|
-| `code-reviewer` | Code quality with SEO-critical checks, import boundaries |
-| `security-reviewer` | Security review (affiliate links, geo-compliance, API security) |
-| `refactor-cleaner` | Dead code cleanup with CamsFinder "NEVER REMOVE" list |
-| `database-reviewer` | PostgreSQL best practices |
-| `doc-updater` | Documentation with CamsFinder codemap templates |
-
-### Continuous Learning
-
-The `continuous-learning-v2` skill learns patterns from your Claude Code sessions:
-
-```
-.claude/homunculus/
-├── instincts/
-│   ├── personal/     # Auto-learned (gitignored, per-developer)
-│   └── shared/       # Team-reviewed (committed)
-└── evolved/          # Generated skills/commands/agents
+**vi.hoisted() for mock variables referenced inside vi.mock():**
+```typescript
+const { mockSave } = vi.hoisted(() => ({ mockSave: vi.fn() }));
+vi.mock('@/lib/parse', () => ({ /* use mockSave here */ }));
 ```
 
-**Team workflow:**
-1. Sessions auto-learn instincts in `personal/` (gitignored)
-2. Export valuable patterns with `/instinct-export`
-3. Add reviewed instincts to `shared/` and commit
-4. Everyone benefits from curated team instincts
-
-### Jira Sync Commands
-
-The `/sync-jira` skill provides bidirectional sync with conflict detection. Use the skill scripts:
-
-```bash
-# From project root
-cd .claude/skills/sync-jira/scripts
-
-# Bidirectional sync (auto-detects direction based on timestamps)
-npx tsx index.ts                          # Preview changes
-npx tsx index.ts --apply                  # Apply with interactive conflict resolution
-
-# Directional sync
-npx tsx index.ts push --apply             # Force local → Jira
-npx tsx index.ts pull --apply             # Force Jira → local
-
-# Rich description sync
-npx tsx index.ts descriptions --apply     # Sync descriptions to Jira
-npx tsx index.ts audit                    # Compare local vs Jira descriptions
-
-# Task operations
-npx tsx index.ts create-tasks --apply     # Create Jira Stories
-npx tsx index.ts verify-done              # Check done status consistency
+**Radix UI portal mocking** (Sheet, DropdownMenu render in portals):
+```typescript
+vi.mock('@/components/ui/sheet', () => ({
+  Sheet: ({ children }) => <div>{children}</div>,
+  SheetContent: ({ children }) => <div data-testid="sheet-content">{children}</div>,
+  SheetTrigger: ({ children }) => <div>{children}</div>,
+}));
 ```
 
-**What syncs bidirectionally:**
-- **Task status** — `ready`/`in_progress` ↔ To Do/In Progress
-- **Assignees** — Developer mappings with GitHub username support
-- **Rich descriptions** — Summary, Requirements, Acceptance Criteria, Technical Notes (local → Jira)
+**Fake timers:** Use `vi.advanceTimersByTime()` NOT `vi.runAllTimers()` — the app uses `setInterval` in `useCountdown` which causes infinite loops.
 
-**Conflict resolution:** When both sides change, choose `--resolve=local`, `--resolve=remote`, `--resolve=newer`, or interactive prompt (default).
-
-**Setup required:** Add Jira credentials to `.env.local` and developer mappings to `.tasks/.jira-mapping.json`. See `.claude/skills/sync-jira/SKILL.md` for full documentation.
-
-### Branch Management
-
-Before starting work on a branch, ensure it's rebased on latest main. After `git pull` or branch switches, verify you're on the correct branch with `git branch --show-current` before committing.
-
-### Git Hooks (Husky)
-
-**Pre-push hook** runs automatically before `git push`:
-- `pnpm type-check` — TypeScript validation
-- `pnpm lint` — ESLint check
-- `pnpm build` — Build all packages
-
-If any check fails, the push is blocked until issues are fixed.
-
-### Commit Format
-
-```
-type(scope): description [TASK-ID]
-
-feat(seo): add JSON-LD schema for model pages [SEO-003]
-fix(url): correct canonical generation for multi-filter [SEO-002]
-docs(prd): update compliance requirements
+**jsdom stubs for Notification/PushManager:**
+```typescript
+vi.stubGlobal('Notification', { permission: 'denied', requestPermission: vi.fn() });
 ```
 
-- Task ID in brackets is optional but encouraged for traceability
-- Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
+## Environment Variables
 
-### CI Pipeline
-
-Type check → Lint → Build → Test (on PR to main)
-
-## Data Flow
+All variables use the `VITE_` prefix. Copy `app/.env.example` to `app/.env.local`:
 
 ```
-Request → Cloudflare CDN/WAF
-        → Next.js middleware (URL normalization, geo headers)
-        → App Router page (SSR)
-        → Logical API layer (server/api/)
-        → Redis cache check
-        → CrakLabel API (if cache miss)
-        → Response with SEO metadata + JSON-LD
+VITE_BACK4APP_APP_ID=       # Back4App app ID
+VITE_BACK4APP_JS_KEY=       # Back4App JS key
+VITE_VAPID_PUBLIC_KEY=      # Web Push VAPID public key
+VITE_GA_MEASUREMENT_ID=     # Google Analytics (optional)
+VITE_CLARITY_PROJECT_ID=    # Microsoft Clarity (optional)
 ```
 
-**Caching TTLs:**
-- Listings: 120s (Redis) + 60-120s (Cloudflare edge)
-- Performer: 60s (Redis) + 120s (edge)
-- Search: 30s (Redis)
+No API keys are needed for basic development — Back4App is only required for push notification features.
 
-## Geo-Restriction Compliance
+## CI/CD
 
-CSS blur applied for restricted regions (EU, EEA, UK, 23 US states). See `packages/config/src/compliance.ts` for full list.
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| `ci.yml` | Pull request | Type-check, lint, test, build |
+| `deploy.yml` | Push to main | Build + deploy to GitHub Pages |
+| `scrape.yml` | Manual | Scrape fixtures, send notifications, open PR |
+| `reminders.yml` | Cron every 30min | Send push match reminders |
 
-- Thumbnails: `blur(20px)`
-- Streams: `blur(40px)` + `pointer-events: none`
-- Sweden/Kyrgyzstan: hard 302 redirect to `/notice`
-- Bots bypass restrictions (SEO preserved)
+**CI runs from `app/` directory using npm.** The scraper scripts live in `app/scripts/scraper/` and are tracked in git (not ignored).
 
-## Tech Stack
+## Scraper Scripts
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | Next.js 16, React 19, Tailwind CSS 3.4 |
-| Components | shadcn/ui (Radix UI) |
-| Language | TypeScript 5.9 |
-| Runtime | Node.js 24 |
-| Package Manager | pnpm 10 + Turborepo 2.x |
-| Testing | Vitest |
-| Cache | Redis 7 |
-| Infrastructure | Kubernetes (MojoHost), ArgoCD, Cloudflare |
-
-## External Tools & Integrations
-
-PostHog is self-hosted, not cloud. Use direct API calls (not the PostHog MCP plugin which is cloud-only). The PostHog proxy is configured via Next.js rewrites with environment-specific detection.
-
-## Environment Setup
-
-Copy `.env.local.template` to `.env.local`. The staging CrakLabel API is publicly accessible — no API keys required for development.
-
-Required variables:
-```
-NEXT_PUBLIC_DEFAULT_LANG=en
-NEXT_PUBLIC_SITE_HOSTNAME=camsfinder.com
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
-
-## Task Management
-
-Task/epic tracking files should be updated as part of every feature completion. Always update the relevant epic file, CHANGELOG.md, and README.md before creating a PR.
-
-Tasks organized in `.tasks/epics/{epic-name}/` with `_epic.md` files containing task tables. Done tasks tracked in `.tasks/.done`. Jira sync configured in `.tasks/.jira-mapping.json`.
-
-### Task Structure
+Match data is scraped and committed via the `scrape.yml` workflow:
 
 ```
-.tasks/
-├── .done              # Completed task IDs
-├── .sprint            # Current sprint info
-├── .current-task      # Your active task (gitignored)
-├── .jira-mapping.json # Jira sync configuration
-└── epics/
-    ├── seo-system/_epic.md
-    ├── design-implementation/_epic.md
-    └── ...
+app/scripts/scraper/
+├── index.ts                    # Main scraper entry point
+├── fotmob-enrichment.ts        # Enriches events with FotMob data
+├── cfa-enrichment.ts           # Enriches football events with CFA data
+└── dataproject-enrichment.ts   # Enriches volleyball events with DataProject data
 ```
 
-### Task Statuses
+Scripts use `tsconfig.scripts.json` with `moduleResolution: "bundler"` — import sibling `.ts` files with `.ts` extensions (not `.js`).
 
-| Status | Repo | Jira |
-|--------|------|------|
-| `ready` | Available to claim | To Do |
-| `in_progress` | Being worked on | In Progress |
-| `blocked` | Waiting on dependency | To Do + "Blocked" label |
-| `done` | Completed | Done (manual transition) |
+## .gitignore Notes
 
-### Quick Commands
+- `app/scripts/scraper/node_modules` — ignored (dependencies)
+- `/scripts` — root-level scripts directory ignored (anchored with `/`)
+- `app/scripts/` — **tracked** (scraper source files should be in git)
+- `.claude/` — gitignored (local agent config, not committed)
 
-```bash
-/list-tasks          # See what's available
-/start-task SEO-005  # Claim and start working
-/complete-task       # Finish and update tracking
-/sync-jira           # Sync to Jira (preview)
-```
-
-See `.docs/task-management/` for full documentation on workflows and Jira integration.
-
-## Project Status Maintenance
-
-**IMPORTANT:** Keep project tracking files updated as work progresses. This ensures accurate status reporting and team visibility.
-
-### Files to Maintain
-
-| File | When to Update | What to Update |
-|------|----------------|----------------|
-| `CHANGELOG.md` | Every change | Add entry under `[Unreleased]` section |
-| `.tasks/.sprint` | Task state changes | Move tasks between sections |
-| `.tasks/.done` | Task completion | Add completed task codes |
-| `.tasks/epics/{epic}/*.md` | Task progress | Update status in task files |
-| `README.md` | Before PR/commit | Regenerate status section |
-
-### Workflow After Completing Work
-
-**Streamlined (recommended):**
-```bash
-/complete-task       # Does steps 1-5 automatically
-/commit              # Commit with task reference
-git push             # Pre-push hook validates quality
-```
-
-**Manual:**
-1. **Update CHANGELOG.md** — Add entry describing the change
-2. **Update task files** — Mark task as complete in `.tasks/epics/{epic}/`
-3. **Update .done file** — Add task code to `.tasks/.done`
-4. **Run `/project-status`** — Regenerate README.md status section
-5. **Run quality checks** — `pnpm type-check && pnpm lint && pnpm build`
-6. **Commit and push**
-
-### The `/project-status` Skill
-
-Use the `/project-status` skill to automatically regenerate the project status section in README.md:
+## Commit Format
 
 ```
-/project-status
+type(scope): description
+
+feat(calendar): add match detail popover
+fix(scraper): use .ts extensions for enrichment imports
+chore(deps): update vitest to 4.0
 ```
 
-This skill:
-- Analyzes all task files in `.tasks/epics/`
-- Reads `.tasks/.done` and `.tasks/.sprint`
-- Cross-references with PRD/TRD phase definitions
-- Calculates completion percentages
-- Updates the `## Project Status` section in README.md
-- Adds current timestamp
-
-**When to use:**
-- After completing significant work
-- Before creating a pull request
-- When asked about project progress
-- Periodically to keep README accurate
+Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
