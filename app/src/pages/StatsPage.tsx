@@ -108,10 +108,10 @@ export default function StatsPage() {
         <FootballStatsTab stats={stats} fotmob={fotmob} loading={loading} />
       )}
       {activeTab === 'volleyball-men' && (
-        <VolleyballStatsTab stats={mensVolleyball} />
+        <VolleyballStatsTab stats={mensVolleyball} variant="men" />
       )}
       {activeTab === 'volleyball-women' && (
-        <VolleyballStatsTab stats={womensVolleyball} />
+        <VolleyballStatsTab stats={womensVolleyball} variant="women" />
       )}
     </div>
   );

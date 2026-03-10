@@ -88,6 +88,18 @@ describe('TASK-06: VolleyballStatsTab', () => {
     expect(screen.queryByText('stats.headToHead')).toBeNull();
   });
 
+  it('women variant shows totalPoints and setsWon hero stats', () => {
+    render(<VolleyballStatsTab stats={mockStats} variant="women" />);
+    expect(screen.getByText('stats.totalPoints')).toBeDefined();
+    expect(screen.getByText('stats.setsWon')).toBeDefined();
+    expect(screen.queryByText('stats.winRate')).toBeNull();
+  });
+
+  it('women variant does NOT render set breakdown', () => {
+    render(<VolleyballStatsTab stats={mockStats} variant="women" />);
+    expect(screen.queryByText('stats.setBreakdown')).toBeNull();
+  });
+
   it('handles empty stats gracefully', () => {
     const empty: VolleyballFormattedStats = {
       overall: { played: 0, wins: 0, losses: 0, setsWon: 0, setsLost: 0, setWinPercentage: 0, winPercentage: 0, pointsScored: 0, pointsConceded: 0 },

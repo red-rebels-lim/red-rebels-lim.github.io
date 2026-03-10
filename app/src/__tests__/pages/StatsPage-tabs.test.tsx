@@ -39,8 +39,8 @@ import { fetchTeamData } from '@/lib/fotmob';
 
 describe('TASK-06: StatsPage tabs integration', () => {
   beforeEach(() => {
-    vi.mocked(fetchTeamData).mockResolvedValue(null);
     vi.restoreAllMocks();
+    vi.mocked(fetchTeamData).mockResolvedValue(null);
   });
 
   describe('3 sport tabs displayed', () => {
@@ -91,10 +91,11 @@ describe('TASK-06: StatsPage tabs integration', () => {
       expect(screen.getByText('stats.setsLost')).toBeDefined();
     });
 
-    it('women\'s volleyball tab shows volleyball stats', async () => {
+    it('women\'s volleyball tab shows volleyball stats with sets won hero', async () => {
       await act(async () => { render(<StatsPage />); });
       await act(async () => { fireEvent.click(screen.getByText('stats.womensVolleyball')); });
-      expect(screen.getByText('stats.winRate')).toBeDefined();
+      expect(screen.getByText('stats.totalPoints')).toBeDefined();
+      expect(screen.getByText('stats.setsWon')).toBeDefined();
     });
 
     it('volleyball tabs show performance split without draws', async () => {

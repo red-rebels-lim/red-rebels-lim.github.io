@@ -56,6 +56,15 @@ describe('TASK-05: VolleyballSeasonSummary', () => {
     expect(screen.queryByText('stats.draws')).toBeNull();
   });
 
+  it('women variant shows totalPoints and setsWon hero stats', () => {
+    render(<VolleyballSeasonSummary overall={mockStats} variant="women" />);
+    expect(screen.getByText('stats.totalPoints')).toBeDefined();
+    expect(screen.getByText('1200')).toBeDefined();
+    expect(screen.getByText('stats.setsWon')).toBeDefined();
+    expect(screen.getByText('42')).toBeDefined();
+    expect(screen.queryByText('stats.winRate')).toBeNull();
+  });
+
   it('renders with zero stats', () => {
     const empty: VolleyballTeamStats = {
       played: 0, wins: 0, losses: 0,
