@@ -40,7 +40,7 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "whitespace-nowrap px-4 py-3 text-xs font-bold uppercase tracking-wider cursor-pointer transition-all border-b-2 border-transparent text-white/50 data-[state=active]:text-white data-[state=active]:border-[#E02520]",
+        "whitespace-nowrap px-4 py-3 text-xs font-bold uppercase tracking-wider cursor-pointer transition-all border-b-2 border-transparent text-white/60 data-[state=active]:text-white data-[state=active]:border-[#E02520]",
         className
       )}
       {...props}
@@ -56,7 +56,7 @@ function TabsContent({
     <TabsPrimitive.Content
       data-slot="tabs-content"
       forceMount
-      className={cn("px-5 py-3 min-h-[100px] data-[state=inactive]:hidden", className)}
+      className={cn("px-5 py-3 data-[state=inactive]:hidden", className)}
       {...props}
     />
   )

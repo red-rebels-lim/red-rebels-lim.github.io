@@ -13,6 +13,12 @@ interface EventPopoverProps {
   onClose: () => void;
 }
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function isVolleyballSport(sport: string): boolean {
+  return sport === 'volleyball-men' || sport === 'volleyball-women';
+}
+
 // ── Small presentational helpers ──────────────────────────────────────────────
 
 function YellowCard() {
@@ -179,28 +185,31 @@ function LineupsSection({
 
 // ── Substitutions two-column layout ──────────────────────────────────────────
 
+function SubRow({ s }: { s: Substitution }) {
+  return (
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-2 text-[11px] p-2 rounded-lg bg-white/5">
+      <div className="flex items-center gap-1.5 min-w-0">
+        <span className="text-green-400 font-bold shrink-0" aria-hidden="true">↑</span>
+        <span className="sr-only">Substituted on:</span>
+        <span className="text-foreground font-medium">{s.playerOn}</span>
+      </div>
+      <span className="text-muted-foreground italic shrink-0 text-center w-10">{s.minute}'</span>
+      <div className="flex items-center gap-1.5 min-w-0 justify-end">
+        <span className="sr-only">Substituted off:</span>
+        <span className="text-muted-foreground text-right">{s.playerOff}</span>
+        <span className="text-red-400 font-bold shrink-0" aria-hidden="true">↓</span>
+      </div>
+    </div>
+  );
+}
+
 function SubstitutionsSection({ subs, homeTeam, awayTeam }: {
   subs: Substitution[];
   homeTeam: string;
   awayTeam: string;
 }) {
-  // subs use team:'home'/'away' relative to the match; homeTeam/awayTeam are display labels
   const homeSubs = [...subs].filter(s => s.team === 'home').sort((a, b) => parseInt(a.minute) - parseInt(b.minute));
   const awaySubs = [...subs].filter(s => s.team === 'away').sort((a, b) => parseInt(a.minute) - parseInt(b.minute));
-
-  const SubRow = ({ s }: { s: Substitution }) => (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-2 text-[11px] p-2 rounded-lg bg-white/5">
-      <div className="flex items-center gap-1.5 min-w-0">
-        <span className="text-green-400 font-bold shrink-0">↑</span>
-        <span className="text-foreground font-medium">{s.playerOn}</span>
-      </div>
-      <span className="text-muted-foreground italic shrink-0 text-center w-10">{s.minute}'</span>
-      <div className="flex items-center gap-1.5 min-w-0 justify-end">
-        <span className="text-muted-foreground text-right">{s.playerOff}</span>
-        <span className="text-red-400 font-bold shrink-0">↓</span>
-      </div>
-    </div>
-  );
 
   return (
     <div className="space-y-4">
@@ -286,7 +295,7 @@ function MatchDetailTabs({
 }) {
   const { t } = useTranslation();
 
-  const isVolleyball = event.sport === 'volleyball-men' || event.sport === 'volleyball-women';
+  const isVolleyball = isVolleyballSport(event.sport);
 
   // Build available tabs based on what data exists
   type TabDef = { id: string; label: string };
@@ -385,7 +394,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   const isHome = event.location === 'home';
   const homeTeam = isHome ? TEAM_NAME : event.title.replace(` vs ${TEAM_NAME}`, '');
-  const ownLogo = event.sport === 'volleyball-men' || event.sport === 'volleyball-women'
+  const ownLogo = isVolleyballSport(event.sport)
     ? '/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ_ΒΟΛΛΕΥ.webp'
     : '/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp';
   const awayTeam = isHome ? event.title.replace(`${TEAM_NAME} vs `, '') : TEAM_NAME;
@@ -476,7 +485,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
                   <span className="text-2xl">🛡️</span>
                 )}
               </div>
-              <span className="text-xs font-bold text-foreground text-center leading-tight truncate w-full text-center">
+              <span className="text-xs font-bold text-foreground text-center leading-tight truncate w-full">
                 {homeTeam}
               </span>
             </div>
@@ -510,7 +519,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
                   <span className="text-2xl">🛡️</span>
                 )}
               </div>
-              <span className="text-xs font-bold text-foreground text-center leading-tight truncate w-full text-center">
+              <span className="text-xs font-bold text-foreground text-center leading-tight truncate w-full">
                 {awayTeam}
               </span>
             </div>
@@ -520,7 +529,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           {event.status === 'played' && event.score && (
             <div className="text-center py-2">
               <div className="text-5xl font-black text-yellow-300 tracking-tight">
-                {event.score.replace('-', ' - ')} <span className="text-4xl">{event.sport === 'volleyball-men' || event.sport === 'volleyball-women' ? '🏐' : '⚽'}</span>
+                {event.score.replace('-', ' - ')} <span className="text-4xl">{isVolleyballSport(event.sport) ? '🏐' : '⚽'}</span>
               </div>
               {event.penalties && (
                 <div className="text-sm font-bold text-yellow-300/70 mt-1">
