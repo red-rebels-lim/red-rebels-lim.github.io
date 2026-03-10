@@ -24,21 +24,23 @@ export function PerformanceSplit({ home, away, showDraws = true }: PerformanceSp
   return (
     <section className="stat-section">
       <h2 className="stat-section-title">{t('stats.performanceSplit')}</h2>
-      <div className="space-y-3">
-        {rows.map(({ label, icon, data }) => (
+      <div className="grid grid-cols-2 gap-3">
+        {rows.map(({ label, data }) => (
           <div
             key={label}
-            className="flex items-center gap-3 bg-white/[0.03] border border-[rgba(224,37,32,0.15)] rounded-lg p-3"
+            className="rounded-lg bg-white/5 dark:bg-[#1a1a1a]/50 border border-slate-200 dark:border-slate-800 p-4 flex items-center gap-3"
           >
-            <span className="text-lg">{icon}</span>
-            <div className="flex-1">
-              <span className="font-bold text-foreground">{t(label)}</span>
-              <span className="text-sm text-muted-foreground ml-2">{data.played} {t('stats.matches')}</span>
+            <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">
+              <span className="text-[20px]">{label === 'stats.home' ? '🏠' : '✈️'}</span>
             </div>
-            <div className="flex gap-3 text-sm font-bold">
-              <span className="text-green-400">{data.wins}{t('stats.w')}</span>
-              {showDraws && <span className="text-yellow-400">{data.draws}{t('stats.d')}</span>}
-              <span className="text-red-400">{data.losses}{t('stats.l')}</span>
+            <div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">{t(label)}</p>
+              <p className="text-lg font-bold">{data.played} <span className="text-xs font-normal text-slate-500">{t('stats.matches')}</span></p>
+              <div className="flex gap-2 text-xs font-bold mt-1">
+                <span className="text-green-600 dark:text-green-400">{data.wins}{t('stats.w')}</span>
+                {showDraws && <span className="text-yellow-500 dark:text-yellow-400">{data.draws}{t('stats.d')}</span>}
+                <span className="text-primary">{data.losses}{t('stats.l')}</span>
+              </div>
             </div>
           </div>
         ))}

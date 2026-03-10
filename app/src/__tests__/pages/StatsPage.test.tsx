@@ -57,7 +57,7 @@ describe('StatsPage', () => {
 
   it('renders stat cards', async () => {
     await act(async () => { render(<StatsPage />); });
-    expect(screen.getByText('stats.matches')).toBeDefined();
+    expect(screen.getAllByText('stats.matches').length).toBeGreaterThan(0);
     expect(screen.getAllByText('stats.wins').length).toBeGreaterThan(0);
     expect(screen.getAllByText('stats.draws').length).toBeGreaterThan(0);
     expect(screen.getAllByText('stats.losses').length).toBeGreaterThan(0);

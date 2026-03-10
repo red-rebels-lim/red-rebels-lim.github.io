@@ -16,18 +16,18 @@ export function HeadToHead({ headToHead }: HeadToHeadProps) {
       ) : (
         <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b border-[rgba(224,37,32,0.2)]">
-              <th className="text-left py-3 px-3 text-red-300 font-extrabold text-xs uppercase tracking-wide bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)]">{t('stats.opponent')}</th>
-              <th className="py-3 px-3 text-red-300 font-extrabold text-xs uppercase tracking-wide bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)]">{t('stats.played')}</th>
-              <th className="py-3 px-3 text-red-300 font-extrabold text-xs uppercase tracking-wide bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)]">{t('stats.w')}</th>
-              <th className="py-3 px-3 text-red-300 font-extrabold text-xs uppercase tracking-wide bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)]">{t('stats.d')}</th>
-              <th className="py-3 px-3 text-red-300 font-extrabold text-xs uppercase tracking-wide bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)]">{t('stats.l')}</th>
-              <th className="py-3 px-3 text-red-300 font-extrabold text-xs uppercase tracking-wide bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)]">{t('stats.goalsCol')}</th>
+            <tr className="border-b border-slate-200 dark:border-slate-800">
+              <th className="text-left py-3 px-3 text-xs uppercase text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800/50">{t('stats.opponent')}</th>
+              <th className="py-3 px-3 text-xs uppercase text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800/50">{t('stats.played')}</th>
+              <th className="py-3 px-3 text-xs uppercase text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800/50">{t('stats.w')}</th>
+              <th className="py-3 px-3 text-xs uppercase text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800/50">{t('stats.d')}</th>
+              <th className="py-3 px-3 text-xs uppercase text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800/50">{t('stats.l')}</th>
+              <th className="py-3 px-3 text-xs uppercase text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800/50">{t('stats.goalsCol')}</th>
             </tr>
           </thead>
           <tbody>
             {headToHead.slice(0, 10).map((h2h) => (
-              <tr key={h2h.opponent} className="border-b border-[rgba(224,37,32,0.2)] hover:bg-[rgba(224,37,32,0.1)] transition-colors">
+              <tr key={h2h.opponent} className="border-b border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                 <td className="py-3 px-3 font-bold text-foreground">{h2h.opponent}</td>
                 <td className="py-3 px-3 text-center text-muted-foreground">{h2h.played}</td>
                 <td className="py-3 px-3 text-center font-bold text-green-400">{h2h.wins}</td>

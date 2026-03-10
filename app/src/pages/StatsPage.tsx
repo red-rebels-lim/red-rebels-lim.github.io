@@ -81,7 +81,7 @@ export default function StatsPage() {
         </section>
       )}
 
-      <div role="tablist" className="flex overflow-x-auto border-b border-white/10 dark:border-white/10 light:border-slate-200 no-scrollbar">
+      <div role="tablist" className="flex gap-2 min-w-max overflow-x-auto no-scrollbar py-2">
         {[
           { value: 'football', label: t('stats.mensFootball') },
           { value: 'volleyball-men', label: t('stats.mensVolleyball') },
@@ -93,10 +93,10 @@ export default function StatsPage() {
             aria-selected={activeTab === tab.value}
             onClick={() => setActiveTab(tab.value)}
             className={cn(
-              'whitespace-nowrap px-2.5 py-3 text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-all border-b-2',
+              'whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold tracking-wide cursor-pointer transition-all',
               activeTab === tab.value
-                ? 'text-foreground border-[#E02520]'
-                : 'border-transparent text-muted-foreground',
+                ? 'bg-primary text-white'
+                : 'bg-slate-200 dark:bg-[#1a1a1a] text-slate-600 dark:text-slate-400',
             )}
           >
             {tab.label}

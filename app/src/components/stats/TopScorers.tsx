@@ -24,21 +24,23 @@ export function TopScorers({ scorers, unit = 'goals' }: TopScorersProps) {
         {scorers.map((scorer, i) => {
           const displayValue = scorer.value ?? scorer.goals ?? 0;
           const displayName = unit === 'goals' ? tApi(t, 'players', scorer.name) : scorer.name;
+          const isFirst = i === 0;
 
           return (
             <div
               key={scorer.name}
-              className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.03] transition-colors"
+              className={`rounded-lg bg-white/5 dark:bg-[#1a1a1a]/50 ${isFirst ? 'border-primary' : 'border-slate-200 dark:border-slate-800'} border p-3 flex items-center justify-between backdrop-blur-sm`}
             >
-              <div className="w-8 h-8 rounded-full bg-[rgba(224,37,32,0.15)] border border-[rgba(224,37,32,0.3)] flex items-center justify-center text-sm font-bold text-[#E02520] shrink-0">
-                {i + 1}
+              <div className="flex items-center gap-3">
+                <span className="text-slate-400 font-medium text-sm w-4">{i + 1}</span>
+                <div className="w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
+                  <span className="text-slate-500 text-[18px]">👤</span>
+                </div>
+                <span className="font-medium">{displayName}</span>
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-bold text-foreground truncate">{displayName}</div>
-              </div>
-              <div className="text-xl font-black text-[#E02520] shrink-0">
+              <span className={`font-bold ${isFirst ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>
                 {displayValue}
-              </div>
+              </span>
             </div>
           );
         })}

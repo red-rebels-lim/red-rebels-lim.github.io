@@ -77,6 +77,6 @@ describe('TASK-04: LeagueTable compact mode', () => {
   it('Nea Salamina row is highlighted', () => {
     render(<LeagueTable tables={[mockTable]} />);
     const nsRow = screen.getByText('Nea Salamis').closest('tr');
-    expect(nsRow?.className).toContain('bg-gradient');
+    expect(nsRow?.className).toContain('bg-primary/10');
   });
 });

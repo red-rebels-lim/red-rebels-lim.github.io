@@ -8,7 +8,7 @@ interface LeagueTableProps {
   tables: LeagueTableData[];
 }
 
-const TH_CLASS = 'py-2 px-2 text-center text-red-300 font-extrabold text-xs uppercase tracking-wide bg-gradient-to-br from-[rgba(224,37,32,0.2)] to-[rgba(185,28,28,0.15)]';
+const TH_CLASS = 'py-2 px-2 text-center text-xs uppercase text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800/50';
 
 function getCompactRows(
   rows: LeagueTableData['rows'],
@@ -56,13 +56,13 @@ export function LeagueTable({ tables }: LeagueTableProps) {
           return (
             <div key={tbl.leagueName}>
               {relevantTables.length > 1 && (
-                <h3 className="text-red-300/80 text-sm font-extrabold uppercase tracking-wide mb-3">
+                <h3 className="text-sm font-bold uppercase tracking-wide mb-3 text-slate-600 dark:text-slate-300">
                   {tApi(t, 'leagues', tbl.leagueName)}
                 </h3>
               )}
               <table className="w-full border-collapse text-sm">
                 <thead>
-                  <tr className="border-b border-[rgba(224,37,32,0.2)]">
+                  <tr className="border-b border-slate-200 dark:border-slate-800">
                     <th className={`${TH_CLASS} text-left`}>#</th>
                     <th className={`${TH_CLASS} text-left`}>{t('stats.team')}</th>
                     <th className={TH_CLASS}>{t('stats.goalDifference')}</th>
@@ -75,10 +75,10 @@ export function LeagueTable({ tables }: LeagueTableProps) {
                     return (
                       <tr
                         key={row.id}
-                        className={`border-b border-[rgba(224,37,32,0.1)] transition-colors ${
+                        className={`border-b border-slate-200 dark:border-slate-800 transition-colors ${
                           isUs
-                            ? 'bg-gradient-to-r from-[rgba(224,37,32,0.2)] to-[rgba(224,37,32,0.1)] font-bold'
-                            : 'hover:bg-[rgba(224,37,32,0.05)]'
+                            ? 'bg-primary/10 border-l-2 border-l-primary font-bold'
+                            : 'hover:bg-slate-50 dark:hover:bg-slate-800/30'
                         }`}
                       >
                         <td className="py-2 px-2">
