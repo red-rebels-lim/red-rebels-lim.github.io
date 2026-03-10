@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { getMatchResult } from '@/lib/stats';
 import { TEAM_NAME } from '@/data/constants';
 import type { CalendarEvent, Scorer, Booking, LineupPlayer, Substitution, VolleyballSet, VolleyballScorer } from '@/types/events';
@@ -13,16 +14,6 @@ interface EventPopoverProps {
 }
 
 // ── Small presentational helpers ──────────────────────────────────────────────
-
-function SectionHeading({ label }: { label: string }) {
-  return (
-    <div className="flex items-center gap-2 my-3">
-      <div className="flex-1 h-px bg-[rgba(224,37,32,0.3)]" />
-      <span className="text-xs font-black text-[#E02520] uppercase tracking-widest">{label}</span>
-      <div className="flex-1 h-px bg-[rgba(224,37,32,0.3)]" />
-    </div>
-  );
-}
 
 function YellowCard() {
   return <span className="inline-block w-3 h-4 bg-yellow-400 rounded-[2px] shrink-0" aria-label="yellow card" />;
@@ -188,40 +179,44 @@ function LineupsSection({
 
 // ── Substitutions two-column layout ──────────────────────────────────────────
 
-function SubstitutionsSection({ subs, isHome }: { subs: Substitution[]; isHome: boolean }) {
-  const isLeft = (s: Substitution) => isHome ? s.team === 'home' : s.team === 'away';
-  const sorted = [...subs].sort((a, b) => parseInt(a.minute) - parseInt(b.minute));
+function SubstitutionsSection({ subs, isHome, homeTeam, awayTeam }: {
+  subs: Substitution[];
+  isHome: boolean;
+  homeTeam: string;
+  awayTeam: string;
+}) {
+  // subs use team:'home'/'away' relative to the match; homeTeam/awayTeam are display labels
+  const homeSubs = [...subs].filter(s => s.team === 'home').sort((a, b) => parseInt(a.minute) - parseInt(b.minute));
+  const awaySubs = [...subs].filter(s => s.team === 'away').sort((a, b) => parseInt(a.minute) - parseInt(b.minute));
+
+  const SubRow = ({ s }: { s: Substitution }) => (
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-2 text-[11px] p-2 rounded-lg bg-white/5">
+      <div className="flex items-center gap-1.5 min-w-0">
+        <span className="text-green-400 font-bold shrink-0">↑</span>
+        <span className="text-foreground font-medium">{s.playerOn}</span>
+      </div>
+      <span className="text-muted-foreground italic shrink-0 text-center w-10">{s.minute}'</span>
+      <div className="flex items-center gap-1.5 min-w-0 justify-end">
+        <span className="text-muted-foreground text-right">{s.playerOff}</span>
+        <span className="text-red-400 font-bold shrink-0">↓</span>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="space-y-1">
-      {sorted.map((s, i) => {
-        const onLeft = isLeft(s);
-        return (
-          <div key={i} className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-2 text-xs">
-            <div className="flex items-center justify-end gap-1 min-w-0">
-              {onLeft ? (
-                <>
-                  <span className="text-muted-foreground truncate">{s.playerOff}</span>
-                  <span className="text-red-400 font-bold shrink-0">↓</span>
-                  <span className="text-foreground font-medium truncate">{s.playerOn}</span>
-                  <span className="text-green-400 font-bold shrink-0">↑</span>
-                </>
-              ) : null}
-            </div>
-            <div className="text-center text-xs text-muted-foreground shrink-0 w-10">{s.minute}'</div>
-            <div className="flex items-center gap-1 min-w-0">
-              {!onLeft ? (
-                <>
-                  <span className="text-green-400 font-bold shrink-0">↑</span>
-                  <span className="text-foreground font-medium truncate">{s.playerOn}</span>
-                  <span className="text-red-400 font-bold shrink-0">↓</span>
-                  <span className="text-muted-foreground truncate">{s.playerOff}</span>
-                </>
-              ) : null}
-            </div>
-          </div>
-        );
-      })}
+    <div className="space-y-4">
+      {homeSubs.length > 0 && (
+        <div className="space-y-1.5">
+          <span className="text-xs font-bold text-muted-foreground truncate">{homeTeam}</span>
+          {homeSubs.map((s, i) => <SubRow key={i} s={s} />)}
+        </div>
+      )}
+      {awaySubs.length > 0 && (
+        <div className="space-y-1.5">
+          <span className="text-xs font-bold text-muted-foreground truncate">{awayTeam}</span>
+          {awaySubs.map((s, i) => <SubRow key={i} s={s} />)}
+        </div>
+      )}
     </div>
   );
 }
@@ -274,6 +269,106 @@ function VbScorersSection({ scorers, isHome }: { scorers: VolleyballScorer[]; is
         );
       })}
     </div>
+  );
+}
+
+// ── Tabbed match details ─────────────────────────────────────────────────────
+
+function MatchDetailTabs({
+  event,
+  isHome,
+  homeTeam,
+  awayTeam,
+}: {
+  event: CalendarEvent;
+  isHome: boolean;
+  homeTeam: string;
+  awayTeam: string;
+}) {
+  const { t } = useTranslation();
+
+  const isVolleyball = event.sport === 'volleyball-men' || event.sport === 'volleyball-women';
+
+  // Build available tabs based on what data exists
+  type TabDef = { id: string; label: string };
+  const tabs: TabDef[] = [];
+
+  if (isVolleyball) {
+    if (event.sets && event.sets.length > 0) tabs.push({ id: 'sets', label: t('popover.sets') });
+    if (event.vbScorers && event.vbScorers.length > 0) tabs.push({ id: 'vbScorers', label: t('popover.vbScorers') });
+  } else {
+    if (event.scorers && event.scorers.length > 0) tabs.push({ id: 'scorers', label: t('popover.goalscorers') });
+    if (event.bookings && event.bookings.length > 0) tabs.push({ id: 'bookings', label: t('popover.bookings') });
+  }
+  if (event.lineup && (event.lineup.home.length > 0 || event.lineup.away.length > 0)) {
+    tabs.push({ id: 'lineups', label: t('popover.lineup') });
+  }
+  if (event.subs && event.subs.length > 0) tabs.push({ id: 'subs', label: t('popover.substitutions') });
+
+  if (tabs.length === 0) return null;
+
+  return (
+    <Tabs defaultValue={tabs[0].id} className="mt-3 -mx-5">
+      <TabsList>
+        {tabs.map((tab) => (
+          <TabsTrigger key={tab.id} value={tab.id}>
+            {tab.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+
+      {/* Football: Scorers */}
+      {event.scorers && event.scorers.length > 0 && !isVolleyball && (
+        <TabsContent value="scorers">
+          <ScorersSection
+            scorers={event.scorers}
+            penLabel={t('popover.pen')}
+            ogLabel={t('popover.og')}
+            isHome={isHome}
+          />
+        </TabsContent>
+      )}
+
+      {/* Football: Bookings */}
+      {event.bookings && event.bookings.length > 0 && !isVolleyball && (
+        <TabsContent value="bookings">
+          <BookingsSection bookings={event.bookings} isHome={isHome} />
+        </TabsContent>
+      )}
+
+      {/* Volleyball: Sets */}
+      {event.sets && event.sets.length > 0 && isVolleyball && (
+        <TabsContent value="sets">
+          <SetsSection sets={event.sets} setLabel={t('popover.set')} />
+        </TabsContent>
+      )}
+
+      {/* Volleyball: Top Scorers */}
+      {event.vbScorers && event.vbScorers.length > 0 && isVolleyball && (
+        <TabsContent value="vbScorers">
+          <VbScorersSection scorers={event.vbScorers} isHome={isHome} />
+        </TabsContent>
+      )}
+
+      {/* Lineups */}
+      {event.lineup && (event.lineup.home.length > 0 || event.lineup.away.length > 0) && (
+        <TabsContent value="lineups">
+          <LineupsSection
+            lineup={event.lineup}
+            homeTeam={homeTeam}
+            awayTeam={awayTeam}
+            isHome={isHome}
+          />
+        </TabsContent>
+      )}
+
+      {/* Substitutions */}
+      {event.subs && event.subs.length > 0 && (
+        <TabsContent value="subs">
+          <SubstitutionsSection subs={event.subs} isHome={isHome} homeTeam={homeTeam} awayTeam={awayTeam} />
+        </TabsContent>
+      )}
+    </Tabs>
   );
 }
 
@@ -468,63 +563,8 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
             </button>
           </div>
 
-          {/* ── Goalscorers ── */}
-          {event.scorers && event.scorers.length > 0 && (
-            <>
-              <SectionHeading label={t('popover.goalscorers')} />
-              <ScorersSection
-                scorers={event.scorers}
-                penLabel={t('popover.pen')}
-                ogLabel={t('popover.og')}
-                isHome={isHome}
-              />
-            </>
-          )}
-
-          {/* ── Bookings ── */}
-          {event.bookings && event.bookings.length > 0 && (
-            <>
-              <SectionHeading label={t('popover.bookings')} />
-              <BookingsSection bookings={event.bookings} isHome={isHome} />
-            </>
-          )}
-
-          {/* ── Lineups ── */}
-          {event.lineup && (event.lineup.home.length > 0 || event.lineup.away.length > 0) && (
-            <>
-              <SectionHeading label={t('popover.lineup')} />
-              <LineupsSection
-                lineup={event.lineup}
-                homeTeam={homeTeam}
-                awayTeam={awayTeam}
-                isHome={isHome}
-              />
-            </>
-          )}
-
-          {/* ── Substitutions ── */}
-          {event.subs && event.subs.length > 0 && (
-            <>
-              <SectionHeading label={t('popover.substitutions')} />
-              <SubstitutionsSection subs={event.subs} isHome={isHome} />
-            </>
-          )}
-
-          {/* ── Volleyball sets ── */}
-          {event.sets && event.sets.length > 0 && (
-            <>
-              <SectionHeading label={t('popover.sets')} />
-              <SetsSection sets={event.sets} setLabel={t('popover.set')} />
-            </>
-          )}
-
-          {/* ── Volleyball top scorers ── */}
-          {event.vbScorers && event.vbScorers.length > 0 && (
-            <>
-              <SectionHeading label={t('popover.vbScorers')} />
-              <VbScorersSection scorers={event.vbScorers} isHome={isHome} />
-            </>
-          )}
+          {/* ── Tabbed match details ── */}
+          {event.status === 'played' && <MatchDetailTabs event={event} isHome={isHome} homeTeam={homeTeam} awayTeam={awayTeam} />}
 
           {/* ── Match report ── */}
           {event.status === 'played' && (
