@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { NextMatchInfo } from '@/lib/fotmob';
 import { tApi } from '@/lib/fotmob';
+import { TEAM_LOGOS } from '@/data/constants';
 
 interface NextMatchProps {
   match: NextMatchInfo;
@@ -34,17 +35,30 @@ export function NextMatch({ match }: NextMatchProps) {
         </div>
         <div className="flex items-center justify-center gap-4">
           <div className="text-center">
-            <div className="w-14 h-14 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center mx-auto mb-2">
-              <span className="text-lg font-bold text-primary">NS</span>
+            <div className="w-14 h-14 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center mx-auto mb-2 overflow-hidden border border-slate-200 dark:border-slate-700">
+              <img
+                src={TEAM_LOGOS['Nea Salamis']}
+                alt="Nea Salamis"
+                className="w-full h-full object-contain p-1"
+              />
             </div>
             <div className="text-sm font-bold">{tApi(t, 'teams', 'Nea Salamis')}</div>
           </div>
           <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">vs</div>
           <div className="text-center">
-            <div className="w-14 h-14 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center mx-auto mb-2">
-              <span className="text-lg font-bold text-slate-600 dark:text-slate-300">
-                {match.opponentName.substring(0, 2).toUpperCase()}
-              </span>
+            <div className="w-14 h-14 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center mx-auto mb-2 overflow-hidden border border-slate-200 dark:border-slate-700">
+              {TEAM_LOGOS[match.opponentName] ? (
+                <img
+                  src={TEAM_LOGOS[match.opponentName]}
+                  alt={match.opponentName}
+                  loading="lazy"
+                  className="w-full h-full object-contain p-1"
+                />
+              ) : (
+                <span className="text-lg font-bold text-slate-600 dark:text-slate-300">
+                  {match.opponentName.substring(0, 2).toUpperCase()}
+                </span>
+              )}
             </div>
             <div className="text-sm font-bold">{tApi(t, 'teams', match.opponentName)}</div>
           </div>
