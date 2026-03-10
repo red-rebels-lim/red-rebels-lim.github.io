@@ -1,3 +1,4 @@
+import { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -280,6 +281,51 @@ function VbScorersSection({ scorers, isHome }: { scorers: VolleyballScorer[]; is
   );
 }
 
+// ── Swipeable tabs wrapper ──────────────────────────────────────────────────
+
+function SwipeTabs({
+  tabs,
+  children,
+}: {
+  tabs: { id: string; label: string }[];
+  children: React.ReactNode;
+}) {
+  const [activeTab, setActiveTab] = useState(tabs[0].id);
+  const startX = useRef(0);
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    startX.current = e.changedTouches[0].screenX;
+  }, []);
+
+  const onTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const endX = e.changedTouches[0].screenX;
+      const diff = startX.current - endX;
+      if (Math.abs(diff) < 50) return;
+
+      setActiveTab((current) => {
+        const idx = tabs.findIndex((t) => t.id === current);
+        if (diff > 0 && idx < tabs.length - 1) return tabs[idx + 1].id; // swipe left → next
+        if (diff < 0 && idx > 0) return tabs[idx - 1].id; // swipe right → prev
+        return current;
+      });
+    },
+    [tabs]
+  );
+
+  return (
+    <Tabs
+      value={activeTab}
+      onValueChange={setActiveTab}
+      className="mt-3"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {children}
+    </Tabs>
+  );
+}
+
 // ── Tabbed match details ─────────────────────────────────────────────────────
 
 function MatchDetailTabs({
@@ -316,7 +362,7 @@ function MatchDetailTabs({
   if (tabs.length === 0) return null;
 
   return (
-    <Tabs defaultValue={tabs[0].id} className="mt-3">
+    <SwipeTabs tabs={tabs}>
       <TabsList>
         {tabs.map((tab) => (
           <TabsTrigger key={tab.id} value={tab.id}>
@@ -376,7 +422,7 @@ function MatchDetailTabs({
           <SubstitutionsSection subs={event.subs} homeTeam={homeTeam} awayTeam={awayTeam} />
         </TabsContent>
       )}
-    </Tabs>
+    </SwipeTabs>
   );
 }
 
@@ -449,7 +495,11 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="bg-gradient-to-br from-[#1a0f0f] to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]">
+      <DialogContent
+        className="bg-gradient-to-br from-[#1a0f0f] to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]"
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+      >
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
         <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
 
