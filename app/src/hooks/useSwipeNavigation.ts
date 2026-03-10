@@ -9,6 +9,9 @@ export function useSwipeNavigation(onLeft: () => void, onRight: () => void, thre
 
   const onTouchEnd = useCallback(
     (e: React.TouchEvent) => {
+      // Don't navigate months while a dialog/modal is open
+      if (document.querySelector('[role="dialog"]')) return;
+
       const endX = e.changedTouches[0].screenX;
       if (endX < startX.current - threshold) onLeft();
       if (endX > startX.current + threshold) onRight();

@@ -65,4 +65,23 @@ describe('useSwipeNavigation', () => {
 
     expect(onLeft).toHaveBeenCalled();
   });
+
+  it('does not navigate when a dialog is open', () => {
+    const onLeft = vi.fn();
+    const onRight = vi.fn();
+    const { result } = renderHook(() => useSwipeNavigation(onLeft, onRight, 50));
+
+    // Simulate an open dialog in the DOM
+    const dialog = document.createElement('div');
+    dialog.setAttribute('role', 'dialog');
+    document.body.appendChild(dialog);
+
+    result.current.onTouchStart({ changedTouches: [{ screenX: 200 }] } as unknown as React.TouchEvent);
+    result.current.onTouchEnd({ changedTouches: [{ screenX: 100 }] } as unknown as React.TouchEvent);
+
+    expect(onLeft).not.toHaveBeenCalled();
+    expect(onRight).not.toHaveBeenCalled();
+
+    document.body.removeChild(dialog);
+  });
 });

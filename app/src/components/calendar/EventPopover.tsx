@@ -292,21 +292,27 @@ function SwipeTabs({
 }) {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
   const startX = useRef(0);
+  const startY = useRef(0);
 
   const onTouchStart = useCallback((e: React.TouchEvent) => {
     startX.current = e.changedTouches[0].screenX;
+    startY.current = e.changedTouches[0].screenY;
   }, []);
 
   const onTouchEnd = useCallback(
     (e: React.TouchEvent) => {
       const endX = e.changedTouches[0].screenX;
-      const diff = startX.current - endX;
-      if (Math.abs(diff) < 50) return;
+      const endY = e.changedTouches[0].screenY;
+      const diffX = startX.current - endX;
+      const diffY = Math.abs(startY.current - endY);
+
+      // Only switch tabs for predominantly horizontal swipes
+      if (Math.abs(diffX) < 50 || diffY > Math.abs(diffX)) return;
 
       setActiveTab((current) => {
         const idx = tabs.findIndex((t) => t.id === current);
-        if (diff > 0 && idx < tabs.length - 1) return tabs[idx + 1].id; // swipe left → next
-        if (diff < 0 && idx > 0) return tabs[idx - 1].id; // swipe right → prev
+        if (diffX > 0 && idx < tabs.length - 1) return tabs[idx + 1].id; // swipe left → next
+        if (diffX < 0 && idx > 0) return tabs[idx - 1].id; // swipe right → prev
         return current;
       });
     },
@@ -495,11 +501,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent
-        className="bg-gradient-to-br from-[#1a0f0f] to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]"
-        onTouchStart={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => e.stopPropagation()}
-      >
+      <DialogContent className="bg-gradient-to-br from-[#1a0f0f] to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]">
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
         <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
 
