@@ -118,8 +118,8 @@ describe('Navbar', () => {
     const onNext = vi.fn();
     const onToday = vi.fn();
     render(<Navbar currentMonth="february" onPrevious={onPrev} onNext={onNext} onToday={onToday} />);
-    expect(screen.getByRole('button', { name: 'Previous' })).toBeDefined();
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Previous month' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Next month' })).toBeDefined();
     expect(screen.getByText('monthNav.jumpToToday')).toBeDefined();
   });
 
@@ -128,7 +128,7 @@ describe('Navbar', () => {
     const onNext = vi.fn();
     const onToday = vi.fn();
     render(<Navbar currentMonth="february" onPrevious={onPrev} onNext={onNext} onToday={onToday} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Previous' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Previous month' }));
     expect(onPrev).toHaveBeenCalled();
     expect(trackEvent).toHaveBeenCalledWith('navigate_month', { direction: 'previous' });
   });
@@ -138,7 +138,7 @@ describe('Navbar', () => {
     const onNext = vi.fn();
     const onToday = vi.fn();
     render(<Navbar currentMonth="february" onPrevious={onPrev} onNext={onNext} onToday={onToday} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next month' }));
     expect(onNext).toHaveBeenCalled();
     expect(trackEvent).toHaveBeenCalledWith('navigate_month', { direction: 'next' });
   });
@@ -155,8 +155,8 @@ describe('Navbar', () => {
 
   it('does not render month navigation without props', () => {
     render(<Navbar />);
-    expect(screen.queryByRole('button', { name: 'Previous' })).toBeNull();
-    expect(screen.queryByRole('button', { name: 'Next' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Previous month' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Next month' })).toBeNull();
   });
 
   it('calls exportToCalendar and trackEvent when export dropdown item clicked on calendar page', () => {

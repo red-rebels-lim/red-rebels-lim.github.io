@@ -1,9 +1,48 @@
+import { useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOnboarding } from '@/hooks/useOnboarding';
 
 export function OnboardingTour() {
   const { t } = useTranslation();
   const { isActive, currentStep, steps, next, prev, skip } = useOnboarding();
+
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      skip();
+      return;
+    }
+    // Focus trap: keep Tab within the dialog
+    if (e.key === 'Tab' && dialogRef.current) {
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }, [skip]);
+
+  useEffect(() => {
+    if (!isActive) return;
+    document.addEventListener('keydown', handleKeyDown);
+    // Move focus into the dialog
+    const timer = setTimeout(() => {
+      dialogRef.current?.focus();
+    }, 0);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      clearTimeout(timer);
+    };
+  }, [isActive, handleKeyDown]);
 
   if (!isActive) return null;
 
@@ -17,13 +56,17 @@ export function OnboardingTour() {
         data-testid="tour-overlay"
         className="fixed inset-0 bg-black/60 z-[100]"
         onClick={skip}
+        aria-hidden="true"
       />
       <div
+        ref={dialogRef}
         role="dialog"
+        aria-modal="true"
         aria-label={t('onboarding.tourLabel')}
-        className="fixed z-[101] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-sm bg-[#1a0f0f] border-2 border-[rgba(224,37,32,0.4)] rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+        tabIndex={-1}
+        className="fixed z-[101] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-sm bg-white dark:bg-[#1a0f0f] border-2 border-[rgba(224,37,32,0.4)] rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)] outline-none"
       >
-        <div className="text-sm text-[rgba(224,37,32,0.8)] font-semibold mb-1">
+        <div className="text-sm text-[rgba(224,37,32,0.8)] font-semibold mb-1" role="status" aria-live="polite">
           {currentStep + 1} / {steps.length}
         </div>
         <h2 className="text-lg font-bold text-foreground mb-2">

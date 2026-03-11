@@ -154,7 +154,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
                 {t('nav.options')}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-[rgba(26,15,15,0.95)] backdrop-blur-xl border-[rgba(224,37,32,0.3)]">
+            <DropdownMenuContent className="bg-white dark:bg-[rgba(26,15,15,0.95)] backdrop-blur-xl border-[rgba(224,37,32,0.3)]">
               {isCalendar && (
                 <DropdownMenuItem onClick={() => { exportToCalendar(); trackEvent('export_calendar'); }} className="text-foreground hover:text-[#E02520] cursor-pointer">
                   {t('nav.export')}
@@ -175,6 +175,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
             variant="outline"
             size="icon"
             onClick={toggleLanguage}
+            aria-label={t('nav.switchLanguage', 'Switch language')}
             className="w-11 h-11 rounded-full border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground font-bold text-sm"
           >
             {langCode}
@@ -205,7 +206,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
                 </svg>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-[#0a1810] border-[rgba(224,37,32,0.3)]" aria-describedby={undefined}>
+            <SheetContent side="right" className="bg-white dark:bg-[#0a1810] border-[rgba(224,37,32,0.3)]" aria-describedby={undefined}>
               <SheetTitle className="sr-only">{t('nav.calendar')}</SheetTitle>
               <div className="flex flex-col gap-4 mt-8">
                 {navLinks}
@@ -274,7 +275,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
           <Button
             variant="outline"
             size="icon"
-            aria-label="Previous"
+            aria-label={t('monthNav.previous', 'Previous month')}
             onClick={() => { trackEvent('navigate_month', { direction: 'previous' }); onPrevious(); }}
             className="w-10 h-10 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground"
           >
@@ -288,7 +289,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
           <Button
             variant="outline"
             size="icon"
-            aria-label="Next"
+            aria-label={t('monthNav.next', 'Next month')}
             onClick={() => { trackEvent('navigate_month', { direction: 'next' }); onNext(); }}
             className="w-10 h-10 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground"
           >
