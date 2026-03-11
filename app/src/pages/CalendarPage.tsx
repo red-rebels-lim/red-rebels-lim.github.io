@@ -140,35 +140,37 @@ export function CalendarPage() {
 
       {/* Mobile: new calendar grid + upcoming events */}
       <div className="md:hidden">
-        {/* Mobile month navigation */}
-        <div className="flex items-center justify-between px-2 py-3">
-          <button
-            onClick={handlePrevious}
-            aria-label={t('monthNav.previous', 'Previous month')}
-            className="p-2 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b]"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-          <h2 className="text-lg font-semibold text-foreground">
-            {t(`months.${currentMonth}`)} {monthMap[currentMonth].year}
-          </h2>
-          <button
-            onClick={handleNext}
-            aria-label={t('monthNav.next', 'Next month')}
-            className="p-2 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b]"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
-        </div>
+        <div className="bg-white/70 dark:bg-transparent backdrop-blur-sm dark:backdrop-blur-none rounded-2xl mx-2 p-2 mt-2">
+          {/* Mobile month navigation */}
+          <div className="flex items-center justify-between px-2 py-3">
+            <button
+              onClick={handlePrevious}
+              aria-label={t('monthNav.previous', 'Previous month')}
+              className="p-2 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b]"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-foreground">
+              {t(`months.${currentMonth}`)} {monthMap[currentMonth].year}
+            </h2>
+            <button
+              onClick={handleNext}
+              aria-label={t('monthNav.next', 'Next month')}
+              className="p-2 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b]"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
 
-        <MobileCalendarGrid
-          monthData={monthData}
-          currentMonth={currentMonth}
-          selectedDay={selectedDay}
-          onDayClick={(day) => {
-            setUserSelectedDay(day);
-          }}
-        />
+          <MobileCalendarGrid
+            monthData={monthData}
+            currentMonth={currentMonth}
+            selectedDay={selectedDay}
+            onDayClick={(day) => {
+              setUserSelectedDay(day);
+            }}
+          />
+        </div>
 
         <UpcomingEventsList
           monthData={monthData}

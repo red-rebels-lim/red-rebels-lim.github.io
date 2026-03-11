@@ -25,8 +25,10 @@ export function UpcomingEventsList({ monthData, currentMonth, selectedDay, onEve
 
   return (
     <section className="px-2 mt-6">
-      <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3">
-        {t('calendar.selectedDay', 'Selected Day')}
+      <h3 className="text-xs font-bold uppercase tracking-widest mb-3">
+        <span className="bg-white/70 dark:bg-transparent backdrop-blur-sm dark:backdrop-blur-none text-slate-700 dark:text-slate-400 px-2 py-1 rounded">
+          {t('calendar.selectedDay', 'Selected Day')}
+        </span>
       </h3>
       <div className="space-y-3">
         {events.map((event, idx) => (
