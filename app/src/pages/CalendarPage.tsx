@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useCalendar } from '@/hooks/useCalendar';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
 import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
 import { MonthNavigation } from '@/components/calendar/MonthNavigation';
 import { CalendarGrid } from '@/components/calendar/CalendarGrid';
 import { FilterPanel } from '@/components/filters/FilterPanel';
@@ -39,8 +38,10 @@ export function CalendarPage() {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, []);
 
-  // Scroll to today on initial mount
+  // Scroll to today on initial mount (mobile only — desktop starts from the top)
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) return;
     const timer = setTimeout(scrollToToday, INITIAL_SCROLL_DELAY_MS);
     return () => clearTimeout(timer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -85,7 +86,6 @@ export function CalendarPage() {
 
       <CalendarGrid monthData={monthData} currentMonth={currentMonth} />
 
-      <Footer />
       <OnboardingTour />
     </div>
   );
