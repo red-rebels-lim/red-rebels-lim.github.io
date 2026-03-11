@@ -59,9 +59,9 @@ describe('CalendarPage', () => {
     expect(screen.getAllByText('monthNav.next').length).toBeGreaterThan(0);
   });
 
-  it('renders the footer legend', () => {
+  it('does not render the footer legend', () => {
     render(<CalendarPage />);
-    expect(screen.getByText('legend.title')).toBeDefined();
+    expect(screen.queryByText('legend.title')).toBeNull();
   });
 
   it('toggles filter panel open when filter button clicked', async () => {
@@ -104,8 +104,11 @@ describe('CalendarPage', () => {
     act(() => { vi.advanceTimersByTime(200); });
   });
 
-  it('executes scrollToToday callback when initial mount timer fires', () => {
+  it('executes scrollToToday callback when initial mount timer fires on mobile', () => {
     vi.useFakeTimers();
+    // Simulate mobile viewport
+    Object.defineProperty(window, 'innerWidth', { value: 375, configurable: true });
+
     // Add a data-today element with non-zero offsetHeight so el.scrollIntoView is called
     const mockEl = document.createElement('div');
     mockEl.setAttribute('data-today', '');
@@ -121,5 +124,6 @@ describe('CalendarPage', () => {
 
     expect(scrollFn).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' });
     document.body.removeChild(mockEl);
+    Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true });
   });
 });

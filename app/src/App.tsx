@@ -22,7 +22,7 @@ export default function App() {
     <HashRouter>
       <PageViewTracker />
       <AppBackground />
-      <main className="min-h-screen p-4 md:p-8 font-['Montserrat',sans-serif]">
+      <main className="min-h-screen p-4 md:px-8 md:pt-8 md:pb-0 font-['Montserrat',sans-serif]">
         <ErrorBoundary>
           <Suspense fallback={<Spinner />}>
             <Routes>
