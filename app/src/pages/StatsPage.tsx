@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navbar } from '@/components/layout/Navbar';
+import { MobileHeader } from '@/components/layout/MobileHeader';
 import { cn } from '@/lib/utils';
 import { calculateStatistics } from '@/lib/stats';
 import { calculateVolleyballStatistics } from '@/lib/volleyball-stats';
@@ -67,14 +67,14 @@ export default function StatsPage() {
   useEffect(() => { loadFotmob(); }, [loadFotmob]);
 
   return (
-    <div className="max-w-[1800px] w-[95%] mx-auto">
-      <Navbar />
+    <div className="max-w-md mx-auto pb-24">
+      <MobileHeader showBack />
 
       <h1 className="sr-only">{t('nav.stats')}</h1>
 
       {/* Error banner */}
       {fetchError && !loading && (
-        <section className="bg-[rgba(244,67,54,0.1)] backdrop-blur-sm rounded-2xl p-4 mb-6 border-2 border-[rgba(244,67,54,0.3)] flex items-center justify-between gap-4">
+        <section className="mx-4 mt-4 bg-[rgba(244,67,54,0.1)] backdrop-blur-sm rounded-2xl p-4 mb-2 border-2 border-[rgba(244,67,54,0.3)] flex items-center justify-between gap-4">
           <p className="text-sm text-red-300">{t('errors.fetchFailed')}</p>
           <button
             onClick={loadFotmob}
@@ -85,7 +85,7 @@ export default function StatsPage() {
         </section>
       )}
 
-      <div role="tablist" className="flex flex-wrap gap-2 py-2">
+      <div role="tablist" className="flex flex-wrap gap-2 py-2 px-4">
         {[
           { value: 'football', label: t('stats.mensFootball') },
           { value: 'volleyball-men', label: t('stats.mensVolleyball') },
@@ -108,15 +108,17 @@ export default function StatsPage() {
         ))}
       </div>
 
-      {activeTab === 'football' && (
-        <FootballStatsTab stats={stats} fotmob={fotmob} loading={loading} />
-      )}
-      {activeTab === 'volleyball-men' && (
-        <VolleyballStatsTab stats={mensVolleyball} variant="men" />
-      )}
-      {activeTab === 'volleyball-women' && (
-        <VolleyballStatsTab stats={womensVolleyball} variant="women" />
-      )}
+      <div className="px-4">
+        {activeTab === 'football' && (
+          <FootballStatsTab stats={stats} fotmob={fotmob} loading={loading} />
+        )}
+        {activeTab === 'volleyball-men' && (
+          <VolleyballStatsTab stats={mensVolleyball} variant="men" />
+        )}
+        {activeTab === 'volleyball-women' && (
+          <VolleyballStatsTab stats={womensVolleyball} variant="women" />
+        )}
+      </div>
     </div>
   );
 }

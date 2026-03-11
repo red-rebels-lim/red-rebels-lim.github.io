@@ -3,7 +3,6 @@ import type { FotMobParsed } from '@/pages/StatsPage';
 import { LeagueTable } from '@/components/stats/LeagueTable';
 import { LeagueRankings } from '@/components/stats/LeagueRankings';
 import { TopScorers } from '@/components/stats/TopScorers';
-import { NextMatch } from '@/components/stats/NextMatch';
 import { SeasonSummary } from '@/components/stats/SeasonSummary';
 import { PerformanceSplit } from '@/components/stats/PerformanceSplit';
 import { RecentForm } from '@/components/stats/RecentForm';
@@ -29,8 +28,13 @@ interface FootballStatsTabProps {
 export function FootballStatsTab({ stats, fotmob, loading }: FootballStatsTabProps) {
   return (
     <>
-      {/* 1. Next Match (FotMob) */}
-      {loading ? <LoadingSkeleton /> : fotmob?.nextMatch ? <NextMatch match={fotmob.nextMatch} /> : null}
+      {/* 1. Season Summary */}
+      <SeasonSummary
+        overall={stats.overall}
+        cleanSheets={stats.cleanSheets}
+        avgGoalsFor={stats.avgGoalsFor}
+        avgGoalsAgainst={stats.avgGoalsAgainst}
+      />
 
       {/* 2. Recent Form */}
       <RecentForm
@@ -41,15 +45,7 @@ export function FootballStatsTab({ stats, fotmob, loading }: FootballStatsTabPro
         hasPlayed={stats.overall.played > 0}
       />
 
-      {/* 3. Season Summary */}
-      <SeasonSummary
-        overall={stats.overall}
-        cleanSheets={stats.cleanSheets}
-        avgGoalsFor={stats.avgGoalsFor}
-        avgGoalsAgainst={stats.avgGoalsAgainst}
-      />
-
-      {/* 4. League Table (FotMob) */}
+      {/* 3. League Table (FotMob) */}
       {loading ? <LoadingSkeleton /> : fotmob && fotmob.tables.length > 0 ? (
         <LeagueTable tables={fotmob.tables} />
       ) : null}

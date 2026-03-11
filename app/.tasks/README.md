@@ -51,3 +51,5 @@ TASK-06 (StatsPage Tabs) ─────────────── TASK-07 (
 | TASK-07 | Tests for volleyball stats | done | TASK-03, TASK-06 |
 | TASK-08 | Align all stats tabs to Stitch design system | done | TASK-06 |
 | TASK-09 | Fix light/dark theme support across all components | done | - |
+| TASK-10 | Redesign mobile calendar page with bottom navigation | done | - |
+| TASK-11 | Redesign settings page with full functionality | done | TASK-10 |

@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppBackground } from '@/components/layout/AppBackground';
 import { CalendarPage } from '@/pages/CalendarPage';
+import { BottomNav } from '@/components/layout/BottomNav';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Spinner } from '@/components/Spinner';
 import { trackEvent } from '@/lib/analytics';
@@ -34,6 +35,7 @@ export default function App() {
           </Suspense>
         </ErrorBoundary>
       </main>
+      <BottomNav />
     </HashRouter>
   );
 }

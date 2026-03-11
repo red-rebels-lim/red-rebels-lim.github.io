@@ -21,3 +21,5 @@ interface ImportMeta {
 interface Window {
   __swRegistration?: ServiceWorkerRegistration;
 }
+
+declare const __APP_VERSION__: string;
