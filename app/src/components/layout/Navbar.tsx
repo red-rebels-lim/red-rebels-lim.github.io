@@ -175,6 +175,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
             variant="outline"
             size="icon"
             onClick={toggleLanguage}
+            aria-label={t('nav.switchLanguage', 'Switch language')}
             className="w-11 h-11 rounded-full border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground font-bold text-sm"
           >
             {langCode}
@@ -274,7 +275,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
           <Button
             variant="outline"
             size="icon"
-            aria-label="Previous"
+            aria-label={t('monthNav.previous', 'Previous month')}
             onClick={() => { trackEvent('navigate_month', { direction: 'previous' }); onPrevious(); }}
             className="w-10 h-10 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground"
           >
@@ -288,7 +289,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
           <Button
             variant="outline"
             size="icon"
-            aria-label="Next"
+            aria-label={t('monthNav.next', 'Next month')}
             onClick={() => { trackEvent('navigate_month', { direction: 'next' }); onNext(); }}
             className="w-10 h-10 border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(224,37,32,0.15)] hover:border-[#E02520] text-foreground"
           >

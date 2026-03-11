@@ -45,7 +45,7 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
       <div className={`text-base font-extrabold shrink-0 mb-1 ${isToday ? 'text-[#E02520] text-xl' : hasEvents ? 'text-red-600 dark:text-red-300' : 'text-slate-500 dark:text-slate-300'}`}>
         {day.number}
         {day.name && (
-          <span className="block text-[0.7rem] font-semibold text-slate-400 uppercase tracking-wide mt-0.5">
+          <span className="block text-[0.7rem] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mt-0.5">
             {t(day.name)}
           </span>
         )}
@@ -66,7 +66,7 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
           <div className="flex items-center justify-center gap-1 mt-auto pt-0.5 shrink-0">
             <button
               onClick={(e) => { e.stopPropagation(); prev(); }}
-              className="w-4 h-4 flex items-center justify-center text-slate-400 hover:text-white opacity-0 group-hover/carousel:opacity-100 transition-opacity"
+              className="w-4 h-4 flex items-center justify-center text-slate-400 hover:text-white focus:text-foreground opacity-0 group-hover/carousel:opacity-100 focus:opacity-100 transition-opacity"
               aria-label="Previous event"
             >
               <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
@@ -77,11 +77,12 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
                 onClick={(e) => { e.stopPropagation(); setActiveIdx(i); }}
                 className={`w-1.5 h-1.5 rounded-full transition-all ${i === safeIdx ? 'bg-[#E02520] scale-125' : 'bg-slate-500 hover:bg-slate-400'}`}
                 aria-label={`Event ${i + 1} of ${events.length}`}
+                aria-current={i === safeIdx ? 'step' : undefined}
               />
             ))}
             <button
               onClick={(e) => { e.stopPropagation(); next(); }}
-              className="w-4 h-4 flex items-center justify-center text-slate-400 hover:text-white opacity-0 group-hover/carousel:opacity-100 transition-opacity"
+              className="w-4 h-4 flex items-center justify-center text-slate-400 hover:text-white focus:text-foreground opacity-0 group-hover/carousel:opacity-100 focus:opacity-100 transition-opacity"
               aria-label="Next event"
             >
               <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
@@ -138,11 +139,11 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
 
   return (
     <>
-      <div className="bg-white/90 dark:bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-3xl shadow-lg dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-2 border-[rgba(224,37,32,0.3)] overflow-hidden" data-tour="calendar" role="grid" aria-label={t(`months.${currentMonth}`)}>
+      <div className="bg-white/90 dark:bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-3xl shadow-lg dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-2 border-[rgba(224,37,32,0.3)] overflow-hidden" data-tour="calendar" role="region" aria-label={t(`months.${currentMonth}`)}>
         {/* Header - weekday names (desktop only) */}
-        <div className="hidden md:grid grid-cols-7 bg-gradient-to-br from-[#E02520] to-[#b91c1c] py-3" role="row">
+        <div className="hidden md:grid grid-cols-7 bg-gradient-to-br from-[#E02520] to-[#b91c1c] py-3" aria-hidden="true">
           {dayNames.map((day) => (
-            <div key={day} role="columnheader" className="text-center text-white font-bold text-sm uppercase tracking-wider px-2">
+            <div key={day} className="text-center text-white font-bold text-sm uppercase tracking-wider px-2">
               {t(day)}
             </div>
           ))}
@@ -188,10 +189,10 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
                   }
                 `}
               >
-                <div className={`text-2xl font-extrabold inline-block pr-3 ${isToday ? 'text-[#E02520]' : 'text-red-300'}`}>
+                <div className={`text-2xl font-extrabold inline-block pr-3 ${isToday ? 'text-[#E02520]' : 'text-red-600 dark:text-red-300'}`}>
                   {day.number}
                   {day.name && (
-                    <span className="inline text-lg font-bold text-red-300 ml-2">
+                    <span className="inline text-lg font-bold text-red-600 dark:text-red-300 ml-2">
                       {t(day.name)}
                     </span>
                   )}
