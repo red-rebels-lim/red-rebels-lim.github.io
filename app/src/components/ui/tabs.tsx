@@ -24,7 +24,7 @@ function TabsList({
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={cn(
-        "flex overflow-x-auto border-b border-white/10 dark:border-white/10 light:border-slate-200 no-scrollbar",
+        "flex overflow-x-auto border-b border-slate-200 dark:border-white/10 no-scrollbar",
         className
       )}
       {...props}
@@ -40,7 +40,7 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "whitespace-nowrap px-2.5 py-3 text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-all border-b-2 border-transparent text-white/60 data-[state=active]:text-white data-[state=active]:border-[#E02520]",
+        "whitespace-nowrap px-2.5 py-3 text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-all border-b-2 border-transparent text-slate-500 dark:text-white/60 data-[state=active]:text-slate-900 dark:data-[state=active]:text-white data-[state=active]:border-[#E02520]",
         className
       )}
       {...props}

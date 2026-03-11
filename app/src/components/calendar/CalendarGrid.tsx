@@ -152,7 +152,7 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
         <div className="hidden md:grid grid-cols-7 gap-3 p-4">
           {monthData.days.map((day, idx) => {
             if (day.empty) {
-              return <div key={`empty-${idx}`} className="aspect-square min-h-[120px] max-h-[180px] rounded-2xl bg-transparent border border-white/5" />;
+              return <div key={`empty-${idx}`} className="aspect-square min-h-[120px] max-h-[180px] rounded-2xl bg-transparent border border-slate-200 dark:border-white/5" />;
             }
 
             return (

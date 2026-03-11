@@ -154,7 +154,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
                 {t('nav.options')}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-[rgba(26,15,15,0.95)] backdrop-blur-xl border-[rgba(224,37,32,0.3)]">
+            <DropdownMenuContent className="bg-white dark:bg-[rgba(26,15,15,0.95)] backdrop-blur-xl border-[rgba(224,37,32,0.3)]">
               {isCalendar && (
                 <DropdownMenuItem onClick={() => { exportToCalendar(); trackEvent('export_calendar'); }} className="text-foreground hover:text-[#E02520] cursor-pointer">
                   {t('nav.export')}
@@ -205,7 +205,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
                 </svg>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-[#0a1810] border-[rgba(224,37,32,0.3)]" aria-describedby={undefined}>
+            <SheetContent side="right" className="bg-white dark:bg-[#0a1810] border-[rgba(224,37,32,0.3)]" aria-describedby={undefined}>
               <SheetTitle className="sr-only">{t('nav.calendar')}</SheetTitle>
               <div className="flex flex-col gap-4 mt-8">
                 {navLinks}

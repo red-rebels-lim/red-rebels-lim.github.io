@@ -34,7 +34,7 @@ export function FilterPanel({ open, filters, onApply, onClear }: FilterPanelProp
   if (!open) return null;
 
   return (
-    <div className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm border-2 border-[rgba(224,37,32,0.3)] rounded-2xl p-4 mb-6 shadow-lg animate-in slide-in-from-top-2 print:hidden">
+    <div className="bg-slate-50 dark:bg-[rgba(10,24,16,0.2)] backdrop-blur-sm border-2 border-[rgba(224,37,32,0.3)] rounded-2xl p-4 mb-6 shadow-lg animate-in slide-in-from-top-2 print:hidden">
       <h3 className="text-foreground font-extrabold text-lg uppercase tracking-wide mb-4">
         {t('filters.title')}
       </h3>
@@ -49,7 +49,7 @@ export function FilterPanel({ open, filters, onApply, onClear }: FilterPanelProp
             <SelectTrigger className="bg-white/5 border-[rgba(224,37,32,0.2)] text-foreground">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[#1a0f0f] border-[rgba(224,37,32,0.3)]">
+            <SelectContent className="bg-white dark:bg-[#1a0f0f] border-[rgba(224,37,32,0.3)]">
               <SelectItem value="all">{t('filters.all')}</SelectItem>
               <SelectItem value="football-men">{t('sports.footballMen')}</SelectItem>
               <SelectItem value="volleyball-men">{t('sports.volleyballMen')}</SelectItem>
@@ -68,7 +68,7 @@ export function FilterPanel({ open, filters, onApply, onClear }: FilterPanelProp
             <SelectTrigger className="bg-white/5 border-[rgba(224,37,32,0.2)] text-foreground">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[#1a0f0f] border-[rgba(224,37,32,0.3)]">
+            <SelectContent className="bg-white dark:bg-[#1a0f0f] border-[rgba(224,37,32,0.3)]">
               <SelectItem value="all">{t('filters.all')}</SelectItem>
               <SelectItem value="home">{t('locations.home')}</SelectItem>
               <SelectItem value="away">{t('locations.away')}</SelectItem>
@@ -85,7 +85,7 @@ export function FilterPanel({ open, filters, onApply, onClear }: FilterPanelProp
             <SelectTrigger className="bg-white/5 border-[rgba(224,37,32,0.2)] text-foreground">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[#1a0f0f] border-[rgba(224,37,32,0.3)]">
+            <SelectContent className="bg-white dark:bg-[#1a0f0f] border-[rgba(224,37,32,0.3)]">
               <SelectItem value="all">{t('filters.all')}</SelectItem>
               <SelectItem value="played">{t('status.played')}</SelectItem>
               <SelectItem value="upcoming">{t('status.upcoming')}</SelectItem>

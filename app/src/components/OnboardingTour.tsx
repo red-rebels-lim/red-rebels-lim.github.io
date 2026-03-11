@@ -21,7 +21,7 @@ export function OnboardingTour() {
       <div
         role="dialog"
         aria-label={t('onboarding.tourLabel')}
-        className="fixed z-[101] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-sm bg-[#1a0f0f] border-2 border-[rgba(224,37,32,0.4)] rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+        className="fixed z-[101] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-sm bg-white dark:bg-[#1a0f0f] border-2 border-[rgba(224,37,32,0.4)] rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
       >
         <div className="text-sm text-[rgba(224,37,32,0.8)] font-semibold mb-1">
           {currentStep + 1} / {steps.length}

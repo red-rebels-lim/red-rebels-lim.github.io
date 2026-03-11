@@ -50,3 +50,4 @@ TASK-06 (StatsPage Tabs) ─────────────── TASK-07 (
 | TASK-06 | StatsPage sport selector tabs & integration | done | TASK-03, TASK-04, TASK-05 |
 | TASK-07 | Tests for volleyball stats | done | TASK-03, TASK-06 |
 | TASK-08 | Align all stats tabs to Stitch design system | done | TASK-06 |
+| TASK-09 | Fix light/dark theme support across all components | done | - |

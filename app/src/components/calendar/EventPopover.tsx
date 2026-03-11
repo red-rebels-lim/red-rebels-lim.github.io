@@ -32,7 +32,7 @@ function RedCard() {
 
 function InfoChip({ icon, label }: { icon: string; label: string }) {
   return (
-    <span className="flex items-center gap-1.5 bg-white/8 border border-white/10 rounded-full px-3 py-1.5 text-xs font-semibold text-foreground">
+    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/8 border border-slate-200 dark:border-white/10 rounded-full px-3 py-1.5 text-xs font-semibold text-foreground">
       <span>{icon}</span>
       <span>{label}</span>
     </span>
@@ -188,7 +188,7 @@ function LineupsSection({
 
 function SubRow({ s }: { s: Substitution }) {
   return (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-2 text-[11px] p-2 rounded-lg bg-white/5">
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-2 text-[11px] p-2 rounded-lg bg-slate-50 dark:bg-white/5">
       <div className="flex items-center gap-1.5 min-w-0">
         <span className="text-green-400 font-bold shrink-0" aria-hidden="true">↑</span>
         <span className="sr-only">Substituted on:</span>
@@ -459,11 +459,11 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   const resultBadge = event.status === 'played'
     ? result === 'win'
-      ? { bg: 'bg-[#1a6b1a]', border: 'border-[#2d8a2d]', text: t('popover.win'), textColor: 'text-green-300' }
+      ? { bg: 'bg-green-100 dark:bg-[#1a6b1a]', border: 'border-green-400 dark:border-[#2d8a2d]', text: t('popover.win'), textColor: 'text-green-700 dark:text-green-300' }
       : result === 'draw'
-        ? { bg: 'bg-[#6b5a00]', border: 'border-[#8a7500]', text: t('popover.draw'), textColor: 'text-yellow-300' }
-        : { bg: 'bg-[#6b1a1a]', border: 'border-[#8a2020]', text: t('popover.loss'), textColor: 'text-red-300' }
-    : { bg: 'bg-[#2a1a1a]', border: 'border-[#E02520]/40', text: t('popover.upcoming'), textColor: 'text-red-300' };
+        ? { bg: 'bg-yellow-100 dark:bg-[#6b5a00]', border: 'border-yellow-400 dark:border-[#8a7500]', text: t('popover.draw'), textColor: 'text-yellow-700 dark:text-yellow-300' }
+        : { bg: 'bg-red-100 dark:bg-[#6b1a1a]', border: 'border-red-400 dark:border-[#8a2020]', text: t('popover.loss'), textColor: 'text-red-700 dark:text-red-300' }
+    : { bg: 'bg-slate-200 dark:bg-[#2a1a1a]', border: 'border-[#E02520]/40', text: t('popover.upcoming'), textColor: 'text-red-700 dark:text-red-300' };
 
   function handleShare() {
     const text = `${homeTeam} ${event!.score ?? ''} ${awayTeam}`;
@@ -478,13 +478,13 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
   if (event.isMeeting) {
     return (
       <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-        <DialogContent className="bg-gradient-to-br from-[#1a0f0f] to-[#0a1810] border-3 border-[rgba(224,37,32,0.6)] rounded-3xl max-w-lg shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_100px_rgba(224,37,32,0.3)]">
+        <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a1810] border-3 border-[rgba(224,37,32,0.6)] rounded-3xl max-w-lg shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_100px_rgba(224,37,32,0.3)]">
           <DialogTitle className="sr-only">{event.title}</DialogTitle>
           <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
           <div className="text-center py-4">
             <div className="text-6xl mb-4">📅</div>
             <div className="text-2xl font-extrabold text-foreground mb-4">{event.title}</div>
-            <div className="bg-white/5 border-2 border-[rgba(224,37,32,0.2)] rounded-xl p-4">
+            <div className="bg-slate-50 dark:bg-white/5 border-2 border-[rgba(224,37,32,0.2)] rounded-xl p-4">
               <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                 {t('popover.time')}
               </div>
@@ -501,13 +501,13 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="bg-gradient-to-br from-[#1a0f0f] to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]">
+      <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]">
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
         <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
 
         {/* ── Top bar ── */}
         <div className="flex items-center justify-center px-5 pt-5 pb-3">
-          <span className="text-xs font-black text-white/60 uppercase tracking-widest">
+          <span className="text-xs font-black text-slate-500 dark:text-white/60 uppercase tracking-widest">
             {isFootballPlayed ? t('popover.matchResult') : event.title}
           </span>
         </div>
@@ -518,7 +518,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           <div className="flex items-center justify-between gap-3 py-2">
             {/* Home team */}
             <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+              <div className="w-16 h-16 overflow-hidden flex items-center justify-center shrink-0">
                 {isHome ? (
                   <img
                     src={ownLogo}
@@ -544,7 +544,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
             {/* VS + result badge */}
             <div className="flex flex-col items-center gap-1.5 shrink-0">
-              <span className="text-lg font-black text-white/40 uppercase tracking-widest">VS</span>
+              <span className="text-lg font-black text-slate-400 dark:text-white/40 uppercase tracking-widest">VS</span>
               <span className={`${resultBadge.bg} border ${resultBadge.border} ${resultBadge.textColor} text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full`}>
                 {resultBadge.text}
               </span>
@@ -552,7 +552,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
             {/* Away team */}
             <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+              <div className="w-16 h-16 overflow-hidden flex items-center justify-center shrink-0">
                 {!isHome ? (
                   <img
                     src={ownLogo}
@@ -594,7 +594,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           {/* ── Competition / matchday line ── */}
           {isFootballPlayed && (
             <div className="text-center">
-              <span className="text-xs font-bold text-white/40 uppercase tracking-widest">
+              <span className="text-xs font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">
                 {t('popover.competition')}
                 {event.matchday !== undefined && (
                   <> · {t('popover.matchday')} {event.matchday}</>
@@ -616,7 +616,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
             )}
             <button
               onClick={handleShare}
-              className="flex items-center gap-1.5 bg-white/8 border border-white/10 rounded-full px-3 py-1.5 text-xs font-semibold text-white/70 hover:text-white hover:bg-white/15 transition-colors"
+              className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/8 border border-slate-200 dark:border-white/10 rounded-full px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/15 transition-colors"
               aria-label={t('popover.shareMatch')}
             >
               <span>⤴</span>
