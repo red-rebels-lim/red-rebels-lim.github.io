@@ -39,3 +39,4 @@ app/test-results
 
 /scripts
 tests
+.envrc
