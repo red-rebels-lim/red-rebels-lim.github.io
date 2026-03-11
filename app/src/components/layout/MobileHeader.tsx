@@ -19,26 +19,26 @@ export function MobileHeader({ showBack }: MobileHeaderProps) {
 
   return (
     <header className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800">
-      {showBack ? (
-        <button
-          onClick={() => navigate('/')}
-          aria-label="Go back"
-          className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-[#1e293b] transition-colors text-slate-600 dark:text-slate-400"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-        </button>
-      ) : (
-        <div className="w-9" />
-      )}
-      <h1 className="text-xl font-bold tracking-tight text-[#dc2828]">
-        {t('common.appName', 'Red Rebels')} {t('common.calendarLabel', 'Calendar')}
-      </h1>
+      <div className="flex items-center gap-3">
+        {showBack && (
+          <button
+            onClick={() => navigate('/')}
+            aria-label="Go back"
+            className="p-2 -ml-2 rounded-full bg-slate-100 dark:bg-[#1e293b] text-[#dc2828] transition-colors"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+        <h1 className="text-xl font-bold tracking-tight text-[#dc2828]">
+          {t('common.appName', 'Red Rebels')} {t('common.calendarLabel', 'Calendar')}
+        </h1>
+      </div>
       <button
         onClick={handleToggleTheme}
         aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-        className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-[#1e293b] transition-colors text-slate-600 dark:text-slate-400"
+        className="p-2 rounded-full bg-slate-100 dark:bg-[#1e293b] text-[#dc2828] transition-colors"
       >
         {isDark ? (
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

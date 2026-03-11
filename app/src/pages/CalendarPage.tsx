@@ -101,7 +101,7 @@ export function CalendarPage() {
   };
 
   return (
-    <div className="max-w-[1800px] w-[95%] mx-auto pb-20 md:pb-0" {...swipe}>
+    <div className="max-w-[1800px] w-full md:w-[95%] mx-auto pb-20 md:pb-0" {...swipe}>
       <h1 className="sr-only">Red Rebels Calendar</h1>
 
       {/* Desktop: full Navbar */}
@@ -142,7 +142,7 @@ export function CalendarPage() {
 
       {/* Mobile: new calendar grid + upcoming events */}
       <div className="md:hidden">
-        <div className="bg-white/70 dark:bg-transparent backdrop-blur-sm dark:backdrop-blur-none rounded-2xl mx-2 p-2 mt-2">
+        <div className="bg-white/70 dark:bg-transparent backdrop-blur-sm dark:backdrop-blur-none rounded-2xl px-2 mt-2">
           {/* Mobile month navigation */}
           <div className="flex items-center justify-between px-2 py-3">
             <button
