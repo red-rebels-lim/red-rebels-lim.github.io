@@ -48,6 +48,7 @@ describe('TASK-08: Stitch Design System Alignment', () => {
           return <a href={to as string} className={className as string}>{children as React.ReactNode}</a>;
         },
         useLocation: () => ({ pathname: '/stats' }),
+        useNavigate: () => vi.fn(),
       }));
       vi.mock('@/hooks/useTheme', () => ({ useTheme: () => ({ isDark: true, toggle: vi.fn() }) }));
       vi.mock('@/lib/analytics', () => ({ trackEvent: vi.fn() }));

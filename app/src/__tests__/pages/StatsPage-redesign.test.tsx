@@ -16,6 +16,7 @@ vi.mock('react-router-dom', () => ({
     return <a href={to as string} className={className as string}>{children as React.ReactNode}</a>;
   },
   useLocation: () => ({ pathname: '/stats' }),
+  useNavigate: () => vi.fn(),
 }));
 
 vi.mock('@/hooks/useTheme', () => ({
@@ -77,19 +78,19 @@ describe('TASK-04: StatsPage redesign - section order', () => {
     expect(screen.queryByText('stats.venueInfo')).toBeNull();
   });
 
-  it('section order matches mockup: Recent Form → Season Summary → Performance Split', async () => {
+  it('section order matches mockup: Season Summary → Recent Form → Performance Split', async () => {
     await act(async () => { render(<StatsPage />); });
     const body = document.body.textContent ?? '';
-    const recentFormIdx = body.indexOf('stats.recentForm');
     const seasonSummaryIdx = body.indexOf('stats.seasonSummary');
+    const recentFormIdx = body.indexOf('stats.recentForm');
     const performanceSplitIdx = body.indexOf('stats.performanceSplit');
 
-    // Recent Form before Season Summary
-    expect(recentFormIdx).toBeGreaterThan(-1);
     expect(seasonSummaryIdx).toBeGreaterThan(-1);
+    expect(recentFormIdx).toBeGreaterThan(-1);
     expect(performanceSplitIdx).toBeGreaterThan(-1);
-    expect(recentFormIdx).toBeLessThan(seasonSummaryIdx);
-    // Season Summary before Performance Split
-    expect(seasonSummaryIdx).toBeLessThan(performanceSplitIdx);
+    // Season Summary before Recent Form
+    expect(seasonSummaryIdx).toBeLessThan(recentFormIdx);
+    // Recent Form before Performance Split
+    expect(recentFormIdx).toBeLessThan(performanceSplitIdx);
   });
 });

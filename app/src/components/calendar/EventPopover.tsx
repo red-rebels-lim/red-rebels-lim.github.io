@@ -459,11 +459,11 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   const resultBadge = event.status === 'played'
     ? result === 'win'
-      ? { bg: 'bg-green-100 dark:bg-[#1a6b1a]', border: 'border-green-400 dark:border-[#2d8a2d]', text: t('popover.win'), textColor: 'text-green-700 dark:text-green-300' }
+      ? { bg: 'bg-green-100 dark:bg-[#1a6b1a]', border: 'border-green-400 dark:border-[#2d8a2d]', text: t('popover.win'), textColor: 'text-green-700 dark:text-green-300', scoreColor: 'text-green-600 dark:text-green-300', dialogBorder: 'border-green-500/50', dialogBg: 'bg-green-50 dark:bg-gradient-to-br dark:from-[#0a1a0a] dark:to-[#0a0a0a]' }
       : result === 'draw'
-        ? { bg: 'bg-yellow-100 dark:bg-[#6b5a00]', border: 'border-yellow-400 dark:border-[#8a7500]', text: t('popover.draw'), textColor: 'text-yellow-700 dark:text-yellow-300' }
-        : { bg: 'bg-red-100 dark:bg-[#6b1a1a]', border: 'border-red-400 dark:border-[#8a2020]', text: t('popover.loss'), textColor: 'text-red-700 dark:text-red-300' }
-    : { bg: 'bg-slate-200 dark:bg-[#2a1a1a]', border: 'border-[#E02520]/40', text: t('popover.upcoming'), textColor: 'text-red-700 dark:text-red-300' };
+        ? { bg: 'bg-yellow-100 dark:bg-[#6b5a00]', border: 'border-yellow-400 dark:border-[#8a7500]', text: t('popover.draw'), textColor: 'text-yellow-700 dark:text-yellow-300', scoreColor: 'text-yellow-600 dark:text-yellow-300', dialogBorder: 'border-yellow-500/50', dialogBg: 'bg-yellow-50 dark:bg-gradient-to-br dark:from-[#1a1a0a] dark:to-[#0a0a0a]' }
+        : { bg: 'bg-red-100 dark:bg-[#6b1a1a]', border: 'border-red-400 dark:border-[#8a2020]', text: t('popover.loss'), textColor: 'text-red-700 dark:text-red-300', scoreColor: 'text-red-600 dark:text-red-300', dialogBorder: 'border-red-500/50', dialogBg: 'bg-red-50 dark:bg-gradient-to-br dark:from-[#1a0a0a] dark:to-[#0a0a0a]' }
+    : { bg: 'bg-slate-200 dark:bg-[#2a1a1a]', border: 'border-[#E02520]/40', text: t('popover.upcoming'), textColor: 'text-red-700 dark:text-red-300', scoreColor: '', dialogBorder: 'border-[rgba(224,37,32,0.5)]', dialogBg: 'bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a0a0a]' };
 
   function handleShare() {
     const text = `${homeTeam} ${event!.score ?? ''} ${awayTeam}`;
@@ -501,7 +501,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]">
+      <DialogContent className={`${resultBadge.dialogBg} border ${resultBadge.dialogBorder} rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]`}>
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
         <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
 
@@ -580,7 +580,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           {/* ── Score ── */}
           {event.status === 'played' && event.score && (
             <div className="text-center py-2">
-              <div className="text-5xl font-black text-yellow-600 dark:text-yellow-300 tracking-tight">
+              <div className={`text-5xl font-black ${resultBadge.scoreColor} tracking-tight`}>
                 {event.score.replace('-', ' - ')} <span className="text-4xl">{isVolleyballSport(event.sport) ? '🏐' : '⚽'}</span>
               </div>
               {event.penalties && (
