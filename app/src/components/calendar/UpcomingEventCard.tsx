@@ -48,11 +48,6 @@ function getTimeFromSubtitle(subtitle: string): string {
   return match ? match[1] : '';
 }
 
-function getOpponent(title: string): string {
-  // Title format: "Team A vs Team B" — extract opponent
-  return title;
-}
-
 export function UpcomingEventCard({ event, monthName, onClick }: UpcomingEventCardProps) {
   const { t } = useTranslation();
   const isVB = isVolleyball(event.sport);
@@ -62,6 +57,7 @@ export function UpcomingEventCard({ event, monthName, onClick }: UpcomingEventCa
     : { text: isVB ? 'text-blue-500' : 'text-[#dc2828]', bg: isVB ? 'bg-blue-500/10' : 'bg-[#dc2828]/10' };
   const time = getTimeFromSubtitle(event.subtitle);
   const monthAbbrev = t(`months.${monthName}`).slice(0, 3).toUpperCase();
+  const cardLabel = `${event.score ? `${event.score} ${t(`popover.${result ?? 'upcoming'}`)}` : ''} ${getCompetitionLabel(event, t)} ${event.title} ${t(`months.${monthName}`).slice(0, 3)} ${event.day}, ${monthMap[monthName].year}`.trim();
 
   return (
     <div
@@ -69,6 +65,7 @@ export function UpcomingEventCard({ event, monthName, onClick }: UpcomingEventCa
       onClick={onClick}
       role="button"
       tabIndex={0}
+      aria-label={cardLabel}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
     >
       {/* Date/Score badge */}
@@ -103,23 +100,22 @@ export function UpcomingEventCard({ event, monthName, onClick }: UpcomingEventCa
           </span>
         </div>
         <h4 className="font-bold text-sm leading-tight mb-1 text-slate-900 dark:text-slate-100 truncate">
-          {getOpponent(event.title)}
+          {event.title}
         </h4>
         <p className="text-xs text-slate-500 dark:text-slate-400">
           {t(`months.${monthName}`).slice(0, 3)} {event.day}, {monthMap[monthName].year} {time ? `\u2022 ${time}` : ''}
         </p>
       </div>
 
-      {/* Chevron */}
-      <button
+      {/* Chevron (decorative) */}
+      <span
         className="size-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0"
-        aria-label="View details"
-        tabIndex={-1}
+        aria-hidden="true"
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M9 18l6-6-6-6" />
         </svg>
-      </button>
+      </span>
     </div>
   );
 }

@@ -243,6 +243,10 @@
     "noEvents": "Δεν υπάρχουν εκδηλώσεις αυτόν τον μήνα",
     "upcomingEvents": "Προσεχή Παιχνίδια",
     "selectedDay": "Επιλεγμένη Ημέρα",
+    "today": "σήμερα",
+    "eventsCount": "{{count}} εκδήλωση",
+    "eventsCount_other": "{{count}} εκδηλώσεις",
+    "viewDetails": "Προβολή λεπτομερειών",
     "cup": "Κύπελλο",
     "penalties": "Πέναλτι",
     "penAbbrev": "(πεν)"

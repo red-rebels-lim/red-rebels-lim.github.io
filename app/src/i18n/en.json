@@ -243,6 +243,10 @@
     "noEvents": "No events this month",
     "upcomingEvents": "Upcoming Events",
     "selectedDay": "Selected Day",
+    "today": "today",
+    "eventsCount": "{{count}} event",
+    "eventsCount_other": "{{count}} events",
+    "viewDetails": "View details",
     "cup": "Cup",
     "penalties": "Penalties",
     "penAbbrev": "(pen)"

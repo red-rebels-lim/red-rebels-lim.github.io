@@ -255,6 +255,8 @@ export default function SettingsPage() {
     <div className="max-w-md mx-auto pb-24">
       <MobileHeader showBack />
 
+      <h1 className="sr-only">{t('nav.settings')}</h1>
+
       <div className="flex-1 overflow-y-auto pb-8">
         {/* ── NOTIFICATIONS ── */}
         <SettingsSection title={t('settings.notifications')}>
@@ -320,13 +322,13 @@ export default function SettingsPage() {
             icon={<FootballIcon />}
             iconBg="bg-[#dc2828]/10 text-[#dc2828]"
             label={t('settings.football')}
-            trailing={<SettingsToggle checked={true} onChange={() => {}} />}
+            trailing={<SettingsToggle checked={true} onChange={() => {}} disabled />}
           />
           <SettingsRow
             icon={<VolleyballIcon />}
             iconBg="bg-[#dc2828]/10 text-[#dc2828]"
             label={t('settings.volleyball')}
-            trailing={<SettingsToggle checked={true} onChange={() => {}} />}
+            trailing={<SettingsToggle checked={true} onChange={() => {}} disabled />}
             isLast
           />
         </SettingsSection>

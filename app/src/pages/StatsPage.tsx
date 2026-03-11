@@ -96,8 +96,10 @@ export default function StatsPage() {
           ].map((tab) => (
             <button
               key={tab.value}
+              id={`tab-${tab.value}`}
               role="tab"
               aria-selected={activeTab === tab.value}
+              aria-controls="stats-tabpanel"
               onClick={() => setActiveTab(tab.value)}
               className={cn(
                 'whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold tracking-wide cursor-pointer transition-all',
@@ -111,7 +113,7 @@ export default function StatsPage() {
           ))}
         </div>
 
-        <div>
+        <div id="stats-tabpanel" role="tabpanel" aria-labelledby={`tab-${activeTab}`}>
           {activeTab === 'football' && (
             <FootballStatsTab stats={stats} fotmob={fotmob} loading={loading} />
           )}

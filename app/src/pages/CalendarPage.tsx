@@ -116,7 +116,9 @@ export function CalendarPage() {
       </div>
 
       {/* Mobile: simplified header */}
-      <MobileHeader />
+      <div className="md:hidden">
+        <MobileHeader />
+      </div>
 
       {/* Desktop: month navigation */}
       <MonthNavigation

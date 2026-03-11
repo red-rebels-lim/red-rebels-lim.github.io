@@ -98,8 +98,9 @@ export function MobileCalendarGrid({ monthData, currentMonth, selectedDay, onDay
               onClick={() => { if (day.number != null) onDayClick(day.number); }}
               role="button"
               tabIndex={0}
+              aria-pressed={isSelected}
               onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && day.number != null) { e.preventDefault(); onDayClick(day.number); } }}
-              aria-label={day.number != null ? `${t(`months.${currentMonth}`)} ${day.number}${isToday ? ', today' : ''}${hasEvents ? `, ${day.events!.length} events` : ''}` : undefined}
+              aria-label={day.number != null ? `${t(`months.${currentMonth}`)} ${day.number}${isToday ? `, ${t('calendar.today')}` : ''}${hasEvents ? `, ${t('calendar.eventsCount', { count: day.events!.length })}` : ''}` : undefined}
             >
               <span className={`text-base ${textStyle}`}>
                 {day.number}
