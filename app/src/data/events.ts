@@ -6328,9 +6328,25 @@ export const eventsData: EventsData = {
       sport: "volleyball-women",
       location: "home",
       opponent: "ΚΟΥΡΗΣ ΕΡΗΜΗΣ",
-      time: "20:00",
+      time: "",
       venue: "Γυμνάσιο Αγίου Νεοφύτου",
-      logo: "images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp"
+      logo: "images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp",
+      status: "played",
+      score: "3-0",
+      sets: [
+        {
+          home: 25,
+          away: 6
+        },
+        {
+          home: 25,
+          away: 6
+        },
+        {
+          home: 25,
+          away: 10
+        }
+      ]
     },
     {
       day: 13,
