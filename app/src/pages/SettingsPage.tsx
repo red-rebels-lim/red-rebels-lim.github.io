@@ -202,27 +202,54 @@ function SmartphoneIcon() {
 
 // ── Main component ───────────────────────────────────────────────────────────
 
+const SPORT_FILTERS_KEY = 'sport_filters';
+
+function getSportFilters(): { football: boolean; volleyball: boolean } {
+  try {
+    const stored = localStorage.getItem(SPORT_FILTERS_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch { /* ignore */ }
+  return { football: true, volleyball: true };
+}
+
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { isDark, toggle: toggleTheme } = useTheme();
   const { canInstall, promptInstall } = usePwaInstall();
 
+  // Sport filter state
+  const [sportFilters, setSportFilters] = useState(() => getSportFilters());
+
+  const toggleSportFilter = (sport: 'football' | 'volleyball') => {
+    const next = { ...sportFilters, [sport]: !sportFilters[sport] };
+    // Don't allow both to be turned off
+    if (!next.football && !next.volleyball) return;
+    setSportFilters(next);
+    localStorage.setItem(SPORT_FILTERS_KEY, JSON.stringify(next));
+    trackEvent('toggle_sport_filter', { sport, enabled: next[sport] ? 'true' : 'false' });
+  };
+
   // Push notification state
   const [status, setStatus] = useState<PushStatus>(() => getSubscriptionStatus());
   const [loading, setLoading] = useState(false);
+  const [pushError, setPushError] = useState(false);
   const supported = isPushSupported();
 
   const handleSubscribe = async () => {
     setLoading(true);
+    setPushError(false);
     try {
       const id = await subscribeToPush();
       if (id) {
         setStatus('subscribed');
       } else if (Notification.permission === 'denied') {
         setStatus('denied');
+      } else {
+        setPushError(true);
       }
     } catch (err) {
       logError('Failed to subscribe:', err);
+      setPushError(true);
     } finally {
       setLoading(false);
     }
@@ -230,11 +257,13 @@ export default function SettingsPage() {
 
   const handleUnsubscribe = async () => {
     setLoading(true);
+    setPushError(false);
     try {
       await unsubscribeFromPush();
       setStatus('unsubscribed');
     } catch (err) {
       logError('Failed to unsubscribe:', err);
+      setPushError(true);
     } finally {
       setLoading(false);
     }
@@ -276,13 +305,21 @@ export default function SettingsPage() {
                 iconBg="bg-[#dc2828]/10 text-[#dc2828]"
                 label={t('settings.matchReminders')}
                 trailing={
-                  <SettingsToggle
-                    checked={isSubscribed}
-                    onChange={isSubscribed ? handleUnsubscribe : handleSubscribe}
-                    disabled={loading}
-                  />
+                  loading ? (
+                    <div className="size-5 border-2 border-[#dc2828] border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <SettingsToggle
+                      checked={isSubscribed}
+                      onChange={isSubscribed ? handleUnsubscribe : handleSubscribe}
+                    />
+                  )
                 }
               />
+              {pushError && (
+                <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
+                  <p className="text-xs text-red-500">{t('settings.pushError', 'Failed to update notifications. Please try again.')}</p>
+                </div>
+              )}
               <SettingsRow
                 icon={<ClockIcon />}
                 label={t('settings.reminderTime')}
@@ -322,13 +359,13 @@ export default function SettingsPage() {
             icon={<FootballIcon />}
             iconBg="bg-[#dc2828]/10 text-[#dc2828]"
             label={t('settings.football')}
-            trailing={<SettingsToggle checked={true} onChange={() => {}} disabled />}
+            trailing={<SettingsToggle checked={sportFilters.football} onChange={() => toggleSportFilter('football')} />}
           />
           <SettingsRow
             icon={<VolleyballIcon />}
             iconBg="bg-[#dc2828]/10 text-[#dc2828]"
             label={t('settings.volleyball')}
-            trailing={<SettingsToggle checked={true} onChange={() => {}} disabled />}
+            trailing={<SettingsToggle checked={sportFilters.volleyball} onChange={() => toggleSportFilter('volleyball')} />}
             isLast
           />
         </SettingsSection>

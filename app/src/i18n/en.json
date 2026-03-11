@@ -201,6 +201,7 @@
     "notSupported": "Push notifications are not supported by your browser.",
     "permissionDenied": "Blocked",
     "deniedHelp": "Notifications are blocked. Please enable them in your browser settings and reload the page.",
+    "pushError": "Failed to update notifications. Please try again.",
     "enabled": "Active",
     "disabled": "Inactive",
     "enable": "Enable Notifications",

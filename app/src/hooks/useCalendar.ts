@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import type { MonthName, CalendarData, CalendarEvent, FilterState } from '@/types/events';
 import { eventsData } from '@/data/events';
 import { sportConfig } from '@/data/sport-config';
@@ -75,11 +75,27 @@ function parseEvent(eventData: {
   };
 }
 
+function getSportFilters(): { football: boolean; volleyball: boolean } {
+  try {
+    const stored = localStorage.getItem('sport_filters');
+    if (stored) return JSON.parse(stored);
+  } catch { /* ignore */ }
+  return { football: true, volleyball: true };
+}
+
 function buildCalendarData(filters?: FilterState): CalendarData {
   const calendar: CalendarData = {};
+  const sportFilters = getSportFilters();
 
   for (const monthName of MONTH_ORDER) {
     let events = eventsData[monthName] || [];
+
+    // Apply settings-level sport filters
+    events = events.filter((event) => {
+      if (event.sport === 'football-men' && !sportFilters.football) return false;
+      if ((event.sport === 'volleyball-men' || event.sport === 'volleyball-women') && !sportFilters.volleyball) return false;
+      return true;
+    });
 
     if (filters) {
       events = events.filter((event) => {
@@ -151,7 +167,18 @@ export function useCalendar() {
     search: '',
   });
 
-  const calendarData = useMemo(() => buildCalendarData(filters), [filters]);
+  // Re-read sport filters from localStorage when they change (e.g. from Settings page)
+  const [sportFilterVersion, setSportFilterVersion] = useState(0);
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'sport_filters') setSportFilterVersion((v) => v + 1);
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- sportFilterVersion triggers re-read of localStorage sport filters
+  const calendarData = useMemo(() => buildCalendarData(filters), [filters, sportFilterVersion]);
   const monthData = calendarData[currentMonth];
 
   const navigatePrevious = useCallback(() => {
