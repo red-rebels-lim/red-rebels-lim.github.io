@@ -42,7 +42,7 @@ function DesktopDayCell({ day, currentMonth, isToday, onSelectEvent }: DesktopDa
         ${isCarousel ? 'group/carousel' : ''}
       `}
     >
-      <div className={`text-base font-extrabold shrink-0 mb-1 ${isToday ? 'text-[#E02520] text-xl' : hasEvents ? 'text-red-300' : 'text-slate-300'}`}>
+      <div className={`text-base font-extrabold shrink-0 mb-1 ${isToday ? 'text-[#E02520] text-xl' : hasEvents ? 'text-red-600 dark:text-red-300' : 'text-slate-500 dark:text-slate-300'}`}>
         {day.number}
         {day.name && (
           <span className="block text-[0.7rem] font-semibold text-slate-400 uppercase tracking-wide mt-0.5">
@@ -138,7 +138,7 @@ export function CalendarGrid({ monthData, currentMonth }: CalendarGridProps) {
 
   return (
     <>
-      <div className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-2 border-[rgba(224,37,32,0.3)] overflow-hidden" data-tour="calendar" role="grid" aria-label={t(`months.${currentMonth}`)}>
+      <div className="bg-white/90 dark:bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-3xl shadow-lg dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-2 border-[rgba(224,37,32,0.3)] overflow-hidden" data-tour="calendar" role="grid" aria-label={t(`months.${currentMonth}`)}>
         {/* Header - weekday names (desktop only) */}
         <div className="hidden md:grid grid-cols-7 bg-gradient-to-br from-[#E02520] to-[#b91c1c] py-3" role="row">
           {dayNames.map((day) => (

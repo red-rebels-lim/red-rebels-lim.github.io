@@ -46,7 +46,7 @@ export function FilterPanel({ open, filters, onApply, onClear }: FilterPanelProp
             {t('filters.sport')}
           </label>
           <Select value={localFilters.sport} onValueChange={(v) => update('sport', v)}>
-            <SelectTrigger className="bg-white/5 border-[rgba(224,37,32,0.2)] text-foreground">
+            <SelectTrigger className="bg-slate-100 dark:bg-white/5 border-[rgba(224,37,32,0.2)] text-foreground">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-[#1a0f0f] border-[rgba(224,37,32,0.3)]">
@@ -65,7 +65,7 @@ export function FilterPanel({ open, filters, onApply, onClear }: FilterPanelProp
             {t('filters.location')}
           </label>
           <Select value={localFilters.location} onValueChange={(v) => update('location', v)}>
-            <SelectTrigger className="bg-white/5 border-[rgba(224,37,32,0.2)] text-foreground">
+            <SelectTrigger className="bg-slate-100 dark:bg-white/5 border-[rgba(224,37,32,0.2)] text-foreground">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-[#1a0f0f] border-[rgba(224,37,32,0.3)]">
@@ -82,7 +82,7 @@ export function FilterPanel({ open, filters, onApply, onClear }: FilterPanelProp
             {t('filters.status')}
           </label>
           <Select value={localFilters.status} onValueChange={(v) => update('status', v)}>
-            <SelectTrigger className="bg-white/5 border-[rgba(224,37,32,0.2)] text-foreground">
+            <SelectTrigger className="bg-slate-100 dark:bg-white/5 border-[rgba(224,37,32,0.2)] text-foreground">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-[#1a0f0f] border-[rgba(224,37,32,0.3)]">

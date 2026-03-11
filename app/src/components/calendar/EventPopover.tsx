@@ -478,7 +478,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
   if (event.isMeeting) {
     return (
       <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-        <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a1810] border-3 border-[rgba(224,37,32,0.6)] rounded-3xl max-w-lg shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_100px_rgba(224,37,32,0.3)]">
+        <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a1810] border-3 border-[rgba(224,37,32,0.6)] rounded-3xl max-w-lg shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_100px_rgba(224,37,32,0.3)]">
           <DialogTitle className="sr-only">{event.title}</DialogTitle>
           <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
           <div className="text-center py-4">
@@ -501,7 +501,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]">
+      <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a0a0a] border border-[rgba(224,37,32,0.5)] rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]">
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
         <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
 
@@ -580,7 +580,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           {/* ── Score ── */}
           {event.status === 'played' && event.score && (
             <div className="text-center py-2">
-              <div className="text-5xl font-black text-yellow-300 tracking-tight">
+              <div className="text-5xl font-black text-yellow-600 dark:text-yellow-300 tracking-tight">
                 {event.score.replace('-', ' - ')} <span className="text-4xl">{isVolleyballSport(event.sport) ? '🏐' : '⚽'}</span>
               </div>
               {event.penalties && (

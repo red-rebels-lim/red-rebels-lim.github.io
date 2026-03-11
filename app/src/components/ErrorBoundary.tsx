@@ -31,7 +31,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <a
               href="."
               onClick={() => window.location.reload()}
-              className="text-red-300 underline hover:text-white transition-colors"
+              className="text-red-600 dark:text-red-300 underline hover:text-red-800 dark:hover:text-white transition-colors"
             >
               {i18n.t('error.reload')}
             </a>
