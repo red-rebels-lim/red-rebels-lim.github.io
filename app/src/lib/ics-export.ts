@@ -3,7 +3,6 @@ import { sportConfig } from '@/data/sport-config';
 import { monthMap, MONTH_ORDER } from '@/data/month-config';
 import { TEAM_NAME, SEASON_START_YEAR, SEASON_END_YEAR } from '@/data/constants';
 import i18n from '@/i18n';
-import type { MonthName } from '@/types/events';
 
 function escapeIcs(value: string): string {
   return value
@@ -37,7 +36,7 @@ export function exportToCalendar() {
 
   for (const monthName of MONTH_ORDER) {
     const events = eventsData[monthName] || [];
-    const info = monthMap[monthName as MonthName];
+    const info = monthMap[monthName];
 
     for (const ev of events) {
       if (!ev.sport) continue;
@@ -63,7 +62,7 @@ export function exportToCalendar() {
         ics += `DTSTART;VALUE=DATE:${dateStr}\r\n`;
         ics += `DTEND;VALUE=DATE:${dateStr}\r\n`;
         ics += `SUMMARY:${escapeIcs(title)}\r\n`;
-        ics += `CATEGORIES:${t(sportI18nKeys[ev.sport!] ?? 'ics.sportEvent')}\r\n`;
+        ics += `CATEGORIES:${t(sportI18nKeys[ev.sport] ?? 'ics.sportEvent')}\r\n`;
         ics += 'END:VEVENT\r\n';
         continue;
       }
@@ -92,7 +91,7 @@ export function exportToCalendar() {
       }
       ics += `DESCRIPTION:${escapeIcs(description)}\r\n`;
       ics += ev.status === 'played' ? 'STATUS:CONFIRMED\r\n' : 'STATUS:TENTATIVE\r\n';
-      ics += `CATEGORIES:${t(sportI18nKeys[ev.sport!] ?? 'ics.sportEvent')}\r\n`;
+      ics += `CATEGORIES:${t(sportI18nKeys[ev.sport] ?? 'ics.sportEvent')}\r\n`;
       ics += 'END:VEVENT\r\n';
     }
   }

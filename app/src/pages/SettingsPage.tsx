@@ -306,7 +306,7 @@ export default function SettingsPage() {
                 label={t('settings.matchReminders')}
                 trailing={
                   loading ? (
-                    <div className="size-5 border-2 border-[#dc2828] border-t-transparent rounded-full animate-spin" />
+                    <div className="size-5 border-2 border-[#dc2828] border-t-transparent rounded-full animate-spin" role="status"><span className="sr-only">Loading...</span></div>
                   ) : (
                     <SettingsToggle
                       checked={isSubscribed}

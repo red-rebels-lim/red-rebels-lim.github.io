@@ -42,6 +42,9 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
   const emoji = subtitleParts[0] ?? '';
   const timePart = subtitleParts[1];
   const opponent = event.title.replace(`${TEAM_NAME} vs `, '').replace(` vs ${TEAM_NAME}`, '');
+  const ariaLabel = event.isMeeting
+    ? event.title
+    : `${event.title}${event.status === 'played' && event.score ? `, ${event.score}` : ''}${result ? `, ${result}` : ''}`;
 
   // Compute countdown timestamp for upcoming events
   let countdownTimestamp: number | null = null;
@@ -56,7 +59,8 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
     <div
       role="button"
       tabIndex={0}
-      className={`${bgClass} text-white py-1.5 px-2 rounded-lg text-xs mb-1 border border-white/20 shadow-md cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg`}
+      aria-label={ariaLabel}
+      className={`${bgClass} text-white py-1.5 px-2 rounded-lg text-xs mb-1 border border-white/20 shadow-md cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white`}
       onClick={() => { trackEvent('view_match', { opponent, status: event.status ?? 'upcoming' }); onClick(); }}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trackEvent('view_match', { opponent, status: event.status ?? 'upcoming' }); onClick(); } }}
     >

@@ -26,9 +26,11 @@ export function RecentForm({ recentForm }: RecentFormProps) {
               key={i}
               className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-black text-white shadow-md cursor-pointer transition-all hover:-translate-y-1 hover:scale-110"
               style={{ background: getFormColor(match.result) }}
+              role="img"
+              aria-label={`${match.result === 'W' ? 'Win' : match.result === 'D' ? 'Draw' : 'Loss'}: ${match.opponent} (${match.score})`}
               title={`${match.opponent} (${match.score})`}
             >
-              {match.result}
+              <span aria-hidden="true">{match.result}</span>
             </div>
           ))
         )}

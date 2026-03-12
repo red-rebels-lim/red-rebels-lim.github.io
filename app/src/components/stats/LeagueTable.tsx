@@ -40,6 +40,7 @@ export function LeagueTable({ tables }: LeagueTableProps) {
         <h2 className="stat-section-title mb-0">{t('stats.leagueStanding')}</h2>
         <button
           onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
           className="text-xs font-bold text-[#E02520] uppercase tracking-wide hover:underline"
         >
           {t('stats.viewFull')}

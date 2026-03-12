@@ -466,7 +466,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
     : { bg: 'bg-slate-200 dark:bg-[#2a1a1a]', border: 'border-[#E02520]/40', text: t('popover.upcoming'), textColor: 'text-red-700 dark:text-red-300', scoreColor: '', dialogBorder: 'border-[rgba(224,37,32,0.5)]', dialogBg: 'bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a0a0a]' };
 
   function handleShare() {
-    const text = `${homeTeam} ${event!.score ?? ''} ${awayTeam}`;
+    const text = `${homeTeam} ${event?.score ?? ''} ${awayTeam}`;
     if (navigator.share) {
       navigator.share({ title: text, url: window.location.href }).catch(() => {});
     } else {

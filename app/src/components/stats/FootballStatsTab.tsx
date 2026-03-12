@@ -10,11 +10,12 @@ import { HeadToHead } from '@/components/stats/HeadToHead';
 
 function LoadingSkeleton() {
   return (
-    <section className="stat-section min-h-[180px]">
+    <section className="stat-section min-h-[180px]" role="status">
       <div className="animate-pulse space-y-4">
         <div className="h-6 bg-[rgba(224,37,32,0.15)] rounded w-1/3" />
         <div className="h-32 bg-[rgba(224,37,32,0.1)] rounded" />
       </div>
+      <span className="sr-only">Loading statistics...</span>
     </section>
   );
 }

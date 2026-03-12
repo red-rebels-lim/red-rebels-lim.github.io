@@ -76,11 +76,17 @@ function parseEvent(eventData: {
 }
 
 function getSportFilters(): { football: boolean; volleyball: boolean } {
+  const defaults = { football: true, volleyball: true };
   try {
     const stored = localStorage.getItem('sport_filters');
-    if (stored) return JSON.parse(stored);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (typeof parsed === 'object' && parsed !== null && typeof parsed.football === 'boolean' && typeof parsed.volleyball === 'boolean') {
+        return parsed;
+      }
+    }
   } catch { /* ignore */ }
-  return { football: true, volleyball: true };
+  return defaults;
 }
 
 function buildCalendarData(filters?: FilterState): CalendarData {
