@@ -17,7 +17,7 @@ describe('ErrorBoundary', () => {
         <GoodComponent />
       </ErrorBoundary>
     );
-    expect(screen.getByText('All good')).toBeDefined();
+    screen.getByText('All good');
   });
 
   it('renders error fallback when child throws', () => {
@@ -29,8 +29,8 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
 
-    expect(screen.getByText('Something went wrong')).toBeDefined();
-    expect(screen.getByText('Reload the page')).toBeDefined();
+    screen.getByText('Something went wrong');
+    screen.getByText('Reload the page');
 
     consoleSpy.mockRestore();
   });

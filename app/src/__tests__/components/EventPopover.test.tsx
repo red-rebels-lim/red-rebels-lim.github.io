@@ -85,7 +85,7 @@ describe('EventPopover', () => {
       penalties: '5-4',
     };
     render(<EventPopover event={penEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByText(/5-4/)).toBeDefined();
+    screen.getByText(/5-4/);
   });
 
   it('shows cup badge for cup matches', () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -41,21 +41,21 @@ describe('LeagueTable', () => {
 
   it('renders league table with Nea Salamina highlighted', () => {
     render(<LeagueTable tables={[mockTable]} />);
-    expect(screen.getByText('stats.leagueStanding')).toBeDefined();
-    expect(screen.getByText('Nea Salamis')).toBeDefined();
-    expect(screen.getByText('APOEL')).toBeDefined();
+    screen.getByText('stats.leagueStanding');
+    screen.getByText('Nea Salamis');
+    screen.getByText('APOEL');
   });
 
   it('renders compact table header columns (# / Team / GD / PTS)', () => {
     render(<LeagueTable tables={[mockTable]} />);
-    expect(screen.getByText('stats.team')).toBeDefined();
-    expect(screen.getByText('stats.goalDifference')).toBeDefined();
-    expect(screen.getByText('stats.points')).toBeDefined();
+    screen.getByText('stats.team');
+    screen.getByText('stats.goalDifference');
+    screen.getByText('stats.points');
   });
 
   it('has View Full button', () => {
     render(<LeagueTable tables={[mockTable]} />);
-    expect(screen.getByText('stats.viewFull')).toBeDefined();
+    screen.getByText('stats.viewFull');
   });
 
   it('renders multiple tables with sub-headings', () => {
@@ -65,7 +65,69 @@ describe('LeagueTable', () => {
       legend: [],
     };
     render(<LeagueTable tables={[mockTable, secondTable]} />);
-    expect(screen.getByText('First Division')).toBeDefined();
-    expect(screen.getByText('Second Division')).toBeDefined();
+    screen.getByText('First Division');
+    screen.getByText('Second Division');
+  });
+
+  describe('compact mode', () => {
+    const compactTable: LeagueTableData = {
+      leagueName: 'Second Division',
+      rows: [
+        { id: 1, name: 'Team A', shortName: 'TA', position: 1, played: 26, wins: 18, draws: 4, losses: 4, goalDifference: 25, pts: 58 },
+        { id: 2, name: 'Team B', shortName: 'TB', position: 2, played: 26, wins: 16, draws: 5, losses: 5, goalDifference: 18, pts: 53 },
+        { id: 3, name: 'Anorthosis', shortName: 'ANO', position: 3, played: 26, wins: 15, draws: 6, losses: 5, goalDifference: 15, pts: 51 },
+        { id: NEA_SALAMINA_ID, name: 'Nea Salamis', shortName: 'NS', position: 4, played: 26, wins: 14, draws: 5, losses: 7, goalDifference: 13, pts: 47, qualColor: '#00ff00' },
+        { id: 5, name: 'Team E', shortName: 'TE', position: 5, played: 26, wins: 12, draws: 7, losses: 7, goalDifference: 8, pts: 43 },
+        { id: 6, name: 'Team F', shortName: 'TF', position: 6, played: 26, wins: 10, draws: 8, losses: 8, goalDifference: 3, pts: 38 },
+        { id: 7, name: 'Team G', shortName: 'TG', position: 7, played: 26, wins: 8, draws: 6, losses: 12, goalDifference: -5, pts: 30 },
+        { id: 8, name: 'Team H', shortName: 'TH', position: 8, played: 26, wins: 5, draws: 5, losses: 16, goalDifference: -20, pts: 20 },
+      ],
+      legend: [],
+    };
+
+    it('shows only 3 rows initially (compact view)', () => {
+      render(<LeagueTable tables={[compactTable]} />);
+      const rows = screen.getAllByRole('row');
+      // 1 header row + 3 data rows = 4 total
+      expect(rows.length).toBe(4);
+    });
+
+    it('always shows Nea Salamina row in compact view', () => {
+      render(<LeagueTable tables={[compactTable]} />);
+      screen.getByText('Nea Salamis');
+    });
+
+    it('shows compact columns: #, Club, GD, PTS', () => {
+      render(<LeagueTable tables={[compactTable]} />);
+      screen.getByText('stats.goalDifference');
+      screen.getByText('stats.points');
+    });
+
+    it('does NOT show Pld, W, D, L columns in compact mode', () => {
+      render(<LeagueTable tables={[compactTable]} />);
+      expect(screen.queryByText('stats.played')).toBeNull();
+      expect(screen.queryByText('stats.w')).toBeNull();
+      expect(screen.queryByText('stats.d')).toBeNull();
+      expect(screen.queryByText('stats.l')).toBeNull();
+    });
+
+    it('has a "View Full" button/link', () => {
+      render(<LeagueTable tables={[compactTable]} />);
+      screen.getByText('stats.viewFull');
+    });
+
+    it('expands to show all rows when "View Full" is clicked', () => {
+      render(<LeagueTable tables={[compactTable]} />);
+      fireEvent.click(screen.getByText('stats.viewFull'));
+      const rows = screen.getAllByRole('row');
+      // 1 header + 8 data rows = 9
+      expect(rows.length).toBe(9);
+    });
+
+    it('Nea Salamina row is highlighted', () => {
+      render(<LeagueTable tables={[compactTable]} />);
+      const nsRow = screen.getByText('Nea Salamis').closest('tr');
+      expect(nsRow?.className).toContain('bg-primary/10');
+    });
   });
 });

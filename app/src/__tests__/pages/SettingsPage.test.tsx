@@ -82,7 +82,7 @@ describe('TASK-11: SettingsPage Redesign', () => {
 
     it('renders centered title', () => {
       render(<SettingsPage />);
-      expect(screen.getByText(/Red Rebels/)).toBeDefined();
+      screen.getByText(/Red Rebels/);
     });
 
     it('renders theme toggle in header', () => {
@@ -95,12 +95,12 @@ describe('TASK-11: SettingsPage Redesign', () => {
   describe('Notifications Section', () => {
     it('renders notifications section header', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.notifications')).toBeDefined();
+      screen.getByText('settings.notifications');
     });
 
     it('renders Match Reminders toggle', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.matchReminders')).toBeDefined();
+      screen.getByText('settings.matchReminders');
     });
 
     it('calls subscribeToPush when Match Reminders toggled on', async () => {
@@ -114,60 +114,60 @@ describe('TASK-11: SettingsPage Redesign', () => {
     it('shows not supported message when push not supported', () => {
       vi.mocked(isPushSupported).mockReturnValue(false);
       render(<SettingsPage />);
-      expect(screen.getByText('settings.notSupported')).toBeDefined();
+      screen.getByText('settings.notSupported');
     });
 
     it('shows denied state when permission denied', () => {
       vi.mocked(getSubscriptionStatus).mockReturnValue('denied');
       render(<SettingsPage />);
-      expect(screen.getByText('settings.permissionDenied')).toBeDefined();
+      screen.getByText('settings.permissionDenied');
     });
   });
 
   describe('Display Section', () => {
     it('renders display section header', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.display')).toBeDefined();
+      screen.getByText('settings.display');
     });
 
     it('renders Language row with current language value', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.language')).toBeDefined();
-      expect(screen.getByText('settings.languageEnglish')).toBeDefined();
+      screen.getByText('settings.language');
+      screen.getByText('settings.languageEnglish');
     });
 
     it('renders Dark Theme toggle', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.darkTheme')).toBeDefined();
+      screen.getByText('settings.darkTheme');
     });
   });
 
   describe('Sports Filter Section', () => {
     it('renders sports filter section header', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.sportsFilter')).toBeDefined();
+      screen.getByText('settings.sportsFilter');
     });
 
     it('renders Football toggle', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.football')).toBeDefined();
+      screen.getByText('settings.football');
     });
 
     it('renders Volleyball toggle', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.volleyball')).toBeDefined();
+      screen.getByText('settings.volleyball');
     });
   });
 
   describe('Tools Section', () => {
     it('renders tools section header', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.tools')).toBeDefined();
+      screen.getByText('settings.tools');
     });
 
     it('renders Export Calendar button', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.exportCalendar')).toBeDefined();
+      screen.getByText('settings.exportCalendar');
     });
 
     it('triggers export when Export Calendar clicked', () => {
@@ -179,7 +179,7 @@ describe('TASK-11: SettingsPage Redesign', () => {
 
     it('renders Print Calendar button', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.printCalendar')).toBeDefined();
+      screen.getByText('settings.printCalendar');
     });
 
     it('triggers print when Print Calendar clicked', () => {
@@ -194,12 +194,12 @@ describe('TASK-11: SettingsPage Redesign', () => {
   describe('About Section', () => {
     it('renders about section header', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.about')).toBeDefined();
+      screen.getByText('settings.about');
     });
 
     it('renders App Version row', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.appVersion')).toBeDefined();
+      screen.getByText('settings.appVersion');
     });
 
     it('renders View on GitHub link', () => {
@@ -215,7 +215,7 @@ describe('TASK-11: SettingsPage Redesign', () => {
   describe('Footer', () => {
     it('renders made with love footer', () => {
       render(<SettingsPage />);
-      expect(screen.getByText('settings.madeWith')).toBeDefined();
+      screen.getByText('settings.madeWith');
     });
   });
 
@@ -235,7 +235,7 @@ describe('TASK-11: SettingsPage Redesign', () => {
       const matchRemindersSwitch = switches[0]; // first toggle is Match Reminders
       await act(async () => { fireEvent.click(matchRemindersSwitch); });
       // Should not crash
-      expect(screen.getByText('settings.matchReminders')).toBeDefined();
+      screen.getByText('settings.matchReminders');
     });
   });
 

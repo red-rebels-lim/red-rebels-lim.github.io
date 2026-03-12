@@ -43,24 +43,24 @@ const mockStats: FormattedStats = {
 describe('TASK-06: FootballStatsTab', () => {
   it('renders season summary', () => {
     render(<FootballStatsTab stats={mockStats} fotmob={null} loading={false} />);
-    expect(screen.getByText('stats.seasonSummary')).toBeDefined();
+    screen.getByText('stats.seasonSummary');
   });
 
   it('renders recent form', () => {
     render(<FootballStatsTab stats={mockStats} fotmob={null} loading={false} />);
-    expect(screen.getByText('stats.recentForm')).toBeDefined();
+    screen.getByText('stats.recentForm');
   });
 
   it('renders performance split with draws', () => {
     const { container } = render(<FootballStatsTab stats={mockStats} fotmob={null} loading={false} />);
-    expect(screen.getByText('stats.performanceSplit')).toBeDefined();
+    screen.getByText('stats.performanceSplit');
     // Should include draws
     expect(container.textContent).toContain('stats.d');
   });
 
   it('renders head to head', () => {
     render(<FootballStatsTab stats={mockStats} fotmob={null} loading={false} />);
-    expect(screen.getByText('stats.headToHead')).toBeDefined();
+    screen.getByText('stats.headToHead');
   });
 
   it('shows loading skeleton when loading', () => {

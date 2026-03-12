@@ -41,7 +41,7 @@ describe('TASK-10: UpcomingEventCard', () => {
   describe('Acceptance Criteria', () => {
     it('renders date badge with day number and month abbreviation', () => {
       render(<UpcomingEventCard event={defaultEvent} monthName={defaultMonth} onClick={onClick} />);
-      expect(screen.getByText('14')).toBeDefined();
+      screen.getByText('14');
       // Month abbreviation (Mar or months.march)
       const container = screen.getByText('14').closest('[class]');
       expect(container).not.toBeNull();
@@ -50,7 +50,7 @@ describe('TASK-10: UpcomingEventCard', () => {
     it('renders match title with team names', () => {
       render(<UpcomingEventCard event={defaultEvent} monthName={defaultMonth} onClick={onClick} />);
       // Should display the opponent name at minimum
-      expect(screen.getByText(/APOEL/i)).toBeDefined();
+      screen.getByText(/APOEL/i);
     });
 
     it('renders competition type label', () => {
@@ -64,7 +64,7 @@ describe('TASK-10: UpcomingEventCard', () => {
     it('renders date and time info', () => {
       render(<UpcomingEventCard event={defaultEvent} monthName={defaultMonth} onClick={onClick} />);
       // Time should be visible from the subtitle
-      expect(screen.getByText(/18:00/)).toBeDefined();
+      screen.getByText(/18:00/);
     });
 
     it('calls onClick when card is clicked', () => {
@@ -121,7 +121,7 @@ describe('TASK-10: UpcomingEventCard', () => {
         competition: 'cup',
       });
       render(<UpcomingEventCard event={vbEvent} monthName={defaultMonth} onClick={onClick} />);
-      expect(screen.getByText(/Omonia/)).toBeDefined();
+      screen.getByText(/Omonia/);
     });
 
     it('handles event without competition type', () => {

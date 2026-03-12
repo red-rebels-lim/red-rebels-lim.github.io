@@ -62,7 +62,8 @@ export async function subscribeToPush(): Promise<string | null> {
   });
 
   const json = subscription.toJSON();
-  const keys = json.keys!;
+  const keys = json.keys;
+  if (!keys) return null;
 
   // Save to Back4App
   const PushSubscription = Parse.Object.extend('PushSubscription');

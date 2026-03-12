@@ -33,9 +33,9 @@ describe('TASK-10: BottomNav', () => {
   describe('Acceptance Criteria', () => {
     it('renders three navigation tabs: Calendar, Stats, Settings', () => {
       render(<BottomNav />);
-      expect(screen.getByText('nav.calendar')).toBeDefined();
-      expect(screen.getByText('nav.stats')).toBeDefined();
-      expect(screen.getByText('nav.settings')).toBeDefined();
+      screen.getByText('nav.calendar');
+      screen.getByText('nav.stats');
+      screen.getByText('nav.settings');
     });
 
     it('renders as a nav element with proper aria label', () => {
@@ -47,9 +47,9 @@ describe('TASK-10: BottomNav', () => {
 
     it('links to correct routes', () => {
       render(<BottomNav />);
-      expect(screen.getByTestId('nav-/')).toBeDefined();
-      expect(screen.getByTestId('nav-/stats')).toBeDefined();
-      expect(screen.getByTestId('nav-/settings')).toBeDefined();
+      screen.getByTestId('nav-/');
+      screen.getByTestId('nav-/stats');
+      screen.getByTestId('nav-/settings');
     });
 
     it('highlights active tab (Calendar) with primary color when on /', () => {

@@ -33,8 +33,8 @@ describe('SeasonProgress', () => {
       { match: 2, points: 4, opponent: 'AEL' },
     ];
     render(<SeasonProgress pointsProgression={data} />);
-    expect(screen.getByText('stats.seasonProgress')).toBeDefined();
-    expect(screen.getByTestId('line-chart')).toBeDefined();
+    screen.getByText('stats.seasonProgress');
+    screen.getByTestId('line-chart');
   });
 
   it('renders section heading', () => {

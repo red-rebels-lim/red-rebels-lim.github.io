@@ -87,8 +87,8 @@ describe('CalendarGrid', () => {
 
   it('renders carousel controls when day has multiple events', () => {
     render(<CalendarGrid monthData={carouselMonthData} currentMonth="february" />);
-    expect(screen.getByLabelText('Previous event')).toBeDefined();
-    expect(screen.getByLabelText('Next event')).toBeDefined();
+    screen.getByLabelText('Previous event');
+    screen.getByLabelText('Next event');
   });
 
   it('navigates to next event in carousel', () => {

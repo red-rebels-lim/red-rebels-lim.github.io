@@ -42,15 +42,9 @@ describe('CalendarPage', () => {
     vi.useRealTimers();
   });
 
-  it('renders without crashing', () => {
-    const { container } = render(<CalendarPage />);
-    expect(container.innerHTML).not.toBe('');
-  });
-
   it('renders the navbar', () => {
     render(<CalendarPage />);
-    const logo = screen.getByAltText('Red Rebels');
-    expect(logo).toBeDefined();
+    screen.getByAltText('Red Rebels');
   });
 
   it('renders month navigation buttons', () => {
@@ -73,7 +67,7 @@ describe('CalendarPage', () => {
       fireEvent.click(filterBtns[0]);
     });
     // After click: FilterPanel is open and renders filters.sport label
-    expect(screen.getByText('filters.sport')).toBeDefined();
+    screen.getByText('filters.sport');
   });
 
   it('calls handleJumpToToday when today button clicked', async () => {

@@ -116,7 +116,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
   );
 
   return (
-    <nav className="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl border-2 border-[rgba(224,37,32,0.3)] rounded-2xl p-4 mb-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)] sticky top-4 z-50 md:relative md:top-0 md:z-auto">
+    <nav aria-label="Site navigation" className="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl border-2 border-[rgba(224,37,32,0.3)] rounded-2xl p-4 mb-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)] sticky top-4 z-50 md:relative md:top-0 md:z-auto">
       <div className="flex items-center justify-between">
         {/* Brand */}
         <NavLink to="/" className="flex items-center gap-3 text-foreground font-bold text-xl no-underline hover:text-[#E02520] transition-all">
@@ -255,7 +255,7 @@ export function Navbar({ onToggleFilters, currentMonth, onPrevious, onNext, onTo
                     onClick={() => { handleInstall(); setMobileOpen(false); }}
                     className="border-[rgba(224,37,32,0.3)] bg-[rgba(255,255,255,0.05)] text-foreground justify-start gap-2"
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden="true">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                       <polyline points="7 10 12 15 17 10" />
                       <line x1="12" y1="15" x2="12" y2="3" />

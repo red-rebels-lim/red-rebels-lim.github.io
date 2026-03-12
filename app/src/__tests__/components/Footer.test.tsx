@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('react-i18next', () => ({
@@ -13,13 +13,13 @@ import { Footer } from '@/components/layout/Footer';
 describe('Footer', () => {
   it('renders the legend title', () => {
     render(<Footer />);
-    expect(screen.getByText('legend.title')).toBeDefined();
+    screen.getByText('legend.title');
   });
 
   it('renders all sport items', () => {
     render(<Footer />);
-    expect(screen.getByText('sports.footballMen')).toBeDefined();
-    expect(screen.getByText('sports.volleyballMen')).toBeDefined();
-    expect(screen.getByText('sports.volleyballWomen')).toBeDefined();
+    screen.getByText('sports.footballMen');
+    screen.getByText('sports.volleyballMen');
+    screen.getByText('sports.volleyballWomen');
   });
 });

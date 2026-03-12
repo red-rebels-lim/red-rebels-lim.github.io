@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('react-i18next', () => ({
@@ -18,18 +18,18 @@ import { VenueInfo } from '@/components/stats/VenueInfo';
 describe('VenueInfo', () => {
   it('renders venue name and city', () => {
     render(<VenueInfo venue={{ name: 'Ammochostos Stadium', city: 'Larnaca', capacity: '10000', surface: 'Grass', yearOpened: '2000' }} />);
-    expect(screen.getByText('Ammochostos Stadium')).toBeDefined();
-    expect(screen.getByText('Larnaca')).toBeDefined();
+    screen.getByText('Ammochostos Stadium');
+    screen.getByText('Larnaca');
   });
 
   it('renders capacity when provided', () => {
     render(<VenueInfo venue={{ name: 'Test', city: 'City', capacity: '5000' }} />);
-    expect(screen.getByText('5000')).toBeDefined();
+    screen.getByText('5000');
   });
 
   it('renders surface and year when provided', () => {
     render(<VenueInfo venue={{ name: 'Test', city: 'City', surface: 'Artificial', yearOpened: '1999' }} />);
-    expect(screen.getByText('Artificial')).toBeDefined();
-    expect(screen.getByText('1999')).toBeDefined();
+    screen.getByText('Artificial');
+    screen.getByText('1999');
   });
 });

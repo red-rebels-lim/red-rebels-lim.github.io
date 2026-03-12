@@ -9,9 +9,12 @@ declare global {
 const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined;
 const CLARITY_ID = import.meta.env.VITE_CLARITY_PROJECT_ID as string | undefined;
 
+const GA_ID_PATTERN = /^G-[A-Z0-9]+$/;
+const CLARITY_ID_PATTERN = /^[a-z0-9]+$/i;
+
 export function initAnalytics() {
   // Google Analytics 4
-  if (GA_ID) {
+  if (GA_ID && GA_ID_PATTERN.test(GA_ID)) {
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
@@ -27,7 +30,7 @@ export function initAnalytics() {
   }
 
   // Microsoft Clarity
-  if (CLARITY_ID) {
+  if (CLARITY_ID && CLARITY_ID_PATTERN.test(CLARITY_ID)) {
     window.clarity = window.clarity || function (...args: unknown[]) {
       (window.clarity as unknown as { q: unknown[][] }).q = (window.clarity as unknown as { q: unknown[][] }).q || [];
       (window.clarity as unknown as { q: unknown[][] }).q.push(args);

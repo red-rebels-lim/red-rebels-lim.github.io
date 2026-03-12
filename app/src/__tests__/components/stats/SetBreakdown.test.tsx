@@ -26,29 +26,29 @@ const mockProps = {
 describe('TASK-05: SetBreakdown', () => {
   it('renders section title', () => {
     render(<SetBreakdown {...mockProps} />);
-    expect(screen.getByText('stats.setBreakdown')).toBeDefined();
+    screen.getByText('stats.setBreakdown');
   });
 
   it('displays sets won count', () => {
     render(<SetBreakdown {...mockProps} />);
-    expect(screen.getByText('42')).toBeDefined();
-    expect(screen.getByText('stats.setsWon')).toBeDefined();
+    screen.getByText('42');
+    screen.getByText('stats.setsWon');
   });
 
   it('displays sets lost count', () => {
     render(<SetBreakdown {...mockProps} />);
-    expect(screen.getByText('22')).toBeDefined();
-    expect(screen.getByText('stats.setsLost')).toBeDefined();
+    screen.getByText('22');
+    screen.getByText('stats.setsLost');
   });
 
   it('displays 3-0, 3-1, 3-2 win counts', () => {
     render(<SetBreakdown {...mockProps} />);
-    expect(screen.getByText('stats.threeZero')).toBeDefined();
-    expect(screen.getByText('stats.threeOne')).toBeDefined();
-    expect(screen.getByText('stats.threeTwo')).toBeDefined();
-    expect(screen.getByText('5')).toBeDefined();
-    expect(screen.getByText('4')).toBeDefined();
-    expect(screen.getByText('3')).toBeDefined();
+    screen.getByText('stats.threeZero');
+    screen.getByText('stats.threeOne');
+    screen.getByText('stats.threeTwo');
+    screen.getByText('5');
+    screen.getByText('4');
+    screen.getByText('3');
   });
 
   it('renders horizontal progress bars', () => {
@@ -69,6 +69,6 @@ describe('TASK-05: SetBreakdown', () => {
         }}
       />
     );
-    expect(screen.getByText('stats.setBreakdown')).toBeDefined();
+    screen.getByText('stats.setBreakdown');
   });
 });
