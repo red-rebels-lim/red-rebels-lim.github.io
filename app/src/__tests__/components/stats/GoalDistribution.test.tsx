@@ -33,13 +33,13 @@ describe('GoalDistribution', () => {
       { match: 'vs APOEL', goalsFor: 1, goalsAgainst: 2 },
     ];
     render(<GoalDistribution goalDistribution={data} />);
-    expect(screen.getByText('stats.goalDistribution')).toBeDefined();
-    expect(screen.getByTestId('bar-chart')).toBeDefined();
+    screen.getByText('stats.goalDistribution');
+    screen.getByTestId('bar-chart');
   });
 
   it('has accessible role="img" on chart container', () => {
     const data = [{ match: 'vs Test', goalsFor: 1, goalsAgainst: 0 }];
     render(<GoalDistribution goalDistribution={data} />);
-    expect(screen.getByRole('img')).toBeDefined();
+    screen.getByRole('img');
   });
 });

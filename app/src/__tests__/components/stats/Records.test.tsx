@@ -18,17 +18,17 @@ describe('Records', () => {
 
   it('renders only biggest win when heaviest defeat is null', () => {
     render(<Records biggestWin={{ score: '5-0', opponent: 'Omonia', margin: 5 }} heaviestDefeat={null} />);
-    expect(screen.getByText('stats.biggestWin')).toBeDefined();
-    expect(screen.getByText('5-0')).toBeDefined();
-    expect(screen.getByText('vs Omonia')).toBeDefined();
+    screen.getByText('stats.biggestWin');
+    screen.getByText('5-0');
+    screen.getByText('vs Omonia');
     expect(screen.queryByText('stats.heaviestDefeat')).toBeNull();
   });
 
   it('renders only heaviest defeat when biggest win is null', () => {
     render(<Records biggestWin={null} heaviestDefeat={{ score: '0-4', opponent: 'APOEL', margin: 4 }} />);
-    expect(screen.getByText('stats.heaviestDefeat')).toBeDefined();
-    expect(screen.getByText('0-4')).toBeDefined();
-    expect(screen.getByText('vs APOEL')).toBeDefined();
+    screen.getByText('stats.heaviestDefeat');
+    screen.getByText('0-4');
+    screen.getByText('vs APOEL');
     expect(screen.queryByText('stats.biggestWin')).toBeNull();
   });
 
@@ -39,9 +39,9 @@ describe('Records', () => {
         heaviestDefeat={{ score: '0-4', opponent: 'APOEL', margin: 4 }}
       />
     );
-    expect(screen.getByText('stats.biggestWin')).toBeDefined();
-    expect(screen.getByText('5-0')).toBeDefined();
-    expect(screen.getByText('stats.heaviestDefeat')).toBeDefined();
-    expect(screen.getByText('0-4')).toBeDefined();
+    screen.getByText('stats.biggestWin');
+    screen.getByText('5-0');
+    screen.getByText('stats.heaviestDefeat');
+    screen.getByText('0-4');
   });
 });

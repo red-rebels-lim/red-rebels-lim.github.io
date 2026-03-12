@@ -78,7 +78,7 @@ describe('Navbar', () => {
 
   it('renders language toggle button', () => {
     render(<Navbar />);
-    expect(screen.getByText('EN')).toBeDefined();
+    screen.getByText('EN');
   });
 
   it('calls onToggleFilters when filter button is clicked', () => {
@@ -118,9 +118,9 @@ describe('Navbar', () => {
     const onNext = vi.fn();
     const onToday = vi.fn();
     render(<Navbar currentMonth="february" onPrevious={onPrev} onNext={onNext} onToday={onToday} />);
-    expect(screen.getByRole('button', { name: 'Previous month' })).toBeDefined();
-    expect(screen.getByRole('button', { name: 'Next month' })).toBeDefined();
-    expect(screen.getByText('monthNav.jumpToToday')).toBeDefined();
+    screen.getByRole('button', { name: 'Previous month' });
+    screen.getByRole('button', { name: 'Next month' });
+    screen.getByText('monthNav.jumpToToday');
   });
 
   it('calls onPrevious and trackEvent when previous month button clicked', () => {

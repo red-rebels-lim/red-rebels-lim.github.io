@@ -33,37 +33,37 @@ const mockAway = {
 describe('HomeVsAway', () => {
   it('renders the section title', () => {
     render(<HomeVsAway home={mockHome} away={mockAway} />);
-    expect(screen.getByText('stats.homeVsAway')).toBeDefined();
+    screen.getByText('stats.homeVsAway');
   });
 
   it('renders home and away sections', () => {
     render(<HomeVsAway home={mockHome} away={mockAway} />);
-    expect(screen.getByText('stats.home')).toBeDefined();
-    expect(screen.getByText('stats.away')).toBeDefined();
+    screen.getByText('stats.home');
+    screen.getByText('stats.away');
   });
 
   it('displays W/D/L values for both sections', () => {
     render(<HomeVsAway home={mockHome} away={mockAway} />);
     // Home: 9W 2D 2L, Away: 5W 3D 5L
-    expect(screen.getByText('9')).toBeDefined();
+    screen.getByText('9');
     expect(screen.getAllByText('5')).toHaveLength(2); // away wins=5 and away losses=5
   });
 
   it('displays goal line with signed positive goal difference', () => {
     render(<HomeVsAway home={mockHome} away={mockAway} />);
     // Home: 24-10 (+14)
-    expect(screen.getByText(/24-10.*\+14/)).toBeDefined();
+    screen.getByText(/24-10.*\+14/);
   });
 
   it('displays goal line with negative goal difference (no plus)', () => {
     render(<HomeVsAway home={mockHome} away={mockAway} />);
     // Away: 14-15 (-1) — no '+' prefix
-    expect(screen.getByText(/14-15.*-1/)).toBeDefined();
+    screen.getByText(/14-15.*-1/);
   });
 
   it('handles zero goal difference', () => {
     const zeroGD = { ...mockAway, goalDifference: 0, goalsFor: 10, goalsAgainst: 10 };
     render(<HomeVsAway home={mockHome} away={zeroGD} />);
-    expect(screen.getByText(/10-10.*\(0\)/)).toBeDefined();
+    screen.getByText(/10-10.*\(0\)/);
   });
 });

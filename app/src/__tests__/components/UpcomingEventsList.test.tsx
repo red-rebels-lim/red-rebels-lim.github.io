@@ -53,7 +53,7 @@ describe('TASK-10: UpcomingEventsList', () => {
     it('renders "Selected Day" header when a day with events is selected', () => {
       const monthData = buildMonthData([makeEvent({ day: 14 })]);
       render(<UpcomingEventsList monthData={monthData} currentMonth={defaultMonth} selectedDay={14} onEventClick={onEventClick} />);
-      expect(screen.getByText(/calendar.selectedDay|selected day/i)).toBeDefined();
+      screen.getByText(/calendar.selectedDay|selected day/i);
     });
 
     it('renders event cards only for the selected day', () => {
@@ -63,7 +63,7 @@ describe('TASK-10: UpcomingEventsList', () => {
       ];
       const monthData = buildMonthData(events);
       render(<UpcomingEventsList monthData={monthData} currentMonth={defaultMonth} selectedDay={14} onEventClick={onEventClick} />);
-      expect(screen.getByText(/APOEL/)).toBeDefined();
+      screen.getByText(/APOEL/);
       expect(screen.queryByText(/Anorthosis/)).toBeNull();
     });
 
@@ -74,8 +74,8 @@ describe('TASK-10: UpcomingEventsList', () => {
       ];
       const monthData = buildMonthData(events);
       render(<UpcomingEventsList monthData={monthData} currentMonth={defaultMonth} selectedDay={14} onEventClick={onEventClick} />);
-      expect(screen.getByText(/APOEL/)).toBeDefined();
-      expect(screen.getByText(/Omonia/)).toBeDefined();
+      screen.getByText(/APOEL/);
+      screen.getByText(/Omonia/);
     });
 
     it('renders clickable event cards', () => {

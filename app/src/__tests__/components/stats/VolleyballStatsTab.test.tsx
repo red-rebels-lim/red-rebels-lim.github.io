@@ -54,33 +54,33 @@ const mockStats: VolleyballFormattedStats = {
 describe('TASK-06: VolleyballStatsTab', () => {
   it('renders volleyball season summary with win rate', () => {
     render(<VolleyballStatsTab stats={mockStats} />);
-    expect(screen.getByText('stats.seasonSummary')).toBeDefined();
-    expect(screen.getByText('stats.winRate')).toBeDefined();
-    expect(screen.getByText('67%')).toBeDefined();
+    screen.getByText('stats.seasonSummary');
+    screen.getByText('stats.winRate');
+    screen.getByText('67%');
   });
 
   it('renders set breakdown', () => {
     render(<VolleyballStatsTab stats={mockStats} />);
-    expect(screen.getByText('stats.setBreakdown')).toBeDefined();
-    expect(screen.getByText('stats.setsWon')).toBeDefined();
+    screen.getByText('stats.setBreakdown');
+    screen.getByText('stats.setsWon');
   });
 
   it('renders recent form', () => {
     render(<VolleyballStatsTab stats={mockStats} />);
-    expect(screen.getByText('stats.recentForm')).toBeDefined();
+    screen.getByText('stats.recentForm');
   });
 
   it('renders performance split without draws', () => {
     render(<VolleyballStatsTab stats={mockStats} />);
-    expect(screen.getByText('stats.performanceSplit')).toBeDefined();
+    screen.getByText('stats.performanceSplit');
     const section = screen.getByText('stats.performanceSplit').closest('section');
     expect(section?.textContent).not.toContain('stats.d');
   });
 
   it('renders top scorers with points', () => {
     render(<VolleyballStatsTab stats={mockStats} />);
-    expect(screen.getByText('stats.topScorers')).toBeDefined();
-    expect(screen.getByText('215')).toBeDefined();
+    screen.getByText('stats.topScorers');
+    screen.getByText('215');
   });
 
   it('does NOT render head-to-head (football only)', () => {
@@ -90,8 +90,8 @@ describe('TASK-06: VolleyballStatsTab', () => {
 
   it('women variant shows totalPoints and setsWon hero stats', () => {
     render(<VolleyballStatsTab stats={mockStats} variant="women" />);
-    expect(screen.getByText('stats.totalPoints')).toBeDefined();
-    expect(screen.getByText('stats.setsWon')).toBeDefined();
+    screen.getByText('stats.totalPoints');
+    screen.getByText('stats.setsWon');
     expect(screen.queryByText('stats.winRate')).toBeNull();
   });
 
@@ -114,6 +114,6 @@ describe('TASK-06: VolleyballStatsTab', () => {
       seasonProgress: [],
     };
     render(<VolleyballStatsTab stats={empty} />);
-    expect(screen.getByText('stats.seasonSummary')).toBeDefined();
+    screen.getByText('stats.seasonSummary');
   });
 });

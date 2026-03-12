@@ -83,16 +83,16 @@ describe('SettingsPage (subscribed)', () => {
       fireEvent.click(screen.getAllByRole('switch')[0]);
     });
     // Should not crash — Match Reminders still visible
-    expect(screen.getByText('settings.matchReminders')).toBeDefined();
+    screen.getByText('settings.matchReminders');
   });
 
   it('renders all sections even when subscribed', async () => {
     await act(async () => { render(<SettingsPage />); });
-    expect(screen.getByText('settings.notifications')).toBeDefined();
-    expect(screen.getByText('settings.display')).toBeDefined();
-    expect(screen.getByText('settings.sportsFilter')).toBeDefined();
-    expect(screen.getByText('settings.tools')).toBeDefined();
-    expect(screen.getByText('settings.about')).toBeDefined();
+    screen.getByText('settings.notifications');
+    screen.getByText('settings.display');
+    screen.getByText('settings.sportsFilter');
+    screen.getByText('settings.tools');
+    screen.getByText('settings.about');
   });
 
   it('renders toggle switches for all settings', async () => {

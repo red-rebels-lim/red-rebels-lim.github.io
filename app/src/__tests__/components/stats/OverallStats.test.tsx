@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('react-i18next', () => ({
@@ -30,31 +30,31 @@ const mockProps = {
 describe('OverallStats', () => {
   it('renders the section title', () => {
     render(<OverallStats {...mockProps} />);
-    expect(screen.getByText('stats.overallStats')).toBeDefined();
+    screen.getByText('stats.overallStats');
   });
 
   it('displays all 9 stat cards with correct values', () => {
     render(<OverallStats {...mockProps} />);
-    expect(screen.getByText('26')).toBeDefined(); // played
-    expect(screen.getByText('14')).toBeDefined(); // wins
-    expect(screen.getByText('5')).toBeDefined();  // draws
-    expect(screen.getByText('7')).toBeDefined();  // losses
-    expect(screen.getByText('38-25')).toBeDefined(); // goals
-    expect(screen.getByText('47')).toBeDefined(); // points
-    expect(screen.getByText('8')).toBeDefined();  // cleanSheets
-    expect(screen.getByText('1.5')).toBeDefined(); // avgGoalsFor
+    screen.getByText('26'); // played
+    screen.getByText('14'); // wins
+    screen.getByText('5');  // draws
+    screen.getByText('7');  // losses
+    screen.getByText('38-25'); // goals
+    screen.getByText('47'); // points
+    screen.getByText('8');  // cleanSheets
+    screen.getByText('1.5'); // avgGoalsFor
   });
 
   it('displays all stat labels', () => {
     render(<OverallStats {...mockProps} />);
-    expect(screen.getByText('stats.matches')).toBeDefined();
-    expect(screen.getByText('stats.wins')).toBeDefined();
-    expect(screen.getByText('stats.draws')).toBeDefined();
-    expect(screen.getByText('stats.losses')).toBeDefined();
-    expect(screen.getByText('stats.goals')).toBeDefined();
-    expect(screen.getByText('stats.points')).toBeDefined();
-    expect(screen.getByText('stats.cleanSheets')).toBeDefined();
-    expect(screen.getByText('stats.avgGoalsFor')).toBeDefined();
-    expect(screen.getByText('stats.avgGoalsAgainst')).toBeDefined();
+    screen.getByText('stats.matches');
+    screen.getByText('stats.wins');
+    screen.getByText('stats.draws');
+    screen.getByText('stats.losses');
+    screen.getByText('stats.goals');
+    screen.getByText('stats.points');
+    screen.getByText('stats.cleanSheets');
+    screen.getByText('stats.avgGoalsFor');
+    screen.getByText('stats.avgGoalsAgainst');
   });
 });

@@ -17,7 +17,7 @@ describe('Task 08: MatchReport component', () => {
   describe('Acceptance Criteria', () => {
     it('should render the report header for played matches', () => {
       render(<MatchReport reportEN={reportEN} reportEL={reportEL} />);
-      expect(screen.getByText('matchReport.title')).toBeDefined();
+      screen.getByText('matchReport.title');
     });
 
     it('should be collapsed by default — report text hidden', () => {
@@ -28,20 +28,20 @@ describe('Task 08: MatchReport component', () => {
     it('should expand and show English text when clicked (lang="en")', () => {
       render(<MatchReport reportEN={reportEN} reportEL={reportEL} lang="en" />);
       fireEvent.click(screen.getByText('matchReport.title'));
-      expect(screen.getByText(reportEN)).toBeDefined();
+      screen.getByText(reportEN);
     });
 
     it('should show Greek text when lang="el"', () => {
       render(<MatchReport reportEN={reportEN} reportEL={reportEL} lang="el" />);
       fireEvent.click(screen.getByText('matchReport.title'));
-      expect(screen.getByText(reportEL)).toBeDefined();
+      screen.getByText(reportEL);
     });
 
     it('should collapse again when header clicked a second time', () => {
       render(<MatchReport reportEN={reportEN} reportEL={reportEL} lang="en" />);
       const header = screen.getByText('matchReport.title');
       fireEvent.click(header); // expand
-      expect(screen.getByText(reportEN)).toBeDefined();
+      screen.getByText(reportEN);
       fireEvent.click(header); // collapse
       expect(screen.queryByText(reportEN)).toBeNull();
     });
@@ -61,13 +61,13 @@ describe('Task 08: MatchReport component', () => {
     it('should fall back to English when Greek report is missing', () => {
       render(<MatchReport reportEN={reportEN} reportEL="" lang="el" />);
       fireEvent.click(screen.getByText('matchReport.title'));
-      expect(screen.getByText(reportEN)).toBeDefined();
+      screen.getByText(reportEN);
     });
 
     it('should fall back to Greek when English report is missing', () => {
       render(<MatchReport reportEN="" reportEL={reportEL} lang="en" />);
       fireEvent.click(screen.getByText('matchReport.title'));
-      expect(screen.getByText(reportEL)).toBeDefined();
+      screen.getByText(reportEL);
     });
   });
 });

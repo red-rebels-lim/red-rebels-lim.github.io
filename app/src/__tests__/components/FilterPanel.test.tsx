@@ -40,17 +40,17 @@ describe('FilterPanel', () => {
     render(
       <FilterPanel open={true} filters={defaultFilters} onApply={vi.fn()} onClear={vi.fn()} />
     );
-    expect(screen.getByText('filters.title')).toBeDefined();
-    expect(screen.getByText('filters.sport')).toBeDefined();
-    expect(screen.getByText('filters.location')).toBeDefined();
-    expect(screen.getByText('filters.status')).toBeDefined();
+    screen.getByText('filters.title');
+    screen.getByText('filters.sport');
+    screen.getByText('filters.location');
+    screen.getByText('filters.status');
   });
 
   it('renders search input', () => {
     render(
       <FilterPanel open={true} filters={defaultFilters} onApply={vi.fn()} onClear={vi.fn()} />
     );
-    expect(screen.getByText('filters.searchOpponent')).toBeDefined();
+    screen.getByText('filters.searchOpponent');
   });
 
   it('calls onClear when clear button is clicked', () => {

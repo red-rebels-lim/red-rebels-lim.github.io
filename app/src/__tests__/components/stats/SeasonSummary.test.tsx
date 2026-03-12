@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('react-i18next', () => ({
@@ -30,33 +30,33 @@ const mockProps = {
 describe('TASK-04: SeasonSummary', () => {
   it('renders the section title', () => {
     render(<SeasonSummary {...mockProps} />);
-    expect(screen.getByText('stats.seasonSummary')).toBeDefined();
+    screen.getByText('stats.seasonSummary');
   });
 
   it('displays total points prominently', () => {
     render(<SeasonSummary {...mockProps} />);
-    expect(screen.getByText('47')).toBeDefined();
-    expect(screen.getByText('stats.points')).toBeDefined();
+    screen.getByText('47');
+    screen.getByText('stats.points');
   });
 
   it('displays goals in for-against format', () => {
     render(<SeasonSummary {...mockProps} />);
-    expect(screen.getByText('38-25')).toBeDefined();
+    screen.getByText('38-25');
   });
 
   it('displays all 9 stat cards in the grid', () => {
     render(<SeasonSummary {...mockProps} />);
-    expect(screen.getByText('26')).toBeDefined();
-    expect(screen.getByText('14')).toBeDefined();
-    expect(screen.getByText('5')).toBeDefined();
-    expect(screen.getByText('7')).toBeDefined();
-    expect(screen.getByText('stats.matches')).toBeDefined();
-    expect(screen.getByText('stats.wins')).toBeDefined();
-    expect(screen.getByText('stats.draws')).toBeDefined();
-    expect(screen.getByText('stats.losses')).toBeDefined();
-    expect(screen.getByText('stats.cleanSheets')).toBeDefined();
-    expect(screen.getByText('stats.avgGoalsFor')).toBeDefined();
-    expect(screen.getByText('stats.avgGoalsAgainst')).toBeDefined();
+    screen.getByText('26');
+    screen.getByText('14');
+    screen.getByText('5');
+    screen.getByText('7');
+    screen.getByText('stats.matches');
+    screen.getByText('stats.wins');
+    screen.getByText('stats.draws');
+    screen.getByText('stats.losses');
+    screen.getByText('stats.cleanSheets');
+    screen.getByText('stats.avgGoalsFor');
+    screen.getByText('stats.avgGoalsAgainst');
   });
 
   it('renders with zero stats without errors', () => {
@@ -69,6 +69,6 @@ describe('TASK-04: SeasonSummary', () => {
       cleanSheets: 0, avgGoalsFor: 0, avgGoalsAgainst: 0,
     };
     render(<SeasonSummary {...emptyProps} />);
-    expect(screen.getByText('stats.seasonSummary')).toBeDefined();
+    screen.getByText('stats.seasonSummary');
   });
 });

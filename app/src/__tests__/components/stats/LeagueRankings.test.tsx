@@ -31,10 +31,10 @@ describe('LeagueRankings', () => {
     ];
     render(<LeagueRankings rankings={rankings} />);
 
-    expect(screen.getByText('Goals')).toBeDefined();
-    expect(screen.getByText('Assists')).toBeDefined();
-    expect(screen.getByText('15')).toBeDefined();
-    expect(screen.getByText('20')).toBeDefined();
+    screen.getByText('Goals');
+    screen.getByText('Assists');
+    screen.getByText('15');
+    screen.getByText('20');
   });
 
   it('shows ordinal suffixes in English', () => {
@@ -45,8 +45,8 @@ describe('LeagueRankings', () => {
     ];
     render(<LeagueRankings rankings={rankings} />);
 
-    expect(screen.getByText('1st')).toBeDefined();
-    expect(screen.getByText('2nd')).toBeDefined();
-    expect(screen.getByText('3rd')).toBeDefined();
+    screen.getByText('1st');
+    screen.getByText('2nd');
+    screen.getByText('3rd');
   });
 });

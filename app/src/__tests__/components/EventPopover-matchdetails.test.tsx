@@ -99,7 +99,7 @@ const playedFootballEvent: CalendarEvent = {
 describe('EventPopover – tabbed match details', () => {
   it('shows GOALSCORERS tab', () => {
     render(<EventPopover event={playedFootballEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'GOALSCORERS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'GOALSCORERS' });
   });
 
   it('shows home scorer name and minute', () => {
@@ -124,7 +124,7 @@ describe('EventPopover – tabbed match details', () => {
 
   it('shows BOOKINGS tab', () => {
     render(<EventPopover event={playedFootballEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'BOOKINGS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'BOOKINGS' });
   });
 
   it('shows booked player names in bookings panel', () => {
@@ -150,7 +150,7 @@ describe('EventPopover – tabbed match details', () => {
 
   it('shows LINEUPS tab', () => {
     render(<EventPopover event={playedFootballEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'LINEUPS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'LINEUPS' });
   });
 
   it('shows home lineup player', () => {
@@ -167,7 +167,7 @@ describe('EventPopover – tabbed match details', () => {
 
   it('shows SUBSTITUTIONS tab', () => {
     render(<EventPopover event={playedFootballEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'SUBSTITUTIONS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'SUBSTITUTIONS' });
   });
 
   it('shows substitution player names and minute', () => {
@@ -180,7 +180,7 @@ describe('EventPopover – tabbed match details', () => {
 
   it('shows View All Statistics button', () => {
     render(<EventPopover event={playedFootballEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByText('View All Statistics')).toBeDefined();
+    screen.getByText('View All Statistics');
   });
 
   it('hides GOALSCORERS tab when no scorers', () => {
@@ -245,7 +245,7 @@ describe('EventPopover – volleyball tabbed details', () => {
 
   it('shows SETS tab for volleyball', () => {
     render(<EventPopover event={playedVolleyballEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'SETS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'SETS' });
   });
 
   it('shows set scores in SETS panel', () => {
@@ -257,7 +257,7 @@ describe('EventPopover – volleyball tabbed details', () => {
 
   it('shows TOP SCORERS tab for volleyball', () => {
     render(<EventPopover event={playedVolleyballEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'TOP SCORERS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'TOP SCORERS' });
   });
 
   it('shows volleyball scorer names and points', () => {
@@ -271,7 +271,7 @@ describe('EventPopover – volleyball tabbed details', () => {
 
   it('shows SUBSTITUTIONS tab for volleyball when subs exist', () => {
     render(<EventPopover event={playedVolleyballEvent} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'SUBSTITUTIONS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'SUBSTITUTIONS' });
   });
 
   it('does not show football tabs (GOALSCORERS/BOOKINGS) for volleyball', () => {
@@ -293,8 +293,8 @@ describe('EventPopover – volleyball tabbed details', () => {
       title: 'Νέα Σαλαμίνα vs ΑΕΚ',
     };
     render(<EventPopover event={womensVb} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'SETS' })).toBeDefined();
-    expect(screen.getByRole('tab', { name: 'TOP SCORERS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'SETS' });
+    screen.getByRole('tab', { name: 'TOP SCORERS' });
   });
 });
 
@@ -334,7 +334,7 @@ describe('EventPopover – tab edge cases', () => {
       subs: undefined,
     };
     render(<EventPopover event={scorersOnly} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'GOALSCORERS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'GOALSCORERS' });
     expect(screen.queryByRole('tab', { name: 'BOOKINGS' })).toBeNull();
     expect(screen.queryByRole('tab', { name: 'LINEUPS' })).toBeNull();
     expect(screen.queryByRole('tab', { name: 'SUBSTITUTIONS' })).toBeNull();
@@ -377,7 +377,7 @@ describe('EventPopover – tab edge cases', () => {
       },
     };
     render(<EventPopover event={homeOnly} open={true} onClose={vi.fn()} />);
-    expect(screen.getByRole('tab', { name: 'LINEUPS' })).toBeDefined();
+    screen.getByRole('tab', { name: 'LINEUPS' });
     const dialog = document.querySelector('[role="dialog"]');
     expect(dialog?.textContent).toContain('GKPlayer');
   });

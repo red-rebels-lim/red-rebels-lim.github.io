@@ -23,12 +23,12 @@ const mockAway = {
 describe('TASK-04: PerformanceSplit', () => {
   it('renders section title', () => {
     render(<PerformanceSplit home={mockHome} away={mockAway} />);
-    expect(screen.getByText('stats.performanceSplit')).toBeDefined();
+    screen.getByText('stats.performanceSplit');
   });
 
   it('displays home row with match count and W/D/L', () => {
     const { container } = render(<PerformanceSplit home={mockHome} away={mockAway} />);
-    expect(screen.getByText('stats.home')).toBeDefined();
+    screen.getByText('stats.home');
     // W/D/L values rendered inline with labels (e.g., "8stats.w")
     const text = container.textContent ?? '';
     expect(text).toContain('8');
@@ -38,7 +38,7 @@ describe('TASK-04: PerformanceSplit', () => {
 
   it('displays away row with match count and W/D/L', () => {
     render(<PerformanceSplit home={mockHome} away={mockAway} />);
-    expect(screen.getByText('stats.away')).toBeDefined();
+    screen.getByText('stats.away');
   });
 
   it('shows match counts for both rows', () => {

@@ -27,7 +27,7 @@ const baseEvent: CalendarEvent = {
 describe('EventCard', () => {
   it('renders opponent name', () => {
     render(<EventCard event={baseEvent} dayNumber={15} monthName="february" onClick={vi.fn()} />);
-    expect(screen.getByText('APOEL')).toBeDefined();
+    screen.getByText('APOEL');
   });
 
   it('calls onClick when clicked', () => {
@@ -44,7 +44,7 @@ describe('EventCard', () => {
       score: '2-1',
     };
     render(<EventCard event={playedEvent} dayNumber={15} monthName="february" onClick={vi.fn()} />);
-    expect(screen.getByText('2-1')).toBeDefined();
+    screen.getByText('2-1');
   });
 
   it('shows penalties indicator', () => {
@@ -55,7 +55,7 @@ describe('EventCard', () => {
       penalties: '4-3',
     };
     render(<EventCard event={penEvent} dayNumber={15} monthName="february" onClick={vi.fn()} />);
-    expect(screen.getByText(/calendar\.penAbbrev/)).toBeDefined();
+    screen.getByText(/calendar\.penAbbrev/);
   });
 
   it('shows cup icon for cup matches', () => {

@@ -52,7 +52,7 @@ describe('Task 18: OnboardingTour component', () => {
   describe('Acceptance Criteria', () => {
     it('should render when tour is active', () => {
       render(<OnboardingTour />);
-      expect(screen.getByRole('dialog')).toBeDefined();
+      screen.getByRole('dialog');
     });
 
     it('should not render when tour is inactive', () => {
@@ -63,13 +63,13 @@ describe('Task 18: OnboardingTour component', () => {
 
     it('should display current step title and description via i18n keys', () => {
       render(<OnboardingTour />);
-      expect(screen.getByText('onboarding.step1Title')).toBeDefined();
-      expect(screen.getByText('onboarding.step1Desc')).toBeDefined();
+      screen.getByText('onboarding.step1Title');
+      screen.getByText('onboarding.step1Desc');
     });
 
     it('should show skip button', () => {
       render(<OnboardingTour />);
-      expect(screen.getByText('onboarding.skip')).toBeDefined();
+      screen.getByText('onboarding.skip');
     });
 
     it('should call skip when skip button clicked', () => {
@@ -80,7 +80,7 @@ describe('Task 18: OnboardingTour component', () => {
 
     it('should show next button', () => {
       render(<OnboardingTour />);
-      expect(screen.getByText('onboarding.next')).toBeDefined();
+      screen.getByText('onboarding.next');
     });
 
     it('should call next when next button clicked', () => {
@@ -97,7 +97,7 @@ describe('Task 18: OnboardingTour component', () => {
     it('should show prev button on steps after first', () => {
       mockHookReturn = { ...mockHookReturn, currentStep: 2 };
       render(<OnboardingTour />);
-      expect(screen.getByText('onboarding.prev')).toBeDefined();
+      screen.getByText('onboarding.prev');
     });
 
     it('should call prev when prev button clicked', () => {
@@ -110,19 +110,19 @@ describe('Task 18: OnboardingTour component', () => {
     it('should show "finish" text on last step instead of "next"', () => {
       mockHookReturn = { ...mockHookReturn, currentStep: 4 };
       render(<OnboardingTour />);
-      expect(screen.getByText('onboarding.finish')).toBeDefined();
+      screen.getByText('onboarding.finish');
       expect(screen.queryByText('onboarding.next')).toBeNull();
     });
 
     it('should show step counter (e.g., 1/5)', () => {
       render(<OnboardingTour />);
-      expect(screen.getByText('1 / 5')).toBeDefined();
+      screen.getByText('1 / 5');
     });
 
     it('should update step counter for different steps', () => {
       mockHookReturn = { ...mockHookReturn, currentStep: 3 };
       render(<OnboardingTour />);
-      expect(screen.getByText('4 / 5')).toBeDefined();
+      screen.getByText('4 / 5');
     });
   });
 

@@ -24,22 +24,20 @@ const mockProps = {
   hasPlayed: true,
 };
 
-describe('TASK-04: RecentForm redesign', () => {
+describe('RecentForm', () => {
   it('renders section title', () => {
     render(<RecentForm {...mockProps} />);
-    expect(screen.getByText('stats.recentForm')).toBeDefined();
+    screen.getByText('stats.recentForm');
   });
 
   it('renders 5 form badges', () => {
     const { container } = render(<RecentForm {...mockProps} />);
-    // Look for form badge elements with W, D, L text
     const badges = container.querySelectorAll('[title]');
     expect(badges.length).toBe(5);
   });
 
   it('does NOT render streaks section in redesigned version', () => {
     render(<RecentForm {...mockProps} />);
-    // Streaks section should be hidden - no currentStreak, longestWinStreak, etc.
     expect(screen.queryByText('stats.streaks')).toBeNull();
     expect(screen.queryByText('stats.currentStreak')).toBeNull();
     expect(screen.queryByText('stats.longestWinStreak')).toBeNull();
