@@ -52,7 +52,6 @@ test.describe('Volleyball Events Verification', () => {
     await page.evaluate(() => localStorage.setItem('language', 'en'));
     await page.reload();
     await page.waitForSelector('nav', { timeout: 10000 });
-    await page.setViewportSize({ width: 1280, height: 900 });
   });
 
   // ── October 2025 ───────────────────────────────────────────────

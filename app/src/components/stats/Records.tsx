@@ -14,7 +14,7 @@ export function Records({ biggestWin, heaviestDefeat }: RecordsProps) {
   return (
     <section className="stat-section">
       <h2 className="stat-section-title">{t('stats.records')}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {biggestWin && (
           <div className="bg-gradient-to-br from-[rgba(76,175,80,0.15)] to-[rgba(56,142,60,0.1)] border-2 border-[rgba(76,175,80,0.3)] rounded-xl p-5 text-center">
             <div className="text-xs font-bold text-green-300 uppercase tracking-wider mb-2">{t('stats.biggestWin')}</div>

@@ -278,21 +278,7 @@ describe('TASK-09: Light/Dark Theme Support', () => {
     });
   });
 
-  describe('Navbar.tsx — Dropdown and Sheet', () => {
-    it('dropdown content should have light-mode background', async () => {
-      const { Navbar } = await import('@/components/layout/Navbar');
-      render(<Navbar />);
-      const dropdown = screen.getByTestId('dropdown-content');
-      expectNoDarkOnlyBg(dropdown.className, 'Navbar dropdown');
-    });
-
-    it('mobile sheet should have light-mode background', async () => {
-      const { Navbar } = await import('@/components/layout/Navbar');
-      render(<Navbar />);
-      const sheet = screen.getByTestId('sheet-content');
-      expectNoDarkOnlyBg(sheet.className, 'Navbar mobile sheet');
-    });
-  });
+  // Navbar.tsx was removed — mobile-only layout no longer has a desktop navbar
 
   describe('FilterPanel.tsx — Panel and Select dropdowns', () => {
     it('filter panel container should have light-mode background', async () => {
@@ -326,30 +312,7 @@ describe('TASK-09: Light/Dark Theme Support', () => {
     });
   });
 
-  describe('CalendarGrid.tsx — Empty day cell border', () => {
-    it('empty day cells should have visible light-mode borders', async () => {
-      const { CalendarGrid } = await import('@/components/calendar/CalendarGrid');
-      const { container } = render(
-        <CalendarGrid
-          currentMonth="march"
-          monthData={{
-            days: [
-              { empty: true },
-              { empty: true },
-              { number: 1, events: [] },
-            ],
-          }}
-        />
-      );
-      // Desktop grid empty cells
-      const emptyCells = container.querySelectorAll('.bg-transparent');
-      emptyCells.forEach((el) => {
-        const cls = el.className;
-        // Should have light border (border-slate-200) not just border-white/5
-        expect(cls, 'Empty cell should have visible light border').toMatch(/border-slate-/);
-      });
-    });
-  });
+  // CalendarGrid.tsx was removed — mobile-only layout uses MobileCalendarGrid
 
   describe('OnboardingTour.tsx — Tour card', () => {
     it('tour dialog should have light-mode background', async () => {

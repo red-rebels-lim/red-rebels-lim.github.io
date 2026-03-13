@@ -13,10 +13,10 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-slate-100 dark:bg-[#1e293b] border-t border-slate-200 dark:border-slate-800 px-6 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 z-50 md:hidden print:hidden"
+      className="fixed bottom-0 left-0 right-0 bg-slate-100 dark:bg-[#1e293b] border-t border-slate-200 dark:border-slate-800 px-6 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 z-50 print:hidden"
       aria-label="Main navigation"
     >
-      <div className="flex items-center justify-between max-w-md mx-auto">
+      <div className="flex items-center justify-between max-w-2xl mx-auto">
         {tabs.map(({ to, labelKey, Icon }) => (
           <NavLink
             key={to}

@@ -18,8 +18,8 @@ test.describe('Visual regression — Desktop', () => {
     await page.goto('/#/');
     await page.waitForLoadState('networkidle');
 
-    // Switch to light mode
-    const themeBtn = page.getByRole('button', { name: /🌙/ });
+    // Switch to light mode via MobileHeader theme toggle
+    const themeBtn = page.getByRole('button', { name: /(light mode|dark mode)/i });
     if (await themeBtn.isVisible()) {
       await themeBtn.click();
       await page.waitForTimeout(500);
@@ -65,22 +65,6 @@ test.describe('Visual regression — Desktop', () => {
       maxDiffPixelRatio: 0.05,
     });
   });
-
-  test('Calendar with filters open', async ({ page }) => {
-    await page.goto('/#/');
-    await page.waitForLoadState('networkidle');
-
-    const filterBtn = page.getByRole('button', { name: /Event Filters/ });
-    if (await filterBtn.isVisible()) {
-      await filterBtn.click();
-      await page.waitForTimeout(500);
-
-      await expect(page).toHaveScreenshot('calendar-filters-open.png', {
-        fullPage: true,
-        maxDiffPixelRatio: 0.05,
-      });
-    }
-  });
 });
 
 test.describe('Visual regression — Mobile', () => {
@@ -93,19 +77,6 @@ test.describe('Visual regression — Mobile', () => {
 
     await expect(page).toHaveScreenshot('calendar-mobile-dark.png', {
       fullPage: true,
-      maxDiffPixelRatio: 0.05,
-    });
-  });
-
-  test('Mobile hamburger menu open', async ({ page }) => {
-    await page.goto('/#/');
-    await page.waitForLoadState('networkidle');
-
-    const menuBtn = page.getByRole('button', { name: 'Open menu' });
-    await menuBtn.click();
-    await page.waitForTimeout(500);
-
-    await expect(page).toHaveScreenshot('calendar-mobile-menu-open.png', {
       maxDiffPixelRatio: 0.05,
     });
   });

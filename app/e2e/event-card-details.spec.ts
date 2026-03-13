@@ -33,7 +33,6 @@ test.describe('Event Card Details', () => {
     await page.evaluate(() => localStorage.setItem('language', 'en'));
     await page.reload();
     await page.waitForSelector('nav', { timeout: 10000 });
-    await page.setViewportSize({ width: 1280, height: 900 });
   });
 
   test.describe('Result Color Gradients', () => {

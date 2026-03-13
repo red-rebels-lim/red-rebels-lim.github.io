@@ -1,10 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCalendar } from '@/hooks/useCalendar';
 import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
-import { Navbar } from '@/components/layout/Navbar';
 import { MobileHeader } from '@/components/layout/MobileHeader';
-import { MonthNavigation } from '@/components/calendar/MonthNavigation';
-import { CalendarGrid } from '@/components/calendar/CalendarGrid';
 import { MobileCalendarGrid } from '@/components/calendar/MobileCalendarGrid';
 import { UpcomingEventsList } from '@/components/calendar/UpcomingEventsList';
 import { EventPopover } from '@/components/calendar/EventPopover';
@@ -69,10 +66,8 @@ export function CalendarPage() {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, []);
 
-  // Scroll to today on initial mount (mobile only — desktop starts from the top)
+  // Scroll to today on initial mount
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    if (!isMobile) return;
     const timer = setTimeout(scrollToToday, INITIAL_SCROLL_DELAY_MS);
     return () => clearTimeout(timer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -101,32 +96,10 @@ export function CalendarPage() {
   };
 
   return (
-    <div className="max-w-[1800px] w-full md:w-[95%] mx-auto pb-20 md:pb-0" {...swipe}>
+    <div className="w-full pb-20" {...swipe}>
       <h1 className="sr-only">Red Rebels Calendar</h1>
 
-      {/* Desktop: full Navbar */}
-      <div className="hidden md:block">
-        <Navbar
-          onToggleFilters={() => setFiltersOpen((o) => !o)}
-          currentMonth={currentMonth}
-          onPrevious={navigatePrevious}
-          onNext={navigateNext}
-          onToday={handleJumpToToday}
-        />
-      </div>
-
-      {/* Mobile: simplified header */}
-      <div className="md:hidden">
-        <MobileHeader />
-      </div>
-
-      {/* Desktop: month navigation */}
-      <MonthNavigation
-        currentMonth={currentMonth}
-        onPrevious={navigatePrevious}
-        onNext={navigateNext}
-        onToday={handleJumpToToday}
-      />
+      <MobileHeader />
 
       <FilterPanel
         open={filtersOpen}
@@ -135,54 +108,45 @@ export function CalendarPage() {
         onClear={clearFilters}
       />
 
-      {/* Desktop: existing CalendarGrid */}
-      <div className="hidden md:block">
-        <CalendarGrid monthData={monthData} currentMonth={currentMonth} />
-      </div>
-
-      {/* Mobile: new calendar grid + upcoming events */}
-      <div className="md:hidden">
-        <div className="bg-white/70 dark:bg-transparent backdrop-blur-sm dark:backdrop-blur-none rounded-2xl px-2 mt-2">
-          {/* Mobile month navigation */}
-          <div className="flex items-center justify-between px-2 py-3">
-            <button
-              onClick={handlePrevious}
-              aria-label={t('monthNav.previous', 'Previous month')}
-              className="p-2 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b]"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-foreground">
-              {t(`months.${currentMonth}`)} {monthMap[currentMonth].year}
-            </h2>
-            <button
-              onClick={handleNext}
-              aria-label={t('monthNav.next', 'Next month')}
-              className="p-2 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b]"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
-          </div>
-
-          <MobileCalendarGrid
-            monthData={monthData}
-            currentMonth={currentMonth}
-            selectedDay={selectedDay}
-            onDayClick={(day) => {
-              setUserSelectedDay(day);
-            }}
-          />
+      <div className="bg-white/70 dark:bg-transparent backdrop-blur-sm dark:backdrop-blur-none rounded-2xl px-2 mt-2">
+        {/* Month navigation */}
+        <div className="flex items-center justify-between px-2 py-3">
+          <button
+            onClick={handlePrevious}
+            aria-label={t('monthNav.previous', 'Previous month')}
+            className="p-2 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b]"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-foreground">
+            {t(`months.${currentMonth}`)} {monthMap[currentMonth].year}
+          </h2>
+          <button
+            onClick={handleNext}
+            aria-label={t('monthNav.next', 'Next month')}
+            className="p-2 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b]"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
         </div>
 
-        <UpcomingEventsList
+        <MobileCalendarGrid
           monthData={monthData}
           currentMonth={currentMonth}
           selectedDay={selectedDay}
-          onEventClick={setSelectedEvent}
+          onDayClick={(day) => {
+            setUserSelectedDay(day);
+          }}
         />
       </div>
 
-      {/* Mobile event popover (triggered from grid/cards) */}
+      <UpcomingEventsList
+        monthData={monthData}
+        currentMonth={currentMonth}
+        selectedDay={selectedDay}
+        onEventClick={setSelectedEvent}
+      />
+
       <EventPopover
         event={selectedEvent}
         open={!!selectedEvent}
