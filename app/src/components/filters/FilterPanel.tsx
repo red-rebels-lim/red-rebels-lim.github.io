@@ -39,7 +39,7 @@ export function FilterPanel({ open, filters, onApply, onClear }: FilterPanelProp
         {t('filters.title')}
       </h3>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         {/* Sport filter */}
         <div>
           <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1 block">

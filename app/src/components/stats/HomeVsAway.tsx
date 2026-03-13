@@ -12,7 +12,7 @@ export function HomeVsAway({ home, away }: HomeVsAwayProps) {
   return (
     <section className="stat-section">
       <h2 className="stat-section-title">{t('stats.homeVsAway')}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {[
           { label: 'stats.home', data: home },
           { label: 'stats.away', data: away },

@@ -32,19 +32,16 @@ for (const vp of VIEWPORTS) {
       expect(gridText!.length).toBeGreaterThan(50);
     });
 
-    test('Navigation is accessible', async ({ page }) => {
+    test('Navigation is accessible via bottom nav', async ({ page }) => {
       await page.goto('/#/');
       await page.waitForLoadState('networkidle');
 
-      if (vp.width < 768) {
-        // Mobile: hamburger should be visible, desktop nav hidden
-        const hamburger = page.getByRole('button', { name: 'Open menu' });
-        await expect(hamburger).toBeVisible();
-      } else {
-        // Desktop: nav links should be visible
-        await expect(page.getByText('Calendar')).toBeVisible();
-        await expect(page.getByText('Statistics')).toBeVisible();
-      }
+      // All viewports use BottomNav for navigation
+      const bottomNav = page.locator('nav[aria-label="Main navigation"]');
+      await expect(bottomNav).toBeVisible();
+      await expect(page.getByRole('link', { name: /calendar/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /statistics/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /settings/i })).toBeVisible();
     });
 
     test('Stats page renders without overflow', async ({ page }) => {

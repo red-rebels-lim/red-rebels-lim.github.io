@@ -85,10 +85,10 @@ describe('TASK-10: BottomNav', () => {
       expect(nav?.className).toContain('bottom-0');
     });
 
-    it('is hidden on desktop (md breakpoint)', () => {
+    it('is always visible (no md:hidden)', () => {
       const { container } = render(<BottomNav />);
       const nav = container.querySelector('nav');
-      expect(nav?.className).toContain('md:hidden');
+      expect(nav?.className).not.toContain('md:hidden');
     });
 
     it('renders icons for each tab', () => {

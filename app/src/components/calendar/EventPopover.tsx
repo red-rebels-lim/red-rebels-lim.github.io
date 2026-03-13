@@ -501,7 +501,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className={`${resultBadge.dialogBg} border ${resultBadge.dialogBorder} rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg md:max-w-2xl shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]`}>
+      <DialogContent className={`${resultBadge.dialogBg} border ${resultBadge.dialogBorder} rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]`}>
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
         <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
 

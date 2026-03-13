@@ -183,14 +183,7 @@ test.describe('Calendar EventCard / EventPopover TBD', () => {
   test('event popover shows TBD or valid time for upcoming matches', async ({ page }) => {
     // Navigate to calendar (root)
     await page.goto('/');
-    // On mobile, event cards are inside the md:hidden container; on desktop
-    // they are in the default grid. Scope to the visible container so
-    // .first() picks a card that is actually rendered.
-    const isMobile = (page.viewportSize()?.width ?? 1280) < 768;
-    const container = isMobile
-      ? page.locator('.md\\:hidden')
-      : page;
-    const eventCard = container.locator('[class*="rounded-lg"][class*="cursor-pointer"]').first();
+    const eventCard = page.locator('[class*="rounded-lg"][class*="cursor-pointer"]').first();
     const cardExists = await eventCard.count();
     if (cardExists === 0) {
       test.skip();

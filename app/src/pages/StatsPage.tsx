@@ -67,7 +67,7 @@ export default function StatsPage() {
   useEffect(() => { loadFotmob(); }, [loadFotmob]);
 
   return (
-    <div className="max-w-md mx-auto pb-24">
+    <div className="w-full mx-auto pb-24">
       <MobileHeader showBack />
 
       <h1 className="sr-only">{t('nav.stats')}</h1>

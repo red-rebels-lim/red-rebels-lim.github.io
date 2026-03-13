@@ -33,7 +33,6 @@ test.describe('Countdown Timer', () => {
     await page.evaluate(() => localStorage.setItem('language', 'en'));
     await page.reload();
     await page.waitForSelector('nav', { timeout: 10000 });
-    await page.setViewportSize({ width: 1280, height: 900 });
   });
 
   test('played matches do not show countdown timer', async ({ page }) => {

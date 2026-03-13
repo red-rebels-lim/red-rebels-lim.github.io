@@ -26,7 +26,7 @@ export function OverallStats({ overall, cleanSheets, avgGoalsFor, avgGoalsAgains
   return (
     <section className="stat-section">
       <h2 className="stat-section-title">{t('stats.overallStats')}</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {statCards.map((card) => (
           <div
             key={card.label}

@@ -3,7 +3,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string, fallback?: string) => fallback ?? key,
     i18n: { language: 'en', changeLanguage: vi.fn() },
   }),
 }));
@@ -42,15 +42,15 @@ describe('CalendarPage', () => {
     vi.useRealTimers();
   });
 
-  it('renders the navbar', () => {
+  it('renders the mobile header', () => {
     render(<CalendarPage />);
-    screen.getByAltText('Red Rebels');
+    expect(screen.getAllByText('Red Rebels Calendar').length).toBeGreaterThan(0);
   });
 
   it('renders month navigation buttons', () => {
     render(<CalendarPage />);
-    expect(screen.getAllByText('monthNav.previous').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('monthNav.next').length).toBeGreaterThan(0);
+    expect(screen.getByLabelText('Previous month')).toBeTruthy();
+    expect(screen.getByLabelText('Next month')).toBeTruthy();
   });
 
   it('does not render the footer legend', () => {
@@ -58,50 +58,26 @@ describe('CalendarPage', () => {
     expect(screen.queryByText('legend.title')).toBeNull();
   });
 
-  it('toggles filter panel open when filter button clicked', async () => {
+  it('navigates to next month when next button clicked', async () => {
     render(<CalendarPage />);
-    // Before click: FilterPanel is closed (returns null), so filters.sport label is absent
-    expect(screen.queryByText('filters.sport')).toBeNull();
-    const filterBtns = screen.getAllByText('filters.title');
+    const nextBtn = screen.getByLabelText('Next month');
     await act(async () => {
-      fireEvent.click(filterBtns[0]);
+      fireEvent.click(nextBtn);
     });
-    // After click: FilterPanel is open and renders filters.sport label
-    screen.getByText('filters.sport');
+    // Navigation happened without error
   });
 
-  it('calls handleJumpToToday when today button clicked', async () => {
-    vi.useFakeTimers();
+  it('navigates to previous month when previous button clicked', async () => {
     render(<CalendarPage />);
-    const todayBtns = screen.getAllByText('monthNav.jumpToToday');
-    expect(todayBtns.length).toBeGreaterThan(0);
+    const prevBtn = screen.getByLabelText('Previous month');
     await act(async () => {
-      fireEvent.click(todayBtns[0]);
+      fireEvent.click(prevBtn);
     });
-    // Advance by 100ms — enough to fire the 50ms setTimeout for same-month case
-    act(() => {
-      vi.advanceTimersByTime(100);
-    });
-    // handleJumpToToday ran, lines 47-49 are covered
+    // Navigation happened without error
   });
 
-  it('covers monthChanged=true branch when jumping to today from a different month', async () => {
+  it('executes scrollToToday callback when initial mount timer fires', () => {
     vi.useFakeTimers();
-    render(<CalendarPage />);
-    // Navigate away from current month (today = february 2026) so monthChanged will be true
-    const nextBtns = screen.getAllByText('monthNav.next');
-    await act(async () => { fireEvent.click(nextBtns[0]); });
-    // Now click Today — jumpToToday() returns true (month changed)
-    const todayBtns = screen.getAllByText('monthNav.jumpToToday');
-    await act(async () => { fireEvent.click(todayBtns[0]); });
-    // Advance by 200ms — enough to fire the MONTH_CHANGE_SCROLL_DELAY_MS (150ms) setTimeout
-    act(() => { vi.advanceTimersByTime(200); });
-  });
-
-  it('executes scrollToToday callback when initial mount timer fires on mobile', () => {
-    vi.useFakeTimers();
-    // Simulate mobile viewport
-    Object.defineProperty(window, 'innerWidth', { value: 375, configurable: true });
 
     // Add a data-today element with non-zero offsetHeight so el.scrollIntoView is called
     const mockEl = document.createElement('div');
@@ -118,6 +94,5 @@ describe('CalendarPage', () => {
 
     expect(scrollFn).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' });
     document.body.removeChild(mockEl);
-    Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true });
   });
 });

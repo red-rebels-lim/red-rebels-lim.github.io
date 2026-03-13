@@ -1,43 +1,34 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Toolbar Actions - Desktop', () => {
+test.describe('Toolbar Actions - Settings Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/#/');
+    await page.goto('/#/settings');
     await page.evaluate(() => localStorage.setItem('language', 'en'));
     await page.reload();
-    await page.waitForSelector('nav', { timeout: 10000 });
-    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.waitForLoadState('networkidle');
   });
 
-  test('Options dropdown button is visible on desktop', async ({ page }) => {
-    const optionsBtn = page.getByRole('button', { name: /tools/i });
-    await expect(optionsBtn).toBeVisible();
+  test('Export Calendar button is visible on Settings page', async ({ page }) => {
+    await expect(page.getByRole('button', { name: /export calendar/i })).toBeVisible();
   });
 
-  test('Options dropdown shows Export and Print items', async ({ page }) => {
-    const optionsBtn = page.getByRole('button', { name: /tools/i });
-    await optionsBtn.click();
-    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
-
-    await expect(page.getByRole('menuitem', { name: /export/i }).first()).toBeVisible();
-    await expect(page.getByRole('menuitem', { name: /^print$/i })).toBeVisible();
+  test('Print Calendar button is visible on Settings page', async ({ page }) => {
+    await expect(page.getByRole('button', { name: /print calendar/i })).toBeVisible();
   });
 
   test('Export triggers ICS file download', async ({ page }) => {
-    // Set up download listener before any clicks to avoid missing the event
+    // Navigate to calendar first (export only works on calendar page)
+    await page.goto('/#/');
+    await page.waitForLoadState('networkidle');
+
+    // Open settings
+    await page.goto('/#/settings');
+    await page.waitForLoadState('networkidle');
+
     const downloadPromise = page.waitForEvent('download');
-
-    const optionsBtn = page.getByRole('button', { name: /tools/i });
-    await optionsBtn.click();
-    // Wait for the Radix dropdown menu to be fully open
-    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
-
-    const exportItem = page.getByRole('menuitem', { name: /export/i }).first();
-    await expect(exportItem).toBeVisible({ timeout: 5000 });
-    await exportItem.click({ force: true });
+    await page.getByRole('button', { name: /export calendar/i }).click();
     const download = await downloadPromise;
 
-    // Verify the downloaded file name
     expect(download.suggestedFilename()).toBe('red-rebels-calendar-2025.ics');
   });
 
@@ -50,81 +41,10 @@ test.describe('Toolbar Actions - Desktop', () => {
       };
     });
 
-    const optionsBtn = page.getByRole('button', { name: /tools/i });
-    await optionsBtn.click();
-    // Wait for the Radix dropdown menu to be fully open
-    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
-
-    const printItem = page.getByRole('menuitem', { name: /print/i });
-    await expect(printItem).toBeVisible({ timeout: 5000 });
-    await printItem.click({ force: true });
+    await page.getByRole('button', { name: /print calendar/i }).click();
     await page.waitForTimeout(300);
 
     const printCalled = await page.evaluate(() => (window as unknown as Record<string, boolean>).__printCalled);
     expect(printCalled).toBe(true);
-  });
-
-  test('Export item only appears on Calendar page', async ({ page }) => {
-    // On calendar page, Export should be visible
-    const optionsBtn = page.getByRole('button', { name: /tools/i });
-    await optionsBtn.click();
-    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
-    await expect(page.getByRole('menuitem', { name: /export/i }).first()).toBeVisible();
-
-    // Close dropdown
-    await page.keyboard.press('Escape');
-    await page.waitForTimeout(200);
-
-    // Navigate to Stats page
-    await page.getByRole('link', { name: /statistics/i }).click();
-    await page.waitForTimeout(500);
-
-    // On Stats page, Options button should still be there
-    const optionsBtnStats = page.getByRole('button', { name: /tools/i });
-    await optionsBtnStats.click();
-    await page.waitForSelector('[role="menu"]', { state: 'visible', timeout: 5000 });
-
-    // Export should NOT be visible on Stats page
-    const exportItems = page.getByRole('menuitem', { name: /export/i });
-    await expect(exportItems).toHaveCount(0);
-    // Print should still be visible
-    await expect(page.getByRole('menuitem', { name: /^print$/i })).toBeVisible();
-  });
-});
-
-test.describe('Toolbar Actions - Mobile', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/#/');
-    await page.evaluate(() => localStorage.setItem('language', 'en'));
-    await page.reload();
-    await page.waitForSelector('nav', { timeout: 10000 });
-    await page.setViewportSize({ width: 390, height: 844 });
-  });
-
-  test('Options dropdown is hidden on mobile', async ({ page }) => {
-    const optionsBtn = page.getByRole('button', { name: /tools/i });
-    await expect(optionsBtn).not.toBeVisible();
-  });
-
-  test('Export and Print buttons are in mobile hamburger menu', async ({ page }) => {
-    const hamburger = page.locator('nav button.md\\:hidden');
-    await hamburger.click();
-    await page.waitForTimeout(300);
-
-    // Mobile menu should show Export and Print as separate buttons
-    await expect(page.getByRole('button', { name: /export/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /print/i })).toBeVisible();
-  });
-
-  test('Mobile Export triggers ICS file download', async ({ page }) => {
-    const hamburger = page.locator('nav button.md\\:hidden');
-    await hamburger.click();
-    await page.waitForTimeout(300);
-
-    const downloadPromise = page.waitForEvent('download');
-    await page.getByRole('button', { name: /export/i }).click();
-    const download = await downloadPromise;
-
-    expect(download.suggestedFilename()).toBe('red-rebels-calendar-2025.ics');
   });
 });

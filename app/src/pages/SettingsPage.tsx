@@ -281,7 +281,7 @@ export default function SettingsPage() {
   const currentLanguageLabel = i18n.language === 'el' ? t('settings.languageGreek') : t('settings.languageEnglish');
 
   return (
-    <div className="max-w-md mx-auto pb-24">
+    <div className="w-full mx-auto pb-24">
       <MobileHeader showBack />
 
       <h1 className="sr-only">{t('nav.settings')}</h1>
