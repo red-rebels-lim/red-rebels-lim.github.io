@@ -6353,18 +6353,160 @@ export const eventsData: EventsData = {
       sport: "football-men",
       location: "away",
       opponent: "ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ",
-      time: "19:00",
+      time: "",
       venue: "ΓΗΠΕΔΟ \"ΚΕΡΥΝΕΙΑ-ΕΠΙΣΤΡΟΦΗ\"",
-      logo: "images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.webp"
+      logo: "images/team_logos/ΠΑΕΕΚ_ΚΕΡΥΝΕΙΑΣ.webp",
+      status: "played",
+      score: "0-0",
+      matchday: 9,
+      duration: "90+3'",
+      lineup: {
+        home: [
+          {
+            name: "ALBERTO  VARO LARA"
+          },
+          {
+            name: "ΠΑΝΑΓΙΩΤΗΣ  ΑΡΤΥΜΑΤΑΣ"
+          },
+          {
+            name: "ΓΕΩΡΓΙΟΣ  ΧΡΙΣΤΟΔΟΥΛΟΥ"
+          },
+          {
+            name: "MANUEL  ARTILES ROMERO JOSE"
+          },
+          {
+            name: "ALEJANDRO  GUTIERREZ HERNANDEZ"
+          },
+          {
+            name: "ΑΝΤΡΕΑΣ  ΔΗΜΗΤΡΙΟΥ"
+          },
+          {
+            name: "ADULAI  DJALO BALDE ALDAIR"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΗΛΙΑ"
+          },
+          {
+            name: "ΔΗΜΗΤΡΗΣ  ΚΥΠΡΙΑΝΟΥ"
+          },
+          {
+            name: "ΓΙΩΡΓΟΣ  ΒΙΚΤΩΡΟΣ"
+          },
+          {
+            name: "ΠΑΝΑΓΙΩΤΗΣ  ΛΟΥΚΑ"
+          }
+        ],
+        away: [
+          {
+            name: "ΔΗΜΗΤΡΙΟΣ  ΚΑΤΣΙΜΗΤΡΟΣ"
+          },
+          {
+            name: "ΘΕΟΧΑΡΗΣ  ΠΟΖΑΤΖΙΔΗΣ"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΚΑΡΑΓΙΑΝΝΗΣ"
+          },
+          {
+            name: "ANDONIS  FOTI HRISTIAN"
+          },
+          {
+            name: "ΧΑΡΑΛΑΜΠΟΣ  ΚΑΤΤΙΡΤΖΗΣ"
+          },
+          {
+            name: "AGUSTIN  PRINCIPE"
+          },
+          {
+            name: "MARKO  DOBRIJEVIC"
+          },
+          {
+            name: "ΧΡΙΣΤΟΣ  ΠΑΣΙΑΡΔΗΣ"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΒΕΝΙΖΕΛΟΥ"
+          },
+          {
+            name: "ΙΩΑΝΝΗΣ  ΤΣΟΥΤΣΟΥΚΗ"
+          },
+          {
+            name: "ΔΗΜΗΤΡΙΟΣ  ΠΙΤΣΩΤΗΣ"
+          }
+        ]
+      },
+      subs: [
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΘΙΜΟΥ",
+          playerOff: "ALEJANDRO GUTIERREZ HERNANDEZ",
+          minute: "66",
+          team: "home"
+        },
+        {
+          playerOn: "FILIPE CORREIA BORGES MICAEL",
+          playerOff: "MANUEL ARTILES ROMERO JOSE",
+          minute: "66",
+          team: "home"
+        },
+        {
+          playerOn: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          playerOff: "ΠΑΝΑΓΙΩΤΗΣ ΛΟΥΚΑ",
+          minute: "66",
+          team: "home"
+        },
+        {
+          playerOn: "ZAID ASFAR",
+          playerOff: "ΙΩΑΝΝΗΣ ΤΣΟΥΤΣΟΥΚΗ",
+          minute: "71",
+          team: "away"
+        },
+        {
+          playerOn: "ΙΩΑΝΝΗΣ ΑΒΡΑΜΙΔΗΣ",
+          playerOff: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΑΡΑΓΙΑΝΝΗΣ",
+          minute: "71",
+          team: "away"
+        },
+        {
+          playerOn: "ΓΙΩΡΓΟΣ ΠΑΥΛΙΔΗΣ",
+          playerOff: "ADULAI DJALO BALDE ALDAIR",
+          minute: "76",
+          team: "home"
+        },
+        {
+          playerOn: "ΓΕΩΡΓΙΟΣ ΝΕΟΦΥΤΙΔΗΣ",
+          playerOff: "ΧΑΡΑΛΑΜΠΟΣ ΚΑΤΤΙΡΤΖΗΣ",
+          minute: "86",
+          team: "away"
+        },
+        {
+          playerOn: "ΘΕΜΙΣΤΟΚΛΗΣ ΘΕΜΙΣΤΟΚΛΕΟΥΣ",
+          playerOff: "AGUSTIN PRINCIPE",
+          minute: "86",
+          team: "away"
+        }
+      ]
     },
     {
       day: 13,
       sport: "volleyball-men",
       location: "home",
       opponent: "ΑΝΟΡΘΩΣΙΣ",
-      time: "20:30",
+      time: "",
       venue: "Αγίου Αθανασίου",
-      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp"
+      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp",
+      status: "played",
+      score: "0-3",
+      sets: [
+        {
+          home: 24,
+          away: 26
+        },
+        {
+          home: 23,
+          away: 25
+        },
+        {
+          home: 28,
+          away: 30
+        }
+      ]
     },
     {
       day: 14,
@@ -6420,6 +6562,14 @@ export const eventsData: EventsData = {
     },
     {
       day: 21,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ",
+      time: "15:30",
+      logo: "images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp"
+    },
+    {
+      day: 22,
       sport: "football-men",
       location: "away",
       opponent: "ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ",
