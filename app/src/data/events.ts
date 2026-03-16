@@ -6513,9 +6513,29 @@ export const eventsData: EventsData = {
       sport: "volleyball-women",
       location: "home",
       opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)",
-      time: "19:00",
+      time: "",
       venue: "Γυμνάσιο Αγίου Νεοφύτου",
-      logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp"
+      logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
+      status: "played",
+      score: "3-1",
+      sets: [
+        {
+          home: 19,
+          away: 25
+        },
+        {
+          home: 25,
+          away: 22
+        },
+        {
+          home: 25,
+          away: 23
+        },
+        {
+          home: 25,
+          away: 23
+        }
+      ]
     },
     {
       day: 17,
@@ -6533,6 +6553,15 @@ export const eventsData: EventsData = {
       opponent: "ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ",
       time: "15:30",
       logo: "images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp"
+    },
+    {
+      day: 18,
+      sport: "volleyball-women",
+      location: "away",
+      opponent: "ΚΟΥΡΗΣ ΕΡΗΜΗΣ",
+      time: "20:30",
+      venue: "Θεμιστόκλειο",
+      logo: "images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp"
     },
     {
       day: 20,
