@@ -6538,15 +6538,6 @@ export const eventsData: EventsData = {
       ]
     },
     {
-      day: 17,
-      sport: "volleyball-women",
-      location: "away",
-      opponent: "ΚΟΥΡΗΣ ΕΡΗΜΗΣ (Γ)",
-      time: "20:00",
-      venue: "Θεμιστόκλειο",
-      logo: "images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp"
-    },
-    {
       day: 18,
       sport: "football-men",
       location: "home",
@@ -6588,14 +6579,6 @@ export const eventsData: EventsData = {
       time: "18:00",
       venue: "Γυμνάσιο Αγίου Νεοφύτου",
       logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp"
-    },
-    {
-      day: 21,
-      sport: "football-men",
-      location: "away",
-      opponent: "ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ",
-      time: "15:30",
-      logo: "images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp"
     },
     {
       day: 22,
