@@ -6542,7 +6542,7 @@ export const eventsData: EventsData = {
       sport: "football-men",
       location: "home",
       opponent: "ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ",
-      time: "15:30",
+      time: "17:00",
       logo: "images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp"
     },
     {
