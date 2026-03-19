@@ -6542,17 +6542,220 @@ export const eventsData: EventsData = {
       sport: "football-men",
       location: "home",
       opponent: "ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ",
-      time: "17:00",
-      logo: "images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp"
+      time: "",
+      logo: "images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp",
+      status: "played",
+      score: "2-1",
+      matchday: 10,
+      duration: "90+9'",
+      scorers: [
+        {
+          name: "Daniel Pérez",
+          minute: "7",
+          team: "home"
+        },
+        {
+          name: "Álex Guti",
+          minute: "9",
+          team: "home"
+        },
+        {
+          name: "Nicolae Milinceanu",
+          minute: "82",
+          team: "away"
+        }
+      ],
+      bookings: [
+        {
+          name: "ΓΕΩΡΓΙΟΣ ΧΡΙΣΤΟΔΟΥΛΟΥ",
+          minute: "6",
+          team: "home",
+          card: "yellow"
+        },
+        {
+          name: "ΑΝΔΡΕΑΣ ΧΡΙΣΤΟΥ",
+          minute: "28",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "LUIS MAURICIO BRIGIDO RUBEN",
+          minute: "41",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "ΣΩΤΗΡΗΣ ΦΟΙΝΙΡΗΣ",
+          minute: "45",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "IAGO OLIVEIRA CAMPOS",
+          minute: "55",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "ΚΩΣΤΑΣ ΧΑΡΑΛΑΜΠΟΥΣ",
+          minute: "68",
+          team: "home",
+          card: "yellow"
+        },
+        {
+          name: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΘΙΜΟΥ",
+          minute: "84",
+          team: "home",
+          card: "yellow"
+        }
+      ],
+      lineup: {
+        home: [
+          {
+            name: "ALBERTO  VARO LARA"
+          },
+          {
+            name: "ΓΕΩΡΓΙΟΣ  ΧΡΙΣΤΟΔΟΥΛΟΥ"
+          },
+          {
+            name: "MANUEL  ARTILES ROMERO JOSE"
+          },
+          {
+            name: "ALEJANDRO  PEREZ CORDOVA DANIEL"
+          },
+          {
+            name: "ALEJANDRO  GUTIERREZ HERNANDEZ"
+          },
+          {
+            name: "ΑΝΤΡΕΑΣ  ΔΗΜΗΤΡΙΟΥ"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΚΑΣΤΑΝΑΣ"
+          },
+          {
+            name: "ΓΙΩΡΓΟΣ  ΠΑΥΛΙΔΗΣ"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΑΝΘΙΜΟΥ"
+          },
+          {
+            name: "ΚΩΣΤΑΣ  ΧΑΡΑΛΑΜΠΟΥΣ"
+          },
+          {
+            name: "ΓΙΩΡΓΟΣ  ΒΙΚΤΩΡΟΣ"
+          }
+        ],
+        away: [
+          {
+            name: "ΧΡΥΣΟΣΤΟΜΟΣ  ΦΙΛΙΠΠΟΥ"
+          },
+          {
+            name: "PATRICK  YANDAL ISMAEL"
+          },
+          {
+            name: "ΣΩΤΗΡΗΣ  ΦΟΙΝΙΡΗΣ"
+          },
+          {
+            name: "LUIS  MAURICIO BRIGIDO RUBEN"
+          },
+          {
+            name: "NICOLAE  MILINCEANU"
+          },
+          {
+            name: "ΧΑΡΑΛΑΜΠΟΣ  ΕΡΩΤΟΚΡΙΤΟΥ"
+          },
+          {
+            name: "ΣΑΒΒΑΣ  ΧΡΙΣΤΟΔΟΥΛΟΥ"
+          },
+          {
+            name: "ΔΗΜΗΤΡΗΣ  ΗΡΟΔΟΤΟΥ"
+          },
+          {
+            name: "BENJAMIN  ROBINAND JORDAN"
+          },
+          {
+            name: "ΑΝΔΡΕΑΣ  ΧΡΙΣΤΟΥ"
+          },
+          {
+            name: "MIGUEL  MENDES PEIXOTO CARLOS"
+          }
+        ]
+      },
+      subs: [
+        {
+          playerOn: "IAGO OLIVEIRA CAMPOS",
+          playerOff: "ΔΗΜΗΤΡΗΣ ΗΡΟΔΟΤΟΥ",
+          minute: "38",
+          team: "away"
+        },
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΥΜΠΑΡΗ",
+          playerOff: "ΓΕΩΡΓΙΟΣ ΧΡΙΣΤΟΔΟΥΛΟΥ",
+          minute: "46",
+          team: "home"
+        },
+        {
+          playerOn: "FILIPE CORREIA BORGES MICAEL",
+          playerOff: "ALEJANDRO GUTIERREZ HERNANDEZ",
+          minute: "57",
+          team: "home"
+        },
+        {
+          playerOn: "ΠΑΝΑΓΙΩΤΗΣ ΛΟΥΚΑ",
+          playerOff: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          minute: "57",
+          team: "home"
+        },
+        {
+          playerOn: "ΑΝΔΡΕΑΣ ΝΙΚΟΛΑΟΥ",
+          playerOff: "ΣΑΒΒΑΣ ΧΡΙΣΤΟΔΟΥΛΟΥ",
+          minute: "58",
+          team: "away"
+        },
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΗΛΙΑ",
+          playerOff: "ΓΙΩΡΓΟΣ ΠΑΥΛΙΔΗΣ",
+          minute: "67",
+          team: "home"
+        },
+        {
+          playerOn: "ΔΗΜΗΤΡΗΣ ΚΥΠΡΙΑΝΟΥ",
+          playerOff: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΘΙΜΟΥ",
+          minute: "85",
+          team: "home"
+        },
+        {
+          playerOn: "ΑΝΔΡΕΑΣ ΝΙΚΟΛΑΟΥ",
+          playerOff: "BENJAMIN ROBINAND JORDAN",
+          minute: "89",
+          team: "away"
+        }
+      ]
     },
     {
       day: 18,
       sport: "volleyball-women",
       location: "away",
       opponent: "ΚΟΥΡΗΣ ΕΡΗΜΗΣ",
-      time: "20:30",
+      time: "",
       venue: "Θεμιστόκλειο",
-      logo: "images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp"
+      logo: "images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp",
+      status: "played",
+      score: "0-3",
+      sets: [
+        {
+          home: 8,
+          away: 25
+        },
+        {
+          home: 11,
+          away: 25
+        },
+        {
+          home: 16,
+          away: 25
+        }
+      ]
     },
     {
       day: 20,

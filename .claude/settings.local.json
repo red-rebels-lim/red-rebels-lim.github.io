@@ -1,0 +1,103 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose up:*)",
+      "Bash(docker compose:*)",
+      "Bash(ls:*)",
+      "Bash(pnpm type-check:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_press_key",
+      "mcp__playwright__browser_run_code",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_close",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm build:*)",
+      "Bash(curl:*)",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_console_messages",
+      "Bash(npx tsc --version)",
+      "Bash(npx tsc:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm dev:*)",
+      "mcp__playwright__browser_evaluate",
+      "mcp__stitch__get_project",
+      "mcp__stitch__get_screen",
+      "mcp__stitch__generate_screen_from_text",
+      "mcp__stitch__list_screens",
+      "Bash(pnpm add:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker exec:*)",
+      "mcp__playwright__browser_fill_form",
+      "Bash(python3 -m json.tool:*)",
+      "Bash(# Check sitemap for exclusion of blocked performers curl -s http://localhost:3000/sitemap.xml)",
+      "Bash(docker pull:*)",
+      "Bash(# Check the actual hostname/alias of our mail container on the network docker inspect camsfinder-mail --format ''{{json .NetworkSettings.Networks}}'' | python3 -m json.tool)",
+      "Bash(# Check Mailpit API for received messages sleep 2 && curl -s http://localhost:8025/api/v1/messages)",
+      "Bash(python3:*)",
+      "Bash(# Get full message details from Mailpit curl -s http://localhost:8025/api/v1/messages)",
+      "Bash(# Check Mailpit for the XSS email curl -s http://localhost:8025/api/v1/messages)",
+      "Bash(# Test Payload CMS REST API lockdown echo \"\"=== Payload REST API: dmca-requests ===\"\" curl -s -w \"\"\\\\nHTTP:%{http_code}\"\" http://localhost:3000/api/dmca-requests)",
+      "Bash(pnpm install:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh api:*)",
+      "Bash(pnpm --filter web test:*)",
+      "Bash(pnpm exec vitest:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(lsof:*)",
+      "mcp__playwright__browser_wait_for",
+      "Bash(git push:*)",
+      "Bash(gh pr diff:*)",
+      "mcp__playwright__browser_snapshot",
+      "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "Bash(pnpm vitest run:*)",
+      "Bash(npx vitest:*)",
+      "Bash(pnpm docker:compose:up:*)",
+      "Bash(pnpm -r exec pnpm vitest run:*)",
+      "Bash(pnpm vitest:*)",
+      "Bash(pnpm --filter @camsfinder/jobs lint:*)",
+      "Bash(pnpm --filter @camsfinder/jobs test -- --run)",
+      "Bash(pnpm --filter @camsfinder/jobs type-check:*)",
+      "Bash(pnpm --filter @camsfinder/jobs add:*)",
+      "Bash(pnpm --filter @camsfinder/jobs test:*)",
+      "Bash(node:*)",
+      "mcp__playwright__browser_navigate_back",
+      "Bash(pnpm docker:compose:build:*)",
+      "Bash(docker restart:*)",
+      "Bash(tail:*)",
+      "Bash(grep:*)",
+      "mcp__atlassian__getConfluencePage",
+      "Bash(pnpm:*)",
+      "Bash(pkill:*)",
+      "Bash(git pull:*)",
+      "Bash(git status:*)",
+      "mcp__stitch__create_project",
+      "WebFetch(domain:www.cfa.com.cy)",
+      "Bash(tmux new-session:*)",
+      "Bash(tmux kill-session:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "playwright"
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Users/ageorgiou/projects/camsfinder-mono && pnpm type-check && pnpm lint",
+            "statusMessage": "Running type-check and lint before commit..."
+          }
+        ]
+      }
+    ]
+  }
+}

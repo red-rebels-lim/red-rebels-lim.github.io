@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Nea Salamina Fixtures - Season 2025/2026",
-    "scrapedAt": "2026-03-17T14:35:58.474Z",
+    "scrapedAt": "2026-03-19T05:58:19.878Z",
     "sources": {
       "football": "https://cfa.com.cy",
       "volleyball": "https://volleyball.org.cy",
@@ -11,8 +11,8 @@
     "footballFixtures": 30,
     "volleyballMenFixtures": 20,
     "volleyballWomenFixtures": 24,
-    "playedFixtures": 66,
-    "upcomingFixtures": 8
+    "playedFixtures": 68,
+    "upcomingFixtures": 6
   },
   "fixtures": [
     {
@@ -294,11 +294,11 @@
       "date": "18 Μαρτίου 2026",
       "homeTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ ΑΜΜΟΧΩΣΤΟΥ",
       "homeLogo": null,
-      "scoreTime": "17:00",
+      "scoreTime": "2-1",
       "awayTeam": "ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ",
       "awayLogo": "images/team_logos/ΔΟΞΑ_ΚΑΤΩΚΟΠΙΑΣ.webp",
       "venue": "",
-      "status": "Upcoming",
+      "status": "Played",
       "sport": "football-men"
     },
     {
@@ -811,13 +811,12 @@
       "date": "18/03",
       "homeTeam": "ΚΟΥΡΗΣ ΕΡΗΜΗΣ",
       "homeLogo": "images/team_logos/ΚΟΥΡΗΣ_ΕΡΗΜΗΣ.webp",
-      "scoreTime": "20:30",
+      "scoreTime": "0-3",
       "awayTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ (Γ)",
       "awayLogo": null,
       "venue": "Θεμιστόκλειο",
-      "status": "Upcoming",
-      "sport": "volleyball-women",
-      "matchTime": "20:30"
+      "status": "Played",
+      "sport": "volleyball-women"
     },
     {
       "date": "21/03",
