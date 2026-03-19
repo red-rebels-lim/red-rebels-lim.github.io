@@ -79,7 +79,9 @@
       "mcp__stitch__create_project",
       "WebFetch(domain:www.cfa.com.cy)",
       "Bash(tmux new-session:*)",
-      "Bash(tmux kill-session:*)"
+      "Bash(tmux kill-session:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
