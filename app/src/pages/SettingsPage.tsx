@@ -323,8 +323,7 @@ export default function SettingsPage() {
               <SettingsRow
                 icon={<ClockIcon />}
                 label={t('settings.reminderTime')}
-                value={t('settings.minutesBefore', { count: 30 })}
-                hasChevron
+                value={t('settings.reminderDefault', '24h & 2h before')}
                 isLast
               />
             </>

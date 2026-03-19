@@ -75,9 +75,14 @@ export async function subscribeToPush(): Promise<string | null> {
 
   let parseObj: Parse.Object;
   if (existing) {
-    existing.set('p256dh', keys.p256dh);
-    existing.set('auth', keys.auth);
-    parseObj = await existing.save();
+    try {
+      existing.set('p256dh', keys.p256dh);
+      existing.set('auth', keys.auth);
+      parseObj = await existing.save();
+    } catch {
+      // ACL prevents updating the existing record — reuse the existing object as-is.
+      parseObj = existing;
+    }
   } else {
     const sub = new PushSubscription();
     sub.set('endpoint', json.endpoint);
@@ -110,19 +115,24 @@ export async function unsubscribeFromPush(): Promise<void> {
 
   const objectId = localStorage.getItem(STORAGE_KEY);
   if (objectId) {
-    // Delete preferences first
-    const NotifPreference = Parse.Object.extend('NotifPreference');
-    const prefQuery = new Parse.Query(NotifPreference);
-    const subPointer = Parse.Object.extend('PushSubscription').createWithoutData(objectId);
-    prefQuery.equalTo('subscription', subPointer);
-    const prefs = await prefQuery.find();
-    await Parse.Object.destroyAll(prefs);
+    // Best-effort Parse cleanup — may fail due to ACL restrictions.
+    // The reminders script cleans up expired subscriptions on 410/404.
+    try {
+      const NotifPreference = Parse.Object.extend('NotifPreference');
+      const prefQuery = new Parse.Query(NotifPreference);
+      const subPointer = Parse.Object.extend('PushSubscription').createWithoutData(objectId);
+      prefQuery.equalTo('subscription', subPointer);
+      const prefs = await prefQuery.find();
+      await Parse.Object.destroyAll(prefs);
 
-    // Delete subscription
-    const PushSubscription = Parse.Object.extend('PushSubscription');
-    const sub = PushSubscription.createWithoutData(objectId);
-    await sub.destroy();
+      const PushSubscription = Parse.Object.extend('PushSubscription');
+      const sub = PushSubscription.createWithoutData(objectId);
+      await sub.destroy();
+    } catch (err) {
+      logError('Failed to clean up Parse subscription (backend will handle on next push attempt):', err);
+    }
 
+    // Always clear localStorage so the UI reflects the unsubscribed state.
     localStorage.removeItem(STORAGE_KEY);
   }
 }

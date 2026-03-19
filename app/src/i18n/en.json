@@ -217,6 +217,7 @@
     "reminders": "Match Reminders",
     "matchReminders": "Match Reminders",
     "reminderTime": "Reminder Time",
+    "reminderDefault": "24h & 2h before",
     "minutesBefore": "{{count}} mins before",
     "reminder24h": "24 hours before",
     "reminder12h": "12 hours before",

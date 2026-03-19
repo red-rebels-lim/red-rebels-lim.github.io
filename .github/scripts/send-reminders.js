@@ -225,7 +225,13 @@ async function main() {
   console.log(`\nSummary: ${sent} sent, ${skipped} skipped/failed`);
 }
 
-main().catch((err) => {
-  console.error('Fatal error:', err);
-  process.exit(1);
-});
+const isMain = process.argv[1] &&
+  path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
+if (isMain) {
+  main().catch((err) => {
+    console.error('Fatal error:', err);
+    process.exit(1);
+  });
+}
+
+export { main, sportEmoji };
