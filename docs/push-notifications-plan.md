@@ -130,30 +130,16 @@ Parse.serverURL = 'https://parseapi.back4app.com/'
 - `updatePreferences(subscriptionId, prefs)` — update fields
 - `createDefaultPreferences(subscriptionId)` — create with defaults
 
-### Phase 3: Settings Page
+### Phase 3: Settings Page ✅ (simplified — full preferences UI out of scope)
 
-**Create `app/src/pages/SettingsPage.tsx`** — route `/#/settings`, lazy loaded:
-- Permission status badge (granted / denied / default)
-- Subscribe / Unsubscribe button
-- Master enable/disable toggle
-- **Event types** section: toggles for New Events, Time Changes, Score Updates
-- **Sports** section: checkboxes for Football, Volleyball Men, Volleyball Women
-- **Reminders** section: checkboxes for 24h, 12h, 2h, 1h before match
-- Debounced save to Back4App on toggle change
-- Glassmorphism card styling matching existing app design
+**`app/src/pages/SettingsPage.tsx`** — route `/#/settings`, lazy loaded:
+- Subscribe / Unsubscribe toggle
+- Reminder Time label (informational, shows "24h & 2h before")
+- Permission denied / not-supported states
+- Sport filter toggles (calendar display only, not per-notification)
+- Theme, language, tools, about sections
 
-**Modify `app/src/App.tsx`** — add lazy route:
-```tsx
-const SettingsPage = lazy(() => import('@/pages/SettingsPage'))
-// In Routes:
-<Route path="/settings" element={<SettingsPage />} />
-```
-
-**Modify `app/src/components/layout/Navbar.tsx`** — add Settings link:
-- Desktop: bell icon nav link next to Calendar/Stats
-- Mobile hamburger: "Settings" menu item with bell icon
-
-**Update i18n files** (`en.json`, `el.json`) — add translations for all settings labels
+> **Note:** The event-type toggles (New Events, Time Changes, Score Updates), per-sport notification preferences, and reminder-hour multi-select are intentionally omitted. All users receive default preferences (`reminderHours: [24, 2]`, all sports enabled) set at subscription time.
 
 ### Phase 4: Scraper → Notification Integration
 
@@ -334,31 +320,28 @@ VITE_VAPID_PUBLIC_KEY: ${{ secrets.VITE_VAPID_PUBLIC_KEY }}
 - No changes → empty arrays
 - Multiple simultaneous changes → all detected
 
-**Notification sender** (`.github/scripts/__tests__/send-notifications.test.js`):
+**Notification sender** (`.github/scripts/send-notifications.test.js`) ✅ **Done**:
 - Filters subscriptions by preference (e.g., score updates disabled → not notified)
 - Filters by sport (e.g., volleyball disabled → football-only notifications)
-- Skips globally disabled subscriptions
 - Handles expired subscriptions (410) → deletes from DB
 - Handles network errors gracefully → logs and continues
 - Empty changes → exits early, no queries made
 
-**Reminder sender** (`.github/scripts/__tests__/send-reminders.test.js`):
+**Reminder sender** (`.github/scripts/send-reminders.test.js`) ✅ **Done**:
 - Match in 24h → sends reminder to users with 24h enabled
 - Match in 2h → sends reminder to users with 2h enabled
 - Already-sent reminder → not sent again (ReminderLog dedup)
 - No upcoming matches → exits early
 - Match with no kick-off time → skipped
+- Expired subscription (410) → cleans up from DB
 
 ### 7.2 Integration Tests
 
 **Settings page** (`app/src/__tests__/SettingsPage.test.tsx`):
-- Renders all sections (permission status, event types, sports, reminders)
-- Subscribe button triggers permission request and subscription flow
-- Toggle changes save to Back4App (debounced)
-- Unsubscribe button clears subscription
+- Subscribe toggle triggers permission request and subscription flow
+- Unsubscribe toggle clears subscription and localStorage
 - When push not supported → shows info message, hides controls
 - When permission denied → shows blocked status with instructions
-- Responsive layout at mobile (390px) and desktop (1280px)
 
 ### 7.3 Manual E2E Testing Checklist
 
@@ -376,11 +359,6 @@ Run these manually against the dev server and production:
 - [ ] Check Back4App → `PushSubscription` + `NotifPreference` objects exist
 - [ ] Click "Disable Notifications" → subscription deleted from Back4App + localStorage
 
-**Settings Persistence**:
-- [ ] Toggle "Score Updates" off → verify in Back4App `NotifPreference.notifyScoreUpdates = false`
-- [ ] Change reminder to 1h only → verify `reminderHours = [1]`
-- [ ] Disable Football → verify `enabledSports` no longer contains "football-men"
-- [ ] Refresh page → all settings persist (loaded from Back4App)
 
 **Notification Delivery**:
 - [ ] Trigger scraper manually (GitHub Actions) with a known change

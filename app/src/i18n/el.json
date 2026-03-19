@@ -217,6 +217,7 @@
     "reminders": "Υπενθυμίσεις Αγώνων",
     "matchReminders": "Υπενθυμίσεις Αγώνων",
     "reminderTime": "Χρόνος Υπενθύμισης",
+    "reminderDefault": "24ω & 2ω πριν",
     "minutesBefore": "{{count}} λεπτά πριν",
     "reminder24h": "24 ώρες πριν",
     "reminder12h": "12 ώρες πριν",
