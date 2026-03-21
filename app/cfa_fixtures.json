@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Nea Salamina Fixtures - Season 2025/2026",
-    "scrapedAt": "2026-03-19T05:58:19.878Z",
+    "scrapedAt": "2026-03-21T19:51:49.720Z",
     "sources": {
       "football": "https://cfa.com.cy",
       "volleyball": "https://volleyball.org.cy",
@@ -11,8 +11,8 @@
     "footballFixtures": 30,
     "volleyballMenFixtures": 20,
     "volleyballWomenFixtures": 24,
-    "playedFixtures": 68,
-    "upcomingFixtures": 6
+    "playedFixtures": 69,
+    "upcomingFixtures": 5
   },
   "fixtures": [
     {
@@ -822,13 +822,12 @@
       "date": "21/03",
       "homeTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ (Γ)",
       "homeLogo": null,
-      "scoreTime": "18:00",
+      "scoreTime": "3-0",
       "awayTeam": "ΑΝΟΡΘΩΣΙΣ (Γ)",
       "awayLogo": "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp",
       "venue": "Γυμνάσιο Αγίου Νεοφύτου",
-      "status": "Upcoming",
-      "sport": "volleyball-women",
-      "matchTime": "18:00"
+      "status": "Played",
+      "sport": "volleyball-women"
     }
   ]
 }
