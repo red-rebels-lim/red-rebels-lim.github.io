@@ -6779,17 +6779,223 @@ export const eventsData: EventsData = {
       sport: "volleyball-women",
       location: "home",
       opponent: "ΑΝΟΡΘΩΣΙΣ (Γ)",
-      time: "18:00",
+      time: "",
       venue: "Γυμνάσιο Αγίου Νεοφύτου",
-      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp"
+      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp",
+      status: "played",
+      score: "3-0",
+      sets: [
+        {
+          home: 25,
+          away: 21
+        },
+        {
+          home: 25,
+          away: 12
+        },
+        {
+          home: 25,
+          away: 9
+        }
+      ]
     },
     {
       day: 22,
       sport: "football-men",
       location: "away",
       opponent: "ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ",
-      time: "15:30",
-      logo: "images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp"
+      time: "",
+      logo: "images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp",
+      status: "played",
+      score: "2-2",
+      scorers: [
+        {
+          name: "ΣΤΑΥΡΟΣ ΤΣΟΥΚΑΛΑΣ",
+          minute: "36",
+          team: "away"
+        },
+        {
+          name: "ΓΕΩΡΓΙΟΣ ΧΡΙΣΤΟΔΟΥΛΟΥ",
+          minute: "45",
+          team: "home"
+        },
+        {
+          name: "OMAR AMBRI STEVE BRAHIM JOSEPH  (Πέναλτι)",
+          minute: "55",
+          team: "away"
+        },
+        {
+          name: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΑΣΤΑΝΑΣ",
+          minute: "65",
+          team: "home"
+        }
+      ],
+      bookings: [
+        {
+          name: "ΣΤΥΛΙΑΝΟΣ ΠΑΝΤΕΛΗ",
+          minute: "39",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "ΣΤΑΥΡΟΣ ΤΣΟΥΚΑΛΑΣ",
+          minute: "52",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "FILIPE CORREIA BORGES MICAEL",
+          minute: "52",
+          team: "home",
+          card: "yellow"
+        },
+        {
+          name: "ADULAI DJALO BALDE ALDAIR",
+          minute: "58",
+          team: "home",
+          card: "yellow"
+        },
+        {
+          name: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          minute: "77",
+          team: "home",
+          card: "yellow"
+        }
+      ],
+      lineup: {
+        home: [
+          {
+            name: "ALBERTO  VARO LARA"
+          },
+          {
+            name: "ΠΑΝΑΓΙΩΤΗΣ  ΑΡΤΥΜΑΤΑΣ"
+          },
+          {
+            name: "ΓΕΩΡΓΙΟΣ  ΧΡΙΣΤΟΔΟΥΛΟΥ"
+          },
+          {
+            name: "MANUEL  ARTILES ROMERO JOSE"
+          },
+          {
+            name: "ALEJANDRO  PEREZ CORDOVA DANIEL"
+          },
+          {
+            name: "FILIPE  CORREIA BORGES MICAEL"
+          },
+          {
+            name: "ΑΝΤΡΕΑΣ  ΔΗΜΗΤΡΙΟΥ"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΚΑΣΤΑΝΑΣ"
+          },
+          {
+            name: "ADULAI  DJALO BALDE ALDAIR"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΗΛΙΑ"
+          },
+          {
+            name: "ΚΩΣΤΑΣ  ΧΑΡΑΛΑΜΠΟΥΣ"
+          }
+        ],
+        away: [
+          {
+            name: "ΜΙΧΑΛΗΣ  ΠΑΠΑΣΤΥΛΙΑΝΟΥ"
+          },
+          {
+            name: "ΠΑΝΤΕΛΗΣ  ΚΟΝΟΜΗΣ"
+          },
+          {
+            name: "ΣΤΑΥΡΟΣ  ΤΣΟΥΚΑΛΑΣ"
+          },
+          {
+            name: "ΧΑΡΑΛΑΜΠΟΣ  ΑΡΙΣΤΟΤΕΛΟΥΣ"
+          },
+          {
+            name: "MICHAEL  DA SILVA CAMPOLARGO MORAIS"
+          },
+          {
+            name: "ΣΕΡΓΙΟΣ  ΑΒΡΑΑΜ"
+          },
+          {
+            name: "ΣΤΥΛΙΑΝΟΣ  ΠΑΝΤΕΛΗ"
+          },
+          {
+            name: "ΣΩΤΗΡΗΣ  ΦΙΑΚΑΣ"
+          },
+          {
+            name: "ΑΓΓΕΛΗΣ  ΑΓΓΕΛΗ"
+          },
+          {
+            name: "OMAR  AMBRI STEVE BRAHIM JOSEPH"
+          },
+          {
+            name: "ANDRE  MEIRA FERNADES MARCIO"
+          }
+        ]
+      },
+      subs: [
+        {
+          playerOn: "ΠΑΝΑΓΙΩΤΗΣ ΛΟΥΚΑ",
+          playerOff: "MANUEL ARTILES ROMERO JOSE",
+          minute: "46",
+          team: "home"
+        },
+        {
+          playerOn: "ALEJANDRO GUTIERREZ HERNANDEZ",
+          playerOff: "FILIPE CORREIA BORGES MICAEL",
+          minute: "55",
+          team: "home"
+        },
+        {
+          playerOn: "ΓΙΩΡΓΟΣ ΠΑΥΛΙΔΗΣ",
+          playerOff: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΗΛΙΑ",
+          minute: "55",
+          team: "home"
+        },
+        {
+          playerOn: "CHINEMEREM NNORUKA CHRISTIAN",
+          playerOff: "ANDRE MEIRA FERNADES MARCIO",
+          minute: "63",
+          team: "away"
+        },
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΘΙΜΟΥ",
+          playerOff: "ADULAI DJALO BALDE ALDAIR",
+          minute: "64",
+          team: "home"
+        },
+        {
+          playerOn: "REDA KHARCHOUCH MOHAMED",
+          playerOff: "MICHAEL DA SILVA CAMPOLARGO MORAIS",
+          minute: "77",
+          team: "away"
+        },
+        {
+          playerOn: "ΑΓΓΕΛΟΣ ΖΕΥΚΗ",
+          playerOff: "OMAR AMBRI STEVE BRAHIM JOSEPH",
+          minute: "77",
+          team: "away"
+        },
+        {
+          playerOn: "ΔΗΜΗΤΡΗΣ ΚΥΠΡΙΑΝΟΥ",
+          playerOff: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          minute: "79",
+          team: "home"
+        },
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΠΑΤΤΙΧΗΣ",
+          playerOff: "ΧΑΡΑΛΑΜΠΟΣ ΑΡΙΣΤΟΤΕΛΟΥΣ",
+          minute: "88",
+          team: "away"
+        },
+        {
+          playerOn: "ΧΕΝΡΗ ΜΠΕΙΤΣ ΑΝΔΡΕΟΥ",
+          playerOff: "ΣΩΤΗΡΗΣ ΦΙΑΚΑΣ",
+          minute: "88",
+          team: "away"
+        }
+      ]
     },
     {
       day: 27,
@@ -6808,7 +7014,7 @@ export const eventsData: EventsData = {
       sport: "football-men",
       location: "home",
       opponent: "ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ",
-      time: "16:30",
+      time: "15:00",
       logo: "images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.webp"
     },
     {
