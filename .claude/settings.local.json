@@ -81,7 +81,10 @@
       "Bash(tmux new-session:*)",
       "Bash(tmux kill-session:*)",
       "Bash(npm run:*)",
-      "Bash(npm test:*)"
+      "Bash(npm test:*)",
+      "WebFetch(domain:volleyball.org.cy)",
+      "WebFetch(domain:kop-web.dataproject.com)",
+      "Read(//tmp/**)"
     ]
   },
   "enableAllProjectMcpServers": true,
