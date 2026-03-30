@@ -1342,6 +1342,16 @@ export const eventsData: EventsData = {
           team: "away"
         }
       ]
+    },
+    {
+      day: 31,
+      sport: "volleyball-men",
+      location: "away",
+      opponent: "OMONOIA",
+      time: "",
+      venue: "Ελευθερία",
+      status: "played",
+      score: "3-1"
     }
   ],
   november: [
@@ -6772,7 +6782,83 @@ export const eventsData: EventsData = {
       time: "20:30",
       venue: "Αγίου Αθανασίου",
       competition: "cup",
-      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp"
+      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp",
+      status: "played",
+      score: "3-2",
+      sets: [
+        {
+          home: 25,
+          away: 22
+        },
+        {
+          home: 24,
+          away: 26
+        },
+        {
+          home: 26,
+          away: 24
+        },
+        {
+          home: 22,
+          away: 25
+        },
+        {
+          home: 15,
+          away: 12
+        }
+      ],
+      vbScorers: [
+        {
+          name: "Peemuller Richard",
+          points: 29,
+          team: "home"
+        },
+        {
+          name: "Montoya Fonnegra Juan Pablo",
+          points: 14,
+          team: "home"
+        },
+        {
+          name: "Pafitis Constantinos",
+          points: 12,
+          team: "home"
+        },
+        {
+          name: "Topuzliev Simeon",
+          points: 12,
+          team: "home"
+        },
+        {
+          name: "Tarasenko Volodymyr",
+          points: 11,
+          team: "home"
+        },
+        {
+          name: "Vjatkins Jevgenijs",
+          points: 23,
+          team: "away"
+        },
+        {
+          name: "Kranin Kiril",
+          points: 18,
+          team: "away"
+        },
+        {
+          name: "Chrysostomou Georgios",
+          points: 11,
+          team: "away"
+        },
+        {
+          name: "Sauss Romans",
+          points: 7,
+          team: "away"
+        },
+        {
+          name: "Christoforou Andreas",
+          points: 7,
+          team: "away"
+        }
+      ]
     },
     {
       day: 21,
@@ -7005,7 +7091,56 @@ export const eventsData: EventsData = {
       time: "20:30",
       venue: "Θεμιστόκλειο",
       competition: "cup",
-      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp"
+      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp",
+      status: "played",
+      score: "3-0",
+      sets: [
+        {
+          home: 25,
+          away: 17
+        },
+        {
+          home: 25,
+          away: 18
+        },
+        {
+          home: 25,
+          away: 10
+        }
+      ]
+    },
+    {
+      day: 28,
+      sport: "volleyball-women",
+      location: "home",
+      opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ",
+      time: "18:00",
+      logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
+      competition: "cup",
+      status: "played",
+      score: "3-2",
+      sets: [
+        {
+          home: 23,
+          away: 25
+        },
+        {
+          home: 25,
+          away: 16
+        },
+        {
+          home: 25,
+          away: 10
+        },
+        {
+          home: 24,
+          away: 26
+        },
+        {
+          home: 15,
+          away: 13
+        }
+      ]
     }
   ],
   april: [
@@ -7016,6 +7151,15 @@ export const eventsData: EventsData = {
       opponent: "ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ",
       time: "15:00",
       logo: "images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.webp"
+    },
+    {
+      day: 4,
+      sport: "volleyball-women",
+      location: "away",
+      opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ",
+      time: "18:00",
+      logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
+      competition: "cup"
     },
     {
       day: 18,
