@@ -19,6 +19,31 @@ const __dirname = path.dirname(__filename);
 const TEAM_FILTER_CFA = 'ΝΕΑ ΣΑΛΑΜΙΝΑ ΑΜΜΟΧΩΣΤΟΥ';
 const TEAM_FILTER_VOLLEYBALL = 'ΝΕΑ ΣΑΛΑΜΙΝΑ';
 
+// Map English dataproject team names to Greek names used in the app
+const DATAPROJECT_TEAM_NAME_MAP: Record<string, string> = {
+  'ANORTHOSIS Famagusta': 'ΑΝΟΡΘΩΣΙΣ',
+  'ANORTHOSIS': 'ΑΝΟΡΘΩΣΙΣ',
+  'AEK Larnaca': 'ΑΕΚ ΛΑΡΝΑΚΑΣ',
+  'AEK LARNACA': 'ΑΕΚ ΛΑΡΝΑΚΑΣ',
+  'APOLLON V.C.Limassol': 'ΑΠΟΛΛΩΝ',
+  'OMONIA Nicosia': 'ΟΜΟΝΟΙΑ',
+  'OMONOIA': 'ΟΜΟΝΟΙΑ',
+  'OMONIA': 'ΟΜΟΝΟΙΑ',
+  'AE KARAVA LAMBOUSA': 'ΑΕ ΚΑΡΑΒΑ',
+  'PAFIAKOS Pafos': 'ΠΑΦΙΑΚΟΣ',
+  'PAFIAKOS': 'ΠΑΦΙΑΚΟΣ',
+  'ANAGENNISIS DHERYNIAS': 'ΑΝΑΓΕΝΝΗΣΗ',
+  'ANAGENNISIS': 'ΑΝΑΓΕΝΝΗΣΗ',
+  'APOEL Nicosia': 'ΑΠΟΕΛ',
+  'APOEL': 'ΑΠΟΕΛ',
+  'LEMESOS Volleyball': 'ΛΕΜΕΣΟΣ',
+  'KOURIS Erimis': 'ΚΟΥΡΙΣ ΕΡΙΜΗΣ',
+  'AEL Limassol': 'ΑΕΛ',
+  'OLYMPIADA NEAPOLIS': 'ΟΛΥΜΠΙΑΔΑ ΝΕΑΠΟΛΙΣ',
+  'Nea Salamina Famagusta': 'ΝΕΑ ΣΑΛΑΜΙΝΑ',
+  'NEA SALAMINA Famagusta': 'ΝΕΑ ΣΑΛΑΜΙΝΑ',
+};
+
 const CFA_URLS = [
   'https://cfa.com.cy/Gr/fixtures/65409603',   // Preliminary phase (Sep-Jan)
   'https://cfa.com.cy/Gr/fixtures/66686780',   // Championship phase (Jan-Apr)
@@ -37,6 +62,15 @@ const DATAPROJECT_URLS: Record<string, string | string[]> = {
   'volleyball-women': 'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=43&PID=72',
 };
 
+// Cup competition URLs from dataproject (not available on volleyball.org.cy)
+const DATAPROJECT_CUP_URLS: Record<string, string | string[]> = {
+  'volleyball-men': [
+    'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=44&PID=74',  // QF
+    'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=44&PID=75',  // SF
+  ],
+  'volleyball-women': 'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=45&PID=77',  // QF
+};
+
 const SCRAPED_SPORTS = ['football-men', 'volleyball-men', 'volleyball-women'];
 
 const LOGOS_DIR = path.resolve(__dirname, '../../public/images/team_logos');
@@ -53,6 +87,7 @@ export interface Fixture {
   status: 'Played' | 'Upcoming';
   sport: string;            // 'football-men' | 'volleyball-men' | 'volleyball-women'
   matchTime?: string;       // Actual kick-off/start time
+  competition?: string;     // 'cup' for cup matches
 }
 
 export interface SportEvent {
@@ -503,6 +538,7 @@ export function findExistingLogo(teamName: string): string | null {
 async function scrapeDataprojectFixtures(
   url: string,
   sport: string,
+  opts: { useLegLayout?: boolean } = {},
 ): Promise<Fixture[]> {
   console.log(`🔄 Fetching dataproject fixtures (${sport}): ${url}`);
 
@@ -521,13 +557,22 @@ async function scrapeDataprojectFixtures(
 
   const fixtures: Fixture[] = [];
 
-  // dataproject uses Telerik RadListView with labeled spans
-  $('[id*="RadListView1"] .rlvI, [id*="RadListView1"] .rlvA').each((_: number, row: Element) => {
+  // dataproject uses Telerik controls with labeled spans.
+  // Cup/leg pages use RADLIST_Legs > RADLIST_Matches with MatchRow divs.
+  // League pages also have MatchRow elements but with overlapping Content_Main sections
+  // that cause team name confusion, so we only use MatchRow for cup pages.
+  const rows = opts.useLegLayout
+    ? $('[id*="RADLIST_Matches"][id*="MatchRow"]')
+    : $('[id*="RadListView1"] .rlvI, [id*="RadListView1"] .rlvA');
+  (rows.toArray() as Element[]).forEach((row) => {
     const el = $(row);
 
-    // Team names: Label2 = home, Label4 = away
-    const homeTeam = el.find('[id*="Label2"]').text().trim();
-    const awayTeam = el.find('[id*="Label4"]').text().trim();
+    // Team names: Label2 = home, Label4 = away (league layout)
+    // Some cup matches use LBL_HomeTeamName/LBL_GuestTeamName or Label6/Label7 instead
+    const homeTeam = el.find('[id*="Label2"]').text().trim()
+      || el.find('[id*="LBL_HomeTeamName"]').text().trim();
+    const awayTeam = el.find('[id*="Label4"]').text().trim()
+      || el.find('[id*="LBL_GuestTeamName"]').text().trim();
     if (!homeTeam || !awayTeam) return;
 
     // Filter to Nea Salamina matches
@@ -538,9 +583,9 @@ async function scrapeDataprojectFixtures(
       return;
     }
 
-    // Date/time: LB_DataOra contains "DD/MM/YYYY HH:MM"
-    const dateTimeStr = el.find('[id*="LB_DataOra"]').text().trim();
-    const dateTimeMatch = dateTimeStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{2}:\d{2})/);
+    // Date/time: LB_DataOra contains "DD/MM/YYYY HH:MM" (may appear multiple times for responsive layouts)
+    const dateTimeStr = el.find('[id*="LB_DataOra"]').first().text().trim();
+    const dateTimeMatch = dateTimeStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(?:-\s+)?(\d{2}:\d{2})/);
     if (!dateTimeMatch) return;
 
     const dateStr = `${dateTimeMatch[1]}/${dateTimeMatch[2]}/${dateTimeMatch[3]}`;
@@ -562,13 +607,22 @@ async function scrapeDataprojectFixtures(
       status = 'Upcoming';
     }
 
+    // Translate English dataproject names to Greek equivalents
+    const mappedHome = DATAPROJECT_TEAM_NAME_MAP[homeTeam] || homeTeam;
+    const mappedAway = DATAPROJECT_TEAM_NAME_MAP[awayTeam] || awayTeam;
+
+    // Try to find logos for the opponent
+    const isHome = mappedHome.toUpperCase().includes('ΝΕΑ ΣΑΛΑΜΙΝΑ') || mappedHome.toUpperCase().includes('NEA SALAMINA');
+    const opponentName = isHome ? mappedAway : mappedHome;
+    const opponentLogo = findExistingLogo(opponentName);
+
     fixtures.push({
       date: dateStr,
-      homeTeam,
-      homeLogo: null,
+      homeTeam: mappedHome,
+      homeLogo: isHome ? null : opponentLogo,
       scoreTime,
-      awayTeam,
-      awayLogo: null,
+      awayTeam: mappedAway,
+      awayLogo: isHome ? opponentLogo : null,
       venue: '',
       status,
       sport,
@@ -583,12 +637,12 @@ export function mergeVolleyballFixtures(
   primary: Fixture[],
   secondary: Fixture[],
 ): Fixture[] {
-  // Dedup by date+sport: Nea Salamina can only play one match per date per sport
+  // Dedup by date+sport+competition: a league and cup match can happen on the same day
   const primaryKeys = new Set<string>();
   for (const f of primary) {
     const parsed = parseFixtureDate(f.date);
     if (parsed) {
-      primaryKeys.add(`${parsed.day}/${parsed.monthNum}|${f.sport}`);
+      primaryKeys.add(`${parsed.day}/${parsed.monthNum}|${f.sport}|${f.competition || ''}`);
     }
   }
 
@@ -601,14 +655,14 @@ export function mergeVolleyballFixtures(
     const parsed = parseFixtureDate(sf.date);
     if (!parsed) continue;
 
-    const key = `${parsed.day}/${parsed.monthNum}|${sf.sport}`;
+    const key = `${parsed.day}/${parsed.monthNum}|${sf.sport}|${sf.competition || ''}`;
 
     if (primaryKeys.has(key)) {
       inBoth++;
       // If primary has no score but secondary does, update it
       const primaryMatch = merged.find(f => {
         const pp = parseFixtureDate(f.date);
-        return pp && `${pp.day}/${pp.monthNum}|${f.sport}` === key;
+        return pp && `${pp.day}/${pp.monthNum}|${f.sport}|${f.competition || ''}` === key;
       });
       if (primaryMatch && primaryMatch.status === 'Upcoming' && sf.status === 'Played') {
         primaryMatch.scoreTime = sf.scoreTime;
@@ -661,7 +715,8 @@ export function fixtureToEvent(fixture: Fixture): { monthName: string; event: Sp
   const monthName = MONTH_NAMES[monthNum];
   if (!monthName) return null;
 
-  const isHome = fixture.homeTeam.toUpperCase().includes('ΝΕΑ ΣΑΛΑΜΙΝΑ');
+  const homeUpper = fixture.homeTeam.toUpperCase();
+  const isHome = homeUpper.includes('ΝΕΑ ΣΑΛΑΜΙΝΑ') || homeUpper.includes('NEA SALAMINA');
   const location = isHome ? 'home' : 'away';
   const opponent = isHome ? fixture.awayTeam : fixture.homeTeam;
   const logo = isHome ? fixture.awayLogo : fixture.homeLogo;
@@ -683,6 +738,7 @@ export function fixtureToEvent(fixture: Fixture): { monthName: string; event: Sp
 
   if (fixture.venue) event.venue = fixture.venue;
   if (logo) event.logo = logo;
+  if (fixture.competition) event.competition = fixture.competition;
   if (fixture.status === 'Played') {
     event.status = 'played';
     event.score = fixture.scoreTime;
@@ -806,10 +862,11 @@ function updateCalendarData(fixtures: Fixture[]): Record<string, SportEvent[]> {
       }
     }
 
-    // Add new scraped events that didn't match any existing event (only future events)
+    // Add new scraped events that didn't match any existing event
+    // Skip past events unless they have a score (e.g. newly discovered cup matches)
     for (const [key, scrapedEvent] of scrapedKeys) {
       if (!matchedKeys.has(key)) {
-        if (isEventInPast(monthName, scrapedEvent.day)) {
+        if (isEventInPast(monthName, scrapedEvent.day) && !scrapedEvent.score) {
           continue;
         }
         const eventDesc = `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${scrapedEvent.day}: ${scrapedEvent.sport} vs ${scrapedEvent.opponent}`;
@@ -984,8 +1041,26 @@ async function main() {
     }
     console.log();
 
-    // 5. Merge volleyball fixtures (primary + secondary)
-    const mergedVolleyball = mergeVolleyballFixtures(allVolleyballFixtures, dataprojectFixtures);
+    // 4b. Scrape dataproject cup fixtures
+    const cupFixtures: Fixture[] = [];
+    for (const [sport, urlOrUrls] of Object.entries(DATAPROJECT_CUP_URLS)) {
+      const dpUrls = Array.isArray(urlOrUrls) ? urlOrUrls : [urlOrUrls];
+      for (const url of dpUrls) {
+        try {
+          const fixtures = await scrapeDataprojectFixtures(url, sport, { useLegLayout: true });
+          // Mark all cup fixtures
+          for (const f of fixtures) f.competition = 'cup';
+          console.log(`  Found ${fixtures.length} ${sport} cup fixtures`);
+          cupFixtures.push(...fixtures);
+        } catch (e) {
+          console.warn(`  ⚠ Failed to fetch dataproject cup ${sport}:`, e);
+        }
+      }
+    }
+    console.log();
+
+    // 5. Merge volleyball fixtures (primary + secondary league + cup)
+    const mergedVolleyball = mergeVolleyballFixtures(allVolleyballFixtures, [...dataprojectFixtures, ...cupFixtures]);
     console.log();
 
     // 6. Combine all fixtures
@@ -1011,7 +1086,15 @@ async function main() {
         // 9. Enrich volleyball events with DataProject set scores and top scorers
         console.log();
         console.log('🏐 Enriching volleyball matches with DataProject data...');
-        const dpStats = await enrichWithDataproject(existingEvents, DATAPROJECT_URLS, {
+        // Merge league and cup URLs for enrichment
+        const allDataprojectUrls: Record<string, string | string[]> = {};
+        for (const [sport, urlOrUrls] of Object.entries(DATAPROJECT_URLS)) {
+          const league = Array.isArray(urlOrUrls) ? urlOrUrls : [urlOrUrls];
+          const cup = DATAPROJECT_CUP_URLS[sport];
+          const cupUrls = cup ? (Array.isArray(cup) ? cup : [cup]) : [];
+          allDataprojectUrls[sport] = [...league, ...cupUrls];
+        }
+        const dpStats = await enrichWithDataproject(existingEvents, allDataprojectUrls, {
           onProgress: (msg) => console.log(msg),
         });
         console.log(`  ✓ DataProject — enriched: ${dpStats.enriched}, skipped: ${dpStats.skipped}, failed: ${dpStats.failed}`);
