@@ -7149,8 +7149,175 @@ export const eventsData: EventsData = {
       sport: "football-men",
       location: "home",
       opponent: "ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ",
-      time: "15:00",
-      logo: "images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.webp"
+      time: "",
+      logo: "images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.webp",
+      status: "played",
+      score: "3-0",
+      scorers: [
+        {
+          name: "ΓΕΩΡΓΙΟΣ ΧΡΙΣΤΟΔΟΥΛΟΥ",
+          minute: "23",
+          team: "home"
+        },
+        {
+          name: "ADULAI DJALO BALDE ALDAIR",
+          minute: "29",
+          team: "home"
+        },
+        {
+          name: "ΑΝΔΡΕΑΣ ΔΑΝΙΗΛ (Αυτογκόλ)",
+          minute: "70",
+          team: "home"
+        }
+      ],
+      bookings: [
+        {
+          name: "ΜΑΡΙΟΣ ΠΕΡΑΤΙΚΟΣ",
+          minute: "80",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "ΤΑΟΥΓΚΑ ΜΑΥΡΟΜΜΑΤΗΣ ΝΩΑ ΓΙΩΡΓΟΣ",
+          minute: "90",
+          team: "away",
+          card: "yellow"
+        }
+      ],
+      lineup: {
+        home: [
+          {
+            name: "ALBERTO  VARO LARA"
+          },
+          {
+            name: "ΠΑΝΑΓΙΩΤΗΣ  ΑΡΤΥΜΑΤΑΣ"
+          },
+          {
+            name: "ΓΕΩΡΓΙΟΣ  ΧΡΙΣΤΟΔΟΥΛΟΥ"
+          },
+          {
+            name: "MANUEL  ARTILES ROMERO JOSE"
+          },
+          {
+            name: "ALEJANDRO  GUTIERREZ HERNANDEZ"
+          },
+          {
+            name: "ΑΝΤΡΕΑΣ  ΔΗΜΗΤΡΙΟΥ"
+          },
+          {
+            name: "ADULAI  DJALO BALDE ALDAIR"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΗΛΙΑ"
+          },
+          {
+            name: "ΚΩΣΤΑΣ  ΧΑΡΑΛΑΜΠΟΥΣ"
+          },
+          {
+            name: "ΓΙΩΡΓΟΣ  ΒΙΚΤΩΡΟΣ"
+          },
+          {
+            name: "ΠΑΝΑΓΙΩΤΗΣ  ΛΟΥΚΑ"
+          }
+        ],
+        away: [
+          {
+            name: "ΜΑΡΙΟΣ  ΠΕΡΑΤΙΚΟΣ"
+          },
+          {
+            name: "ΛΕΥΤΕΡΗΣ  ΑΛΑΜΠΡΙΤΗΣ"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΒΟΛΑΚΗΣ"
+          },
+          {
+            name: "ΗΛΙΑΣ  ΜΠΑΤΖΩΝΗΣ"
+          },
+          {
+            name: "ΠΑΝΑΓΙΩΤΗΣ  ΗΛΙΑ"
+          },
+          {
+            name: "ΤΑΟΥΓΚΑ  ΜΑΥΡΟΜΜΑΤΗΣ ΝΩΑ ΓΙΩΡΓΟΣ"
+          },
+          {
+            name: "ΠΕΡΙΚΛΗΣ  ΠΕΡΙΚΛΕΟΥΣ"
+          },
+          {
+            name: "ΑΝΔΡΕΑΣ  ΔΑΝΙΗΛ"
+          },
+          {
+            name: "ΕΥΣΤΑΘΙΟΣ  ΓΙΑΝΝΑΡΑ"
+          },
+          {
+            name: "ΜΙΧΑΗΛ  ΣΟΛΩΜΟΥ"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΠΕΤΡΟΥ"
+          }
+        ]
+      },
+      subs: [
+        {
+          playerOn: "ΣΤΕΦΑΝΟΣ ΒΑΣΙΛΕΙΟΥ",
+          playerOff: "ΜΙΧΑΗΛ ΣΟΛΩΜΟΥ",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "ΑΝΔΡΕΑΣ ΠΑΠΑΔΟΠΟΥΛΟΣ",
+          playerOff: "ΕΥΣΤΑΘΙΟΣ ΓΙΑΝΝΑΡΑ",
+          minute: "62",
+          team: "away"
+        },
+        {
+          playerOn: "ΟΝΗΣΙΦΟΡΟΣ ΡΟΥΣΙΑΣ",
+          playerOff: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΒΟΛΑΚΗΣ",
+          minute: "62",
+          team: "away"
+        },
+        {
+          playerOn: "KLAIDI TERSHALLA",
+          playerOff: "ΠΑΝΑΓΙΩΤΗΣ ΗΛΙΑ",
+          minute: "62",
+          team: "away"
+        },
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΘΙΜΟΥ",
+          playerOff: "ALEJANDRO GUTIERREZ HERNANDEZ",
+          minute: "66",
+          team: "home"
+        },
+        {
+          playerOn: "ΓΙΩΡΓΟΣ ΠΑΥΛΙΔΗΣ",
+          playerOff: "MANUEL ARTILES ROMERO JOSE",
+          minute: "66",
+          team: "home"
+        },
+        {
+          playerOn: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          playerOff: "ΠΑΝΑΓΙΩΤΗΣ ΛΟΥΚΑ",
+          minute: "66",
+          team: "home"
+        },
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΥΜΠΑΡΗ",
+          playerOff: "ΓΕΩΡΓΙΟΣ ΧΡΙΣΤΟΔΟΥΛΟΥ",
+          minute: "72",
+          team: "home"
+        },
+        {
+          playerOn: "ΠΑΡΑΣΚΕΥΑΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+          playerOff: "ΠΕΡΙΚΛΗΣ ΠΕΡΙΚΛΕΟΥΣ",
+          minute: "73",
+          team: "away"
+        },
+        {
+          playerOn: "ΓΙΩΡΓΟΣ ΠΟΝΤΙΚΟΥ",
+          playerOff: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΗΛΙΑ",
+          minute: "76",
+          team: "home"
+        }
+      ]
     },
     {
       day: 4,
@@ -7158,6 +7325,15 @@ export const eventsData: EventsData = {
       location: "away",
       opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ",
       time: "18:00",
+      logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
+      competition: "cup"
+    },
+    {
+      day: 7,
+      sport: "volleyball-women",
+      location: "away",
+      opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ",
+      time: "20:00",
       logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
       competition: "cup"
     },

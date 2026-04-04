@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Nea Salamina Fixtures - Season 2025/2026",
-    "scrapedAt": "2026-03-30T11:31:34.991Z",
+    "scrapedAt": "2026-04-04T17:37:09.480Z",
     "sources": {
       "football": "https://cfa.com.cy",
       "volleyball": "https://volleyball.org.cy",
@@ -11,8 +11,8 @@
     "footballFixtures": 30,
     "volleyballMenFixtures": 22,
     "volleyballWomenFixtures": 26,
-    "playedFixtures": 73,
-    "upcomingFixtures": 5
+    "playedFixtures": 74,
+    "upcomingFixtures": 4
   },
   "fixtures": [
     {
@@ -316,11 +316,11 @@
       "date": "04 Απριλίου 2026",
       "homeTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ ΑΜΜΟΧΩΣΤΟΥ",
       "homeLogo": null,
-      "scoreTime": "15:00",
+      "scoreTime": "3-0",
       "awayTeam": "ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ",
       "awayLogo": "images/team_logos/ΑΟΑΝ_ΑΓΙΑΣ_ΝΑΠΑΣ.webp",
       "venue": "",
-      "status": "Upcoming",
+      "status": "Played",
       "sport": "football-men"
     },
     {
@@ -869,16 +869,16 @@
       "competition": "cup"
     },
     {
-      "date": "04/04/2026",
+      "date": "07/04/2026",
       "homeTeam": "ΑΕΚ ΛΑΡΝΑΚΑΣ",
       "homeLogo": "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
-      "scoreTime": "18:00",
+      "scoreTime": "20:00",
       "awayTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ",
       "awayLogo": null,
       "venue": "",
       "status": "Upcoming",
       "sport": "volleyball-women",
-      "matchTime": "18:00",
+      "matchTime": "20:00",
       "competition": "cup"
     }
   ]
