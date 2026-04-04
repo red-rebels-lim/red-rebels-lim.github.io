@@ -7320,15 +7320,6 @@ export const eventsData: EventsData = {
       ]
     },
     {
-      day: 4,
-      sport: "volleyball-women",
-      location: "away",
-      opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ",
-      time: "18:00",
-      logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
-      competition: "cup"
-    },
-    {
       day: 7,
       sport: "volleyball-women",
       location: "away",
