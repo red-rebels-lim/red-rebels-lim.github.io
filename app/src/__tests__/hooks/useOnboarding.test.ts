@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useOnboarding } from '@/hooks/useOnboarding';
 
-const STORAGE_KEY = 'onboarding-completed';
+const STORAGE_KEY = 'onboarding-completed-v2';
 
 describe('Task 18: useOnboarding hook', () => {
   beforeEach(() => {
@@ -23,9 +23,9 @@ describe('Task 18: useOnboarding hook', () => {
       expect(result.current.isActive).toBe(false);
     });
 
-    it('should have 5 tour steps', () => {
+    it('should have 7 tour steps', () => {
       const { result } = renderHook(() => useOnboarding());
-      expect(result.current.steps.length).toBe(5);
+      expect(result.current.steps.length).toBe(7);
     });
 
     it('should advance to next step', () => {

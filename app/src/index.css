@@ -129,9 +129,125 @@
   --accent-glow: rgba(224, 37, 32, 0.25);
 }
 
-/* Athletic heading font */
+/* ─── Visual Theme: Brutalism ────────────────────────────────────────── */
+.theme-brutalism {
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --radius: 0px;
+  --background: #09090B; --foreground: #FAFAFA;
+  --card: #09090B; --card-foreground: #FAFAFA;
+  --popover: #09090B; --popover-foreground: #FAFAFA;
+  --secondary: #27272A; --secondary-foreground: #A1A1AA;
+  --muted: #27272A; --muted-foreground: #A1A1AA;
+  --accent: #27272A; --accent-foreground: #FAFAFA;
+  --border: #3F3F46; --input: #3F3F46;
+  --primary-border: #3F3F46; --primary-border-subtle: #3F3F46;
+  --primary-border-emphasis: var(--primary);
+  --primary-bg-subtle: rgba(224,37,32,0.1);
+  --primary-bg-hover: rgba(224,37,32,0.15);
+  --surface-overlay: rgba(9,9,11,0.8);
+  --surface-dark: #09090B;
+  --border-subtle: #3F3F46; --accent-glow: rgba(224,37,32,0.3);
+}
+.theme-brutalism.light, .theme-brutalism :is(.light *) {
+  --background: #F8FAFC; --foreground: #1E293B;
+  --card: #FFFFFF; --card-foreground: #1E293B;
+  --popover: #FFFFFF; --popover-foreground: #1E293B;
+  --secondary: #E2E8F0; --secondary-foreground: #475569;
+  --muted: #E2E8F0; --muted-foreground: #64748B;
+  --border: #CBD5E1; --input: #CBD5E1;
+  --primary-border: #CBD5E1; --primary-border-subtle: #E2E8F0;
+  --surface-overlay: rgba(248,250,252,0.8); --surface-dark: #FFFFFF;
+}
+
+/* ─── Visual Theme: Cinema ──────────────────────────────────────────── */
+.theme-cinema {
+  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Inter', sans-serif;
+  --radius: 1rem;
+  --background: #020203; --foreground: #EDEDEF;
+  --card: #0a0a0c; --card-foreground: #EDEDEF;
+  --popover: #0a0a0c; --popover-foreground: #EDEDEF;
+  --secondary: #18181B; --secondary-foreground: #A1A1AA;
+  --muted: #18181B; --muted-foreground: #8A8F98;
+  --accent: #18181B; --accent-foreground: #EDEDEF;
+  --border: rgba(255,255,255,0.08); --input: rgba(255,255,255,0.1);
+  --primary-border: rgba(224,37,32,0.25);
+  --primary-border-subtle: rgba(255,255,255,0.08);
+  --primary-border-emphasis: rgba(224,37,32,0.4);
+  --primary-bg-subtle: rgba(224,37,32,0.12);
+  --primary-bg-hover: rgba(224,37,32,0.18);
+  --surface-overlay: rgba(2,2,3,0.6);
+  --surface-dark: #0a0a0c;
+  --border-subtle: rgba(255,255,255,0.1); --glass-blur: 20px;
+  --accent-glow: rgba(224,37,32,0.2);
+}
+.theme-cinema.light, .theme-cinema :is(.light *) {
+  --background: #F8FAFC; --foreground: #1E293B;
+  --card: #FFFFFF; --card-foreground: #1E293B;
+  --popover: #FFFFFF; --popover-foreground: #1E293B;
+  --secondary: #F1F5F9; --secondary-foreground: #475569;
+  --muted: #F1F5F9; --muted-foreground: #64748B;
+  --border: rgba(0,0,0,0.08); --input: rgba(0,0,0,0.06);
+  --primary-border: rgba(224,37,32,0.2);
+  --primary-border-subtle: rgba(0,0,0,0.06);
+  --surface-overlay: rgba(248,250,252,0.6); --surface-dark: #FFFFFF;
+  --border-subtle: rgba(0,0,0,0.06);
+}
+
+/* ─── Visual Theme: Neon HUD ────────────────────────────────────────── */
+.theme-neon {
+  --font-body: 'JetBrains Mono', monospace;
+  --font-heading: 'Orbitron', sans-serif;
+  --radius: 0px;
+  --background: #0A0A0F; --foreground: #E4E4E7;
+  --card: #12121A; --card-foreground: #E4E4E7;
+  --popover: #12121A; --popover-foreground: #E4E4E7;
+  --secondary: #1E1E2A; --secondary-foreground: #A1A1AA;
+  --muted: #1E1E2A; --muted-foreground: #71717A;
+  --accent: #1E1E2A; --accent-foreground: #E4E4E7;
+  --border: rgba(0,255,255,0.15); --input: rgba(0,255,255,0.1);
+  --primary: #FF2D20;
+  --primary-border: rgba(0,255,255,0.15);
+  --primary-border-subtle: rgba(0,255,255,0.1);
+  --primary-border-emphasis: rgba(0,255,255,0.3);
+  --primary-bg-subtle: rgba(0,255,255,0.08);
+  --primary-bg-hover: rgba(0,255,255,0.12);
+  --surface-overlay: rgba(10,10,15,0.8);
+  --surface-dark: #12121A;
+  --border-subtle: rgba(0,255,255,0.1); --accent-glow: rgba(0,255,255,0.2);
+  --neon-cyan: #00FFFF; --neon-magenta: #FF00FF; --neon-green: #00FF88; --neon-yellow: #FFE600;
+  --ring: #00FFFF;
+}
+.theme-neon.light, .theme-neon :is(.light *) {
+  --background: #F0F4F8; --foreground: #1A202C;
+  --card: #FFFFFF; --card-foreground: #1A202C;
+  --popover: #FFFFFF; --popover-foreground: #1A202C;
+  --secondary: #E2E8F0; --secondary-foreground: #475569;
+  --muted: #E2E8F0; --muted-foreground: #718096;
+  --border: rgba(8,145,178,0.2); --input: rgba(8,145,178,0.1);
+  --primary: #E02520;
+  --primary-border: rgba(8,145,178,0.2);
+  --primary-border-subtle: rgba(8,145,178,0.1);
+  --neon-cyan: #0891B2; --neon-magenta: #C026D3; --neon-green: #059669; --neon-yellow: #B45309;
+  --surface-overlay: rgba(240,244,248,0.8); --surface-dark: #FFFFFF;
+  --ring: #0891B2;
+}
+
+/* Neon scanline overlay */
+.theme-neon::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,255,0.015) 2px, rgba(0,255,255,0.015) 4px);
+  pointer-events: none;
+  z-index: 100;
+}
+.theme-neon:is(.light *)::after, .theme-neon.light::after { opacity: 0; }
+
+/* ─── Font system (theme-aware) ─────────────────────────────────────── */
 .font-condensed {
-  font-family: 'Barlow Condensed', 'Barlow', sans-serif;
+  font-family: var(--font-heading, 'Barlow Condensed', 'Barlow', sans-serif);
 }
 
 /* Shared stats section styles — Stitch design system */
@@ -140,7 +256,7 @@
 }
 
 .stat-section-title {
-  font-family: 'Barlow Condensed', 'Barlow', sans-serif;
+  font-family: var(--font-heading, 'Barlow Condensed', 'Barlow', sans-serif);
   font-size: 1.125rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -158,7 +274,7 @@
   body {
     @apply text-foreground;
     background: transparent;
-    font-family: 'Barlow', 'Inter', sans-serif;
+    font-family: var(--font-body, 'Barlow', 'Inter', sans-serif);
     overscroll-behavior: contain;
   }
 }
@@ -201,6 +317,74 @@
   background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
   animation: blob-drift-2 25s ease-in-out infinite;
 }
+
+/* ─── Theme-specific overrides ────────────────────────────────────── */
+
+/* Brutalism: 2px borders, no rounded buttons, solid hover fills */
+.theme-brutalism header { border-bottom-width: 2px; border-color: var(--border); }
+.theme-brutalism nav[aria-label] {
+  border-top: 2px solid var(--primary) !important;
+  background: var(--background) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.theme-brutalism nav a.active { background: rgba(224,37,32,0.08); }
+.theme-brutalism h1 { font-size: 14px; text-transform: uppercase; letter-spacing: 3px; }
+.theme-brutalism button { border-radius: 0; }
+.theme-brutalism .rounded-full { border-radius: 0; }
+.theme-brutalism .rounded-lg, .theme-brutalism .rounded-xl, .theme-brutalism .rounded-2xl, .theme-brutalism .rounded-3xl { border-radius: 0; }
+
+/* Cinema: gradient background, gradient title text, glass nav */
+.theme-cinema nav[aria-label] {
+  background: rgba(2,2,3,0.75) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+}
+.theme-cinema.light nav[aria-label], :is(.light) .theme-cinema nav[aria-label] {
+  background: rgba(248,250,252,0.85) !important;
+  border-top-color: rgba(0,0,0,0.08) !important;
+}
+.theme-cinema { background: linear-gradient(180deg, #050506 0%, #020203 100%); }
+.theme-cinema.light, :is(.light) .theme-cinema { background: linear-gradient(180deg, #F1F5F9 0%, #F8FAFC 100%); }
+.theme-cinema h1 { background: linear-gradient(135deg, var(--foreground) 0%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* Neon: solid background, glow effects, neon line, neon nav */
+.theme-neon nav[aria-label] {
+  background: rgba(10,10,15,0.9) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-top: 1px solid rgba(0,255,255,0.15) !important;
+}
+.theme-neon nav[aria-label] a.active { color: var(--neon-cyan, #00FFFF) !important; text-shadow: 0 0 10px var(--neon-cyan, #00FFFF); }
+.theme-neon.light nav[aria-label], :is(.light) .theme-neon nav[aria-label] {
+  background: rgba(240,244,248,0.92) !important;
+  border-top-color: rgba(8,145,178,0.2) !important;
+}
+.theme-neon.light nav[aria-label] a.active, :is(.light) .theme-neon nav[aria-label] a.active { color: var(--neon-cyan, #0891B2) !important; text-shadow: none; }
+.theme-neon { background: var(--background); }
+.theme-neon h1 { text-shadow: 0 0 10px var(--primary); }
+.theme-neon .font-condensed { text-shadow: 0 0 8px currentColor; }
+.theme-neon .text-primary { text-shadow: 0 0 8px var(--primary); }
+.theme-neon .rounded-full { border-radius: 0; }
+.theme-neon .rounded-lg, .theme-neon .rounded-xl, .theme-neon .rounded-2xl { border-radius: 0; }
+
+/* Neon: sport-colored left borders on cards */
+.theme-neon [data-sport="football"]::before,
+.theme-neon .event-card-sport-football { border-left: 3px solid var(--neon-red, #FF2D20); }
+.theme-neon [data-sport="volleyball"]::before,
+.theme-neon .event-card-sport-volleyball { border-left: 3px solid var(--neon-magenta, #FF00FF); }
+
+/* Neon top-line */
+.neon-top-line { display: none; height: 2px; background: linear-gradient(90deg, transparent, var(--neon-cyan, #00FFFF), var(--neon-magenta, #FF00FF), transparent); opacity: 0.6; }
+.theme-neon .neon-top-line { display: block; }
+.light .neon-top-line { opacity: 0.3; }
+
+/* Brutalism marquee ticker */
+.marquee { overflow: hidden; border-top: 2px solid var(--border); border-bottom: 2px solid var(--border); padding: 8px 0; }
+.marquee-inner { display: flex; gap: 48px; animation: marquee-scroll 12s linear infinite; white-space: nowrap; }
+.marquee-inner span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--muted-foreground); }
+@keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
