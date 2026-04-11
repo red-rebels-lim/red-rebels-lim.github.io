@@ -7326,16 +7326,54 @@ export const eventsData: EventsData = {
       opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ",
       time: "20:00",
       logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
+      competition: "cup",
+      status: "played",
+      score: "3-1",
+      sets: [
+        {
+          home: 23,
+          away: 25
+        },
+        {
+          home: 25,
+          away: 19
+        },
+        {
+          home: 25,
+          away: 16
+        },
+        {
+          home: 25,
+          away: 22
+        }
+      ]
+    },
+    {
+      day: 16,
+      sport: "volleyball-women",
+      location: "away",
+      opponent: "ΑΕΛ",
+      time: "20:00",
+      logo: "images/team_logos/ΑΕΛ.webp",
       competition: "cup"
     },
     {
-      day: 18,
+      day: 19,
       sport: "football-men",
       location: "away",
       opponent: "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
-      time: "16:30",
+      time: "16:00",
       venue: "ΚΟΙΝΟΤΙΚΟ ΓΗΠΕΔΟ ΠΑΝΩ ΠΟΛΕΜΙΔΙΩΝ",
       logo: "images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp"
+    },
+    {
+      day: 19,
+      sport: "volleyball-women",
+      location: "home",
+      opponent: "ΑΕΛ",
+      time: "18:30",
+      logo: "images/team_logos/ΑΕΛ.webp",
+      competition: "cup"
     },
     {
       day: 25,

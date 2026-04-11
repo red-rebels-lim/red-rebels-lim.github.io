@@ -1,18 +1,18 @@
 {
   "metadata": {
     "title": "Nea Salamina Fixtures - Season 2025/2026",
-    "scrapedAt": "2026-04-04T17:37:09.480Z",
+    "scrapedAt": "2026-04-11T14:54:14.658Z",
     "sources": {
       "football": "https://cfa.com.cy",
       "volleyball": "https://volleyball.org.cy",
       "volleyballVerification": "https://kop-web.dataproject.com"
     },
-    "totalFixtures": 78,
+    "totalFixtures": 80,
     "footballFixtures": 30,
     "volleyballMenFixtures": 22,
-    "volleyballWomenFixtures": 26,
-    "playedFixtures": 74,
-    "upcomingFixtures": 4
+    "volleyballWomenFixtures": 28,
+    "playedFixtures": 75,
+    "upcomingFixtures": 5
   },
   "fixtures": [
     {
@@ -324,10 +324,10 @@
       "sport": "football-men"
     },
     {
-      "date": "18 Απριλίου 2026",
+      "date": "19 Απριλίου 2026",
       "homeTeam": "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
       "homeLogo": "images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp",
-      "scoreTime": "16:30",
+      "scoreTime": "16:00",
       "awayTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ ΑΜΜΟΧΩΣΤΟΥ",
       "awayLogo": null,
       "venue": "ΚΟΙΝΟΤΙΚΟ ΓΗΠΕΔΟ ΠΑΝΩ ΠΟΛΕΜΙΔΙΩΝ",
@@ -846,7 +846,7 @@
       "date": "27/03/2026",
       "homeTeam": "ΑΝΟΡΘΩΣΙΣ",
       "homeLogo": "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp",
-      "scoreTime": "3-0",
+      "scoreTime": "0-3",
       "awayTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ",
       "awayLogo": null,
       "venue": "",
@@ -872,9 +872,35 @@
       "date": "07/04/2026",
       "homeTeam": "ΑΕΚ ΛΑΡΝΑΚΑΣ",
       "homeLogo": "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
+      "scoreTime": "3-1",
+      "awayTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ",
+      "awayLogo": null,
+      "venue": "",
+      "status": "Played",
+      "sport": "volleyball-women",
+      "matchTime": "20:00",
+      "competition": "cup"
+    },
+    {
+      "date": "16/04/2026",
+      "homeTeam": "ΑΕΛ",
+      "homeLogo": "images/team_logos/ΑΕΛ.webp",
       "scoreTime": "20:00",
       "awayTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ",
       "awayLogo": null,
+      "venue": "",
+      "status": "Upcoming",
+      "sport": "volleyball-women",
+      "matchTime": "20:00",
+      "competition": "cup"
+    },
+    {
+      "date": "20/04/2026",
+      "homeTeam": "ΝΕΑ ΣΑΛΑΜΙΝΑ",
+      "homeLogo": null,
+      "scoreTime": "20:00",
+      "awayTeam": "ΑΕΛ",
+      "awayLogo": "images/team_logos/ΑΕΛ.webp",
       "venue": "",
       "status": "Upcoming",
       "sport": "volleyball-women",

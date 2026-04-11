@@ -222,10 +222,15 @@ describe('parseMatchStats — away match', () => {
     expect(opponentScorers[0].name).toBe('OMONIA Player A');
   });
 
-  it('parses 5-set match scores', () => {
+  it('flips set scores to Salamina-first when away', () => {
     const { sets } = parseMatchStats(html, false);
     expect(sets).toHaveLength(5);
-    expect(sets[4]).toEqual({ home: 15, away: 12 });
+    // Venue: 25/18 → Salamina (away) 18, opponent (home) 25 → {home: 18, away: 25}
+    expect(sets[0]).toEqual({ home: 18, away: 25 });
+    expect(sets[1]).toEqual({ home: 22, away: 25 });
+    expect(sets[2]).toEqual({ home: 25, away: 22 });
+    expect(sets[3]).toEqual({ home: 25, away: 22 });
+    expect(sets[4]).toEqual({ home: 12, away: 15 });
   });
 });
 
