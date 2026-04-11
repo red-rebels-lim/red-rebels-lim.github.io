@@ -32,7 +32,7 @@ export function OverallStats({ overall, cleanSheets, avgGoalsFor, avgGoalsAgains
             key={card.label}
             className="bg-gradient-to-br from-primary-bg-subtle to-primary-bg-subtle/60 border-2 border-primary-border rounded-xl p-4 text-center transition-all hover:-translate-y-1 hover:shadow-lg hover:border-primary-border-emphasis"
           >
-            <div className="text-4xl font-black text-primary mb-2 drop-shadow-[0_2px_10px_var(--primary-glow)] tabular-nums">
+            <div className="text-4xl font-black text-primary mb-2 drop-shadow-[0_2px_10px_var(--primary-glow)] tabular-nums font-condensed">
               {card.value}
             </div>
             <div className="text-sm font-bold text-muted-foreground uppercase tracking-wide">

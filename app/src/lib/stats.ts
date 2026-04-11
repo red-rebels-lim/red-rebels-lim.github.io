@@ -30,6 +30,63 @@ export function getMatchResult(
   return 'draw';
 }
 
+export interface LastMeeting {
+  score: string;
+  result: 'win' | 'draw' | 'loss';
+  location: string;
+  month: string;
+  day: number;
+}
+
+export function getLastMeeting(opponent: string, sport: string): LastMeeting | null {
+  // Scan events in reverse chronological order to find the most recent played match vs opponent
+  const reversedMonths = [...MONTH_ORDER].reverse();
+  for (const monthName of reversedMonths) {
+    const events = eventsData[monthName];
+    if (!events) continue;
+    // Iterate events in reverse (later days first)
+    for (let i = events.length - 1; i >= 0; i--) {
+      const e = events[i];
+      if (e.sport !== sport || e.status !== 'played' || !e.score) continue;
+      if (e.opponent !== opponent) continue;
+      const result = getMatchResult(e.score, e.location);
+      if (!result) continue;
+      return {
+        score: e.score,
+        result,
+        location: e.location,
+        month: monthName,
+        day: e.day,
+      };
+    }
+  }
+  return null;
+}
+
+export function getOpponentH2H(opponent: string, sport: string): HeadToHead | null {
+  let h2h: HeadToHead | null = null;
+  for (const monthName of MONTH_ORDER) {
+    const events = eventsData[monthName];
+    if (!events) continue;
+    for (const e of events) {
+      if (e.sport !== sport || e.status !== 'played' || !e.score) continue;
+      if (e.opponent !== opponent) continue;
+      const [gf, ga] = parseScore(e.score, e.location);
+      if (gf === null || ga === null) continue;
+      if (!h2h) {
+        h2h = { opponent, played: 0, wins: 0, draws: 0, losses: 0, goalsFor: 0, goalsAgainst: 0 };
+      }
+      h2h.played++;
+      h2h.goalsFor += gf;
+      h2h.goalsAgainst += ga;
+      if (gf > ga) h2h.wins++;
+      else if (gf < ga) h2h.losses++;
+      else h2h.draws++;
+    }
+  }
+  return h2h;
+}
+
 export function getFormColor(result: string): string {
   switch (result) {
     case 'W': return '#4CAF50';

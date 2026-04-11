@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import { MobileHeader } from '@/components/layout/MobileHeader';
@@ -8,8 +8,10 @@ import {
   getSubscriptionStatus,
   subscribeToPush,
   unsubscribeFromPush,
+  getStoredSubscriptionId,
   type PushStatus,
 } from '@/lib/push';
+import { getPreferences, updatePreferences, type NotifPrefs } from '@/lib/preferences';
 import { exportToCalendar } from '@/lib/ics-export';
 import { trackEvent } from '@/lib/analytics';
 import { logError } from '@/lib/logger';
@@ -42,6 +44,22 @@ function SettingsToggle({ checked, onChange, disabled }: { checked: boolean; onC
       } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
       <div className="h-[27px] w-[27px] rounded-full bg-white shadow-sm transition-transform duration-200" />
+    </button>
+  );
+}
+
+function ReminderChip({ label, active, onToggle }: { label: string; active: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors min-h-[36px] ${
+        active
+          ? 'bg-primary text-white'
+          : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+      }`}
+    >
+      {label}
     </button>
   );
 }
@@ -272,6 +290,57 @@ export default function SettingsPage() {
 
   const isSubscribed = status === 'subscribed';
 
+  // Notification preferences
+  const [notifPrefs, setNotifPrefs] = useState<NotifPrefs | null>(null);
+
+  const loadPrefs = useCallback(async () => {
+    const subId = getStoredSubscriptionId();
+    if (!subId) return;
+    try {
+      const prefs = await getPreferences(subId);
+      if (prefs) setNotifPrefs(prefs);
+    } catch (err) {
+      logError('Failed to load preferences:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isSubscribed) loadPrefs();
+  }, [isSubscribed, loadPrefs]);
+
+  const updatePref = async (update: Partial<NotifPrefs>) => {
+    const subId = getStoredSubscriptionId();
+    if (!subId || !notifPrefs) return;
+    const next = { ...notifPrefs, ...update };
+    setNotifPrefs(next);
+    try {
+      await updatePreferences(subId, update);
+    } catch (err) {
+      logError('Failed to save preference:', err);
+      setNotifPrefs(notifPrefs); // revert on error
+    }
+  };
+
+  const toggleReminderHour = (hour: number) => {
+    if (!notifPrefs) return;
+    const current = notifPrefs.reminderHours;
+    const next = current.includes(hour)
+      ? current.filter(h => h !== hour)
+      : [...current, hour].sort((a, b) => b - a);
+    if (next.length === 0) return; // must keep at least one
+    updatePref({ reminderHours: next });
+  };
+
+  const toggleNotifSport = (sport: string) => {
+    if (!notifPrefs) return;
+    const current = notifPrefs.enabledSports;
+    const next = current.includes(sport)
+      ? current.filter(s => s !== sport)
+      : [...current, sport];
+    if (next.length === 0) return; // must keep at least one
+    updatePref({ enabledSports: next });
+  };
+
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'el' : 'en';
     i18n.changeLanguage(newLang);
@@ -321,12 +390,82 @@ export default function SettingsPage() {
                   <p className="text-xs text-red-500">{t('settings.pushError', 'Failed to update notifications. Please try again.')}</p>
                 </div>
               )}
-              <SettingsRow
-                icon={<ClockIcon />}
-                label={t('settings.reminderTime')}
-                value={t('settings.reminderDefault', '24h & 2h before')}
-                isLast
-              />
+
+              {/* Expanded preferences (only when subscribed and prefs loaded) */}
+              {isSubscribed && notifPrefs && (
+                <>
+                  {/* Reminder times */}
+                  <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                      {t('settings.reminderTimes')}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {[{ hour: 24, label: '24h' }, { hour: 12, label: '12h' }, { hour: 2, label: '2h' }, { hour: 1, label: '1h' }].map(({ hour, label }) => (
+                        <ReminderChip
+                          key={hour}
+                          label={label}
+                          active={notifPrefs.reminderHours.includes(hour)}
+                          onToggle={() => toggleReminderHour(hour)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Sports */}
+                  <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                      {t('sports.title', 'Sports')}
+                    </p>
+                    <div className="space-y-1">
+                      {[
+                        { key: 'football-men', label: t('sports.footballMen') },
+                        { key: 'volleyball-men', label: t('sports.volleyballMen') },
+                        { key: 'volleyball-women', label: t('sports.volleyballWomen') },
+                      ].map(({ key, label }) => (
+                        <div key={key} className="flex items-center justify-between py-1.5">
+                          <span className="text-sm font-medium">{label}</span>
+                          <SettingsToggle
+                            checked={notifPrefs.enabledSports.includes(key)}
+                            onChange={() => toggleNotifSport(key)}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Alert types */}
+                  <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                      {t('settings.alertTypes')}
+                    </p>
+                    <div className="space-y-1">
+                      {[
+                        { key: 'notifyNewEvents' as const, label: t('settings.newEvents') },
+                        { key: 'notifyTimeChanges' as const, label: t('settings.timeChanges') },
+                        { key: 'notifyScoreUpdates' as const, label: t('settings.scoreUpdates') },
+                      ].map(({ key, label }) => (
+                        <div key={key} className="flex items-center justify-between py-1.5">
+                          <span className="text-sm font-medium">{label}</span>
+                          <SettingsToggle
+                            checked={notifPrefs[key]}
+                            onChange={() => updatePref({ [key]: !notifPrefs[key] })}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Fallback: show static reminder time when not subscribed */}
+              {!isSubscribed && (
+                <SettingsRow
+                  icon={<ClockIcon />}
+                  label={t('settings.reminderTime')}
+                  value={t('settings.reminderDefault', '24h & 2h before')}
+                  isLast
+                />
+              )}
             </>
           )}
         </SettingsSection>

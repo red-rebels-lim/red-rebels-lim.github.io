@@ -15,7 +15,7 @@ export function VenueInfo({ venue }: VenueInfoProps) {
         {t('stats.venueInfo')}
       </h2>
       <div className="bg-gradient-to-br from-primary-bg-subtle to-primary-bg-subtle/60 border-2 border-primary-border rounded-xl p-5">
-        <div className="text-xl font-black text-primary mb-3 drop-shadow-[0_2px_10px_var(--primary-glow)]">
+        <div className="text-xl font-black text-primary mb-3 drop-shadow-[0_2px_10px_var(--primary-glow)] font-condensed">
           {tApi(t, 'venue', venue.name)}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

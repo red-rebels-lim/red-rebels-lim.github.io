@@ -49,7 +49,7 @@ export function MobileCalendarGrid({ monthData, currentMonth, selectedDay, onDay
         {dayHeaders.map((key) => (
           <div
             key={key}
-            className="text-xs font-bold text-slate-700 dark:text-slate-400 pb-2"
+            className="text-xs font-bold text-slate-700 dark:text-slate-400 pb-2 font-condensed tracking-wider"
             aria-hidden="true"
           >
             {t(key).slice(0, 3).toUpperCase()}
@@ -84,7 +84,7 @@ export function MobileCalendarGrid({ monthData, currentMonth, selectedDay, onDay
           let cellStyle = '';
           let textStyle = 'font-medium text-slate-800 dark:text-slate-200';
           if (isSelected) {
-            cellStyle = 'bg-[#dc2828]/20 rounded-lg';
+            cellStyle = 'bg-[#dc2828]/20 rounded-lg dark:shadow-[0_0_12px_var(--accent-glow)]';
             textStyle = 'font-bold text-[#dc2828]';
           } else if (isToday) {
             cellStyle = 'rounded-lg ring-2 ring-[#dc2828]/50';

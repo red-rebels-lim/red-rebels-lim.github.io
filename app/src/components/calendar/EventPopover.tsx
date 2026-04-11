@@ -7,6 +7,7 @@ import { getMatchResult } from '@/lib/stats';
 import { TEAM_NAME } from '@/data/constants';
 import type { CalendarEvent, Scorer, Booking, LineupPlayer, Substitution, VolleyballSet, VolleyballScorer } from '@/types/events';
 import { MatchReport } from './MatchReport';
+import { OpponentScoutCard } from './OpponentScoutCard';
 
 interface EventPopoverProps {
   event: CalendarEvent | null;
@@ -580,7 +581,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           {/* ── Score ── */}
           {event.status === 'played' && event.score && (
             <div className="text-center py-2">
-              <div className={`text-5xl font-black ${resultBadge.scoreColor} tracking-tight tabular-nums`}>
+              <div className={`text-5xl font-black ${resultBadge.scoreColor} tracking-tight tabular-nums font-condensed`}>
                 {event.score.replace('-', ' - ')} <span className="text-4xl">{isVolleyballSport(event.sport) ? '🏐' : '⚽'}</span>
               </div>
               {event.penalties && (
@@ -622,6 +623,11 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
               <span>⤴</span>
             </button>
           </div>
+
+          {/* ── Opponent scouting card (upcoming matches only) ── */}
+          {event.status !== 'played' && !event.isMeeting && (
+            <OpponentScoutCard opponent={opponent} sport={event.sport} />
+          )}
 
           {/* ── Tabbed match details ── */}
           {event.status === 'played' && <MatchDetailTabs event={event} isHome={isHome} homeTeam={homeTeam} awayTeam={awayTeam} />}
