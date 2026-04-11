@@ -39,6 +39,7 @@ export function NextMatch({ match }: NextMatchProps) {
               <img
                 src={TEAM_LOGOS['Nea Salamis']}
                 alt="Nea Salamis"
+                loading="lazy"
                 className="w-full h-full object-contain p-1"
               />
             </div>

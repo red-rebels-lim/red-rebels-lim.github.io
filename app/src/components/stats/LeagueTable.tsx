@@ -61,7 +61,7 @@ export function LeagueTable({ tables }: LeagueTableProps) {
                   {tApi(t, 'leagues', tbl.leagueName)}
                 </h3>
               )}
-              <table className="w-full border-collapse text-sm">
+              <table className="w-full border-collapse text-sm tabular-nums">
                 <thead>
                   <tr className="border-b border-slate-200 dark:border-slate-800">
                     <th className={`${TH_CLASS} text-left`}>#</th>

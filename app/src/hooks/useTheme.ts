@@ -1,10 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 
+function getInitialTheme(): boolean {
+  const saved = localStorage.getItem('theme');
+  if (saved) return saved === 'dark';
+  // No explicit preference — respect system setting
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
 export function useTheme() {
-  const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem('theme');
-    return saved !== 'light';
-  });
+  const [isDark, setIsDark] = useState(getInitialTheme);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark);

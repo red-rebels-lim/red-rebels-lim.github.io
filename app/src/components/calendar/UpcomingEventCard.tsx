@@ -61,7 +61,7 @@ export function UpcomingEventCard({ event, monthName, onClick }: UpcomingEventCa
 
   return (
     <div
-      className={`flex items-center gap-4 bg-slate-100 dark:bg-[#1e293b] p-4 rounded-xl border border-slate-200 dark:border-slate-800 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors ${isVB ? 'opacity-80' : ''}`}
+      className={`flex items-center gap-4 bg-slate-100 dark:bg-[#1e293b] p-4 rounded-xl border cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-[0.98] transition-all outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px] ${isVB ? 'border-blue-400/30 dark:border-blue-500/30' : 'border-slate-200 dark:border-slate-800'}`}
       onClick={onClick}
       role="button"
       tabIndex={0}

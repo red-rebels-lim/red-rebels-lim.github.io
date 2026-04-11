@@ -126,18 +126,14 @@ export function parseMatchRefs(html: string, sport: string): DataprojectMatchRef
  */
 export function parseMatchStats(html: string, isHomeTeam: boolean): DataprojectMatchDetails {
   // 1. Set scores — first "NN/MM NN/MM ..." pattern in the HTML
-  //    DataProject uses venue perspective (home/away), flip to Salamina-first when away
+  //    DataProject and app both use venue perspective (home/away) — no flip needed
   const setScoresMatch = html.match(/(\d+\/\d+(?:\s+\d+\/\d+)+)/);
   const sets: VolleyballSet[] = [];
   if (setScoresMatch) {
     for (const setStr of setScoresMatch[1].trim().split(/\s+/)) {
       const parts = setStr.split('/');
       if (parts.length === 2) {
-        const venueHome = parseInt(parts[0], 10);
-        const venueAway = parseInt(parts[1], 10);
-        sets.push(isHomeTeam
-          ? { home: venueHome, away: venueAway }
-          : { home: venueAway, away: venueHome });
+        sets.push({ home: parseInt(parts[0], 10), away: parseInt(parts[1], 10) });
       }
     }
   }

@@ -12,8 +12,12 @@ function LoadingSkeleton() {
   return (
     <section className="stat-section min-h-[180px]" role="status">
       <div className="animate-pulse space-y-4">
-        <div className="h-6 bg-[rgba(224,37,32,0.15)] rounded w-1/3" />
-        <div className="h-32 bg-[rgba(224,37,32,0.1)] rounded" />
+        <div className="h-6 bg-muted rounded w-1/3" />
+        <div className="space-y-2">
+          <div className="h-10 bg-muted rounded" />
+          <div className="h-10 bg-muted/60 rounded" />
+          <div className="h-10 bg-muted/40 rounded" />
+        </div>
       </div>
       <span className="sr-only">Loading statistics...</span>
     </section>

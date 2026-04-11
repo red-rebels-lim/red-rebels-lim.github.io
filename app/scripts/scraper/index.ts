@@ -601,16 +601,16 @@ async function scrapeDataprojectFixtures(
     const isHome = upperHome.includes('NEA SALAMINA') || upperHome.includes('SALAMINA');
 
     // Scores: LB_SetCasa = home sets, LB_SetOspiti = away sets (venue perspective)
-    const venueHomeScore = el.find('[id*="LB_SetCasa"]').text().trim();
-    const venueAwayScore = el.find('[id*="LB_SetOspiti"]').text().trim();
+    // App uses venue perspective throughout — no flip needed
+    const homeScore = el.find('[id*="LB_SetCasa"]').text().trim();
+    const awayScore = el.find('[id*="LB_SetOspiti"]').text().trim();
 
     let scoreTime: string;
     let status: 'Played' | 'Upcoming';
 
-    const hasScore = venueHomeScore && venueAwayScore && (venueHomeScore !== '0' || venueAwayScore !== '0');
+    const hasScore = homeScore && awayScore && (homeScore !== '0' || awayScore !== '0');
     if (hasScore) {
-      // Flip to Salamina-first convention when Salamina is the away team
-      scoreTime = isHome ? `${venueHomeScore}-${venueAwayScore}` : `${venueAwayScore}-${venueHomeScore}`;
+      scoreTime = `${homeScore}-${awayScore}`;
       status = 'Played';
     } else {
       scoreTime = matchTime;

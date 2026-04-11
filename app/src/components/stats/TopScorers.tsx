@@ -38,7 +38,7 @@ export function TopScorers({ scorers, unit = 'goals' }: TopScorersProps) {
                 </div>
                 <span className="font-medium">{displayName}</span>
               </div>
-              <span className={`font-bold ${isFirst ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>
+              <span className={`font-bold tabular-nums ${isFirst ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>
                 {displayValue}
               </span>
             </div>

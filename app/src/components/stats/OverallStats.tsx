@@ -30,9 +30,9 @@ export function OverallStats({ overall, cleanSheets, avgGoalsFor, avgGoalsAgains
         {statCards.map((card) => (
           <div
             key={card.label}
-            className="bg-gradient-to-br from-[rgba(224,37,32,0.15)] to-[rgba(185,28,28,0.1)] border-2 border-[rgba(224,37,32,0.3)] rounded-xl p-4 text-center transition-all hover:-translate-y-1 hover:shadow-lg hover:border-[rgba(224,37,32,0.5)]"
+            className="bg-gradient-to-br from-primary-bg-subtle to-primary-bg-subtle/60 border-2 border-primary-border rounded-xl p-4 text-center transition-all hover:-translate-y-1 hover:shadow-lg hover:border-primary-border-emphasis"
           >
-            <div className="text-4xl font-black text-[#E02520] mb-2 drop-shadow-[0_2px_10px_rgba(224,37,32,0.5)]">
+            <div className="text-4xl font-black text-primary mb-2 drop-shadow-[0_2px_10px_var(--primary-glow)] tabular-nums">
               {card.value}
             </div>
             <div className="text-sm font-bold text-muted-foreground uppercase tracking-wide">

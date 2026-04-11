@@ -54,7 +54,7 @@ export function OnboardingTour() {
     <>
       <div
         data-testid="tour-overlay"
-        className="fixed inset-0 bg-black/60 z-[100]"
+        className="fixed inset-0 bg-black/60 z-[100] cursor-pointer"
         onClick={skip}
         aria-hidden="true"
       />
@@ -64,9 +64,9 @@ export function OnboardingTour() {
         aria-modal="true"
         aria-label={t('onboarding.tourLabel')}
         tabIndex={-1}
-        className="fixed z-[101] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-sm bg-white dark:bg-[#1a0f0f] border-2 border-[rgba(224,37,32,0.4)] rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)] outline-none"
+        className="fixed z-[101] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-sm bg-white dark:bg-surface-dark border-2 border-primary-border-emphasis rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)] outline-none"
       >
-        <div className="text-sm text-[rgba(224,37,32,0.8)] font-semibold mb-1" role="status" aria-live="polite">
+        <div className="text-sm text-primary/80 font-semibold mb-1" role="status" aria-live="polite">
           {currentStep + 1} / {steps.length}
         </div>
         <h2 className="text-lg font-bold text-foreground mb-2">
@@ -88,14 +88,14 @@ export function OnboardingTour() {
             {!isFirst && (
               <button
                 onClick={prev}
-                className="px-4 py-2 text-sm font-semibold rounded-lg border border-[rgba(224,37,32,0.3)] text-foreground hover:bg-[rgba(224,37,32,0.15)] transition-colors"
+                className="px-4 py-2 text-sm font-semibold rounded-lg border border-primary-border text-foreground hover:bg-primary-bg-subtle transition-colors"
               >
                 {t('onboarding.prev')}
               </button>
             )}
             <button
               onClick={next}
-              className="px-4 py-2 text-sm font-bold rounded-lg bg-gradient-to-br from-[#E02520] to-[#b91c1c] text-white border border-[#E02520] shadow-[0_4px_12px_rgba(224,37,32,0.4)] hover:from-[#b91c1c] hover:to-[#991b1b] transition-colors"
+              className="px-4 py-2 text-sm font-bold rounded-lg bg-gradient-to-br from-primary to-red-700 text-white border border-primary shadow-[0_4px_12px_var(--primary-glow)] hover:from-red-700 hover:to-red-800 transition-colors"
             >
               {isLast ? t('onboarding.finish') : t('onboarding.next')}
             </button>

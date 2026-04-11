@@ -10,12 +10,12 @@ export function VenueInfo({ venue }: VenueInfoProps) {
   const { t } = useTranslation();
 
   return (
-    <section className="bg-[rgba(10,24,16,0.2)] backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-[rgba(224,37,32,0.3)] shadow-lg">
+    <section className="bg-surface-overlay backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-primary-border shadow-lg">
       <h2 className="text-red-300 text-xl font-extrabold uppercase tracking-wide mb-5">
         {t('stats.venueInfo')}
       </h2>
-      <div className="bg-gradient-to-br from-[rgba(224,37,32,0.15)] to-[rgba(185,28,28,0.1)] border-2 border-[rgba(224,37,32,0.3)] rounded-xl p-5">
-        <div className="text-xl font-black text-[#E02520] mb-3 drop-shadow-[0_2px_10px_rgba(224,37,32,0.5)]">
+      <div className="bg-gradient-to-br from-primary-bg-subtle to-primary-bg-subtle/60 border-2 border-primary-border rounded-xl p-5">
+        <div className="text-xl font-black text-primary mb-3 drop-shadow-[0_2px_10px_var(--primary-glow)]">
           {tApi(t, 'venue', venue.name)}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

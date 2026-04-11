@@ -7328,23 +7328,23 @@ export const eventsData: EventsData = {
       logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
       competition: "cup",
       status: "played",
-      score: "3-1",
+      score: "1-3",
       sets: [
         {
-          home: 23,
+          home: 25,
+          away: 23
+        },
+        {
+          home: 19,
           away: 25
         },
         {
-          home: 25,
-          away: 19
+          home: 16,
+          away: 25
         },
         {
-          home: 25,
-          away: 16
-        },
-        {
-          home: 25,
-          away: 22
+          home: 22,
+          away: 25
         }
       ]
     },

@@ -57,9 +57,11 @@ import SettingsPage from '@/pages/SettingsPage';
 describe('SettingsPage (subscribed)', () => {
   beforeEach(() => {
     vi.mocked(unsubscribeFromPush).mockResolvedValue(undefined);
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
   });
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('renders Match Reminders toggle in ON state when subscribed', async () => {

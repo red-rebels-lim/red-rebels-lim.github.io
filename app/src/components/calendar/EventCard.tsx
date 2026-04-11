@@ -60,7 +60,7 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
       role="button"
       tabIndex={0}
       aria-label={ariaLabel}
-      className={`${bgClass} text-white py-1.5 px-2 rounded-lg text-xs mb-1 border border-white/20 shadow-md cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white`}
+      className={`${bgClass} text-white py-1.5 px-2 rounded-lg text-xs mb-1 border border-white/20 shadow-md cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] outline-none focus-visible:ring-white/50 focus-visible:ring-[3px]`}
       onClick={() => { trackEvent('view_match', { opponent, status: event.status ?? 'upcoming' }); onClick(); }}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trackEvent('view_match', { opponent, status: event.status ?? 'upcoming' }); onClick(); } }}
     >
@@ -82,7 +82,7 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
           {event.isMeeting ? event.title : truncateTeamName(opponent)}
         </span>
         {event.status === 'played' && event.score && (
-          <span className="ml-auto font-extrabold text-xs text-yellow-300 whitespace-nowrap px-1 py-0.5 bg-black/30 rounded shrink-0">
+          <span className="ml-auto font-extrabold text-xs text-yellow-300 whitespace-nowrap px-1 py-0.5 bg-black/30 rounded shrink-0 tabular-nums">
             {event.score}{event.penalties ? ` ${t('calendar.penAbbrev')}` : ''}
           </span>
         )}
