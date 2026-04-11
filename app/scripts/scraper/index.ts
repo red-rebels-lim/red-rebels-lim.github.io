@@ -68,7 +68,10 @@ const DATAPROJECT_CUP_URLS: Record<string, string | string[]> = {
     'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=44&PID=74',  // QF
     'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=44&PID=75',  // SF
   ],
-  'volleyball-women': 'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=45&PID=77',  // QF
+  'volleyball-women': [
+    'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=45&PID=77',  // QF
+    'https://kop-web.dataproject.com/CompetitionMatches.aspx?ID=45&PID=78',  // SF
+  ],
 };
 
 const SCRAPED_SPORTS = ['football-men', 'volleyball-men', 'volleyball-women'];
@@ -591,28 +594,28 @@ async function scrapeDataprojectFixtures(
     const dateStr = `${dateTimeMatch[1]}/${dateTimeMatch[2]}/${dateTimeMatch[3]}`;
     const matchTime = dateTimeMatch[4];
 
-    // Scores: LB_SetCasa = home sets, LB_SetOspiti = away sets
-    const homeScore = el.find('[id*="LB_SetCasa"]').text().trim();
-    const awayScore = el.find('[id*="LB_SetOspiti"]').text().trim();
+    // Translate English dataproject names to Greek equivalents
+    const mappedHome = DATAPROJECT_TEAM_NAME_MAP[homeTeam] || homeTeam;
+    const mappedAway = DATAPROJECT_TEAM_NAME_MAP[awayTeam] || awayTeam;
+
+    const isHome = upperHome.includes('NEA SALAMINA') || upperHome.includes('SALAMINA');
+
+    // Scores: LB_SetCasa = home sets, LB_SetOspiti = away sets (venue perspective)
+    const venueHomeScore = el.find('[id*="LB_SetCasa"]').text().trim();
+    const venueAwayScore = el.find('[id*="LB_SetOspiti"]').text().trim();
 
     let scoreTime: string;
     let status: 'Played' | 'Upcoming';
 
-    const hasScore = homeScore && awayScore && (homeScore !== '0' || awayScore !== '0');
+    const hasScore = venueHomeScore && venueAwayScore && (venueHomeScore !== '0' || venueAwayScore !== '0');
     if (hasScore) {
-      scoreTime = `${homeScore}-${awayScore}`;
+      // Flip to Salamina-first convention when Salamina is the away team
+      scoreTime = isHome ? `${venueHomeScore}-${venueAwayScore}` : `${venueAwayScore}-${venueHomeScore}`;
       status = 'Played';
     } else {
       scoreTime = matchTime;
       status = 'Upcoming';
     }
-
-    // Translate English dataproject names to Greek equivalents
-    const mappedHome = DATAPROJECT_TEAM_NAME_MAP[homeTeam] || homeTeam;
-    const mappedAway = DATAPROJECT_TEAM_NAME_MAP[awayTeam] || awayTeam;
-
-    // Try to find logos for the opponent
-    const isHome = mappedHome.toUpperCase().includes('ΝΕΑ ΣΑΛΑΜΙΝΑ') || mappedHome.toUpperCase().includes('NEA SALAMINA');
     const opponentName = isHome ? mappedAway : mappedHome;
     const opponentLogo = findExistingLogo(opponentName);
 
