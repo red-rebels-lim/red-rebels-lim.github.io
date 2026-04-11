@@ -94,7 +94,7 @@ export function MobileCalendarGrid({ monthData, currentMonth, selectedDay, onDay
           return (
             <div
               key={`day-${day.number}`}
-              className={`relative h-12 flex flex-col items-center justify-center cursor-pointer ${cellStyle}`}
+              className={`relative min-h-[44px] h-12 flex flex-col items-center justify-center cursor-pointer focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none rounded-lg active:bg-slate-200/50 dark:active:bg-slate-700/50 ${cellStyle}`}
               onClick={() => { if (day.number != null) onDayClick(day.number); }}
               role="button"
               tabIndex={0}

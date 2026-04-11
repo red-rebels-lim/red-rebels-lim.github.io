@@ -77,11 +77,11 @@ export default function StatsPage() {
 
         {/* Error banner */}
         {fetchError && !loading && (
-          <section role="alert" className="bg-[rgba(244,67,54,0.1)] rounded-2xl p-4 mb-2 border-2 border-[rgba(244,67,54,0.3)] flex items-center justify-between gap-4">
+          <section role="alert" className="bg-red-500/10 rounded-2xl p-4 mb-2 border-2 border-red-500/30 flex items-center justify-between gap-4">
             <p className="text-sm text-red-600 dark:text-red-300">{t('errors.fetchFailed')}</p>
             <button
               onClick={loadFotmob}
-              className="text-sm font-bold text-white bg-[#E02520] hover:bg-[#c41f1b] px-4 py-2 rounded-lg transition-colors shrink-0"
+              className="text-sm font-bold text-white bg-primary hover:bg-red-700 px-4 py-2 rounded-lg transition-colors shrink-0"
             >
               {t('errors.retry')}
             </button>

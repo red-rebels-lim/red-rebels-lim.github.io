@@ -21,7 +21,7 @@ export function MatchReport({ reportEN, reportEL, lang }: MatchReportProps) {
       <button
         onClick={() => setExpanded((v) => !v)}
         aria-expanded={expanded}
-        className="w-full flex items-center justify-between text-left bg-white/5 border-2 border-[rgba(224,37,32,0.2)] rounded-xl p-3 hover:bg-white/8 transition-all cursor-pointer"
+        className="w-full flex items-center justify-between text-left bg-white/5 border-2 border-primary-border-subtle rounded-xl p-3 hover:bg-white/8 active:scale-[0.99] transition-all cursor-pointer"
       >
         <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
           {t('matchReport.title')}
@@ -29,7 +29,7 @@ export function MatchReport({ reportEN, reportEL, lang }: MatchReportProps) {
         <span className="text-foreground/60 text-sm" aria-hidden="true">{expanded ? '\u25B2' : '\u25BC'}</span>
       </button>
       {expanded && (
-        <div className="bg-white/5 border-2 border-t-0 border-[rgba(224,37,32,0.2)] rounded-b-xl p-3 -mt-0.5">
+        <div className="bg-white/5 border-2 border-t-0 border-primary-border-subtle rounded-b-xl p-3 -mt-0.5">
           <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-line">{text}</p>
         </div>
       )}

@@ -463,7 +463,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
       : result === 'draw'
         ? { bg: 'bg-yellow-100 dark:bg-[#6b5a00]', border: 'border-yellow-400 dark:border-[#8a7500]', text: t('popover.draw'), textColor: 'text-yellow-700 dark:text-yellow-300', scoreColor: 'text-yellow-600 dark:text-yellow-300', dialogBorder: 'border-yellow-500/50', dialogBg: 'bg-yellow-50 dark:bg-gradient-to-br dark:from-[#1a1a0a] dark:to-[#0a0a0a]' }
         : { bg: 'bg-red-100 dark:bg-[#6b1a1a]', border: 'border-red-400 dark:border-[#8a2020]', text: t('popover.loss'), textColor: 'text-red-700 dark:text-red-300', scoreColor: 'text-red-600 dark:text-red-300', dialogBorder: 'border-red-500/50', dialogBg: 'bg-red-50 dark:bg-gradient-to-br dark:from-[#1a0a0a] dark:to-[#0a0a0a]' }
-    : { bg: 'bg-slate-200 dark:bg-[#2a1a1a]', border: 'border-[#E02520]/40', text: t('popover.upcoming'), textColor: 'text-red-700 dark:text-red-300', scoreColor: '', dialogBorder: 'border-[rgba(224,37,32,0.5)]', dialogBg: 'bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a0a0a]' };
+    : { bg: 'bg-slate-200 dark:bg-[#2a1a1a]', border: 'border-primary/40', text: t('popover.upcoming'), textColor: 'text-red-700 dark:text-red-300', scoreColor: '', dialogBorder: 'border-primary-border-emphasis', dialogBg: 'bg-white dark:bg-gradient-to-br dark:from-surface-dark dark:to-[#0a0a0a]' };
 
   function handleShare() {
     const text = `${homeTeam} ${event?.score ?? ''} ${awayTeam}`;
@@ -478,13 +478,13 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
   if (event.isMeeting) {
     return (
       <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-        <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-[#1a0f0f] dark:to-[#0a1810] border-3 border-[rgba(224,37,32,0.6)] rounded-3xl max-w-lg shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_100px_rgba(224,37,32,0.3)]">
+        <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-surface-dark dark:to-background border-3 border-primary-border-emphasis rounded-3xl max-w-lg shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_100px_var(--primary-glow)]">
           <DialogTitle className="sr-only">{event.title}</DialogTitle>
           <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
           <div className="text-center py-4">
             <div className="text-6xl mb-4">📅</div>
             <div className="text-2xl font-extrabold text-foreground mb-4">{event.title}</div>
-            <div className="bg-slate-50 dark:bg-white/5 border-2 border-[rgba(224,37,32,0.2)] rounded-xl p-4">
+            <div className="bg-slate-50 dark:bg-white/5 border-2 border-primary-border-subtle rounded-xl p-4">
               <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                 {t('popover.time')}
               </div>
@@ -501,7 +501,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className={`${resultBadge.dialogBg} border ${resultBadge.dialogBorder} rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_rgba(224,37,32,0.2)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]`}>
+      <DialogContent className={`${resultBadge.dialogBg} border ${resultBadge.dialogBorder} rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_var(--primary-border-subtle)] p-0 overflow-x-hidden overflow-y-auto max-h-[85dvh]`}>
         <DialogTitle className="sr-only">{event.title}</DialogTitle>
         <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
 
@@ -580,7 +580,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           {/* ── Score ── */}
           {event.status === 'played' && event.score && (
             <div className="text-center py-2">
-              <div className={`text-5xl font-black ${resultBadge.scoreColor} tracking-tight`}>
+              <div className={`text-5xl font-black ${resultBadge.scoreColor} tracking-tight tabular-nums`}>
                 {event.score.replace('-', ' - ')} <span className="text-4xl">{isVolleyballSport(event.sport) ? '🏐' : '⚽'}</span>
               </div>
               {event.penalties && (
@@ -637,7 +637,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           {isFootballPlayed && (
             <button
               onClick={() => { navigate('/stats'); onClose(); }}
-              className="w-full mt-4 flex items-center justify-center gap-2 bg-gradient-to-r from-[#E02520] to-[#b91c1c] hover:from-[#c41e19] hover:to-[#991b1b] text-white font-black text-sm uppercase tracking-wider px-6 py-3.5 rounded-2xl transition-all shadow-[0_4px_20px_rgba(224,37,32,0.4)] active:scale-[0.98]"
+              className="w-full mt-4 flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-red-800 text-white font-black text-sm uppercase tracking-wider px-6 py-3.5 rounded-2xl transition-all shadow-[0_4px_20px_var(--primary-glow)] active:scale-[0.98]"
             >
               <span>📊</span>
               {t('popover.viewAllStats')}

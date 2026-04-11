@@ -31,7 +31,7 @@ export function SetBreakdown({ setsWon, setsLost, breakdown }: SetBreakdownProps
               aria-valuemax={total}
             />
           </div>
-          <span className="text-sm font-black text-foreground w-8 text-right">{setsWon}</span>
+          <span className="text-sm font-black text-foreground w-8 text-right tabular-nums">{setsWon}</span>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-sm font-bold text-muted-foreground w-20 shrink-0">{t('stats.setsLost')}</span>
@@ -45,7 +45,7 @@ export function SetBreakdown({ setsWon, setsLost, breakdown }: SetBreakdownProps
               aria-valuemax={total}
             />
           </div>
-          <span className="text-sm font-black text-foreground w-8 text-right">{setsLost}</span>
+          <span className="text-sm font-black text-foreground w-8 text-right tabular-nums">{setsLost}</span>
         </div>
       </div>
 

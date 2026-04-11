@@ -256,6 +256,7 @@ export default function SettingsPage() {
   };
 
   const handleUnsubscribe = async () => {
+    if (!window.confirm(t('settings.confirmUnsubscribe'))) return;
     setLoading(true);
     setPushError(false);
     try {

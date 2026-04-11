@@ -14,13 +14,13 @@ export function GoalDistribution({ goalDistribution }: GoalDistributionProps) {
   return (
     <section className="stat-section">
       <h2 className="stat-section-title">{t('stats.goalDistribution')}</h2>
-      <div className="w-full h-[300px]" role="img" aria-label={t('stats.goalDistribution')}>
+      <div className="w-full h-[300px]" role="img" aria-label={`${t('stats.goalDistribution')}: ${t('stats.goalDistSummary')}`}>
         <ResponsiveContainer width="100%" height="100%" debounce={50}>
           <BarChart data={goalDistribution} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
             <XAxis dataKey="match" tick={{ fill: '#9ca3af', fontSize: 11 }} angle={-45} textAnchor="end" height={60} />
             <YAxis tick={{ fill: '#9ca3af' }} allowDecimals={false} />
             <Tooltip
-              contentStyle={{ backgroundColor: '#1a0f0f', border: '1px solid rgba(224,37,32,0.3)', borderRadius: '8px' }}
+              contentStyle={{ backgroundColor: 'var(--surface-dark)', border: '1px solid var(--primary-border)', borderRadius: '8px' }}
               labelStyle={{ color: '#fca5a5' }}
             />
             <Legend wrapperStyle={{ color: '#9ca3af' }} />

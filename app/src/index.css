@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -43,6 +42,14 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-primary-border: var(--primary-border);
+  --color-primary-border-subtle: var(--primary-border-subtle);
+  --color-primary-border-emphasis: var(--primary-border-emphasis);
+  --color-primary-bg-subtle: var(--primary-bg-subtle);
+  --color-primary-bg-hover: var(--primary-bg-hover);
+  --color-primary-glow: var(--primary-glow);
+  --color-surface-overlay: var(--surface-overlay);
+  --color-surface-dark: var(--surface-dark);
 }
 
 /* Light mode (used when .light class is on html) */
@@ -71,6 +78,15 @@
   --chart-3: #FFC107;
   --chart-4: #2196F3;
   --chart-5: #9C27B0;
+  /* Semantic brand tokens */
+  --primary-border: rgba(224, 37, 32, 0.25);
+  --primary-border-subtle: rgba(224, 37, 32, 0.15);
+  --primary-border-emphasis: rgba(224, 37, 32, 0.4);
+  --primary-bg-subtle: rgba(224, 37, 32, 0.08);
+  --primary-bg-hover: rgba(224, 37, 32, 0.12);
+  --primary-glow: rgba(224, 37, 32, 0.4);
+  --surface-overlay: rgba(0, 0, 0, 0.02);
+  --surface-dark: #ffffff;
 }
 
 /* Dark mode (default for this app) */
@@ -98,6 +114,15 @@
   --chart-3: #FFC107;
   --chart-4: #2196F3;
   --chart-5: #9C27B0;
+  /* Semantic brand tokens — dark variants */
+  --primary-border: rgba(224, 37, 32, 0.3);
+  --primary-border-subtle: rgba(224, 37, 32, 0.2);
+  --primary-border-emphasis: rgba(224, 37, 32, 0.5);
+  --primary-bg-subtle: rgba(224, 37, 32, 0.15);
+  --primary-bg-hover: rgba(224, 37, 32, 0.2);
+  --primary-glow: rgba(224, 37, 32, 0.5);
+  --surface-overlay: rgba(10, 24, 16, 0.2);
+  --surface-dark: #1a0f0f;
 }
 
 /* Shared stats section styles — Stitch design system */
@@ -122,6 +147,17 @@
     @apply text-foreground;
     background: transparent;
     font-family: 'Montserrat', 'Inter', sans-serif;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -135,11 +171,41 @@
   body {
     background: white !important;
     color: black !important;
+    font-size: 12pt !important;
   }
 
   .print\:hidden,
   nav,
   footer {
     display: none !important;
+  }
+
+  /* Force light-mode colors for print */
+  * {
+    color: #1e293b !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    background-image: none !important;
+  }
+
+  /* Keep event card backgrounds visible */
+  [class*="bg-green"],
+  [class*="bg-red"],
+  [class*="bg-yellow"],
+  [class*="bg-blue"] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Remove fixed background */
+  .fixed {
+    display: none !important;
+  }
+
+  /* Prevent page breaks inside cards */
+  [role="button"],
+  section {
+    break-inside: avoid;
   }
 }

@@ -17,7 +17,7 @@ export function HomeVsAway({ home, away }: HomeVsAwayProps) {
           { label: 'stats.home', data: home },
           { label: 'stats.away', data: away },
         ].map(({ label, data }) => (
-          <div key={label} className="bg-white/[0.03] rounded-xl p-4 border border-[rgba(224,37,32,0.15)]">
+          <div key={label} className="bg-white/[0.03] rounded-xl p-4 border border-primary-border-subtle">
             <h3 className="text-red-300 text-lg font-extrabold uppercase tracking-wide text-center mb-4">
               {t(label)}
             </h3>

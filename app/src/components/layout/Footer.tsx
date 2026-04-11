@@ -18,7 +18,7 @@ export function Footer() {
         {items.map((item) => (
           <div
             key={item.label}
-            className="flex items-center gap-3 px-4 py-3 bg-[rgba(224,37,32,0.12)] border border-[rgba(224,37,32,0.2)] rounded-xl font-semibold text-secondary-foreground hover:bg-[rgba(224,37,32,0.2)] hover:border-[rgba(224,37,32,0.4)] transition-all"
+            className="flex items-center gap-3 px-4 py-3 bg-primary-bg-subtle border border-primary-border-subtle rounded-xl font-semibold text-secondary-foreground hover:bg-primary-bg-hover hover:border-primary-border-emphasis transition-all"
           >
             <span className="text-2xl" aria-hidden="true">{item.emoji}</span>
             <span>{t(item.label)}</span>

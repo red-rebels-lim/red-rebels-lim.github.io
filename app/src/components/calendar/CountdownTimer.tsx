@@ -8,7 +8,7 @@ export function CountdownTimer({ timestamp }: CountdownTimerProps) {
   const text = useCountdown(timestamp);
   if (!text) return null;
   return (
-    <div className="text-[0.65rem] font-semibold text-yellow-300 mt-1 opacity-90 text-center" aria-live="polite" aria-atomic="true">
+    <div className="text-[0.65rem] font-semibold text-yellow-300 mt-1 opacity-90 text-center tabular-nums" aria-live="polite" aria-atomic="true">
       {text}
     </div>
   );
