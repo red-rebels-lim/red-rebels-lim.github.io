@@ -7326,7 +7326,27 @@ export const eventsData: EventsData = {
       opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ",
       time: "20:00",
       logo: "images/team_logos/ΑΕΚ ΛΑΡΝΑΚΑΣ.webp",
-      competition: "cup"
+      competition: "cup",
+      status: "played",
+      score: "1-3",
+      sets: [
+        {
+          home: 25,
+          away: 23
+        },
+        {
+          home: 19,
+          away: 25
+        },
+        {
+          home: 16,
+          away: 25
+        },
+        {
+          home: 22,
+          away: 25
+        }
+      ]
     },
     {
       day: 18,
@@ -7334,6 +7354,15 @@ export const eventsData: EventsData = {
       location: "away",
       opponent: "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
       time: "16:30",
+      venue: "ΚΟΙΝΟΤΙΚΟ ΓΗΠΕΔΟ ΠΑΝΩ ΠΟΛΕΜΙΔΙΩΝ",
+      logo: "images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp"
+    },
+    {
+      day: 19,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
+      time: "16:00",
       venue: "ΚΟΙΝΟΤΙΚΟ ΓΗΠΕΔΟ ΠΑΝΩ ΠΟΛΕΜΙΔΙΩΝ",
       logo: "images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp"
     },
