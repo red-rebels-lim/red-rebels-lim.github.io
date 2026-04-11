@@ -1,4 +1,8 @@
+import { useTheme } from '@/hooks/useTheme';
+
 export function AppBackground() {
+  const { isDark } = useTheme();
+
   return (
     <>
       <div
@@ -7,6 +11,13 @@ export function AppBackground() {
       />
       {/* Dark overlay */}
       <div className="fixed inset-0 -z-10 pointer-events-none bg-gradient-to-br from-surface-overlay via-surface-overlay/60 to-surface-overlay" />
+      {/* Ambient light blobs — dark mode only */}
+      {isDark && (
+        <>
+          <div className="ambient-blob ambient-blob-1" aria-hidden="true" />
+          <div className="ambient-blob ambient-blob-2" aria-hidden="true" />
+        </>
+      )}
     </>
   );
 }

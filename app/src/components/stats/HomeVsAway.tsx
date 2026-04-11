@@ -28,7 +28,7 @@ export function HomeVsAway({ home, away }: HomeVsAwayProps) {
                 { l: 'stats.losses', v: data.losses, color: 'text-red-400' },
               ].map((s) => (
                 <div key={s.l} className="text-center">
-                  <div className={`text-2xl font-black ${s.color}`}>{s.v}</div>
+                  <div className={`text-2xl font-black ${s.color} font-condensed tabular-nums`}>{s.v}</div>
                   <div className="text-xs font-bold text-muted-foreground uppercase">{t(s.l)}</div>
                 </div>
               ))}

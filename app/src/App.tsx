@@ -41,7 +41,7 @@ export default function App() {
     <HashRouter>
       <PageViewTracker />
       <AppBackground />
-      <main className="min-h-screen p-4 pb-20 font-['Montserrat',sans-serif]">
+      <main className="min-h-screen p-4 pb-20 font-['Barlow',sans-serif]">
         <div className="max-w-3xl mx-auto">
         <ErrorBoundary>
           <Suspense fallback={<PageSkeleton />}>

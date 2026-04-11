@@ -18,7 +18,7 @@ export function MobileHeader({ showBack }: MobileHeaderProps) {
   };
 
   return (
-    <header className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800">
+    <header className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-[var(--border-subtle)] dark:backdrop-blur-[var(--glass-blur)] dark:bg-background/80">
       <div className="flex items-center gap-3">
         {showBack && (
           <button
@@ -31,7 +31,7 @@ export function MobileHeader({ showBack }: MobileHeaderProps) {
             </svg>
           </button>
         )}
-        <h1 className="text-xl font-bold tracking-tight text-[#dc2828]">
+        <h1 className="text-xl font-bold tracking-tight text-[#dc2828] font-condensed">
           {t('common.appName', 'Red Rebels')} {t('common.calendarLabel', 'Calendar')}
         </h1>
       </div>
