@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
+import { useVisualTheme, type VisualTheme } from '@/hooks/useVisualTheme';
 import { MobileHeader } from '@/components/layout/MobileHeader';
 import { usePwaInstall } from '@/hooks/usePwaInstall';
 import {
@@ -12,6 +13,13 @@ import {
   type PushStatus,
 } from '@/lib/push';
 import { getPreferences, updatePreferences, type NotifPrefs } from '@/lib/preferences';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { exportToCalendar } from '@/lib/ics-export';
 import { trackEvent } from '@/lib/analytics';
 import { logError } from '@/lib/logger';
@@ -233,7 +241,22 @@ function getSportFilters(): { football: boolean; volleyball: boolean } {
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { isDark, toggle: toggleTheme } = useTheme();
+  const { theme: visualTheme, setTheme: setVisualTheme, themes: visualThemes } = useVisualTheme();
   const { canInstall, promptInstall } = usePwaInstall();
+
+  const themeLabels: Record<VisualTheme, string> = {
+    default: t('settings.themeDefault'),
+    brutalism: t('settings.themeBrutalism'),
+    cinema: t('settings.themeCinema'),
+    neon: t('settings.themeNeon'),
+  };
+
+  const handleThemeSelect = (value: string) => {
+    setVisualTheme(value as VisualTheme);
+    trackEvent('change_visual_theme', { theme: value });
+    // Force reload so all components re-render with the new theme's tokens
+    window.location.reload();
+  };
 
   // Sport filter state
   const [sportFilters, setSportFilters] = useState(() => getSportFilters());
@@ -468,6 +491,30 @@ export default function SettingsPage() {
               )}
             </>
           )}
+        </SettingsSection>
+
+        {/* ── VISUAL THEME ── */}
+        <SettingsSection title={t('settings.visualTheme')}>
+          <div data-tour="theme" className="flex items-center gap-4 px-4 min-h-[56px] justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center rounded-lg shrink-0 size-10 bg-[#dc2828]/10 text-[#dc2828]">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="13.5" cy="6.5" r="2.5" /><circle cx="6" cy="12" r="2.5" /><circle cx="8" cy="21" r="2.5" /><circle cx="17.5" cy="17.5" r="2.5" /><path d="M21 12c0-4.97-4.03-9-9-9s-9 4.03-9 9c0 1.66.45 3.21 1.24 4.54" />
+                </svg>
+              </div>
+              <p className="text-base font-medium">{t('settings.visualTheme')}</p>
+            </div>
+            <Select value={visualTheme} onValueChange={handleThemeSelect}>
+              <SelectTrigger className="w-[140px] bg-slate-100 dark:bg-white/5 border-primary-border-subtle text-foreground">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-white dark:bg-surface-dark border-primary-border">
+                {visualThemes.map((t_key) => (
+                  <SelectItem key={t_key} value={t_key}>{themeLabels[t_key]}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </SettingsSection>
 
         {/* ── DISPLAY ── */}

@@ -4,10 +4,14 @@ import { useSwipeNavigation } from '@/hooks/useSwipeNavigation';
 import { MobileHeader } from '@/components/layout/MobileHeader';
 import { MobileCalendarGrid } from '@/components/calendar/MobileCalendarGrid';
 import { UpcomingEventsList } from '@/components/calendar/UpcomingEventsList';
+import { CalendarListView } from '@/components/calendar/CalendarListView';
+import { CalendarCardsView } from '@/components/calendar/CalendarCardsView';
 import { EventPopover } from '@/components/calendar/EventPopover';
 import { FilterPanel } from '@/components/filters/FilterPanel';
 import { OnboardingTour } from '@/components/OnboardingTour';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useCalendarView } from '@/hooks/useCalendarView';
+import { HudFrame } from '@/components/layout/HudFrame';
 import { useTranslation } from 'react-i18next';
 import { trackEvent } from '@/lib/analytics';
 import { monthMap } from '@/data/month-config';
@@ -36,6 +40,7 @@ export function CalendarPage() {
     applyFilters,
     clearFilters,
   } = useCalendar();
+  const { view, setView } = useCalendarView();
 
   const { t } = useTranslation();
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -99,7 +104,7 @@ export function CalendarPage() {
     <div className="w-full pb-20" {...swipe}>
       <h1 className="sr-only">Red Rebels Calendar</h1>
 
-      <MobileHeader />
+      <MobileHeader calendarView={view} onViewChange={(v) => { setView(v); trackEvent('switch_calendar_view', { view: v }); }} />
 
       <FilterPanel
         open={filtersOpen}
@@ -108,6 +113,7 @@ export function CalendarPage() {
         onClear={clearFilters}
       />
 
+      <HudFrame>
       <div className="bg-white/70 dark:bg-transparent backdrop-blur-sm dark:backdrop-blur-none rounded-2xl px-2 mt-2">
         {/* Month navigation */}
         <div className="flex items-center justify-between px-2 py-3">
@@ -130,22 +136,43 @@ export function CalendarPage() {
           </button>
         </div>
 
-        <MobileCalendarGrid
+        {view === 'grid' && (
+          <MobileCalendarGrid
+            monthData={monthData}
+            currentMonth={currentMonth}
+            selectedDay={selectedDay}
+            onDayClick={(day) => {
+              setUserSelectedDay(day);
+            }}
+          />
+        )}
+      </div>
+      </HudFrame>
+
+      {view === 'grid' && (
+        <UpcomingEventsList
           monthData={monthData}
           currentMonth={currentMonth}
           selectedDay={selectedDay}
-          onDayClick={(day) => {
-            setUserSelectedDay(day);
-          }}
+          onEventClick={setSelectedEvent}
         />
-      </div>
+      )}
 
-      <UpcomingEventsList
-        monthData={monthData}
-        currentMonth={currentMonth}
-        selectedDay={selectedDay}
-        onEventClick={setSelectedEvent}
-      />
+      {view === 'list' && (
+        <CalendarListView
+          monthData={monthData}
+          currentMonth={currentMonth}
+          onEventClick={setSelectedEvent}
+        />
+      )}
+
+      {view === 'cards' && (
+        <CalendarCardsView
+          monthData={monthData}
+          currentMonth={currentMonth}
+          onEventClick={setSelectedEvent}
+        />
+      )}
 
       <EventPopover
         event={selectedEvent}

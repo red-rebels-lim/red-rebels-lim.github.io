@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppBackground } from '@/components/layout/AppBackground';
+import { Marquee } from '@/components/layout/Marquee';
 import { CalendarPage } from '@/pages/CalendarPage';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -41,6 +42,8 @@ export default function App() {
     <HashRouter>
       <PageViewTracker />
       <AppBackground />
+      <div className="neon-top-line" aria-hidden="true" />
+      <Marquee />
       <main className="min-h-screen p-4 pb-20 font-['Barlow',sans-serif]">
         <div className="max-w-3xl mx-auto">
         <ErrorBoundary>

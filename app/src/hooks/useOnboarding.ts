@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 
-const STORAGE_KEY = 'onboarding-completed';
+// Bump version to re-trigger tour for users who completed an older version
+const STORAGE_KEY = 'onboarding-completed-v2';
 
 export interface OnboardingStep {
   targetSelector: string;
@@ -20,19 +21,29 @@ const STEPS: OnboardingStep[] = [
     descriptionKey: 'onboarding.step2Desc',
   },
   {
-    targetSelector: '[data-tour="stats"]',
+    targetSelector: '[data-tour="layout"]',
     titleKey: 'onboarding.step3Title',
     descriptionKey: 'onboarding.step3Desc',
   },
   {
-    targetSelector: '[data-tour="settings"]',
+    targetSelector: '[data-tour="stats"]',
     titleKey: 'onboarding.step4Title',
     descriptionKey: 'onboarding.step4Desc',
   },
   {
-    targetSelector: '[data-tour="export"]',
+    targetSelector: '[data-tour="settings"]',
     titleKey: 'onboarding.step5Title',
     descriptionKey: 'onboarding.step5Desc',
+  },
+  {
+    targetSelector: '[data-tour="theme"]',
+    titleKey: 'onboarding.step6Title',
+    descriptionKey: 'onboarding.step6Desc',
+  },
+  {
+    targetSelector: '[data-tour="export"]',
+    titleKey: 'onboarding.step7Title',
+    descriptionKey: 'onboarding.step7Desc',
   },
 ];
 
