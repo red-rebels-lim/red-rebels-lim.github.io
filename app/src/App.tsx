@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppBackground } from '@/components/layout/AppBackground';
 import { Marquee } from '@/components/layout/Marquee';
 import { CalendarPage } from '@/pages/CalendarPage';
@@ -39,7 +39,7 @@ function PageViewTracker() {
 
 export default function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <PageViewTracker />
       <AppBackground />
       <div className="neon-top-line" aria-hidden="true" />
@@ -59,6 +59,6 @@ export default function App() {
         </div>
       </main>
       <BottomNav />
-    </HashRouter>
+    </BrowserRouter>
   );
 }
