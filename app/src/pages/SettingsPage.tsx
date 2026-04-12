@@ -523,8 +523,6 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  {/* Notification preview */}
-                  <NotificationPreview t={t} notifPrefs={notifPrefs} />
                 </>
               )}
 
@@ -537,6 +535,12 @@ export default function SettingsPage() {
                   isLast
                 />
               )}
+
+              {/* Notification preview — always visible as a teaser / confirmation */}
+              <NotificationPreview
+                t={t}
+                notifPrefs={notifPrefs ?? { reminderHours: [24, 2], enabledSports: [], notifyNewEvents: true, notifyTimeChanges: true, notifyScoreUpdates: true, disabled: false }}
+              />
             </>
           )}
         </SettingsSection>
