@@ -226,6 +226,75 @@ function SmartphoneIcon() {
   );
 }
 
+function NotificationPreview({ t, notifPrefs }: { t: (key: string, opts?: Record<string, string>) => string; notifPrefs: NotifPrefs }) {
+  const [expanded, setExpanded] = useState(false);
+
+  const reminderLabel = notifPrefs.reminderHours.length > 0
+    ? `${notifPrefs.reminderHours[0]}h`
+    : '2h';
+
+  const previews = [
+    { icon: '🔔', text: t('settings.previewReminder', { time: reminderLabel }), type: 'reminder' },
+    ...(notifPrefs.notifyScoreUpdates ? [{ icon: '⚽', text: t('settings.previewScore'), type: 'score' }] : []),
+    ...(notifPrefs.notifyNewEvents ? [{ icon: '📅', text: t('settings.previewNewEvent'), type: 'new' }] : []),
+  ];
+
+  if (previews.length === 0) return null;
+
+  return (
+    <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
+      <button
+        type="button"
+        onClick={() => setExpanded(!expanded)}
+        className="flex items-center justify-between w-full group"
+      >
+        <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          {t('settings.notificationPreview')}
+        </p>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={`text-slate-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+          aria-hidden="true"
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+      {expanded && (
+        <div className="space-y-2 mt-3">
+          {previews.map((p) => (
+            <div
+              key={p.type}
+              className="flex items-start gap-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3 shadow-sm"
+            >
+              <img
+                src="/images/clear_logo_192.png"
+                alt=""
+                className="w-8 h-8 rounded-lg object-cover shrink-0 mt-0.5"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  {t('settings.previewTitle')}
+                </p>
+                <p className="text-sm font-medium text-foreground leading-snug mt-0.5">
+                  {p.text}
+                </p>
+              </div>
+              <span className="text-xs text-slate-400 dark:text-slate-500 shrink-0 mt-1">now</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Main component ───────────────────────────────────────────────────────────
 
 const SPORT_FILTERS_KEY = 'sport_filters';
@@ -477,6 +546,7 @@ export default function SettingsPage() {
                       ))}
                     </div>
                   </div>
+
                 </>
               )}
 
@@ -489,6 +559,12 @@ export default function SettingsPage() {
                   isLast
                 />
               )}
+
+              {/* Notification preview — always visible as a teaser / confirmation */}
+              <NotificationPreview
+                t={t}
+                notifPrefs={notifPrefs ?? { reminderHours: [24, 2], enabledSports: [], notifyNewEvents: true, notifyTimeChanges: true, notifyScoreUpdates: true, disabled: false }}
+              />
             </>
           )}
         </SettingsSection>
