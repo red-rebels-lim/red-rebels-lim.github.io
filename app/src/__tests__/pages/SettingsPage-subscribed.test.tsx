@@ -62,16 +62,19 @@ describe('SettingsPage (subscribed)', () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
+    localStorage.removeItem('notification_channels');
   });
 
-  it('renders Match Reminders toggle in ON state when subscribed', async () => {
+  it('renders Web Push toggle in ON state when subscribed', async () => {
     await act(async () => { render(<SettingsPage />); });
     const switches = screen.getAllByRole('switch');
     // First toggle is Match Reminders — should be checked
     expect(switches[0].getAttribute('aria-checked')).toBe('true');
   });
 
-  it('calls unsubscribeFromPush when Match Reminders toggled off', async () => {
+  it('calls unsubscribeFromPush when Web Push toggled off', async () => {
+    // Enable another channel so the guard allows disabling Web Push
+    localStorage.setItem('notification_channels', JSON.stringify({ telegram: true, calendar: false }));
     await act(async () => { render(<SettingsPage />); });
     const switches = screen.getAllByRole('switch');
     await act(async () => { fireEvent.click(switches[0]); });
@@ -79,13 +82,15 @@ describe('SettingsPage (subscribed)', () => {
   });
 
   it('handles unsubscribe error gracefully', async () => {
+    // Enable another channel so the guard allows disabling Web Push
+    localStorage.setItem('notification_channels', JSON.stringify({ telegram: true, calendar: false }));
     vi.mocked(unsubscribeFromPush).mockRejectedValue(new Error('Unsubscribe failed'));
     await act(async () => { render(<SettingsPage />); });
     await act(async () => {
       fireEvent.click(screen.getAllByRole('switch')[0]);
     });
-    // Should not crash — Match Reminders still visible
-    screen.getByText('settings.matchReminders');
+    // Should show push error inline
+    screen.getByText('settings.pushError');
   });
 
   it('renders all sections even when subscribed', async () => {
@@ -100,15 +105,15 @@ describe('SettingsPage (subscribed)', () => {
   it('renders toggle switches for all settings', async () => {
     await act(async () => { render(<SettingsPage />); });
     const switches = screen.getAllByRole('switch');
-    // Match Reminders + Dark Theme + Football + Volleyball = 4 minimum
-    expect(switches.length).toBeGreaterThanOrEqual(4);
+    // Web Push + Telegram + Calendar + Dark Theme + Football + Volleyball = 6 minimum
+    expect(switches.length).toBeGreaterThanOrEqual(6);
   });
 
   it('toggles dark theme switch', async () => {
     await act(async () => { render(<SettingsPage />); });
     const switches = screen.getAllByRole('switch');
-    // Second toggle is Dark Theme
-    await act(async () => { fireEvent.click(switches[1]); });
+    // Fourth toggle is Dark Theme (after Web Push, Telegram, Calendar)
+    await act(async () => { fireEvent.click(switches[3]); });
     // Should not crash
     expect(switches[1]).toBeDefined();
   });

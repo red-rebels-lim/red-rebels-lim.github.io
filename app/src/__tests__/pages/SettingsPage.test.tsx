@@ -98,9 +98,9 @@ describe('TASK-11: SettingsPage Redesign', () => {
       screen.getByText('settings.notifications');
     });
 
-    it('renders Match Reminders toggle', () => {
+    it('renders Web Push toggle', () => {
       render(<SettingsPage />);
-      screen.getByText('settings.matchReminders');
+      screen.getByText('settings.webPush');
     });
 
     it('calls subscribeToPush when Match Reminders toggled on', async () => {
@@ -111,16 +111,19 @@ describe('TASK-11: SettingsPage Redesign', () => {
       expect(subscribeToPush).toHaveBeenCalled();
     });
 
-    it('shows not supported message when push not supported', () => {
+    it('disables Web Push toggle when push not supported', () => {
       vi.mocked(isPushSupported).mockReturnValue(false);
       render(<SettingsPage />);
-      screen.getByText('settings.notSupported');
+      const switches = screen.getAllByRole('switch');
+      expect(switches[0].hasAttribute('disabled')).toBe(true);
     });
 
-    it('shows denied state when permission denied', () => {
+    it('shows denied help and disables toggle when permission denied', () => {
       vi.mocked(getSubscriptionStatus).mockReturnValue('denied');
       render(<SettingsPage />);
-      screen.getByText('settings.permissionDenied');
+      screen.getByText('settings.deniedHelp');
+      const switches = screen.getAllByRole('switch');
+      expect(switches[0].hasAttribute('disabled')).toBe(true);
     });
   });
 
@@ -234,8 +237,8 @@ describe('TASK-11: SettingsPage Redesign', () => {
       const switches = screen.getAllByRole('switch');
       const matchRemindersSwitch = switches[0]; // first toggle is Match Reminders
       await act(async () => { fireEvent.click(matchRemindersSwitch); });
-      // Should not crash
-      screen.getByText('settings.matchReminders');
+      // Should show push error inline
+      screen.getByText('settings.pushError');
     });
   });
 
