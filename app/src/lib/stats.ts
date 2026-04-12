@@ -166,8 +166,7 @@ export function calculateStatistics(): FormattedStats {
     if (ga === 0) cleanSheets++;
 
     // Goal distribution
-    const abbrev = match.opponent.length > 10 ? match.opponent.substring(0, 10) + '\u2026' : match.opponent;
-    goalDistribution.push({ match: abbrev, goalsFor: gf, goalsAgainst: ga });
+    goalDistribution.push({ match: match.opponent, opponent: match.opponent, goalsFor: gf, goalsAgainst: ga });
 
     // Points progression
     const matchPoints = result === 'W' ? 3 : result === 'D' ? 1 : 0;

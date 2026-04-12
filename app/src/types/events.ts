@@ -68,6 +68,8 @@ export interface SportEvent {
 export interface CalendarEvent {
   title: string;
   subtitle: string;
+  /** Raw opponent name from events data (Greek, for lookups) */
+  opponent: string;
   venue?: string;
   logo?: string;
   status?: MatchStatus;
@@ -164,6 +166,7 @@ export interface HeadToHead {
 
 export interface GoalDistributionEntry {
   match: string;
+  opponent: string;
   goalsFor: number;
   goalsAgainst: number;
 }

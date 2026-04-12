@@ -1,9 +1,11 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import type { MonthName, CalendarData, CalendarEvent, FilterState } from '@/types/events';
 import { eventsData } from '@/data/events';
 import { sportConfig } from '@/data/sport-config';
 import { monthMap, MONTH_ORDER } from '@/data/month-config';
-import { TEAM_NAME } from '@/data/constants';
+import { translateTeamName } from '@/lib/translate';
 
 function getDayName(year: number, monthIndex: number, day: number): string {
   const dayKeys = ['days.sunday', 'days.monday', 'days.tuesday', 'days.wednesday', 'days.thursday', 'days.friday', 'days.saturday'];
@@ -32,17 +34,20 @@ function parseEvent(eventData: {
   subs?: CalendarEvent['subs'];
   sets?: CalendarEvent['sets'];
   vbScorers?: CalendarEvent['vbScorers'];
-}): CalendarEvent {
+}, t: TFunction): CalendarEvent {
   const info = sportConfig[eventData.sport as keyof typeof sportConfig];
   const isMeeting = eventData.sport === 'meeting';
+
+  const teamName = translateTeamName('Νέα Σαλαμίνα', t);
+  const translatedOpponent = isMeeting ? eventData.opponent : translateTeamName(eventData.opponent, t);
 
   let title: string;
   if (isMeeting) {
     title = eventData.opponent;
   } else if (eventData.location === 'home') {
-    title = `${TEAM_NAME} vs ${eventData.opponent}`;
+    title = `${teamName} vs ${translatedOpponent}`;
   } else {
-    title = `${eventData.opponent} vs ${TEAM_NAME}`;
+    title = `${translatedOpponent} vs ${teamName}`;
   }
 
   const subtitle = info?.emoji
@@ -53,6 +58,7 @@ function parseEvent(eventData: {
     day: eventData.day,
     title,
     subtitle,
+    opponent: eventData.opponent,
     venue: eventData.venue,
     logo: eventData.logo,
     status: eventData.status as CalendarEvent['status'],
@@ -89,7 +95,7 @@ function getSportFilters(): { football: boolean; volleyball: boolean } {
   return defaults;
 }
 
-function buildCalendarData(filters?: FilterState): CalendarData {
+function buildCalendarData(filters: FilterState | undefined, t: TFunction): CalendarData {
   const calendar: CalendarData = {};
   const sportFilters = getSportFilters();
 
@@ -127,7 +133,7 @@ function buildCalendarData(filters?: FilterState): CalendarData {
     const eventsByDay: Record<number, CalendarEvent[]> = {};
     for (const ev of events) {
       if (!ev.sport) continue;
-      const parsed = parseEvent(ev as typeof ev & { sport: string });
+      const parsed = parseEvent(ev as typeof ev & { sport: string }, t);
       if (!eventsByDay[parsed.day]) eventsByDay[parsed.day] = [];
       eventsByDay[parsed.day].push(parsed);
     }
@@ -165,6 +171,7 @@ function getCurrentMonthName(): MonthName {
 }
 
 export function useCalendar() {
+  const { t, i18n } = useTranslation();
   const [currentMonth, setCurrentMonth] = useState<MonthName>(getCurrentMonthName);
   const [filters, setFilters] = useState<FilterState>({
     sport: 'all',
@@ -183,8 +190,8 @@ export function useCalendar() {
     return () => window.removeEventListener('storage', onStorage);
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- sportFilterVersion triggers re-read of localStorage sport filters
-  const calendarData = useMemo(() => buildCalendarData(filters), [filters, sportFilterVersion]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- sportFilterVersion triggers re-read of localStorage sport filters; i18n.language triggers re-translation
+  const calendarData = useMemo(() => buildCalendarData(filters, t), [filters, sportFilterVersion, i18n.language]);
   const monthData = calendarData[currentMonth];
 
   const navigatePrevious = useCallback(() => {

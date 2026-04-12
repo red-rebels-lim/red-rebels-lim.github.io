@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 import type { PointsProgressionEntry } from '@/types/events';
+import { translateTeamName } from '@/lib/translate';
 
 interface SeasonProgressProps {
   pointsProgression: PointsProgressionEntry[];
@@ -29,7 +30,7 @@ export function SeasonProgress({ pointsProgression }: SeasonProgressProps) {
               labelStyle={{ color: '#fca5a5' }}
               labelFormatter={(label) => {
                 const entry = pointsProgression.find(p => p.match === label);
-                return entry ? `${t('stats.matchday')} ${label} - ${entry.opponent}` : `${t('stats.matchday')} ${label}`;
+                return entry ? `${t('stats.matchday')} ${label} - ${translateTeamName(entry.opponent, t)}` : `${t('stats.matchday')} ${label}`;
               }}
             />
             <Line

@@ -4,17 +4,14 @@ import type { CalendarEvent } from '@/types/events';
 import { getMatchResult } from '@/lib/stats';
 import { CountdownTimer } from './CountdownTimer';
 import { monthMap } from '@/data/month-config';
-import { TEAM_NAME } from '@/data/constants';
 import type { MonthName } from '@/types/events';
 import { trackEvent } from '@/lib/analytics';
+import { translateTeamName } from '@/lib/translate';
 
 function truncateTeamName(name: string, maxLength = 12): string {
   if (!name) return '';
-  const shortened = name
-    .replace(/^(ΑΕ|ΑΟ|ΑΣ|ΠΟ|ΠΑΕ|ΠΑΕΕΚ|ΑΛΣ|ΜΕΑΠ|ΑΟΑΝ|ΑΠΕΑ)\s+/g, '')
-    .trim();
-  if (shortened.length <= maxLength) return shortened;
-  return shortened.substring(0, maxLength - 1) + '\u2026';
+  if (name.length <= maxLength) return name;
+  return name.substring(0, maxLength - 1) + '\u2026';
 }
 
 interface EventCardProps {
@@ -41,7 +38,7 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
   const subtitleParts = event.subtitle.split(' - ');
   const emoji = subtitleParts[0] ?? '';
   const timePart = subtitleParts[1];
-  const opponent = event.title.replace(`${TEAM_NAME} vs `, '').replace(` vs ${TEAM_NAME}`, '');
+  const opponent = translateTeamName(event.opponent, t);
   const ariaLabel = event.isMeeting
     ? event.title
     : `${event.title}${event.status === 'played' && event.score ? `, ${event.score}` : ''}${result ? `, ${result}` : ''}`;

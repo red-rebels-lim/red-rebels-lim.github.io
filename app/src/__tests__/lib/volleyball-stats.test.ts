@@ -369,7 +369,7 @@ describe('TASK-03: Volleyball Stats Engine', () => {
       { score: '3-1', location: 'away' as const },  // 1-3 loss (swapped)
       { score: '2-3', location: 'home' as const },  // 2-3 loss
     ].map(m => ({
-      title: '', subtitle: '', sport: 'volleyball-men' as const,
+      title: '', subtitle: '', opponent: '', sport: 'volleyball-men' as const,
       day: 1, isMeeting: false, ...m,
     }));
 
@@ -410,7 +410,7 @@ describe('TASK-03: Volleyball Stats Engine', () => {
   describe('aggregateTopScorers', () => {
     const mockMatches = [
       {
-        title: '', subtitle: '', sport: 'volleyball-men' as const,
+        title: '', subtitle: '', opponent: '', sport: 'volleyball-men' as const,
         day: 1, isMeeting: false, location: 'home' as const, score: '3-1',
         vbScorers: [
           { name: 'Player A', points: 20, team: 'home' as const },
@@ -419,7 +419,7 @@ describe('TASK-03: Volleyball Stats Engine', () => {
         ],
       },
       {
-        title: '', subtitle: '', sport: 'volleyball-men' as const,
+        title: '', subtitle: '', opponent: '', sport: 'volleyball-men' as const,
         day: 5, isMeeting: false, location: 'away' as const, score: '1-3',
         vbScorers: [
           { name: 'Player A', points: 18, team: 'away' as const },
@@ -455,7 +455,7 @@ describe('TASK-03: Volleyball Stats Engine', () => {
     it('returns empty array for matches without vbScorers', () => {
       const emptyMatches = [
         {
-          title: '', subtitle: '', sport: 'volleyball-men' as const,
+          title: '', subtitle: '', opponent: '', sport: 'volleyball-men' as const,
           day: 1, isMeeting: false, location: 'home' as const, score: '3-0',
         },
       ];
@@ -469,7 +469,7 @@ describe('TASK-03: Volleyball Stats Engine', () => {
         name: `Player ${i}`, points: 10 + i, team: 'home' as const,
       }));
       const matches = [{
-        title: '', subtitle: '', sport: 'volleyball-men' as const,
+        title: '', subtitle: '', opponent: '', sport: 'volleyball-men' as const,
         day: 1, isMeeting: false, location: 'home' as const, score: '3-0',
         vbScorers: manyScorers,
       }];
