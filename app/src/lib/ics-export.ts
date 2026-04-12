@@ -1,8 +1,9 @@
 import { eventsData } from '@/data/events';
 import { sportConfig } from '@/data/sport-config';
 import { monthMap, MONTH_ORDER } from '@/data/month-config';
-import { TEAM_NAME, SEASON_START_YEAR, SEASON_END_YEAR } from '@/data/constants';
+import { SEASON_START_YEAR, SEASON_END_YEAR } from '@/data/constants';
 import i18n from '@/i18n';
+import { translateTeamName, translateVenue } from '@/lib/translate';
 
 function escapeIcs(value: string): string {
   return value
@@ -43,10 +44,13 @@ export function exportToCalendar() {
       const cfg = sportConfig[ev.sport];
       const isMeeting = ev.sport === 'meeting';
 
+      const teamName = translateTeamName('Νέα Σαλαμίνα', t);
+      const translatedOpponent = isMeeting ? ev.opponent : translateTeamName(ev.opponent, t);
+
       let title: string;
       if (isMeeting) title = ev.opponent;
-      else if (ev.location === 'home') title = `${TEAM_NAME} vs ${ev.opponent}`;
-      else title = `${ev.opponent} vs ${TEAM_NAME}`;
+      else if (ev.location === 'home') title = `${teamName} vs ${translatedOpponent}`;
+      else title = `${translatedOpponent} vs ${teamName}`;
 
       const subtitle = cfg?.emoji ? `${cfg.emoji} - ${ev.time}` : `${cfg?.name ?? ''} - ${ev.time}`;
       const timePart = subtitle.split(' - ')[1];
@@ -83,8 +87,9 @@ export function exportToCalendar() {
 
       let description = title;
       if (ev.venue) {
-        description += `\\n${t('ics.venue')}: ${ev.venue}`;
-        ics += `LOCATION:${escapeIcs(ev.venue)}\r\n`;
+        const translatedVenue = translateVenue(ev.venue, t);
+        description += `\\n${t('ics.venue')}: ${translatedVenue}`;
+        ics += `LOCATION:${escapeIcs(translatedVenue)}\r\n`;
       }
       if (ev.status === 'played' && ev.score) {
         description += `\\n${t('ics.result')}: ${ev.score}`;

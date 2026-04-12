@@ -29,8 +29,8 @@ describe('GoalDistribution', () => {
 
   it('renders section title and chart when data is provided', () => {
     const data = [
-      { match: 'vs Omonia', goalsFor: 3, goalsAgainst: 1 },
-      { match: 'vs APOEL', goalsFor: 1, goalsAgainst: 2 },
+      { match: 'vs Omonia', opponent: 'ΟΜΟΝΟΙΑ', goalsFor: 3, goalsAgainst: 1 },
+      { match: 'vs APOEL', opponent: 'APOEL', goalsFor: 1, goalsAgainst: 2 },
     ];
     render(<GoalDistribution goalDistribution={data} />);
     screen.getByText('stats.goalDistribution');
@@ -38,7 +38,7 @@ describe('GoalDistribution', () => {
   });
 
   it('has accessible role="img" on chart container', () => {
-    const data = [{ match: 'vs Test', goalsFor: 1, goalsAgainst: 0 }];
+    const data = [{ match: 'vs Test', opponent: 'TEST', goalsFor: 1, goalsAgainst: 0 }];
     render(<GoalDistribution goalDistribution={data} />);
     screen.getByRole('img');
   });

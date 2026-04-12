@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { getFormColor } from '@/lib/stats';
 import type { FormMatch, StreakInfo } from '@/types/events';
+import { translateTeamName } from '@/lib/translate';
 
 interface RecentFormProps {
   recentForm: FormMatch[];
@@ -27,8 +28,8 @@ export function RecentForm({ recentForm }: RecentFormProps) {
               className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-black text-white shadow-md cursor-pointer transition-all hover:-translate-y-1 hover:scale-110"
               style={{ background: getFormColor(match.result) }}
               role="img"
-              aria-label={`${match.result === 'W' ? 'Win' : match.result === 'D' ? 'Draw' : 'Loss'}: ${match.opponent} (${match.score})`}
-              title={`${match.opponent} (${match.score})`}
+              aria-label={`${match.result === 'W' ? 'Win' : match.result === 'D' ? 'Draw' : 'Loss'}: ${translateTeamName(match.opponent, t)} (${match.score})`}
+              title={`${translateTeamName(match.opponent, t)} (${match.score})`}
             >
               <span aria-hidden="true">{match.result}</span>
             </div>

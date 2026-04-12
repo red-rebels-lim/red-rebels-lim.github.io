@@ -41,6 +41,23 @@ export function MobileHeader({ showBack, calendarView, onViewChange }: MobileHea
     trackEvent('toggle_theme', { theme: isDark ? 'light' : 'dark' });
   };
 
+  const handleShare = async () => {
+    const shareData = {
+      title: t('common.appName', 'Red Rebels') + ' ' + t('common.calendarLabel', 'Calendar'),
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+      }
+      trackEvent('share', { method: 'share' in navigator ? 'native' : 'clipboard' });
+    } catch {
+      // User cancelled share dialog
+    }
+  };
+
   const cycleView = () => {
     if (!calendarView || !onViewChange) return;
     const idx = viewOrder.indexOf(calendarView);
@@ -79,6 +96,16 @@ export function MobileHeader({ showBack, calendarView, onViewChange }: MobileHea
             {viewIcons[calendarView]}
           </button>
         )}
+        {/* Share button */}
+        <button
+          onClick={handleShare}
+          aria-label={t('calendar.shareMatch', 'Share')}
+          className="p-2 rounded-full bg-slate-100 dark:bg-[#1e293b] text-slate-600 dark:text-slate-300 transition-colors"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+          </svg>
+        </button>
         {/* Dark/light toggle */}
         <button
           onClick={handleToggleTheme}

@@ -96,14 +96,14 @@ describe('exportToCalendar', () => {
     expect(eventContent).toContain('CATEGORIES:');
   });
 
-  it('home matches show "Νέα Σαλαμίνα vs Opponent"', async () => {
+  it('home matches show translated team name vs Opponent', async () => {
     exportToCalendar();
 
     const blob = createObjectURLSpy.mock.calls[0][0] as Blob;
     const text = await blob.text();
 
-    // There should be at least one home match with "Νέα Σαλαμίνα vs"
-    expect(text).toContain('Νέα Σαλαμίνα vs');
+    // There should be at least one home match with the translated team name followed by "vs"
+    expect(text).toMatch(/Nea Salamis vs|Νέα Σαλαμίνα vs/);
   });
 
   it('events have STATUS field (CONFIRMED or TENTATIVE)', async () => {

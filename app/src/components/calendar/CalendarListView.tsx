@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getMatchResult } from '@/lib/stats';
 import type { MonthData, MonthName, CalendarEvent } from '@/types/events';
+import { translateVenue } from '@/lib/translate';
 
 interface CalendarListViewProps {
   monthData: MonthData;
@@ -112,7 +113,7 @@ function ListItem({ event, currentMonth, onClick, t }: { event: CalendarEvent; c
         <div className="text-sm font-semibold truncate mt-0.5">{event.title}</div>
         <div className="text-xs text-muted-foreground mt-0.5">
           {event.location === 'home' ? t('locations.home') : t('locations.away')}
-          {event.venue && ` \u2022 ${event.venue}`}
+          {event.venue && ` \u2022 ${translateVenue(event.venue, t)}`}
         </div>
       </div>
 

@@ -21,6 +21,7 @@ const makeEvent = (overrides: Partial<CalendarEvent> = {}): CalendarEvent => ({
   day: 14,
   title: 'Νέα Σαλαμίνα vs APOEL',
   subtitle: '⚽ - 18:00',
+  opponent: '',
   location: 'home',
   sport: 'football-men',
   isMeeting: false,

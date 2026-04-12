@@ -32,6 +32,7 @@ function makeEvent(overrides: Partial<CalendarEvent>): CalendarEvent {
   return {
     title: 'Nea Salamina vs Opponent',
     subtitle: 'Apr 10 - 16:00',
+    opponent: '',
     sport: 'football-men',
     location: 'home',
     day: 10,

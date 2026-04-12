@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { getMatchResult } from '@/lib/stats';
-import { TEAM_NAME } from '@/data/constants';
 import type { CalendarEvent, Scorer, Booking, LineupPlayer, Substitution, VolleyballSet, VolleyballScorer } from '@/types/events';
+import { translateTeamName, translateVenue } from '@/lib/translate';
 import { MatchReport } from './MatchReport';
 import { OpponentScoutCard } from './OpponentScoutCard';
 
@@ -446,12 +446,14 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
     : null;
 
   const isHome = event.location === 'home';
-  const homeTeam = isHome ? TEAM_NAME : event.title.replace(` vs ${TEAM_NAME}`, '');
+  const teamName = translateTeamName('Νέα Σαλαμίνα', t);
+  const translatedOpponent = translateTeamName(event.opponent, t);
+  const homeTeam = isHome ? teamName : translatedOpponent;
   const ownLogo = isVolleyballSport(event.sport)
     ? '/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ_ΒΟΛΛΕΥ.webp'
     : '/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp';
-  const awayTeam = isHome ? event.title.replace(`${TEAM_NAME} vs `, '') : TEAM_NAME;
-  const opponent = isHome ? awayTeam : homeTeam;
+  const awayTeam = isHome ? translatedOpponent : teamName;
+  const opponent = translatedOpponent;
 
   const subtitleParts = event.subtitle.split(' - ');
   const rawTime = subtitleParts[1];
@@ -523,7 +525,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
                 {isHome ? (
                   <img
                     src={ownLogo}
-                    alt={TEAM_NAME}
+                    alt={teamName}
                     loading="lazy"
                     className="w-full h-full object-cover"
                   />
@@ -557,7 +559,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
                 {!isHome ? (
                   <img
                     src={ownLogo}
-                    alt={TEAM_NAME}
+                    alt={teamName}
                     loading="lazy"
                     className="w-full h-full object-cover"
                   />
@@ -608,7 +610,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           <div className="flex flex-wrap justify-center gap-2 pt-3">
             {event.duration && <InfoChip icon="🕐" label={event.duration} />}
             <InfoChip icon={isHome ? '🏠' : '✈️'} label={isHome ? t('popover.homeGround') : t('popover.awayGround')} />
-            {event.venue && <InfoChip icon="📍" label={event.venue} />}
+            {event.venue && <InfoChip icon="📍" label={translateVenue(event.venue, t)} />}
             {!isFootballPlayed && hasValidTime && <InfoChip icon="⏰" label={time} />}
             {event.competition === 'cup' && (
               <span className="flex items-center gap-1.5 bg-amber-500/20 border border-amber-500/30 rounded-full px-3 py-1.5 text-xs font-semibold text-amber-400">

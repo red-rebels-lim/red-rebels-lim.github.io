@@ -255,7 +255,7 @@ export function calculateVolleyballStatistics(sport: VolleyballSport): Volleybal
 
     // Build CalendarEvent for set breakdown / top scorers
     calendarEvents.push({
-      title: '', subtitle: '',
+      title: '', subtitle: '', opponent: match.opponent,
       sport, day: match.day, isMeeting: false,
       location: match.location,
       score: match.score,

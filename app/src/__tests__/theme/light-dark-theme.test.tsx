@@ -188,6 +188,7 @@ describe('TASK-09: Light/Dark Theme Support', () => {
           event={{
             title: 'Nea Salamina vs APOEL',
             subtitle: 'League - 18:00',
+            opponent: 'APOEL',
             day: 15,
             sport: 'football-men',
             location: 'home',
@@ -210,6 +211,7 @@ describe('TASK-09: Light/Dark Theme Support', () => {
           event={{
             title: 'Team Meeting',
             subtitle: 'Meeting - 20:00',
+            opponent: '',
             day: 15,
             sport: 'football-men',
             location: 'home',
@@ -231,6 +233,7 @@ describe('TASK-09: Light/Dark Theme Support', () => {
           event={{
             title: 'Nea Salamina vs APOEL',
             subtitle: 'League - 18:00',
+            opponent: 'APOEL',
             day: 15,
             sport: 'football-men',
             location: 'home',
@@ -261,6 +264,7 @@ describe('TASK-09: Light/Dark Theme Support', () => {
           event={{
             title: 'Nea Salamina vs APOEL',
             subtitle: 'League - 18:00',
+            opponent: 'APOEL',
             day: 15,
             sport: 'football-men',
             location: 'home',
