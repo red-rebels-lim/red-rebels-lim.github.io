@@ -289,7 +289,12 @@
     "about": "About",
     "appVersion": "App Version",
     "viewOnGithub": "View on GitHub",
-    "madeWith": "Made with love for Nea Salamina"
+    "madeWith": "Made with love for Nea Salamina",
+    "notificationPreview": "Notification Preview",
+    "previewTitle": "Red Rebels Calendar",
+    "previewReminder": "Nea Salamis vs PAEEK — Kickoff in {{time}}",
+    "previewScore": "Nea Salamis 2-0 Doxa Katokopia — Match ended!",
+    "previewNewEvent": "New match added: Nea Salamis vs Ayia Napa, Apr 19"
   },
   "calendar": {
     "noEvents": "No events this month",

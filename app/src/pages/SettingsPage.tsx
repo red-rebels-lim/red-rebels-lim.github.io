@@ -226,6 +226,51 @@ function SmartphoneIcon() {
   );
 }
 
+function NotificationPreview({ t, notifPrefs }: { t: (key: string, opts?: Record<string, string>) => string; notifPrefs: NotifPrefs }) {
+  const reminderLabel = notifPrefs.reminderHours.length > 0
+    ? `${notifPrefs.reminderHours[0]}h`
+    : '2h';
+
+  const previews = [
+    { icon: '🔔', text: t('settings.previewReminder', { time: reminderLabel }), type: 'reminder' },
+    ...(notifPrefs.notifyScoreUpdates ? [{ icon: '⚽', text: t('settings.previewScore'), type: 'score' }] : []),
+    ...(notifPrefs.notifyNewEvents ? [{ icon: '📅', text: t('settings.previewNewEvent'), type: 'new' }] : []),
+  ];
+
+  if (previews.length === 0) return null;
+
+  return (
+    <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
+      <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">
+        {t('settings.notificationPreview')}
+      </p>
+      <div className="space-y-2">
+        {previews.map((p) => (
+          <div
+            key={p.type}
+            className="flex items-start gap-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3 shadow-sm"
+          >
+            <img
+              src="/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp"
+              alt=""
+              className="w-8 h-8 rounded-lg object-cover shrink-0 mt-0.5"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                {t('settings.previewTitle')}
+              </p>
+              <p className="text-sm font-medium text-foreground leading-snug mt-0.5">
+                {p.text}
+              </p>
+            </div>
+            <span className="text-xs text-slate-400 dark:text-slate-500 shrink-0 mt-1">now</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Main component ───────────────────────────────────────────────────────────
 
 const SPORT_FILTERS_KEY = 'sport_filters';
@@ -477,6 +522,9 @@ export default function SettingsPage() {
                       ))}
                     </div>
                   </div>
+
+                  {/* Notification preview */}
+                  <NotificationPreview t={t} notifPrefs={notifPrefs} />
                 </>
               )}
 
