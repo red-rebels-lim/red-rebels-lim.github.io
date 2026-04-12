@@ -5,27 +5,25 @@ import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
 import pkg from './package.json' with { type: 'json' }
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 // https://vite.dev/config/
 export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
-  plugins: [
-    react(),
-    tailwindcss(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      manifest: false,
-      injectRegister: null,
-      strategies: 'injectManifest',
-      srcDir: 'src',
-      filename: 'sw.ts',
-      injectManifest: {
-        globPatterns: ['**/*.{js,css,html,ico,png,webp}'],
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-      },
-    }),
-  ],
+  plugins: [react(), tailwindcss(), VitePWA({
+    registerType: 'autoUpdate',
+    manifest: false,
+    injectRegister: null,
+    strategies: 'injectManifest',
+    srcDir: 'src',
+    filename: 'sw.ts',
+    injectManifest: {
+      globPatterns: ['**/*.{js,css,html,ico,png,webp}'],
+      maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+    },
+  }), cloudflare()],
   build: {
     rollupOptions: {
       output: {
