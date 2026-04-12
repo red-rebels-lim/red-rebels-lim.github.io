@@ -632,6 +632,54 @@ export default function SettingsPage() {
           />
         </SettingsSection>
 
+        {/* ── NOTIFICATION CHANNELS ── */}
+        <SettingsSection title={t('settings.channels')}>
+          {/* Calendar Sync */}
+          <div className="flex items-center gap-4 px-4 min-h-[56px] justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center rounded-lg shrink-0 size-10 bg-blue-500/10 text-blue-500">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-base font-medium">{t('settings.calendarSync')}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t('settings.calendarSyncDesc')}</p>
+              </div>
+            </div>
+            <a
+              href={`webcal://red-rebels.com/calendar${i18n.language === 'el' ? '-el' : ''}.ics`}
+              className="px-3 py-1.5 rounded-full text-xs font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors shrink-0"
+              onClick={() => trackEvent('subscribe_calendar', { lang: i18n.language })}
+            >
+              {t('settings.subscribe')}
+            </a>
+          </div>
+          {/* Telegram */}
+          <div className="flex items-center gap-4 px-4 min-h-[56px] justify-between border-t border-slate-100 dark:border-slate-700/50">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center rounded-lg shrink-0 size-10 bg-[#229ED9]/10 text-[#229ED9]">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-base font-medium">{t('settings.connectTelegram')}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t('settings.telegramDesc')}</p>
+              </div>
+            </div>
+            <a
+              href="https://t.me/RedRebelsBot?start=subscribe"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#229ED9] text-white hover:bg-[#1a8bc4] transition-colors shrink-0"
+              onClick={() => trackEvent('connect_telegram')}
+            >
+              {t('settings.subscribe')}
+            </a>
+          </div>
+        </SettingsSection>
+
         {/* ── TOOLS ── */}
         <SettingsSection title={t('settings.tools')}>
           <SettingsRow

@@ -41,16 +41,9 @@ Parse.initialize(BACK4APP_APP_ID, undefined, BACK4APP_MASTER_KEY);
 Parse.serverURL = 'https://parseapi.back4app.com/';
 Parse.masterKey = BACK4APP_MASTER_KEY;
 
-// --- Helpers ---
+import { buildChangePayload, sportEmoji } from './lib/message-builder.js';
 
-function sportEmoji(sport) {
-  switch (sport) {
-    case 'football-men': return '\u{1F468}\u26BD';
-    case 'volleyball-men': return '\u{1F468}\u{1F3D0}';
-    case 'volleyball-women': return '\u{1F469}\u{1F3FB}\u{1F3D0}';
-    default: return '';
-  }
-}
+// --- Helpers ---
 
 function parseEventsFile() {
   try {
@@ -88,47 +81,7 @@ function extractSport(desc) {
   return match ? match[1] : null;
 }
 
-/**
- * Build notification payload for a change type.
- */
-function buildPayload(type, desc, sport, location) {
-  const sportMatch = desc.match(/:\s*\S+\s+vs\s+(.+?)(?:\s*\(|$)/);
-  const opponent = sportMatch ? sportMatch[1].trim() : '';
-  const emoji = sportEmoji(sport);
-  const prefix = emoji ? `${emoji} ` : '';
-  const ha = location === 'home' ? ' (H)' : location === 'away' ? ' (A)' : '';
-
-  switch (type) {
-    case 'added': {
-      return {
-        title: `${prefix}New Match`,
-        body: opponent ? `vs ${opponent}${ha}` : desc,
-        tag: `new-${desc.replace(/\s+/g, '-').toLowerCase()}`,
-        url: '/',
-      };
-    }
-    case 'scoreUpdated': {
-      const scoreMatch = desc.match(/\(([^)]+)\)/);
-      return {
-        title: `${prefix}Score Update`,
-        body: opponent && scoreMatch ? `vs ${opponent}${ha} — ${scoreMatch[1]}` : desc,
-        tag: `score-${desc.replace(/\s+/g, '-').toLowerCase()}`,
-        url: '/',
-      };
-    }
-    case 'timeUpdated': {
-      const timeMatch = desc.match(/\(([^)]+)\)/);
-      return {
-        title: `${prefix}Time Changed`,
-        body: opponent && timeMatch ? `vs ${opponent}${ha} — ${timeMatch[1]}` : desc,
-        tag: `time-${desc.replace(/\s+/g, '-').toLowerCase()}`,
-        url: '/',
-      };
-    }
-    default:
-      return null;
-  }
-}
+// buildPayload is now imported from lib/message-builder.js as buildChangePayload
 
 const PREF_FIELDS = {
   added: 'notifyNewEvents',
@@ -189,7 +142,7 @@ async function main() {
     for (const desc of items) {
       const sport = extractSport(desc);
       const location = lookupLocation(desc, eventsData);
-      const payload = buildPayload(changeType, desc, sport, location);
+      const payload = buildChangePayload(changeType, desc, sport, location);
       if (!payload) continue;
 
       for (const pref of prefs) {
@@ -269,4 +222,4 @@ if (isMain) {
   });
 }
 
-export { main, buildPayload, extractSport, sportEmoji };
+export { main, extractSport };

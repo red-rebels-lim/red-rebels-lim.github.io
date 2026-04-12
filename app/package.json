@@ -6,7 +6,8 @@
   "scripts": {
     "prepare": "cd .. && husky app/.husky",
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "generate:calendar": "npx tsx scripts/generate-calendar.ts",
+    "build": "npm run generate:calendar && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "npm run build && wrangler dev",
     "test": "vitest run",

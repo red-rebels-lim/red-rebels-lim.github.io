@@ -40,16 +40,9 @@ Parse.initialize(BACK4APP_APP_ID, undefined, BACK4APP_MASTER_KEY);
 Parse.serverURL = 'https://parseapi.back4app.com/';
 Parse.masterKey = BACK4APP_MASTER_KEY;
 
-// --- Helpers ---
+import { buildReminderPayload, sportEmoji } from './lib/message-builder.js';
 
-function sportEmoji(sport) {
-  switch (sport) {
-    case 'football-men': return '\u{1F468}\u26BD';
-    case 'volleyball-men': return '\u{1F468}\u{1F3D0}';
-    case 'volleyball-women': return '\u{1F469}\u{1F3FB}\u{1F3D0}';
-    default: return '';
-  }
-}
+// --- Helpers ---
 
 const MONTH_TO_INDEX = {
   september: 8, october: 9, november: 10, december: 11,
@@ -141,6 +134,7 @@ async function main() {
       const logQuery = new Parse.Query(ReminderLog);
       logQuery.equalTo('eventKey', match.eventKey);
       logQuery.equalTo('hoursBefore', tier);
+      logQuery.equalTo('channel', 'web-push');
       const existing = await logQuery.first({ useMasterKey: true });
 
       if (existing) {
@@ -160,15 +154,10 @@ async function main() {
 
       const prefs = await prefQuery.find({ useMasterKey: true });
 
-      const emoji = sportEmoji(match.sport);
-      const prefix = emoji ? `${emoji} ` : '';
-
+      const reminderPayload = buildReminderPayload(match, tier);
       const payload = JSON.stringify({
-        title: `${prefix}Match in ${tier}h`,
-        body: `vs ${match.opponent} (${match.location === 'home' ? 'H' : 'A'})${match.venue ? ` at ${match.venue}` : ''} — ${match.time}`,
+        ...reminderPayload,
         icon: '/images/clear_logo.png',
-        tag: `reminder-${tier}h-${match.eventKey}`,
-        url: '/',
       });
 
       for (const pref of prefs) {
@@ -200,6 +189,7 @@ async function main() {
       const log = new ReminderLog();
       log.set('eventKey', match.eventKey);
       log.set('hoursBefore', tier);
+      log.set('channel', 'web-push');
       log.set('sentAt', new Date());
       await log.save(null, { useMasterKey: true });
     }
@@ -222,7 +212,127 @@ async function main() {
     }
   }
 
-  console.log(`\nSummary: ${sent} sent, ${skipped} skipped/failed`);
+  console.log(`\nWeb Push summary: ${sent} sent, ${skipped} skipped/failed`);
+
+  // --- Telegram reminders ---
+  const { TELEGRAM_BOT_TOKEN } = process.env;
+  if (TELEGRAM_BOT_TOKEN) {
+    const { sendTelegramMessage } = await import('./lib/telegram-sender.js');
+    const TelegramSubscriber = Parse.Object.extend('TelegramSubscriber');
+    let tgSent = 0;
+    let tgFailed = 0;
+
+    for (const match of upcoming) {
+      for (const tier of REMINDER_TIERS) {
+        const lowerBound = tier - WINDOW_MINUTES / 60;
+        const upperBound = tier + WINDOW_MINUTES / 60;
+        if (match.hoursUntil < lowerBound || match.hoursUntil > upperBound) continue;
+
+        // Dedup for telegram channel
+        const tgLogQuery = new Parse.Query(ReminderLog);
+        tgLogQuery.equalTo('eventKey', match.eventKey);
+        tgLogQuery.equalTo('hoursBefore', tier);
+        tgLogQuery.equalTo('channel', 'telegram');
+        if (await tgLogQuery.first({ useMasterKey: true })) continue;
+
+        const subQuery = new Parse.Query(TelegramSubscriber);
+        subQuery.equalTo('active', true);
+        subQuery.containedIn('reminderHours', [tier]);
+        subQuery.containedIn('enabledSports', [match.sport]);
+        subQuery.limit(1000);
+        const subs = await subQuery.find({ useMasterKey: true });
+
+        if (subs.length === 0) continue;
+
+        const reminderPayload = buildReminderPayload(match, tier);
+
+        for (const sub of subs) {
+          try {
+            const result = await sendTelegramMessage(sub.get('chatId'), reminderPayload, TELEGRAM_BOT_TOKEN);
+            if (result.ok) tgSent++;
+            else {
+              if (result.statusCode === 403) {
+                sub.set('active', false);
+                await sub.save(null, { useMasterKey: true });
+              }
+              tgFailed++;
+            }
+          } catch (err) {
+            console.error(`Telegram send failed:`, err.message);
+            tgFailed++;
+          }
+        }
+
+        const log = new ReminderLog();
+        log.set('eventKey', match.eventKey);
+        log.set('hoursBefore', tier);
+        log.set('channel', 'telegram');
+        log.set('sentAt', new Date());
+        await log.save(null, { useMasterKey: true });
+      }
+    }
+    console.log(`Telegram summary: ${tgSent} sent, ${tgFailed} failed`);
+  }
+
+  // --- Viber reminders ---
+  const { VIBER_BOT_TOKEN } = process.env;
+  if (VIBER_BOT_TOKEN) {
+    const { sendViberMessage } = await import('./lib/viber-sender.js');
+    const ViberSubscriber = Parse.Object.extend('ViberSubscriber');
+    let vbSent = 0;
+    let vbFailed = 0;
+
+    for (const match of upcoming) {
+      for (const tier of REMINDER_TIERS) {
+        const lowerBound = tier - WINDOW_MINUTES / 60;
+        const upperBound = tier + WINDOW_MINUTES / 60;
+        if (match.hoursUntil < lowerBound || match.hoursUntil > upperBound) continue;
+
+        // Dedup for viber channel
+        const vbLogQuery = new Parse.Query(ReminderLog);
+        vbLogQuery.equalTo('eventKey', match.eventKey);
+        vbLogQuery.equalTo('hoursBefore', tier);
+        vbLogQuery.equalTo('channel', 'viber');
+        if (await vbLogQuery.first({ useMasterKey: true })) continue;
+
+        const subQuery = new Parse.Query(ViberSubscriber);
+        subQuery.equalTo('active', true);
+        subQuery.containedIn('reminderHours', [tier]);
+        subQuery.containedIn('enabledSports', [match.sport]);
+        subQuery.limit(1000);
+        const subs = await subQuery.find({ useMasterKey: true });
+
+        if (subs.length === 0) continue;
+
+        const reminderPayload = buildReminderPayload(match, tier);
+
+        for (const sub of subs) {
+          try {
+            const result = await sendViberMessage(sub.get('viberId'), reminderPayload, VIBER_BOT_TOKEN);
+            if (result.ok) vbSent++;
+            else {
+              if (result.statusCode === 6) { // Viber: receiver not subscribed
+                sub.set('active', false);
+                await sub.save(null, { useMasterKey: true });
+              }
+              vbFailed++;
+            }
+          } catch (err) {
+            console.error(`Viber send failed:`, err.message);
+            vbFailed++;
+          }
+        }
+
+        const log = new ReminderLog();
+        log.set('eventKey', match.eventKey);
+        log.set('hoursBefore', tier);
+        log.set('channel', 'viber');
+        log.set('sentAt', new Date());
+        await log.save(null, { useMasterKey: true });
+      }
+    }
+    console.log(`Viber summary: ${vbSent} sent, ${vbFailed} failed`);
+  }
 }
 
 const isMain = process.argv[1] &&
@@ -234,4 +344,4 @@ if (isMain) {
   });
 }
 
-export { main, sportEmoji };
+export { main };
