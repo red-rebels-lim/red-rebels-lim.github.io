@@ -71,7 +71,8 @@ vi.mock('fs', () => ({
 }));
 
 import fs from 'fs';
-import { main, sportEmoji } from './send-reminders.js';
+import { main } from './send-reminders.js';
+import { sportEmoji } from './lib/message-builder.js';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 

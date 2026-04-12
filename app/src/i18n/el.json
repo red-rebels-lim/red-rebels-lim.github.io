@@ -294,7 +294,16 @@
     "previewTitle": "Red Rebels Calendar",
     "previewReminder": "Νέα Σαλαμίνα vs ΠΑΕΕΚ — Σέντρα σε {{time}}",
     "previewScore": "Νέα Σαλαμίνα 2-0 Δόξα Κατωκοπιάς — Τέλος αγώνα!",
-    "previewNewEvent": "Νέος αγώνας: Νέα Σαλαμίνα vs Αγία Νάπα, 19 Απρ"
+    "previewNewEvent": "Νέος αγώνας: Νέα Σαλαμίνα vs Αγία Νάπα, 19 Απρ",
+    "channels": "Κανάλια Ειδοποιήσεων",
+    "calendarSync": "Συγχρονισμός Ημερολογίου",
+    "calendarSyncDesc": "Αυτόματος συγχρονισμός αγώνων στο ημερολόγιό σας",
+    "subscribe": "Εγγραφή",
+    "linkCopied": "Ο σύνδεσμος αντιγράφηκε!",
+    "connectTelegram": "Telegram",
+    "telegramDesc": "Υπενθυμίσεις μέσω Telegram bot",
+    "connectViber": "Viber",
+    "viberDesc": "Υπενθυμίσεις μέσω Viber bot"
   },
   "calendar": {
     "noEvents": "Δεν υπάρχουν εκδηλώσεις αυτόν τον μήνα",

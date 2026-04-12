@@ -294,7 +294,16 @@
     "previewTitle": "Red Rebels Calendar",
     "previewReminder": "Nea Salamis vs PAEEK — Kickoff in {{time}}",
     "previewScore": "Nea Salamis 2-0 Doxa Katokopia — Match ended!",
-    "previewNewEvent": "New match added: Nea Salamis vs Ayia Napa, Apr 19"
+    "previewNewEvent": "New match added: Nea Salamis vs Ayia Napa, Apr 19",
+    "channels": "Notification Channels",
+    "calendarSync": "Calendar Sync",
+    "calendarSyncDesc": "Auto-sync matches to your calendar app",
+    "subscribe": "Subscribe",
+    "linkCopied": "Link copied!",
+    "connectTelegram": "Telegram",
+    "telegramDesc": "Get reminders via Telegram bot",
+    "connectViber": "Viber",
+    "viberDesc": "Get reminders via Viber bot"
   },
   "calendar": {
     "noEvents": "No events this month",

@@ -55,7 +55,8 @@ vi.mock('fs', () => ({
 }));
 
 import fs from 'fs';
-import { main, buildPayload, extractSport, sportEmoji } from './send-notifications.js';
+import { main, extractSport } from './send-notifications.js';
+import { buildChangePayload as buildPayload, sportEmoji } from './lib/message-builder.js';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 

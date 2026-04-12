@@ -632,6 +632,79 @@ export default function SettingsPage() {
           />
         </SettingsSection>
 
+        {/* ── NOTIFICATION CHANNELS ── */}
+        <SettingsSection title={t('settings.channels')}>
+          {/* Calendar Sync */}
+          <div className="flex items-center gap-4 px-4 min-h-[56px] justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center rounded-lg shrink-0 size-10 bg-blue-500/10 text-blue-500">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-base font-medium">{t('settings.calendarSync')}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t('settings.calendarSyncDesc')}</p>
+              </div>
+            </div>
+            <a
+              href={`webcal://red-rebels.com/calendar${i18n.language === 'el' ? '-el' : ''}.ics`}
+              className="px-3 py-1.5 rounded-full text-xs font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors shrink-0"
+              onClick={() => trackEvent('subscribe_calendar', { lang: i18n.language })}
+            >
+              {t('settings.subscribe')}
+            </a>
+          </div>
+          {/* Telegram */}
+          <div className="flex items-center gap-4 px-4 min-h-[56px] justify-between border-t border-slate-100 dark:border-slate-700/50">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center rounded-lg shrink-0 size-10 bg-[#229ED9]/10 text-[#229ED9]">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-base font-medium">{t('settings.connectTelegram')}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t('settings.telegramDesc')}</p>
+              </div>
+            </div>
+            <a
+              href="https://t.me/RedRebelsBot?start=subscribe"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#229ED9] text-white hover:bg-[#1a8bc4] transition-colors shrink-0"
+              onClick={() => trackEvent('connect_telegram')}
+            >
+              {t('settings.subscribe')}
+            </a>
+          </div>
+          {/* Viber */}
+          <div className="flex items-center gap-4 px-4 min-h-[56px] justify-between border-t border-slate-100 dark:border-slate-700/50">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center rounded-lg shrink-0 size-10 bg-[#7360F2]/10 text-[#7360F2]">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M11.4 0C9.473.028 5.333.344 3.02 2.467 1.302 4.187.541 6.932.456 10.299.372 13.665.196 20.055 5.96 21.598h.004l-.002 2.416s-.04.975.606 1.174c.778.24 1.236-.502 1.98-1.303.408-.44.971-1.086 1.397-1.58 3.85.322 6.813-.416 7.15-.528.776-.258 5.171-.816 5.886-6.655.738-6.009-.354-9.803-2.36-11.527C19.07.738 15.79.066 11.4 0zm.577 1.802c3.837.044 6.652.572 7.908 1.683 1.592 1.404 2.558 4.74 1.926 9.887-.588 4.81-4.116 5.165-4.775 5.384-.278.092-2.846.738-5.9.584 0 0-2.34 2.822-3.072 3.56-.114.117-.263.16-.357.14-.133-.031-.17-.152-.168-.337.002-.263.016-3.27.016-3.27C3.5 18.112 2.288 14.25 2.36 10.34c.073-2.923.698-5.2 2.132-6.636C6.364 1.835 9.493 1.766 11.977 1.8z" />
+                  <path d="M11.68 4.74c-.243 0-.243.378 0 .382 2.953.018 5.345 2.12 5.393 5.392.003.244.382.24.38 0-.05-3.498-2.632-5.754-5.773-5.774zm3.762 5.3c-.002.243.377.247.38 0 .013-1.718-1.322-3.39-3.31-3.454-.244-.008-.247.373 0 .381 1.7.054 2.918 1.476 2.93 3.073zm-1.26-.005c0 .245.38.245.382 0 .018-.9-.605-1.77-1.593-1.86-.243-.023-.277.357-.034.38.73.065 1.227.702 1.245 1.48z" />
+                  <path d="M14.156 12.81c-.41-.258-.834-.124-1.016.186l-.407.593c-.2.295-.579.257-.579.257-2.778-.71-3.547-3.547-3.547-3.547s-.038-.38.257-.58l.593-.406c.31-.182.444-.606.187-1.017-.832-1.332-1.36-1.766-1.565-2.004-.217-.192-.481-.282-.76-.147 0 0 0 .003-.003.003-.818.417-1.71 1.15-1.315 1.95.586 1.233 1.592 4.15 4.087 6.233 1.37 1.145 3.76 2.608 5.206 3.068.78.258 1.527-.555 1.944-1.37l.003-.003c.134-.28.045-.544-.148-.76-.237-.206-.671-.734-2.004-1.566z" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-base font-medium">{t('settings.connectViber')}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t('settings.viberDesc')}</p>
+              </div>
+            </div>
+            <a
+              href="viber://pa?chatURI=RedRebelsBot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#7360F2] text-white hover:bg-[#6250e0] transition-colors shrink-0"
+              onClick={() => trackEvent('connect_viber')}
+            >
+              {t('settings.subscribe')}
+            </a>
+          </div>
+        </SettingsSection>
+
         {/* ── TOOLS ── */}
         <SettingsSection title={t('settings.tools')}>
           <SettingsRow

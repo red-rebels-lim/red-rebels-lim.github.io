@@ -1,0 +1,724 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Red Rebels Calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Red Rebels Events 2025/26
+X-WR-TIMEZONE:Europe/Nicosia
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:20250912-Δόξα-Κατωκοπιάς-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20250912
+DTEND;VALUE=DATE:20250912
+SUMMARY:Δόξα Κατωκοπιάς vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20250920-Νέα-Σαλαμίνα-vs-Ηρακλής-Γερόλακκου@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20250920
+DTEND;VALUE=DATE:20250920
+SUMMARY:Νέα Σαλαμίνα vs Ηρακλής Γερόλακκου
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20250928-Διγενής-Μόρφου-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20250928
+DTEND;VALUE=DATE:20250928
+SUMMARY:Διγενής Μόρφου vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251001-Κρασάβα-Ύψωνα-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251001
+DTEND;VALUE=DATE:20251001
+SUMMARY:Κρασάβα Ύψωνα vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251005-Νέα-Σαλαμίνα-vs-ΠΟ-Αχυρώνας-Ονήσιλος@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251005
+DTEND;VALUE=DATE:20251005
+SUMMARY:Νέα Σαλαμίνα vs ΠΟ Αχυρώνας-Ονήσιλος
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251017-Νέα-Σαλαμίνα-vs-Παφιακός@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251017
+DTEND;VALUE=DATE:20251017
+SUMMARY:Νέα Σαλαμίνα vs Παφιακός
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251018-ΜΕΑΠ-Νήσου-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251018
+DTEND;VALUE=DATE:20251018
+SUMMARY:ΜΕΑΠ Νήσου vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251018-ΑΕΛ-(Γ)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251018
+DTEND;VALUE=DATE:20251018
+SUMMARY:ΑΕΛ (Γ) vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251025-Νέα-Σαλαμίνα-vs-Χαλκάνορας-Ιδαλίου@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251025
+DTEND;VALUE=DATE:20251025
+SUMMARY:Νέα Σαλαμίνα vs Χαλκάνορας Ιδαλίου
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251025-Νέα-Σαλαμίνα-vs-Ανόρθωσις-(Γ)@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251025
+DTEND;VALUE=DATE:20251025
+SUMMARY:Νέα Σαλαμίνα vs Ανόρθωσις (Γ)
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251031-Ομόνοια-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251031
+DTEND;VALUE=DATE:20251031
+SUMMARY:Ομόνοια vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251031-Ομόνοια-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251031
+DTEND;VALUE=DATE:20251031
+SUMMARY:Ομόνοια vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251101-ΑΣΙΛ-Λύσης-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251101
+DTEND;VALUE=DATE:20251101
+SUMMARY:ΑΣΙΛ Λύσης vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251101-ΑΕΚ-Λάρνακας-(Γ)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251101
+DTEND;VALUE=DATE:20251101
+SUMMARY:ΑΕΚ Λάρνακας (Γ) vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251107-Νέα-Σαλαμίνα-vs-Ανόρθωσις@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251107
+DTEND;VALUE=DATE:20251107
+SUMMARY:Νέα Σαλαμίνα vs Ανόρθωσις
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251107-Κούρης-Ερήμης-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251107
+DTEND;VALUE=DATE:20251107
+SUMMARY:Κούρης Ερήμης vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251108-Νέα-Σαλαμίνα-vs-ΑΕΖ-Ζακακίου@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251108
+DTEND;VALUE=DATE:20251108
+SUMMARY:Νέα Σαλαμίνα vs ΑΕΖ Ζακακίου
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251115-Νέα-Σαλαμίνα-vs-Απόλλων-(Γ)@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251115
+DTEND;VALUE=DATE:20251115
+SUMMARY:Νέα Σαλαμίνα vs Απόλλων (Γ)
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251117-ΑΕ-Καράβα-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251117
+DTEND;VALUE=DATE:20251117
+SUMMARY:ΑΕ Καράβα vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251121-Νέα-Σαλαμίνα-vs-Αναγέννηση@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251121
+DTEND;VALUE=DATE:20251121
+SUMMARY:Νέα Σαλαμίνα vs Αναγέννηση
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251122-Ομόνοια-29ης-Μαΐου-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251122
+DTEND;VALUE=DATE:20251122
+SUMMARY:Ομόνοια 29ης Μαΐου vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251122-Olympiada-N.-(W)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251122
+DTEND;VALUE=DATE:20251122
+SUMMARY:Olympiada N. (W) vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251128-Νέα-Σαλαμίνα-vs-ΠΑΕΕΚ@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251128
+DTEND;VALUE=DATE:20251128
+SUMMARY:Νέα Σαλαμίνα vs ΠΑΕΕΚ
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251128-ΑΠΟΕΛ-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251128
+DTEND;VALUE=DATE:20251128
+SUMMARY:ΑΠΟΕΛ vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251129-Νέα-Σαλαμίνα-vs-Lemesos-Volleyball-(Γ)@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251129
+DTEND;VALUE=DATE:20251129
+SUMMARY:Νέα Σαλαμίνα vs Lemesos Volleyball (Γ)
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251205-Παφιακός-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251205
+DTEND;VALUE=DATE:20251205
+SUMMARY:Παφιακός vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251206-Σπάρτακος-Κιτίου-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251206
+DTEND;VALUE=DATE:20251206
+SUMMARY:Σπάρτακος Κιτίου vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251206-Νέα-Σαλαμίνα-vs-ΑΕΛ-(Γ)@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251206
+DTEND;VALUE=DATE:20251206
+SUMMARY:Νέα Σαλαμίνα vs ΑΕΛ (Γ)
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251212-Νέα-Σαλαμίνα-vs-Καρμιώτισσα-Πάνω-Πολεμιδιών@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251212
+DTEND;VALUE=DATE:20251212
+SUMMARY:Νέα Σαλαμίνα vs Καρμιώτισσα Πάνω Πολεμιδιών
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251213-Ανόρθωσις-(Γ)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251213
+DTEND;VALUE=DATE:20251213
+SUMMARY:Ανόρθωσις (Γ) vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251219-Εθνικός-Λατσιών-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251219
+DTEND;VALUE=DATE:20251219
+SUMMARY:Εθνικός Λατσιών vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20251219-Νέα-Σαλαμίνα-vs-Ομόνοια@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251219
+DTEND;VALUE=DATE:20251219
+SUMMARY:Νέα Σαλαμίνα vs Ομόνοια
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251220-Νέα-Σαλαμίνα-vs-ΑΕΚ-Λάρνακας-(Γ)@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251220
+DTEND;VALUE=DATE:20251220
+SUMMARY:Νέα Σαλαμίνα vs ΑΕΚ Λάρνακας (Γ)
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251222-Ανόρθωσις-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251222
+DTEND;VALUE=DATE:20251222
+SUMMARY:Ανόρθωσις vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20251223-Νέα-Σαλαμίνα-vs-Κούρης-Ερήμης@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20251223
+DTEND;VALUE=DATE:20251223
+SUMMARY:Νέα Σαλαμίνα vs Κούρης Ερήμης
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260103-Αγία-Νάπα-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260103
+DTEND;VALUE=DATE:20260103
+SUMMARY:Αγία Νάπα vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260110-Νέα-Σαλαμίνα-vs-ΑΠΕΑ-Ακρωτηρίου@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260110
+DTEND;VALUE=DATE:20260110
+SUMMARY:Νέα Σαλαμίνα vs ΑΠΕΑ Ακρωτηρίου
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260116-Νέα-Σαλαμίνα-vs-ΑΕ-Καράβα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260116
+DTEND;VALUE=DATE:20260116
+SUMMARY:Νέα Σαλαμίνα vs ΑΕ Καράβα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260117-Απόλλων-(Γ)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260117
+DTEND;VALUE=DATE:20260117
+SUMMARY:Απόλλων (Γ) vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260118-Νέα-Σαλαμίνα-vs-ΜΕΑΠ-Νήσου@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260118
+DTEND;VALUE=DATE:20260118
+SUMMARY:Νέα Σαλαμίνα vs ΜΕΑΠ Νήσου
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260119-Αναγέννηση-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260119
+DTEND;VALUE=DATE:20260119
+SUMMARY:Αναγέννηση vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260121-Νέα-Σαλαμίνα-vs-Διγενής-Μόρφου@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260121
+DTEND;VALUE=DATE:20260121
+SUMMARY:Νέα Σαλαμίνα vs Διγενής Μόρφου
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260123-Νέα-Σαλαμίνα-vs-ΑΠΟΕΛ@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260123
+DTEND;VALUE=DATE:20260123
+SUMMARY:Νέα Σαλαμίνα vs ΑΠΟΕΛ
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260124-Νέα-Σαλαμίνα-vs-Olympiada-N.-(W)@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260124
+DTEND;VALUE=DATE:20260124
+SUMMARY:Νέα Σαλαμίνα vs Olympiada N. (W)
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260125-Νέα-Σαλαμίνα-vs-ΠΑΕΕΚ@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260125
+DTEND;VALUE=DATE:20260125
+SUMMARY:Νέα Σαλαμίνα vs ΠΑΕΕΚ
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260130-Δόξα-Κατωκοπιάς-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260130
+DTEND;VALUE=DATE:20260130
+SUMMARY:Δόξα Κατωκοπιάς vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260131-Lemesos-Volleyball-(Γ)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260131
+DTEND;VALUE=DATE:20260131
+SUMMARY:Lemesos Volleyball (Γ) vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260202-Ομόνοια-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260202
+DTEND;VALUE=DATE:20260202
+SUMMARY:Ομόνοια vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260205-Ανόρθωσις-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260205
+DTEND;VALUE=DATE:20260205
+SUMMARY:Ανόρθωσις vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260207-Νέα-Σαλαμίνα-vs-Ομόνοια-29ης-Μαΐου@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260207
+DTEND;VALUE=DATE:20260207
+SUMMARY:Νέα Σαλαμίνα vs Ομόνοια 29ης Μαΐου
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260207-Νέα-Σαλαμίνα-vs-Ανόρθωσις-(Γ)@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260207
+DTEND;VALUE=DATE:20260207
+SUMMARY:Νέα Σαλαμίνα vs Ανόρθωσις (Γ)
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260209-Νέα-Σαλαμίνα-vs-Παφιακός@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260209
+DTEND;VALUE=DATE:20260209
+SUMMARY:Νέα Σαλαμίνα vs Παφιακός
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260210-ΑΕΚ-Λάρνακας-(Γ)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260210
+DTEND;VALUE=DATE:20260210
+SUMMARY:ΑΕΚ Λάρνακας (Γ) vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260213-Νέα-Σαλαμίνα-vs-Αναγέννηση@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260213
+DTEND;VALUE=DATE:20260213
+SUMMARY:Νέα Σαλαμίνα vs Αναγέννηση
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260214-Αγία-Νάπα-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260214
+DTEND;VALUE=DATE:20260214
+SUMMARY:Αγία Νάπα vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260217-Νέα-Σαλαμίνα-vs-Κούρης-Ερήμης@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260217
+DTEND;VALUE=DATE:20260217
+SUMMARY:Νέα Σαλαμίνα vs Κούρης Ερήμης
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260220-Ομόνοια-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260220
+DTEND;VALUE=DATE:20260220
+SUMMARY:Ομόνοια vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260221-Νέα-Σαλαμίνα-vs-Καρμιώτισσα-Πάνω-Πολεμιδιών@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260221
+DTEND;VALUE=DATE:20260221
+SUMMARY:Νέα Σαλαμίνα vs Καρμιώτισσα Πάνω Πολεμιδιών
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260221-ΑΕΛ-(Γ)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260221
+DTEND;VALUE=DATE:20260221
+SUMMARY:ΑΕΛ (Γ) vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260227-Νέα-Σαλαμίνα-vs-Ομόνοια@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260227
+DTEND;VALUE=DATE:20260227
+SUMMARY:Νέα Σαλαμίνα vs Ομόνοια
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260228T150000-ΑΣΙΛ-Λύσης-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260228T150000
+DTEND;TZID=Europe/Nicosia:20260228T170000
+SUMMARY:ΑΣΙΛ Λύσης vs Νέα Σαλαμίνα
+LOCATION:Γήπεδο Ολυμπιάδας Λυμπιών
+DESCRIPTION:ΑΣΙΛ Λύσης vs Νέα Σαλαμίνα\\nΓήπεδο: Γήπεδο Ολυμπιάδας Λυμπιών\\nΑποτέλεσμα: 1-2
+STATUS:CONFIRMED
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260228T170000-Ανόρθωσις-(Γ)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260228T170000
+DTEND;TZID=Europe/Nicosia:20260228T190000
+SUMMARY:Ανόρθωσις (Γ) vs Νέα Σαλαμίνα
+LOCATION:Σωτήρειον
+DESCRIPTION:Ανόρθωσις (Γ) vs Νέα Σαλαμίνα\\nΓήπεδο: Σωτήρειον\\nΑποτέλεσμα: 1-3
+STATUS:CONFIRMED
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260302T200000-Ομόνοια-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260302T200000
+DTEND;TZID=Europe/Nicosia:20260302T220000
+SUMMARY:Ομόνοια vs Νέα Σαλαμίνα
+LOCATION:Ελευθερία
+DESCRIPTION:Ομόνοια vs Νέα Σαλαμίνα\\nΓήπεδο: Ελευθερία\\nΑποτέλεσμα: 3-0
+STATUS:CONFIRMED
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260307-ΜΕΑΠ-Νήσου-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260307
+DTEND;VALUE=DATE:20260307
+SUMMARY:ΜΕΑΠ Νήσου vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260307-ΑΕΚ-Λάρνακας-(Γ)-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260307
+DTEND;VALUE=DATE:20260307
+SUMMARY:ΑΕΚ Λάρνακας (Γ) vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260310-Νέα-Σαλαμίνα-vs-Κούρης-Ερήμης@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260310
+DTEND;VALUE=DATE:20260310
+SUMMARY:Νέα Σαλαμίνα vs Κούρης Ερήμης
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260313-ΠΑΕΕΚ-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260313
+DTEND;VALUE=DATE:20260313
+SUMMARY:ΠΑΕΕΚ vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260313-Νέα-Σαλαμίνα-vs-Ανόρθωσις@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260313
+DTEND;VALUE=DATE:20260313
+SUMMARY:Νέα Σαλαμίνα vs Ανόρθωσις
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260314-Νέα-Σαλαμίνα-vs-ΑΕΚ-Λάρνακας-(Γ)@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260314
+DTEND;VALUE=DATE:20260314
+SUMMARY:Νέα Σαλαμίνα vs ΑΕΚ Λάρνακας (Γ)
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260318-Νέα-Σαλαμίνα-vs-Δόξα-Κατωκοπιάς@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260318
+DTEND;VALUE=DATE:20260318
+SUMMARY:Νέα Σαλαμίνα vs Δόξα Κατωκοπιάς
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260318-Κούρης-Ερήμης-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260318
+DTEND;VALUE=DATE:20260318
+SUMMARY:Κούρης Ερήμης vs Νέα Σαλαμίνα
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260320T200000-Red-Rebels-Annual-Party@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260320T200000
+DTEND;TZID=Europe/Nicosia:20260320T210000
+SUMMARY:Red Rebels Annual Party
+DESCRIPTION:Red Rebels Annual Party
+STATUS:TENTATIVE
+CATEGORIES:Συνάντηση
+END:VEVENT
+BEGIN:VEVENT
+UID:20260320T203000-Νέα-Σαλαμίνα-vs-Ανόρθωσις@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260320T203000
+DTEND;TZID=Europe/Nicosia:20260320T223000
+SUMMARY:Νέα Σαλαμίνα vs Ανόρθωσις
+LOCATION:Αγίου Αθανασίου
+DESCRIPTION:Νέα Σαλαμίνα vs Ανόρθωσις\\nΓήπεδο: Αγίου Αθανασίου\\nΑποτέλεσμα: 3-2
+STATUS:CONFIRMED
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260321-Νέα-Σαλαμίνα-vs-Ανόρθωσις-(Γ)@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260321
+DTEND;VALUE=DATE:20260321
+SUMMARY:Νέα Σαλαμίνα vs Ανόρθωσις (Γ)
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260322-Ομόνοια-29ης-Μαΐου-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260322
+DTEND;VALUE=DATE:20260322
+SUMMARY:Ομόνοια 29ης Μαΐου vs Νέα Σαλαμίνα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260327T203000-Ανόρθωσις-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260327T203000
+DTEND;TZID=Europe/Nicosia:20260327T223000
+SUMMARY:Ανόρθωσις vs Νέα Σαλαμίνα
+LOCATION:Θεμιστόκλειο
+DESCRIPTION:Ανόρθωσις vs Νέα Σαλαμίνα\\nΓήπεδο: Θεμιστόκλειο\\nΑποτέλεσμα: 3-0
+STATUS:CONFIRMED
+CATEGORIES:Ανδρικό Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260328T180000-Νέα-Σαλαμίνα-vs-ΑΕΚ-Λάρνακας@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260328T180000
+DTEND;TZID=Europe/Nicosia:20260328T200000
+SUMMARY:Νέα Σαλαμίνα vs ΑΕΚ Λάρνακας
+DESCRIPTION:Νέα Σαλαμίνα vs ΑΕΚ Λάρνακας\\nΑποτέλεσμα: 3-2
+STATUS:CONFIRMED
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260404-Νέα-Σαλαμίνα-vs-Αγία-Νάπα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;VALUE=DATE:20260404
+DTEND;VALUE=DATE:20260404
+SUMMARY:Νέα Σαλαμίνα vs Αγία Νάπα
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+END:VEVENT
+BEGIN:VEVENT
+UID:20260407T200000-ΑΕΚ-Λάρνακας-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260407T200000
+DTEND;TZID=Europe/Nicosia:20260407T220000
+SUMMARY:ΑΕΚ Λάρνακας vs Νέα Σαλαμίνα
+DESCRIPTION:ΑΕΚ Λάρνακας vs Νέα Σαλαμίνα\\nΑποτέλεσμα: 1-3
+STATUS:CONFIRMED
+CATEGORIES:Γυναικείο Βόλεϊ
+END:VEVENT
+BEGIN:VEVENT
+UID:20260416T200000-ΑΕΛ-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260416T200000
+DTEND;TZID=Europe/Nicosia:20260416T220000
+SUMMARY:ΑΕΛ vs Νέα Σαλαμίνα
+DESCRIPTION:ΑΕΛ vs Νέα Σαλαμίνα
+STATUS:TENTATIVE
+CATEGORIES:Γυναικείο Βόλεϊ
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:ΑΕΛ vs Νέα Σαλαμίνα
+TRIGGER:-PT120M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:20260419T160000-Καρμιώτισσα-Πάνω-Πολεμιδιών-vs-Νέα-Σαλαμίνα@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260419T160000
+DTEND;TZID=Europe/Nicosia:20260419T180000
+SUMMARY:Καρμιώτισσα Πάνω Πολεμιδιών vs Νέα Σαλαμίνα
+LOCATION:Κοινοτικό Γήπεδο Πάνω Πολεμιδιών
+DESCRIPTION:Καρμιώτισσα Πάνω Πολεμιδιών vs Νέα Σαλαμίνα\\nΓήπεδο: Κοινοτικό Γήπεδο Πάνω Πολεμιδιών
+STATUS:TENTATIVE
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Καρμιώτισσα Πάνω Πολεμιδιών vs Νέα Σαλαμίνα
+TRIGGER:-PT120M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:20260419T183000-Νέα-Σαλαμίνα-vs-ΑΕΛ@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260419T183000
+DTEND;TZID=Europe/Nicosia:20260419T203000
+SUMMARY:Νέα Σαλαμίνα vs ΑΕΛ
+DESCRIPTION:Νέα Σαλαμίνα vs ΑΕΛ
+STATUS:TENTATIVE
+CATEGORIES:Γυναικείο Βόλεϊ
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Νέα Σαλαμίνα vs ΑΕΛ
+TRIGGER:-PT120M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:20260425T163000-Νέα-Σαλαμίνα-vs-ΑΣΙΛ-Λύσης@red-rebels.com
+DTSTAMP:20260412T215500
+DTSTART;TZID=Europe/Nicosia:20260425T163000
+DTEND;TZID=Europe/Nicosia:20260425T183000
+SUMMARY:Νέα Σαλαμίνα vs ΑΣΙΛ Λύσης
+DESCRIPTION:Νέα Σαλαμίνα vs ΑΣΙΛ Λύσης
+STATUS:TENTATIVE
+CATEGORIES:Ανδρικό Ποδόσφαιρο
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Νέα Σαλαμίνα vs ΑΣΙΛ Λύσης
+TRIGGER:-PT120M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
