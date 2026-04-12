@@ -136,7 +136,7 @@ No API keys are needed for basic development — Back4App is only required for p
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
 | `ci.yml` | Pull request | Type-check, lint, test, build |
-| `deploy.yml` | Push to main | Build + deploy to GitHub Pages |
+| Cloudflare Pages | Push to main | Auto-build + deploy to red-rebels.com |
 | `scrape.yml` | Manual | Scrape fixtures, send notifications, open PR |
 | `reminders.yml` | Cron every 30min | Send push match reminders |
 

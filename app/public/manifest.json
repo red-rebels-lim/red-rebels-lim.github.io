@@ -1,8 +1,9 @@
 {
-  "name": "Red Rebels Calendar 2025",
+  "name": "Red Rebels Calendar",
   "short_name": "Red Rebels",
-  "description": "Event schedule calendar for Red Rebels Limassol - Football and Volleyball matches",
-  "start_url": "./",
+  "description": "Sports calendar for Nea Salamina FC — football and volleyball fixtures, statistics, and match details",
+  "start_url": "https://red-rebels.com/",
+  "id": "https://red-rebels.com/",
   "display": "standalone",
   "background_color": "#0a1810",
   "theme_color": "#E02520",
@@ -24,6 +25,6 @@
   "categories": ["sports", "entertainment"],
   "lang": "el-GR",
   "dir": "ltr",
-  "scope": "./",
+  "scope": "https://red-rebels.com/",
   "prefer_related_applications": false
 }
