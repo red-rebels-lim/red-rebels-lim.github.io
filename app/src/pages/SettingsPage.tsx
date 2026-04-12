@@ -274,7 +274,7 @@ function NotificationPreview({ t, notifPrefs }: { t: (key: string, opts?: Record
               className="flex items-start gap-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3 shadow-sm"
             >
               <img
-                src="/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp"
+                src="/images/clear_logo_192.png"
                 alt=""
                 className="w-8 h-8 rounded-lg object-cover shrink-0 mt-0.5"
               />
