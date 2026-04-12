@@ -126,15 +126,6 @@ function BellIcon() {
   );
 }
 
-function ClockIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
-  );
-}
-
 function GlobeIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -440,6 +431,53 @@ export default function SettingsPage() {
     trackEvent('toggle_language', { language: newLang });
   };
 
+  // Channel state (Telegram and Calendar are stored in localStorage)
+  const [channelState, setChannelState] = useState(() => {
+    try {
+      const stored = localStorage.getItem('notification_channels');
+      if (stored) return JSON.parse(stored) as { telegram: boolean; calendar: boolean };
+    } catch { /* ignore */ }
+    return { telegram: false, calendar: false };
+  });
+
+  const saveChannelState = (next: { telegram: boolean; calendar: boolean }) => {
+    setChannelState(next);
+    localStorage.setItem('notification_channels', JSON.stringify(next));
+  };
+
+  const anyChannelActive = isSubscribed || channelState.telegram || channelState.calendar;
+
+  const toggleTelegram = () => {
+    if (channelState.telegram) {
+      // Don't allow disabling if it's the only active channel
+      if (!isSubscribed && !channelState.calendar) return;
+      saveChannelState({ ...channelState, telegram: false });
+    } else {
+      // Open Telegram deep link when enabling
+      window.open('https://t.me/RedRebelsBot?start=subscribe', '_blank');
+      saveChannelState({ ...channelState, telegram: true });
+      trackEvent('connect_telegram');
+    }
+  };
+
+  const toggleCalendar = () => {
+    if (channelState.calendar) {
+      // Don't allow disabling if it's the only active channel
+      if (!isSubscribed && !channelState.telegram) return;
+      saveChannelState({ ...channelState, calendar: false });
+    } else {
+      // Open webcal link when enabling
+      const calUrl = `webcal://red-rebels.com/calendar${i18n.language === 'el' ? '-el' : ''}.ics`;
+      window.location.href = calUrl;
+      saveChannelState({ ...channelState, calendar: true });
+      trackEvent('subscribe_calendar', { lang: i18n.language });
+    }
+  };
+
+  // Default prefs used when not subscribed to web push (for shared UI)
+  const defaultPrefs: NotifPrefs = { reminderHours: [24, 2], enabledSports: ['football-men', 'volleyball-men', 'volleyball-women'], notifyNewEvents: true, notifyTimeChanges: true, notifyScoreUpdates: true, disabled: false };
+  const activePrefs = notifPrefs ?? defaultPrefs;
+
   const currentLanguageLabel = i18n.language === 'el' ? t('settings.languageGreek') : t('settings.languageEnglish');
 
   return (
@@ -451,122 +489,164 @@ export default function SettingsPage() {
       <div className="flex-1 overflow-y-auto pb-8">
         {/* ── NOTIFICATIONS ── */}
         <SettingsSection title={t('settings.notifications')}>
-          {!supported ? (
-            <div className="px-4 py-4">
-              <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.notSupported')}</p>
-            </div>
-          ) : status === 'denied' ? (
-            <div className="px-4 py-4 space-y-2">
-              <p className="text-sm font-semibold text-red-500">{t('settings.permissionDenied')}</p>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{t('settings.deniedHelp')}</p>
-            </div>
-          ) : (
-            <>
-              <SettingsRow
-                icon={<BellIcon />}
-                iconBg="bg-[#dc2828]/10 text-[#dc2828]"
-                label={t('settings.matchReminders')}
-                trailing={
-                  loading ? (
-                    <div className="size-5 border-2 border-[#dc2828] border-t-transparent rounded-full animate-spin" role="status"><span className="sr-only">Loading...</span></div>
-                  ) : (
-                    <SettingsToggle
-                      checked={isSubscribed}
-                      onChange={isSubscribed ? handleUnsubscribe : handleSubscribe}
-                    />
-                  )
-                }
-              />
-              {pushError && (
-                <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
-                  <p className="text-xs text-red-500">{t('settings.pushError', 'Failed to update notifications. Please try again.')}</p>
+          {/* ── Channels ── */}
+          <div className="px-4 py-3">
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+              {t('settings.channels')}
+            </p>
+            <div className="space-y-1">
+              {/* Web Push */}
+              <div className="flex items-center justify-between py-1.5">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center rounded-lg shrink-0 size-8 bg-[#dc2828]/10 text-[#dc2828]">
+                    <BellIcon />
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium">{t('settings.webPush')}</span>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500">{t('settings.webPushDesc')}</p>
+                  </div>
                 </div>
+                {loading ? (
+                  <div className="size-5 border-2 border-[#dc2828] border-t-transparent rounded-full animate-spin" role="status"><span className="sr-only">Loading...</span></div>
+                ) : (
+                  <SettingsToggle
+                    checked={isSubscribed}
+                    onChange={() => {
+                      if (isSubscribed) {
+                        // Don't allow disabling if it's the only active channel
+                        if (!channelState.telegram && !channelState.calendar) return;
+                        handleUnsubscribe();
+                      } else {
+                        handleSubscribe();
+                      }
+                    }}
+                    disabled={!supported || status === 'denied'}
+                  />
+                )}
+              </div>
+              {pushError && (
+                <p className="text-xs text-red-500 ml-11">{t('settings.pushError')}</p>
+              )}
+              {status === 'denied' && (
+                <p className="text-xs text-red-500 ml-11">{t('settings.deniedHelp')}</p>
               )}
 
-              {/* Expanded preferences (only when subscribed and prefs loaded) */}
-              {isSubscribed && notifPrefs && (
-                <>
-                  {/* Reminder times */}
-                  <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
-                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
-                      {t('settings.reminderTimes')}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {[{ hour: 24, label: '24h' }, { hour: 12, label: '12h' }, { hour: 2, label: '2h' }, { hour: 1, label: '1h' }].map(({ hour, label }) => (
-                        <ReminderChip
-                          key={hour}
-                          label={label}
-                          active={notifPrefs.reminderHours.includes(hour)}
-                          onToggle={() => toggleReminderHour(hour)}
-                        />
-                      ))}
-                    </div>
+              {/* Telegram */}
+              <div className="flex items-center justify-between py-1.5">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center rounded-lg shrink-0 size-8 bg-[#229ED9]/10 text-[#229ED9]">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                    </svg>
                   </div>
-
-                  {/* Sports */}
-                  <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
-                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
-                      {t('sports.title', 'Sports')}
-                    </p>
-                    <div className="space-y-1">
-                      {[
-                        { key: 'football-men', label: t('sports.footballMen') },
-                        { key: 'volleyball-men', label: t('sports.volleyballMen') },
-                        { key: 'volleyball-women', label: t('sports.volleyballWomen') },
-                      ].map(({ key, label }) => (
-                        <div key={key} className="flex items-center justify-between py-1.5">
-                          <span className="text-sm font-medium">{label}</span>
-                          <SettingsToggle
-                            checked={notifPrefs.enabledSports.includes(key)}
-                            onChange={() => toggleNotifSport(key)}
-                          />
-                        </div>
-                      ))}
-                    </div>
+                  <div>
+                    <span className="text-sm font-medium">{t('settings.connectTelegram')}</span>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500">{t('settings.telegramDesc')}</p>
                   </div>
-
-                  {/* Alert types */}
-                  <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
-                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
-                      {t('settings.alertTypes')}
-                    </p>
-                    <div className="space-y-1">
-                      {[
-                        { key: 'notifyNewEvents' as const, label: t('settings.newEvents') },
-                        { key: 'notifyTimeChanges' as const, label: t('settings.timeChanges') },
-                        { key: 'notifyScoreUpdates' as const, label: t('settings.scoreUpdates') },
-                      ].map(({ key, label }) => (
-                        <div key={key} className="flex items-center justify-between py-1.5">
-                          <span className="text-sm font-medium">{label}</span>
-                          <SettingsToggle
-                            checked={notifPrefs[key]}
-                            onChange={() => updatePref({ [key]: !notifPrefs[key] })}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                </>
-              )}
-
-              {/* Fallback: show static reminder time when not subscribed */}
-              {!isSubscribed && (
-                <SettingsRow
-                  icon={<ClockIcon />}
-                  label={t('settings.reminderTime')}
-                  value={t('settings.reminderDefault', '24h & 2h before')}
-                  isLast
+                </div>
+                <SettingsToggle
+                  checked={channelState.telegram}
+                  onChange={toggleTelegram}
                 />
-              )}
+              </div>
 
-              {/* Notification preview — always visible as a teaser / confirmation */}
-              <NotificationPreview
-                t={t}
-                notifPrefs={notifPrefs ?? { reminderHours: [24, 2], enabledSports: [], notifyNewEvents: true, notifyTimeChanges: true, notifyScoreUpdates: true, disabled: false }}
-              />
+              {/* Calendar Sync */}
+              <div className="flex items-center justify-between py-1.5">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center rounded-lg shrink-0 size-8 bg-blue-500/10 text-blue-500">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium">{t('settings.calendarSync')}</span>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500">{t('settings.calendarSyncDesc')}</p>
+                  </div>
+                </div>
+                <SettingsToggle
+                  checked={channelState.calendar}
+                  onChange={toggleCalendar}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Shared preferences (visible when any channel is active) ── */}
+          {anyChannelActive && (
+            <>
+              {/* Reminder times */}
+              <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
+                <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  {t('settings.reminderTimes')}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {[{ hour: 24, label: '24h' }, { hour: 12, label: '12h' }, { hour: 2, label: '2h' }, { hour: 1, label: '1h' }].map(({ hour, label }) => (
+                    <ReminderChip
+                      key={hour}
+                      label={label}
+                      active={activePrefs.reminderHours.includes(hour)}
+                      onToggle={() => notifPrefs ? toggleReminderHour(hour) : undefined}
+                    />
+                  ))}
+                </div>
+                {channelState.calendar && (
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2 italic">
+                    {t('settings.calendarSyncNote')}
+                  </p>
+                )}
+              </div>
+
+              {/* Sports */}
+              <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
+                <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  {t('sports.title', 'Sports')}
+                </p>
+                <div className="space-y-1">
+                  {[
+                    { key: 'football-men', label: t('sports.footballMen') },
+                    { key: 'volleyball-men', label: t('sports.volleyballMen') },
+                    { key: 'volleyball-women', label: t('sports.volleyballWomen') },
+                  ].map(({ key, label }) => (
+                    <div key={key} className="flex items-center justify-between py-1.5">
+                      <span className="text-sm font-medium">{label}</span>
+                      <SettingsToggle
+                        checked={activePrefs.enabledSports.includes(key)}
+                        onChange={() => notifPrefs ? toggleNotifSport(key) : undefined}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Alert types */}
+              <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700/50">
+                <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  {t('settings.alertTypes')}
+                </p>
+                <div className="space-y-1">
+                  {[
+                    { key: 'notifyNewEvents' as const, label: t('settings.newEvents') },
+                    { key: 'notifyTimeChanges' as const, label: t('settings.timeChanges') },
+                    { key: 'notifyScoreUpdates' as const, label: t('settings.scoreUpdates') },
+                  ].map(({ key, label }) => (
+                    <div key={key} className="flex items-center justify-between py-1.5">
+                      <span className="text-sm font-medium">{label}</span>
+                      <SettingsToggle
+                        checked={activePrefs[key]}
+                        onChange={() => notifPrefs ? updatePref({ [key]: !notifPrefs[key] }) : undefined}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </>
           )}
+
+          {/* Notification preview */}
+          <NotificationPreview
+            t={t}
+            notifPrefs={activePrefs}
+          />
         </SettingsSection>
 
         {/* ── VISUAL THEME ── */}
@@ -630,54 +710,6 @@ export default function SettingsPage() {
             trailing={<SettingsToggle checked={sportFilters.volleyball} onChange={() => toggleSportFilter('volleyball')} />}
             isLast
           />
-        </SettingsSection>
-
-        {/* ── NOTIFICATION CHANNELS ── */}
-        <SettingsSection title={t('settings.channels')}>
-          {/* Calendar Sync */}
-          <div className="flex items-center gap-4 px-4 min-h-[56px] justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center justify-center rounded-lg shrink-0 size-10 bg-blue-500/10 text-blue-500">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-                </svg>
-              </div>
-              <div className="min-w-0">
-                <p className="text-base font-medium">{t('settings.calendarSync')}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{t('settings.calendarSyncDesc')}</p>
-              </div>
-            </div>
-            <a
-              href={`webcal://red-rebels.com/calendar${i18n.language === 'el' ? '-el' : ''}.ics`}
-              className="px-3 py-1.5 rounded-full text-xs font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors shrink-0"
-              onClick={() => trackEvent('subscribe_calendar', { lang: i18n.language })}
-            >
-              {t('settings.subscribe')}
-            </a>
-          </div>
-          {/* Telegram */}
-          <div className="flex items-center gap-4 px-4 min-h-[56px] justify-between border-t border-slate-100 dark:border-slate-700/50">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center justify-center rounded-lg shrink-0 size-10 bg-[#229ED9]/10 text-[#229ED9]">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-                </svg>
-              </div>
-              <div className="min-w-0">
-                <p className="text-base font-medium">{t('settings.connectTelegram')}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{t('settings.telegramDesc')}</p>
-              </div>
-            </div>
-            <a
-              href="https://t.me/RedRebelsBot?start=subscribe"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#229ED9] text-white hover:bg-[#1a8bc4] transition-colors shrink-0"
-              onClick={() => trackEvent('connect_telegram')}
-            >
-              {t('settings.subscribe')}
-            </a>
-          </div>
         </SettingsSection>
 
         {/* ── TOOLS ── */}
