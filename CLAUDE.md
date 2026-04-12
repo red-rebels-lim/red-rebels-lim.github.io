@@ -6,6 +6,8 @@ This file provides guidance to Claude Code when working with this repository.
 
 When asked to implement a feature or fix, proceed directly to implementation. Do NOT spend extended time in planning/discovery mode unless explicitly asked for a plan. If exploration is needed, timebox it to 2-3 minutes before starting code changes.
 
+**IMPORTANT: Never push directly to main. Always create a feature branch and open a Pull Request.**
+
 ## Code Style
 
 When making UI/style changes, match the existing design exactly. Do not introduce color drift, padding changes, or deviate from established patterns. Prefer DRY approaches — extract shared components rather than duplicating styles.
