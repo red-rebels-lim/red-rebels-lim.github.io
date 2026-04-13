@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "rrcalendar",
   "compatibility_date": "2026-04-12",
+  "main": "src/_worker.ts",
   "observability": {
     "enabled": true
   },
