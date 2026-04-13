@@ -9,6 +9,7 @@
     "generate:calendar": "npx tsx scripts/generate-calendar.ts",
     "build": "npm run generate:calendar && tsc -b && vite build",
     "lint": "eslint .",
+    "deploy:secrets": "echo \"${TELEGRAM_BOT_TOKEN}\" | wrangler secret put TELEGRAM_BOT_TOKEN && echo \"${BACK4APP_APP_ID}\" | wrangler secret put BACK4APP_APP_ID && echo \"${BACK4APP_REST_API_KEY}\" | wrangler secret put BACK4APP_REST_API_KEY",
     "preview": "npm run build && wrangler dev",
     "test": "vitest run",
     "test:watch": "vitest",
