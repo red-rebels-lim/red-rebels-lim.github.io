@@ -16,6 +16,17 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
+    // Temporary debug endpoint — remove after diagnosing env var issue
+    if (url.pathname === '/api/debug-env' && request.method === 'GET') {
+      return new Response(JSON.stringify({
+        TELEGRAM_BOT_TOKEN: !!env.TELEGRAM_BOT_TOKEN,
+        BACK4APP_APP_ID: !!env.BACK4APP_APP_ID,
+        BACK4APP_REST_API_KEY: !!env.BACK4APP_REST_API_KEY,
+        VIBER_BOT_TOKEN: !!env.VIBER_BOT_TOKEN,
+        ASSETS: !!env.ASSETS,
+      }), { headers: { 'Content-Type': 'application/json' } });
+    }
+
     if (url.pathname === '/api/telegram-webhook' && request.method === 'POST') {
       return handleTelegramWebhook(request, env);
     }
