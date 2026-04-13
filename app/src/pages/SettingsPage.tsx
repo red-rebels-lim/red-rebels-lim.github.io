@@ -454,7 +454,7 @@ export default function SettingsPage() {
       saveChannelState({ ...channelState, telegram: false });
     } else {
       // Open Telegram deep link when enabling
-      window.open('https://t.me/RedRebelsBot?start=subscribe', '_blank');
+      window.open('https://t.me/RedRebels_bot?start=subscribe', '_blank');
       saveChannelState({ ...channelState, telegram: true });
       trackEvent('connect_telegram');
     }
