@@ -12,5 +12,10 @@
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "secrets_store_secrets": [
+    { "binding": "TELEGRAM_BOT_TOKEN", "store_id": "5bc2095c42554bd29807d19bffc06a2a", "secret_name": "TELEGRAM_BOT_TOKEN" },
+    { "binding": "BACK4APP_APP_ID", "store_id": "5bc2095c42554bd29807d19bffc06a2a", "secret_name": "BACK4APP_APP_ID" },
+    { "binding": "BACK4APP_REST_API_KEY", "store_id": "5bc2095c42554bd29807d19bffc06a2a", "secret_name": "BACK4APP_REST_API_KEY" }
   ]
 }
