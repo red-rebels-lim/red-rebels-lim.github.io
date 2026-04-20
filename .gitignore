@@ -27,6 +27,9 @@ verify-*.png
 *.sln
 *.sw?
 
+# Wrangler (Cloudflare local dev state)
+app/.wrangler
+
 # Scraper
 app/scripts/scraper/node_modules
 
