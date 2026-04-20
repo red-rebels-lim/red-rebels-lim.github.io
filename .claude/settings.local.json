@@ -84,7 +84,8 @@
       "Bash(npm test:*)",
       "WebFetch(domain:volleyball.org.cy)",
       "WebFetch(domain:kop-web.dataproject.com)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)"
     ]
   },
   "enableAllProjectMcpServers": true,
