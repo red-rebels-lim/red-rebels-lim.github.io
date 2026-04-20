@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import { enrichWithFotMob } from './fotmob-enrichment.ts';
 import { enrichWithCfa } from './cfa-enrichment.ts';
 import { enrichWithDataproject } from './dataproject-enrichment.ts';
+import { fetchFotMobTeamFixtures } from './fotmob-fallback.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1006,17 +1007,36 @@ async function main() {
   console.log();
 
   try {
-    // 1. Scrape CFA football fixtures from both URLs
+    // 1. Scrape CFA football fixtures from both URLs (with FotMob fallback)
     const allCfaFixtures: Fixture[] = [];
+    let cfaSuccessCount = 0;
     for (const url of CFA_URLS) {
-      const fixtures = await scrapeCfaFixtures(url, TEAM_FILTER_CFA, shouldDownloadLogos);
-      console.log(`  Found ${fixtures.length} CFA fixtures from ${url}`);
-      allCfaFixtures.push(...fixtures);
+      try {
+        const fixtures = await scrapeCfaFixtures(url, TEAM_FILTER_CFA, shouldDownloadLogos);
+        console.log(`  Found ${fixtures.length} CFA fixtures from ${url}`);
+        allCfaFixtures.push(...fixtures);
+        cfaSuccessCount++;
+      } catch (e) {
+        console.warn(`  ⚠ CFA fetch failed for ${url}: ${(e as Error).message}`);
+      }
     }
 
-    // 2. Deduplicate CFA fixtures (matches may appear on both pages)
-    const cfaFixtures = deduplicateCfaFixtures(allCfaFixtures);
-    console.log(`  After deduplication: ${cfaFixtures.length} CFA fixtures`);
+    let cfaFixtures: Fixture[];
+    if (cfaSuccessCount === 0) {
+      console.log();
+      console.log('⚠️  All CFA URLs failed — falling back to FotMob for football fixtures');
+      try {
+        cfaFixtures = await fetchFotMobTeamFixtures(NEA_SALAMINA_FOTMOB_ID);
+        console.log(`  Found ${cfaFixtures.length} football fixtures from FotMob fallback`);
+      } catch (e) {
+        console.error(`  ✗ FotMob fallback also failed: ${(e as Error).message}`);
+        cfaFixtures = [];
+      }
+    } else {
+      // 2. Deduplicate CFA fixtures (matches may appear on both pages)
+      cfaFixtures = deduplicateCfaFixtures(allCfaFixtures);
+      console.log(`  After deduplication: ${cfaFixtures.length} CFA fixtures`);
+    }
     console.log();
 
     // 3. Scrape volleyball.org.cy volleyball fixtures (primary)

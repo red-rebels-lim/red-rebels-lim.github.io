@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   dev:
-    image: node:20-alpine
+    image: node:20
     container_name: red-rebels-calendar-dev
     working_dir: /app
     ports:

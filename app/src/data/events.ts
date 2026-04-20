@@ -7355,19 +7355,261 @@ export const eventsData: EventsData = {
       opponent: "ΑΕΛ",
       time: "20:00",
       logo: "images/team_logos/ΑΕΛ.webp",
-      competition: "cup"
+      competition: "cup",
+      status: "played",
+      score: "3-0",
+      sets: [
+        {
+          home: 25,
+          away: 19
+        },
+        {
+          home: 25,
+          away: 23
+        },
+        {
+          home: 25,
+          away: 11
+        }
+      ]
     },
     {
       day: 19,
       sport: "football-men",
       location: "away",
       opponent: "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
-      time: "16:00",
+      time: "",
       venue: "ΚΟΙΝΟΤΙΚΟ ΓΗΠΕΔΟ ΠΑΝΩ ΠΟΛΕΜΙΔΙΩΝ",
-      logo: "images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp"
+      logo: "images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp",
+      status: "played",
+      score: "1-0",
+      scorers: [
+        {
+          name: "ΘΕΟΔΟΣΗΣ ΚΥΠΡΟΥ",
+          minute: "64",
+          team: "away"
+        }
+      ],
+      bookings: [
+        {
+          name: "ΑΘΑΝΑΣΙΟΣ ΠΙΤΣΟΛΗΣ",
+          minute: "20",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "ΚΩΣΤΑΣ ΧΑΡΑΛΑΜΠΟΥΣ",
+          minute: "68",
+          team: "home",
+          card: "yellow"
+        },
+        {
+          name: "ADULAI DJALO BALDE ALDAIR",
+          minute: "72",
+          team: "home",
+          card: "yellow"
+        },
+        {
+          name: "ΔΗΜΗΤΡΙΑΝΟΣ ΤΖΟΥΛΙΟΥ",
+          minute: "84",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "FILIPE CORREIA BORGES MICAEL",
+          minute: "84",
+          team: "home",
+          card: "yellow"
+        },
+        {
+          name: "ΙΩΑΝΝΗΣ ΜΠΑΣΤΙΑΝΟΣ",
+          minute: "86",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "ΜΑΡΤΙΝΟΣ ΧΡΙΣΤΟΦΗ",
+          minute: "90",
+          team: "away",
+          card: "yellow"
+        },
+        {
+          name: "ΜΙΧΑΛΗΣ ΚΩΝΣΤΑΝΤΙΝΙΔΗΣ",
+          minute: "90",
+          team: "away",
+          card: "yellow"
+        }
+      ],
+      lineup: {
+        home: [
+          {
+            name: "ALBERTO  VARO LARA"
+          },
+          {
+            name: "ΠΑΝΑΓΙΩΤΗΣ  ΑΡΤΥΜΑΤΑΣ"
+          },
+          {
+            name: "ΓΕΩΡΓΙΟΣ  ΧΡΙΣΤΟΔΟΥΛΟΥ"
+          },
+          {
+            name: "MANUEL  ARTILES ROMERO JOSE"
+          },
+          {
+            name: "ALEJANDRO  GUTIERREZ HERNANDEZ"
+          },
+          {
+            name: "ΑΝΤΡΕΑΣ  ΔΗΜΗΤΡΙΟΥ"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΚΑΣΤΑΝΑΣ"
+          },
+          {
+            name: "ADULAI  DJALO BALDE ALDAIR"
+          },
+          {
+            name: "ΚΩΝΣΤΑΝΤΙΝΟΣ  ΗΛΙΑ"
+          },
+          {
+            name: "ΚΩΣΤΑΣ  ΧΑΡΑΛΑΜΠΟΥΣ"
+          },
+          {
+            name: "ΠΑΝΑΓΙΩΤΗΣ  ΛΟΥΚΑ"
+          }
+        ],
+        away: [
+          {
+            name: "ΜΑΤΙΙΑ  ΣΠΟΛΙΑΡΙΤΣ ΑΛΕΞΑΝΤΕΡ"
+          },
+          {
+            name: "ΑΘΑΝΑΣΙΟΣ  ΠΙΤΣΟΛΗΣ"
+          },
+          {
+            name: "HENRIQUE  GUEDES LUIZ"
+          },
+          {
+            name: "ΑΝΤΡΕΑΣ  ΝΕΟΦΥΤΟΥ"
+          },
+          {
+            name: "MARLON  YEBLI CURTIS FABRICE"
+          },
+          {
+            name: "ΚΩΝΣΤΑNTΙΝΟΣ  ΔΗΜΗΤΡΙΟΥ"
+          },
+          {
+            name: "ΘΕΟΔΟΣΗΣ  ΚΥΠΡΟΥ"
+          },
+          {
+            name: "ΜΑΡΙΟΣ  ΚΟΚΚΙΝΟΦΤΑΣ"
+          },
+          {
+            name: "ΙΩΑΝΝΗΣ  ΜΠΑΣΤΙΑΝΟΣ"
+          },
+          {
+            name: "ΤΙΜΟΘΕΟΣ  ΠΑΥΛΟΥ"
+          },
+          {
+            name: "ΜΑΡΤΙΝΟΣ  ΧΡΙΣΤΟΦΗ"
+          }
+        ]
+      },
+      subs: [
+        {
+          playerOn: "ΔΗΜΗΤΡΙΑΝΟΣ ΤΖΟΥΛΙΟΥ",
+          playerOff: "HENRIQUE GUEDES LUIZ",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          playerOff: "MANUEL ARTILES ROMERO JOSE",
+          minute: "46",
+          team: "home"
+        },
+        {
+          playerOn: "ΠΕΤΡΟΣ ΨΥΧΑΣ",
+          playerOff: "ΘΕΟΔΟΣΗΣ ΚΥΠΡΟΥ",
+          minute: "67",
+          team: "away"
+        },
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΘΙΜΟΥ",
+          playerOff: "ΓΕΩΡΓΙΟΣ ΧΡΙΣΤΟΔΟΥΛΟΥ",
+          minute: "68",
+          team: "home"
+        },
+        {
+          playerOn: "ΓΙΩΡΓΟΣ ΠΑΥΛΙΔΗΣ",
+          playerOff: "ALEJANDRO GUTIERREZ HERNANDEZ",
+          minute: "68",
+          team: "home"
+        },
+        {
+          playerOn: "ΔΗΜΗΤΡΗΣ ΚΥΠΡΙΑΝΟΥ",
+          playerOff: "ΚΩΣΤΑΣ ΧΑΡΑΛΑΜΠΟΥΣ",
+          minute: "68",
+          team: "home"
+        },
+        {
+          playerOn: "FILIPE CORREIA BORGES MICAEL",
+          playerOff: "ΑΝΤΡΕΑΣ ΔΗΜΗΤΡΙΟΥ",
+          minute: "76",
+          team: "home"
+        },
+        {
+          playerOn: "ΜΙΧΑΛΗΣ ΚΩΝΣΤΑΝΤΙΝΙΔΗΣ",
+          playerOff: "ΙΩΑΝΝΗΣ ΜΠΑΣΤΙΑΝΟΣ",
+          minute: "88",
+          team: "away"
+        },
+        {
+          playerOn: "ΑΡΤΕΜΗΣ ΣΠΑΝΟΣ",
+          playerOff: "ΑΝΤΡΕΑΣ ΝΕΟΦΥΤΟΥ",
+          minute: "90",
+          team: "away"
+        },
+        {
+          playerOn: "MATIJA SPOLJARIC",
+          playerOff: "ΜΑΡΙΟΣ ΚΟΚΚΙΝΟΦΤΑΣ",
+          minute: "90",
+          team: "away"
+        }
+      ]
     },
     {
       day: 19,
+      sport: "volleyball-women",
+      location: "home",
+      opponent: "ΑΕΛ",
+      time: "18:30",
+      logo: "images/team_logos/ΑΕΛ.webp",
+      competition: "cup",
+      status: "played",
+      score: "3-2",
+      sets: [
+        {
+          home: 14,
+          away: 25
+        },
+        {
+          home: 21,
+          away: 25
+        },
+        {
+          home: 25,
+          away: 17
+        },
+        {
+          home: 25,
+          away: 15
+        },
+        {
+          home: 15,
+          away: 8
+        }
+      ]
+    },
+    {
+      day: 20,
       sport: "volleyball-women",
       location: "home",
       opponent: "ΑΕΛ",
@@ -7380,7 +7622,7 @@ export const eventsData: EventsData = {
       sport: "football-men",
       location: "home",
       opponent: "ΑΣΙΛ ΛΥΣΗΣ",
-      time: "16:30",
+      time: "17:00",
       logo: "images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.webp"
     }
   ],
