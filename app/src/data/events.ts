@@ -7622,8 +7622,185 @@ export const eventsData: EventsData = {
       sport: "football-men",
       location: "home",
       opponent: "ΑΣΙΛ ΛΥΣΗΣ",
-      time: "17:00",
-      logo: "images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.webp"
+      time: "",
+      logo: "images/team_logos/ΑΣΙΛ_ΛΥΣΗΣ.webp",
+      status: "played",
+      score: "4-1",
+      scorers: [
+        {
+          name: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          minute: "28",
+          team: "home"
+        },
+        {
+          name: "MANUEL ARTILES ROMERO JOSE",
+          minute: "29",
+          team: "home"
+        },
+        {
+          name: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          minute: "35",
+          team: "home"
+        },
+        {
+          name: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          minute: "56",
+          team: "home"
+        },
+        {
+          name: "ΛΕΩΝΙΔΑΣ ΡΟΥΤΖΟΥΑΝΙ",
+          minute: "89",
+          team: "away"
+        }
+      ],
+      bookings: [
+        {
+          name: "ΔΗΜΗΤΡΗΣ ΚΥΠΡΙΑΝΟΥ",
+          minute: "16",
+          team: "home",
+          card: "yellow"
+        },
+        {
+          name: "ΓΕΩΡΓΙΟΣ ΠΑΠΑΘΑΝΑΣΙΟΥ",
+          minute: "41",
+          team: "away",
+          card: "yellow"
+        }
+      ],
+      lineup: {
+        home: [
+          {
+            name: "ALBERTO  VARO LARA"
+          },
+          {
+            name: "ΓΕΩΡΓΙΟΣ  ΧΡΙΣΤΟΔΟΥΛΟΥ"
+          },
+          {
+            name: "ΓΙΩΡΓΟΣ  ΠΟΝΤΙΚΟΥ"
+          },
+          {
+            name: "MANUEL  ARTILES ROMERO JOSE"
+          },
+          {
+            name: "ALEJANDRO  PEREZ CORDOVA DANIEL"
+          },
+          {
+            name: "ALEJANDRO  GUTIERREZ HERNANDEZ"
+          },
+          {
+            name: "ΘΩΜΑΣ  ΝΙΚΟΛΑΟΥ"
+          },
+          {
+            name: "ΓΙΩΡΓΟΣ  ΠΑΥΛΙΔΗΣ"
+          },
+          {
+            name: "ΔΗΜΗΤΡΗΣ  ΚΥΠΡΙΑΝΟΥ"
+          },
+          {
+            name: "ΑΛΕΞΑΝΔΡΟΣ  ΘΕΟΧΑΡΟΥΣ"
+          },
+          {
+            name: "ΓΙΩΡΓΟΣ  ΒΙΚΤΩΡΟΣ"
+          }
+        ],
+        away: [
+          {
+            name: "ΓΕΩΡΓΙΟΣ  ΠΑΠΑΘΑΝΑΣΙΟΥ"
+          },
+          {
+            name: "ΚΥΡΙΑΚΟΣ  ΚΥΡΙΑΚΟΥ"
+          },
+          {
+            name: "ΓΙΩΡΓΟΣ  ΚΑΤΣΙΑΤΗ"
+          },
+          {
+            name: "ΝΙΚΟΣ  ΚΑΤΖΙΗΣ"
+          },
+          {
+            name: "ΑΝΔΡΕΑΣ  ΚΑΨΗΣ"
+          },
+          {
+            name: "ΝΙΚΟΛΑΣ  ΜΗΝΑ"
+          },
+          {
+            name: "ALEXANDRE  CRUZ MARTINS FABIO"
+          },
+          {
+            name: "ΛΕΥΤΕΡΗΣ  ΧΑΤΖΗΚΩΝΣΤΑΝΤΗ"
+          },
+          {
+            name: "ΛΕΩΝΙΔΑΣ  ΡΟΥΤΖΟΥΑΝΙ"
+          },
+          {
+            name: "ΚΥΡΙΑΚΟΣ  ΣΤΡΑΤΗΛΑΤΗΣ"
+          },
+          {
+            name: "JEAN  PRUDENTE"
+          }
+        ]
+      },
+      subs: [
+        {
+          playerOn: "ΕΥΑΓΓΕΛΟΣ ΤΣΙΑΜΗΣ",
+          playerOff: "ΛΕΥΤΕΡΗΣ ΧΑΤΖΗΚΩΝΣΤΑΝΤΗ",
+          minute: "26",
+          team: "away"
+        },
+        {
+          playerOn: "ΝΙΚΟΛΑΣ ΚΥΡΙΑΚΙΔΗΣ",
+          playerOff: "ΓΕΩΡΓΙΟΣ ΠΑΠΑΘΑΝΑΣΙΟΥ",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΘΙΜΟΥ",
+          playerOff: "ΔΗΜΗΤΡΗΣ ΚΥΠΡΙΑΝΟΥ",
+          minute: "60",
+          team: "home"
+        },
+        {
+          playerOn: "ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΑΣΤΑΝΑΣ",
+          playerOff: "ΓΙΩΡΓΟΣ ΠΟΝΤΙΚΟΥ",
+          minute: "60",
+          team: "home"
+        },
+        {
+          playerOn: "ΣΑΒΒΑΣ ΚΟΝΤΟΠΟΥΛΟΣ",
+          playerOff: "ALEJANDRO PEREZ CORDOVA DANIEL",
+          minute: "60",
+          team: "home"
+        },
+        {
+          playerOn: "ΜΑΡΙΟΣ ΦΑΣΟΥΛΙΩΤΗΣ",
+          playerOff: "ALEXANDRE CRUZ MARTINS FABIO",
+          minute: "60",
+          team: "away"
+        },
+        {
+          playerOn: "CRISTOBAL D' RUGGIERO LOPEZ",
+          playerOff: "ΝΙΚΟΛΑΣ ΜΗΝΑ",
+          minute: "60",
+          team: "away"
+        },
+        {
+          playerOn: "ΚΥΡΙΑΚΟΣ ΕΠΙΦΑΝΙΟΥ",
+          playerOff: "ALEJANDRO GUTIERREZ HERNANDEZ",
+          minute: "71",
+          team: "home"
+        },
+        {
+          playerOn: "ΑΝΤΡΕΑΣ ΔΗΜΗΤΡΙΟΥ",
+          playerOff: "ΘΩΜΑΣ ΝΙΚΟΛΑΟΥ",
+          minute: "71",
+          team: "home"
+        },
+        {
+          playerOn: "ΚΥΠΡΙΑΝΟΣ ΑΝΔΡΕΟΥ",
+          playerOff: "ΚΥΡΙΑΚΟΣ ΣΤΡΑΤΗΛΑΤΗΣ",
+          minute: "85",
+          team: "away"
+        }
+      ]
     }
   ],
   may: [],
