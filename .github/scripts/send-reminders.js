@@ -273,66 +273,6 @@ async function main() {
     }
     console.log(`Telegram summary: ${tgSent} sent, ${tgFailed} failed`);
   }
-
-  // --- Viber reminders ---
-  const { VIBER_BOT_TOKEN } = process.env;
-  if (VIBER_BOT_TOKEN) {
-    const { sendViberMessage } = await import('./lib/viber-sender.js');
-    const ViberSubscriber = Parse.Object.extend('ViberSubscriber');
-    let vbSent = 0;
-    let vbFailed = 0;
-
-    for (const match of upcoming) {
-      for (const tier of REMINDER_TIERS) {
-        const lowerBound = tier - WINDOW_MINUTES / 60;
-        const upperBound = tier + WINDOW_MINUTES / 60;
-        if (match.hoursUntil < lowerBound || match.hoursUntil > upperBound) continue;
-
-        // Dedup for viber channel
-        const vbLogQuery = new Parse.Query(ReminderLog);
-        vbLogQuery.equalTo('eventKey', match.eventKey);
-        vbLogQuery.equalTo('hoursBefore', tier);
-        vbLogQuery.equalTo('channel', 'viber');
-        if (await vbLogQuery.first({ useMasterKey: true })) continue;
-
-        const subQuery = new Parse.Query(ViberSubscriber);
-        subQuery.equalTo('active', true);
-        subQuery.containedIn('reminderHours', [tier]);
-        subQuery.containedIn('enabledSports', [match.sport]);
-        subQuery.limit(1000);
-        const subs = await subQuery.find({ useMasterKey: true });
-
-        if (subs.length === 0) continue;
-
-        const reminderPayload = buildReminderPayload(match, tier);
-
-        for (const sub of subs) {
-          try {
-            const result = await sendViberMessage(sub.get('viberId'), reminderPayload, VIBER_BOT_TOKEN);
-            if (result.ok) vbSent++;
-            else {
-              if (result.statusCode === 6) { // Viber: receiver not subscribed
-                sub.set('active', false);
-                await sub.save(null, { useMasterKey: true });
-              }
-              vbFailed++;
-            }
-          } catch (err) {
-            console.error(`Viber send failed:`, err.message);
-            vbFailed++;
-          }
-        }
-
-        const log = new ReminderLog();
-        log.set('eventKey', match.eventKey);
-        log.set('hoursBefore', tier);
-        log.set('channel', 'viber');
-        log.set('sentAt', new Date());
-        await log.save(null, { useMasterKey: true });
-      }
-    }
-    console.log(`Viber summary: ${vbSent} sent, ${vbFailed} failed`);
-  }
 }
 
 const isMain = process.argv[1] &&

@@ -31,4 +31,3 @@ jobs:
           BACK4APP_APP_ID: ${{ secrets.BACK4APP_APP_ID }}
           BACK4APP_MASTER_KEY: ${{ secrets.BACK4APP_MASTER_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          VIBER_BOT_TOKEN: ${{ secrets.VIBER_BOT_TOKEN }}

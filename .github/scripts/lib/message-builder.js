@@ -1,6 +1,6 @@
 /**
  * Shared notification message builder.
- * Used by send-reminders.js, send-notifications.js, and channel senders (Telegram, Viber).
+ * Used by send-reminders.js, send-notifications.js, and the Telegram channel sender.
  */
 
 export function sportEmoji(sport) {
@@ -78,7 +78,7 @@ export function buildChangePayload(type, desc, sport, location) {
 }
 
 /**
- * Format a notification payload as plain text for Telegram/Viber.
+ * Format a notification payload as plain text for Telegram.
  * @param {{ title: string, body: string }} payload
  * @returns {string}
  */
