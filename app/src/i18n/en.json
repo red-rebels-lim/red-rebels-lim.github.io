@@ -305,9 +305,7 @@
     "linkCopied": "Link copied!",
     "connectTelegram": "Telegram Bot",
     "telegramDesc": "Reminders via Telegram",
-    "telegramSetup": "Open Telegram to connect",
-    "connectViber": "Viber",
-    "viberDesc": "Get reminders via Viber bot"
+    "telegramSetup": "Open Telegram to connect"
   },
   "calendar": {
     "noEvents": "No events this month",

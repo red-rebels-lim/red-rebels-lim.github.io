@@ -1,178 +1,115 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with this repository.
+Lean context for Claude Code working on the Red Rebels Calendar.
+Only things you would otherwise get wrong are recorded here.
 
-## General Behavior
+## Stack at a glance
 
-When asked to implement a feature or fix, proceed directly to implementation. Do NOT spend extended time in planning/discovery mode unless explicitly asked for a plan. If exploration is needed, timebox it to 2-3 minutes before starting code changes.
+- React 19 + TypeScript 5.9 + Vite 7 (in `app/`); Tailwind 4 + Radix; React Router v7 **BrowserRouter** (not hash).
+- PWA via `vite-plugin-pwa` injectManifest; service worker source: `app/src/sw.ts`.
+- Cloudflare **Worker** (not Pages) named `rrcalendar`; entry `app/src/_worker.ts` handles `/api/*` webhooks, everything else falls through to static `ASSETS` with SPA `not_found_handling`.
+- Backend: Parse SDK pointed at Back4App (`https://parseapi.back4app.com/`). Classes: `PushSubscription`, `NotifPreference`, `TelegramSubscriber`, `ReminderLog`.
+- Package manager: npm, run from `app/`.
 
-**IMPORTANT: Never push directly to main. Always create a feature branch and open a Pull Request.**
+## Build & deploy
 
-## Code Style
+- Local dev: `cd app && npm run dev` (Vite at `:5173`). Worker preview: `npm run preview` (build + `wrangler dev`).
+- Build: `npm run build` runs `generate:calendar` → `tsc -b` → `vite build`. The first step rewrites `public/calendar.ics` and `public/calendar-el.ics` (gitignored).
+- Deploy: production deploys are wired through the **Cloudflare dashboard's git integration** (not a GitHub Action in this repo). Pushing to `main` triggers Cloudflare's build + deploy. For local manual deploys (rare), `npm run deploy` = `npm run build && wrangler deploy` with appropriate `wrangler` auth. For a hotfix, prefer pushing a PR through main rather than running `wrangler deploy` directly — the dashboard pipeline is the source of truth.
+- Pre-push hook (`app/.husky/pre-push`) runs lint + test + build. Don't `--no-verify`.
+- Never push directly to `main`. Always open a PR.
 
-When making UI/style changes, match the existing design exactly. Do not introduce color drift, padding changes, or deviate from established patterns. Prefer DRY approaches — extract shared components rather than duplicating styles.
+## CI workflows
 
-## Before Committing
+| File | Trigger | What it does | What it does NOT do |
+|---|---|---|---|
+| `ci.yml` | PR | type-check, lint, test, build | does not run e2e, does not deploy |
+| `scrape.yml` | manual (`workflow_dispatch`) | runs scraper, sends notifications, opens PR with updated `events.ts` | not on a schedule |
+| `reminders.yml` | cron `*/30 * * * *` | sends Web Push + Telegram reminders for matches in next 25h | does not touch repo |
 
-After making code changes, always verify the build passes before committing. Run:
-
-```bash
-cd app
-npm run lint
-npm test
-npm run build
-```
-
-The pre-push hook runs these automatically and will block the push if any fail.
-
-## Tech Stack & Constraints
-
-- **React 19 + TypeScript 5.9**, built with **Vite 7**
-- **Radix UI** primitives wrapped in `src/components/ui/`
-- **Tailwind CSS 4** + CVA for component variants
-- **React Router v7** (hash-based routing)
-- **Parse/Back4App** for push subscriptions and user preferences
-- **i18next** for EN/EL bilingual support
-- **Recharts** for statistics charts
-- **Vitest + React Testing Library** for unit/integration tests
-- **Playwright** for E2E tests
-- Package manager: **npm** (not pnpm — ignore the leftover `pnpm-lock.yaml`)
-
-## Project Overview
-
-Red Rebels Calendar is a PWA for Nea Salamina FC (Cyprus) that displays football and volleyball fixtures, statistics, and match details. It supports push notifications for match reminders, dark/light theme, keyboard navigation, and swipe gestures.
-
-## Commands
-
-```bash
-# Development (run from app/)
-npm run dev              # Vite dev server at http://localhost:5173
-npm run build            # tsc -b && vite build
-npm run lint             # ESLint check
-npm run lint --fix       # Auto-fix lint issues
-npm test                 # Vitest single run
-npm run test:watch       # Vitest watch mode
-npm run test:coverage    # Vitest with V8 coverage report
-npm run preview          # Preview production build locally
-```
-
-## Architecture
+## Directory map
 
 ```
-app/src/
-├── components/
-│   ├── calendar/         # CalendarGrid, EventCard, EventPopover, MatchReport, CountdownTimer
-│   ├── filters/          # FilterPanel
-│   ├── layout/           # Navbar, Footer, AppBackground
-│   ├── stats/            # OverallStats, LeagueTable, TopScorers, NextMatch, etc.
-│   └── ui/               # Radix UI wrappers (button, dialog, sheet, select, etc.)
-├── hooks/
-│   ├── useCalendar.ts    # Core calendar state and event filtering
-│   ├── useCountdown.ts   # Match countdown timer
-│   ├── useTheme.ts       # Light/dark theme toggle
-│   ├── useKeyboardShortcuts.ts
-│   └── useSwipeNavigation.ts
-├── lib/
-│   ├── fotmob.ts         # FotMob API: live scores, standings, venue info
-│   ├── stats.ts          # W/D/L, streaks, head-to-head calculations
-│   ├── push.ts           # Web Push subscription
-│   ├── preferences.ts    # localStorage + Parse backend for user settings
-│   ├── analytics.ts      # Google Analytics + Microsoft Clarity
-│   └── ics-export.ts     # iCalendar (.ics) export
-├── data/
-│   ├── events.ts         # All match data (~6500 lines, updated by scraper)
-│   ├── constants.ts      # Venue info, team colors
-│   ├── month-config.ts   # Month metadata
-│   └── sport-config.ts   # Sport types
-├── pages/                # CalendarPage, StatsPage (lazy), SettingsPage (lazy)
-├── types/events.ts       # Shared TypeScript interfaces
-└── i18n/                 # i18next config + language detection
+app/                       # the application — work here
+  src/
+    _worker.ts             # CF Worker entry: /api/telegram-webhook
+    sw.ts                  # service worker (push notifications)
+    App.tsx                # router (BrowserRouter)
+    pages/                 # CalendarPage, StatsPage (lazy), SettingsPage (lazy)
+    components/{calendar,stats,filters,layout,ui}/
+    hooks/                 # useCalendar, useCountdown, useTheme, ...
+    lib/                   # fotmob, stats, volleyball-stats, push, parse, preferences,
+                           #   ics-core (pure), ics-export (browser), translate, analytics
+    data/                  # events.ts (GENERATED), constants, month-config, sport-config
+    types/events.ts        # SportEvent, CalendarEvent, all stat types
+    i18n/{en,el}.json      # all UI strings + fotmob name lookup tables
+  scripts/
+    generate-calendar.ts   # build-time .ics generator
+    scraper/               # standalone Node project (own package.json, own node_modules)
+    register-telegram-webhook.sh
+  e2e/                     # Playwright specs — GITIGNORED, local only, not run in CI
+  public/                  # static assets; calendar.ics files generated at build
+.github/
+  workflows/{ci,scrape,reminders}.yml
+  scripts/                 # standalone Node project for cron reminders + push
+docs/, app/docs/           # planning notes (not load-bearing)
+app/.tasks/                # sprint tracker tied to app/.claude/skills/start-task etc.
 ```
 
-**Data flow:** Static `events.ts` → `useCalendar` hook → `CalendarPage` → grid + cards + popover. Stats come from `lib/stats.ts` (calculations) and `lib/fotmob.ts` (live API).
+Three separate `package.json` files: `app/`, `app/scripts/scraper/`, `.github/scripts/`. CI installs each separately. Don't add scraper deps to the app bundle.
 
-## Testing
+## Domain glossary
 
-Tests live in `app/src/__tests__/`. Coverage targets: 80%+ branches, 89%+ statements.
+- **Νέα Σαλαμίνα** appears in three canonical forms — keep them straight:
+  - `'Νέα Σαλαμίνα'` (mixed case) — display constant, `data/constants.ts`.
+  - `'ΝΕΑ ΣΑΛΑΜΙΝΑ'` (uppercase) — events.ts opponent strings + translate.ts lookup key.
+  - `'ΝΕΑ ΣΑΛΑΜΙΝΑ ΑΜΜΟΧΩΣΤΟΥ'` (full name) — scraper team filter against CFA HTML.
+- Team data is stored Greek-uppercase in `events.ts`. English keys live under `i18n/*.json#fotmob.teams.*`. Translation goes Greek string → key (via `lib/translate.ts`) → i18n value.
+- Sports: `'football-men' | 'volleyball-men' | 'volleyball-women' | 'meeting'`. Football is men-only; volleyball is gendered.
+- Match status enum is only `'played' | 'upcoming'` — there is no `cancelled` or `postponed`. If you need to model a postponement, ask first.
+- Competition: `'league' | 'cup'`. Cup matches may set `penalties: "1-3"`.
+- Season constants live in `app/src/data/constants.ts` (`SEASON_START_YEAR`, `SEASON_END_YEAR`). Sept–Dec belongs to start year, Jan–Aug to end year. **Bumping the season also requires updating scraper URLs and competition IDs — see `app/scripts/scraper/CLAUDE.md`.**
+- Scorer name annotations like `"... (Πέναλτι)"` in `events.ts` are intentional. `translatePlayerName` strips the parens before lookup. Don't sanitise them.
 
-### Key patterns
+## Conventions that hold
 
-**vi.hoisted() for mock variables referenced inside vi.mock():**
-```typescript
-const { mockSave } = vi.hoisted(() => ({ mockSave: vi.fn() }));
-vi.mock('@/lib/parse', () => ({ /* use mockSave here */ }));
-```
+- Path alias `@/` → `app/src/` everywhere (Vite, vitest, tsconfig). The build-time scripts also use it via `tsconfig.scripts.json`.
+- Scraper TS files import siblings with `.ts` extensions (NOT `.js`) — this is `moduleResolution: "bundler"` in `tsconfig.scripts.json`.
+- Tests in `app/src/__tests__/` use Vitest. `vi.hoisted()` for mocks referenced inside `vi.mock()`. Use `vi.advanceTimersByTime()`, never `vi.runAllTimers()` (the countdown's `setInterval` causes an infinite loop).
+- Radix portals (Sheet, DropdownMenu) need to be mocked in tests — see existing tests for the pattern.
+- New external script/host = update CSP in `app/index.html` (hardcoded meta tag).
+- Style changes match existing tokens. Don't drift colours, padding, radius. Prefer extracting shared components to duplicating styles.
 
-**Radix UI portal mocking** (Sheet, DropdownMenu render in portals):
-```typescript
-vi.mock('@/components/ui/sheet', () => ({
-  Sheet: ({ children }) => <div>{children}</div>,
-  SheetContent: ({ children }) => <div data-testid="sheet-content">{children}</div>,
-  SheetTrigger: ({ children }) => <div>{children}</div>,
-}));
-```
+## Env vars / secrets
 
-**Fake timers:** Use `vi.advanceTimersByTime()` NOT `vi.runAllTimers()` — the app uses `setInterval` in `useCountdown` which causes infinite loops.
+| Var | Where | What |
+|---|---|---|
+| `VITE_BACK4APP_APP_ID`, `VITE_BACK4APP_JS_KEY` | `app/.env.local` | Public Parse client keys |
+| `VITE_VAPID_PUBLIC_KEY` | `app/.env.local` | Web Push subscription |
+| `VITE_GA_MEASUREMENT_ID`, `VITE_CLARITY_PROJECT_ID` | `app/.env.local` (optional) | Analytics |
+| `BACK4APP_APP_ID`, `BACK4APP_REST_API_KEY`, `TELEGRAM_BOT_TOKEN` | Cloudflare Secrets Store (binding in `wrangler.jsonc`) | Worker runtime |
+| `BACK4APP_APP_ID`, `BACK4APP_MASTER_KEY`, `VAPID_*`, `TELEGRAM_BOT_TOKEN` | GitHub Actions secrets | Cron + scraper |
 
-**jsdom stubs for Notification/PushManager:**
-```typescript
-vi.stubGlobal('Notification', { permission: 'denied', requestPermission: vi.fn() });
-```
+`app/.env.example` is the source of truth for client-side vars. Empty values are fine for local dev — Back4App is only needed for push features.
 
-## Environment Variables
+## Known gotchas
 
-All variables use the `VITE_` prefix. Copy `app/.env.example` to `app/.env.local`:
+- **`events.ts` is generated AND externally parsed.** The cron at `.github/scripts/send-reminders.js:60` does `new Function('return ' + match[1])` on the file contents. TS-only constructs (`as const`, `satisfies`, type assertions, computed keys) will silently break the cron — CI doesn't catch this. See `app/src/data/CLAUDE.md`.
+- **`events.ts` is regenerated wholesale** by the scraper. Don't hand-edit unless you've checked the scraper's merge logic — it can clobber your changes on the next run. If a fixture has been officially announced by CFA / volleyball.org.cy / DataProject, prefer running the scraper (`scrape.yml` workflow_dispatch, or locally) over hand-adding the entry.
+- **Repo name is misleading.** `red-rebels-lim.github.io` looks like GH Pages. It isn't — see Build & deploy.
+- **Don't add a Viber channel.** Viber bots have required a commercial partnership since Feb 2024 — not viable for fan clubs. The previous Viber code was removed; don't reintroduce it without confirming the partnership status.
+- **Coverage thresholds (80%/89%) are aspirational** — not enforced in `vitest.config.ts` or CI.
+- E2E tests live in `app/e2e/` but are **gitignored** and not run in CI. Treat them as local exploration.
 
-```
-VITE_BACK4APP_APP_ID=       # Back4App app ID
-VITE_BACK4APP_JS_KEY=       # Back4App JS key
-VITE_VAPID_PUBLIC_KEY=      # Web Push VAPID public key
-VITE_GA_MEASUREMENT_ID=     # Google Analytics (optional)
-VITE_CLARITY_PROJECT_ID=    # Microsoft Clarity (optional)
-```
+## Do NOT touch without asking
 
-No API keys are needed for basic development — Back4App is only required for push notification features.
+- `app/src/data/events.ts` — see `app/src/data/CLAUDE.md`.
+- Scraper URL constants and competition IDs (`app/scripts/scraper/index.ts:48-77`) — season-specific; bumping them mid-season is destructive.
+- `index.html` CSP meta — adding a new origin requires testing.
+- `wrangler.jsonc` `secrets_store_secrets[].store_id` — that's a real Cloudflare resource ID.
+- Greek copy in `i18n/el.json` — flag for the user before translating or rewriting; tone matters.
+- `manifest.json`, favicon set, hero images (`main.webp`, `mobile.webp`) — visual identity, not a refactor target.
 
-## CI/CD
+## Commit style
 
-| Workflow | Trigger | Purpose |
-|----------|---------|---------|
-| `ci.yml` | Pull request | Type-check, lint, test, build |
-| Cloudflare Pages | Push to main | Auto-build + deploy to red-rebels.com |
-| `scrape.yml` | Manual | Scrape fixtures, send notifications, open PR |
-| `reminders.yml` | Cron every 30min | Send push match reminders |
-
-**CI runs from `app/` directory using npm.** The scraper scripts live in `app/scripts/scraper/` and are tracked in git (not ignored).
-
-## Scraper Scripts
-
-Match data is scraped and committed via the `scrape.yml` workflow:
-
-```
-app/scripts/scraper/
-├── index.ts                    # Main scraper entry point
-├── fotmob-enrichment.ts        # Enriches events with FotMob data
-├── cfa-enrichment.ts           # Enriches football events with CFA data
-└── dataproject-enrichment.ts   # Enriches volleyball events with DataProject data
-```
-
-Scripts use `tsconfig.scripts.json` with `moduleResolution: "bundler"` — import sibling `.ts` files with `.ts` extensions (not `.js`).
-
-## .gitignore Notes
-
-- `app/scripts/scraper/node_modules` — ignored (dependencies)
-- `/scripts` — root-level scripts directory ignored (anchored with `/`)
-- `app/scripts/` — **tracked** (scraper source files should be in git)
-- `.claude/` — gitignored (local agent config, not committed)
-
-## Commit Format
-
-```
-type(scope): description
-
-feat(calendar): add match detail popover
-fix(scraper): use .ts extensions for enrichment imports
-chore(deps): update vitest to 4.0
-```
-
-Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
+`type(scope): description` — types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`. Examples in `git log`.

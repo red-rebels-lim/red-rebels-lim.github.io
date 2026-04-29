@@ -305,9 +305,7 @@
     "linkCopied": "Ο σύνδεσμος αντιγράφηκε!",
     "connectTelegram": "Telegram Bot",
     "telegramDesc": "Υπενθυμίσεις μέσω Telegram",
-    "telegramSetup": "Ανοίξτε το Telegram για σύνδεση",
-    "connectViber": "Viber",
-    "viberDesc": "Υπενθυμίσεις μέσω Viber bot"
+    "telegramSetup": "Ανοίξτε το Telegram για σύνδεση"
   },
   "calendar": {
     "noEvents": "Δεν υπάρχουν εκδηλώσεις αυτόν τον μήνα",
