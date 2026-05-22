@@ -38,6 +38,7 @@ vi.mock('@/components/ui/sheet', () => ({
     <div data-testid="sheet-content" className={className}>{children}</div>
   ),
   SheetTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SheetDescription: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 vi.mock('@/components/ui/dropdown-menu', () => ({
@@ -198,7 +199,7 @@ describe('TASK-09: Light/Dark Theme Support', () => {
           }}
         />
       );
-      const dialogContent = screen.getByTestId('dialog-content');
+      const dialogContent = screen.getByTestId('sheet-content');
       expectNoDarkOnlyBg(dialogContent.className, 'Match popover');
     });
 
@@ -220,7 +221,7 @@ describe('TASK-09: Light/Dark Theme Support', () => {
           }}
         />
       );
-      const dialogContent = screen.getByTestId('dialog-content');
+      const dialogContent = screen.getByTestId('sheet-content');
       expectNoDarkOnlyBg(dialogContent.className, 'Meeting popover');
     });
 
