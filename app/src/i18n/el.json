@@ -7,11 +7,52 @@
   "nav": {
     "calendar": "Ημερολόγιο",
     "stats": "Στατιστικά",
+    "squad": "Ρόστερ",
     "options": "Εργαλεία",
     "export": "Εξαγωγή (.ics)",
     "print": "Εκτύπωση",
     "install": "Εγκατάσταση",
     "settings": "Ρυθμίσεις"
+  },
+  "squad": {
+    "colApps": "Σ",
+    "colGoals": "Γ",
+    "colCards": "Κ",
+    "positions": {
+      "GK": "Τερματοφύλακες",
+      "DEF": "Αμυντικοί",
+      "MID": "Μέσοι",
+      "FWD": "Επιθετικοί"
+    },
+    "subPositions": {
+      "Central": "Κεντρικός",
+      "Wing": "Πλευρός",
+      "Defensive": "Αμυντικός",
+      "Attacking": "Επιθετικός"
+    },
+    "row": {
+      "ariaLabel": "{{name}}: {{apps}} συμμετοχές, {{goals}} γκολ, {{cards}} κάρτες"
+    },
+    "modal": {
+      "age": "{{age}} ετών",
+      "played": "Συμμετοχές",
+      "goals": "Γκολ",
+      "cards": "Κάρτες",
+      "startsAndSubs": "{{starts}} βασικός · {{subs}} αλλαγή",
+      "goalBreakdown": "{{openPlay}} ανοιχτό · {{penalty}} πέναλτι · {{og}} αυτογκόλ",
+      "cardsBreakdown": "Κίτρινες / Κόκκινες",
+      "matchLog": "Αγώνες",
+      "expand": "Όλοι",
+      "collapse": "Λιγότερα",
+      "noApps": "Καμία συμμετοχή ακόμη φέτος",
+      "start": "Β",
+      "sub": "Α",
+      "appearance": {
+        "start": "Βασικός",
+        "sub": "Αλλαγή",
+        "none": "Δεν αγωνίστηκε"
+      }
+    }
   },
   "monthNav": {
     "previous": "Προηγούμενος",
@@ -187,11 +228,7 @@
       "Anagennisi": "Αναγέννηση",
       "APOEL": "ΑΠΟΕΛ"
     },
-    "players": {
-      "Panagiotis Louka": "Παναγιώτης Λούκα",
-      "Georgios Christodoulou": "Γεώργιος Χριστοδούλου",
-      "Konstantinos Anthimou": "Κωνσταντίνος Ανθίμου"
-    },
+    "players": {},
     "leagues": {
       "2. Division": "Β' Κατηγορία",
       "Promotion Group": "Όμιλος Ανόδου",
