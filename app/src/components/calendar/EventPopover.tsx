@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { getMatchResult } from '@/lib/stats';
 import type { CalendarEvent, Scorer, Booking, LineupPlayer, Substitution, VolleyballSet, VolleyballScorer } from '@/types/events';
@@ -480,11 +480,14 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
   // ── Meeting layout ──────────────────────────────────────────────────────────
   if (event.isMeeting) {
     return (
-      <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-        <DialogContent className="bg-white dark:bg-gradient-to-br dark:from-surface-dark dark:to-background border-3 border-primary-border-emphasis rounded-3xl max-w-lg shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_100px_var(--primary-glow)]">
-          <DialogTitle className="sr-only">{event.title}</DialogTitle>
-          <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
-          <div className="text-center py-4">
+      <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
+        <SheetContent
+          side="bottom"
+          className="bg-white dark:bg-gradient-to-br dark:from-surface-dark dark:to-background border-3 border-primary-border-emphasis rounded-t-3xl sm:max-w-2xl sm:mx-auto max-h-[90vh] overflow-y-auto shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_100px_var(--primary-glow)]"
+        >
+          <SheetTitle className="sr-only">{event.title}</SheetTitle>
+          <SheetDescription className="sr-only">{event.subtitle}</SheetDescription>
+          <div className="text-center py-4 px-4">
             <div className="text-6xl mb-4">📅</div>
             <div className="text-2xl font-extrabold text-foreground mb-4">{event.title}</div>
             <div className="bg-slate-50 dark:bg-white/5 border-2 border-primary-border-subtle rounded-xl p-4">
@@ -494,8 +497,8 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
               <div className="text-lg font-bold text-foreground">⏰ {time}</div>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
     );
   }
 
@@ -503,10 +506,13 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
   const isFootballPlayed = event.sport === 'football-men' && event.status === 'played';
 
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className={`${resultBadge.dialogBg} border ${resultBadge.dialogBorder} rounded-3xl max-w-[calc(100%-2rem)] sm:max-w-lg shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_var(--primary-border-subtle)] p-0 overflow-x-hidden overflow-y-auto max-h-[85dvh]`}>
-        <DialogTitle className="sr-only">{event.title}</DialogTitle>
-        <DialogDescription className="sr-only">{event.subtitle}</DialogDescription>
+    <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
+      <SheetContent
+        side="bottom"
+        className={`${resultBadge.dialogBg} border ${resultBadge.dialogBorder} rounded-t-3xl sm:max-w-2xl sm:mx-auto shadow-lg dark:shadow-[0_25px_50px_rgba(0,0,0,0.9),0_0_80px_var(--primary-border-subtle)] p-0 overflow-x-hidden overflow-y-auto max-h-[90vh]`}
+      >
+        <SheetTitle className="sr-only">{event.title}</SheetTitle>
+        <SheetDescription className="sr-only">{event.subtitle}</SheetDescription>
 
         {/* ── Top bar ── */}
         <div className="flex items-center justify-center px-5 pt-5 pb-3">
@@ -652,7 +658,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
             </button>
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }
