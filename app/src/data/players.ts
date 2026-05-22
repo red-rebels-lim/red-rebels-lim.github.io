@@ -21,6 +21,7 @@ export const players: Player[] = [
     nameEn: 'Alberto Varo Lara',
     position: 'GK',
     shirtNumber: 1,
+    photoUrl: '/images/players/alberto_varo_lara.webp',
     aliases: ['ALBERTO VARO LARA', 'Alberto Varo'],
   },
   {
@@ -40,6 +41,7 @@ export const players: Player[] = [
     nameEn: 'Denys Vakulyk',
     position: 'GK',
     shirtNumber: 16,
+    photoUrl: '/images/players/denys_vakulyk.webp',
   },
   {
     key: 'giannis_kalanidis',
@@ -49,6 +51,7 @@ export const players: Player[] = [
     nameEn: 'Giannis Kalanidis',
     position: 'GK',
     shirtNumber: 98,
+    photoUrl: '/images/players/giannis_kalanidis.webp',
   },
 
   // Defenders
@@ -61,6 +64,7 @@ export const players: Player[] = [
     position: 'DEF',
     subPosition: 'Central',
     shirtNumber: 3,
+    photoUrl: '/images/players/alexandros_theocharous.webp',
     aliases: ['ΑΛΕΞΑΝΔΡΟΣ ΘΕΟΧΑΡΟΥΣ'],
   },
   {
@@ -72,6 +76,7 @@ export const players: Player[] = [
     position: 'DEF',
     subPosition: 'Central',
     shirtNumber: 4,
+    photoUrl: '/images/players/panagiotis_artymatas.webp',
     aliases: ['ΠΑΝΑΓΙΩΤΗΣ ΑΡΤΥΜΑΤΑΣ'],
   },
   {
@@ -83,6 +88,7 @@ export const players: Player[] = [
     position: 'DEF',
     subPosition: 'Central',
     shirtNumber: 5,
+    photoUrl: '/images/players/alexantros_michail.webp',
     // Bare surnames (Μιχαήλ etc.) are deliberately not aliased — they collide with
     // common Cypriot surnames on opposing rosters.
     aliases: ['ΑΛΕΞΑΝΔΡΟΣ ΜΙΧΑΗΛ'],
@@ -96,6 +102,7 @@ export const players: Player[] = [
     position: 'DEF',
     subPosition: 'Wing',
     shirtNumber: 12,
+    photoUrl: '/images/players/antreas_dimitriou.webp',
     aliases: ['ΑΝΤΡΕΑΣ ΔΗΜΗΤΡΙΟΥ'],
   },
   {
@@ -107,6 +114,7 @@ export const players: Player[] = [
     position: 'DEF',
     subPosition: 'Central',
     shirtNumber: 15,
+    photoUrl: '/images/players/konstantinos_kastanas.webp',
     aliases: ['ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΑΣΤΑΝΑΣ'],
   },
   {
@@ -118,6 +126,7 @@ export const players: Player[] = [
     position: 'DEF',
     subPosition: 'Wing',
     shirtNumber: 21,
+    photoUrl: '/images/players/thomas_nikolaou.webp',
     aliases: ['ΘΩΜΑΣ ΝΙΚΟΛΑΟΥ'],
   },
   {
@@ -129,6 +138,7 @@ export const players: Player[] = [
     position: 'DEF',
     subPosition: 'Wing',
     shirtNumber: 26,
+    photoUrl: '/images/players/dimitris_kyprianou.webp',
     aliases: ['ΔΗΜΗΤΡΗΣ ΚΥΠΡΙΑΝΟΥ', 'Demetris Kyprianou'],
   },
   {
@@ -140,6 +150,7 @@ export const players: Player[] = [
     position: 'DEF',
     subPosition: 'Wing',
     shirtNumber: 33,
+    photoUrl: '/images/players/kostas_charalampous.webp',
     aliases: ['ΚΩΣΤΑΣ ΧΑΡΑΛΑΜΠΟΥΣ', 'Costas Charalambous'],
   },
   {
@@ -151,6 +162,7 @@ export const players: Player[] = [
     position: 'DEF',
     subPosition: 'Central',
     shirtNumber: 44,
+    photoUrl: '/images/players/giorgos_viktoros.webp',
     aliases: ['ΓΙΩΡΓΟΣ ΒΙΚΤΩΡΟΣ'],
   },
 
@@ -164,6 +176,7 @@ export const players: Player[] = [
     position: 'MID',
     subPosition: 'Defensive',
     shirtNumber: 6,
+    photoUrl: '/images/players/giorgos_christodoulou.webp',
     aliases: ['ΓΕΩΡΓΙΟΣ ΧΡΙΣΤΟΔΟΥΛΟΥ', 'Georgios Christodoulou'],
   },
   {
@@ -175,6 +188,7 @@ export const players: Player[] = [
     position: 'MID',
     subPosition: 'Attacking',
     shirtNumber: 8,
+    photoUrl: '/images/players/jose_artiles.webp',
     aliases: ['MANUEL ARTILES ROMERO JOSE'],
   },
   {
@@ -186,6 +200,7 @@ export const players: Player[] = [
     position: 'MID',
     subPosition: 'Central',
     shirtNumber: 23,
+    photoUrl: '/images/players/antreas_frangkos.webp',
     aliases: ['ΑΝΤΡΕΑΣ ΦΡΑΓΚΟΣ', 'Andreas Fragkos', 'Andreas Frangos'],
   },
   {
@@ -197,6 +212,7 @@ export const players: Player[] = [
     position: 'MID',
     subPosition: 'Central',
     shirtNumber: 24,
+    photoUrl: '/images/players/giorgos_pavlidis.webp',
     aliases: ['ΓΙΩΡΓΟΣ ΠΑΥΛΙΔΗΣ'],
   },
   {
@@ -208,6 +224,7 @@ export const players: Player[] = [
     position: 'MID',
     subPosition: 'Defensive',
     shirtNumber: 25,
+    photoUrl: '/images/players/konstantinos_ilia.webp',
     aliases: ['ΚΩΝΣΤΑΝΤΙΝΟΣ ΗΛΙΑ'],
   },
   {
@@ -219,6 +236,7 @@ export const players: Player[] = [
     position: 'MID',
     subPosition: 'Central',
     shirtNumber: 66,
+    photoUrl: '/images/players/konstantinos_koumparis.webp',
     aliases: ['ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΥΜΠΑΡΗ', 'Konstantinos Koumbari'],
   },
 
@@ -232,6 +250,7 @@ export const players: Player[] = [
     position: 'FWD',
     subPosition: 'Wing',
     shirtNumber: 7,
+    photoUrl: '/images/players/giorgos_pontikou.webp',
     aliases: ['ΓΙΩΡΓΟΣ ΠΟΝΤΙΚΟΥ'],
   },
   {
@@ -243,6 +262,7 @@ export const players: Player[] = [
     position: 'FWD',
     subPosition: 'Central',
     shirtNumber: 9,
+    photoUrl: '/images/players/daniel_perez.webp',
     aliases: ['ALEJANDRO PEREZ CORDOVA DANIEL', 'Daniel Pérez'],
   },
   {
@@ -254,6 +274,7 @@ export const players: Player[] = [
     position: 'FWD',
     subPosition: 'Wing',
     shirtNumber: 10,
+    photoUrl: '/images/players/mika_borges.webp',
     // 'Mika Borges' is intentionally not aliased — it duplicates nameEn (auto-included
     // by the resolver) and risks future short-form collisions.
     aliases: ['FILIPE CORREIA BORGES MICAEL', 'Micael Filipe Correia Borges'],
@@ -267,6 +288,7 @@ export const players: Player[] = [
     position: 'FWD',
     subPosition: 'Wing',
     shirtNumber: 11,
+    photoUrl: '/images/players/alex_guti.webp',
     aliases: ['ALEJANDRO GUTIERREZ HERNANDEZ', 'Álex Guti'],
   },
   {
@@ -278,6 +300,7 @@ export const players: Player[] = [
     position: 'FWD',
     subPosition: 'Wing',
     shirtNumber: 17,
+    photoUrl: '/images/players/aldair_djalo_balde.webp',
     // Bare 'Aldair' is intentionally not aliased — common Lusophone first name,
     // collision risk with future opponents.
     aliases: ['ADULAI DJALO BALDE ALDAIR'],
@@ -291,6 +314,7 @@ export const players: Player[] = [
     position: 'FWD',
     subPosition: 'Wing',
     shirtNumber: 27,
+    photoUrl: '/images/players/konstantinos_anthimou.webp',
     aliases: ['ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΘΙΜΟΥ'],
   },
   {
@@ -302,6 +326,7 @@ export const players: Player[] = [
     position: 'FWD',
     subPosition: 'Central',
     shirtNumber: 77,
+    photoUrl: '/images/players/savvas_kontopoulos.webp',
     aliases: ['ΣΑΒΒΑΣ ΚΟΝΤΟΠΟΥΛΟΣ'],
   },
   {
@@ -313,6 +338,7 @@ export const players: Player[] = [
     position: 'FWD',
     subPosition: 'Central',
     shirtNumber: 89,
+    photoUrl: '/images/players/panagiotis_louka.webp',
     aliases: ['ΠΑΝΑΓΙΩΤΗΣ ΛΟΥΚΑ', 'P. Louka'],
   },
   {

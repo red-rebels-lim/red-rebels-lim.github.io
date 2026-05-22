@@ -16,6 +16,12 @@ export interface Player {
   joinedDate?: string;
   leftDate?: string;
   /**
+   * Path to a portrait under /images/players/. Omit (or null) to fall back to the
+   * silhouette icon. Photos are stored at 192px wide webp; the row/sheet apply
+   * object-cover + object-top to crop in on the face.
+   */
+  photoUrl?: string;
+  /**
    * Alternative name forms as they appear in events.ts (lineup, subs, scorers, bookings).
    * The football-stats resolver normalises each entry (whitespace, parenthetical annotations,
    * case) before matching, so list each spotted variant verbatim.

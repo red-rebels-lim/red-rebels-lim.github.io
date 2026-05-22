@@ -1,6 +1,7 @@
-import { ChevronRight, User } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Player, PlayerSeasonStats } from '@/types/players';
+import { PlayerAvatar } from './PlayerAvatar';
 
 interface PlayerRowProps {
   player: Player;
@@ -38,12 +39,7 @@ export function PlayerRow({ player, stats, onSelect }: PlayerRowProps) {
       <span className="w-8 shrink-0 text-right font-condensed font-bold tabular-nums text-slate-400 dark:text-slate-500">
         {player.shirtNumber ? `#${player.shirtNumber}` : '—'}
       </span>
-      <span
-        className="size-9 shrink-0 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500"
-        aria-hidden="true"
-      >
-        <User size={20} strokeWidth={2} />
-      </span>
+      <PlayerAvatar photoUrl={player.photoUrl} size="sm" />
       <span className="flex-1 min-w-0 font-condensed font-bold uppercase tracking-wide truncate text-slate-900 dark:text-slate-100">
         {displayName}
       </span>
