@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronUp, User } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { translateTeamName } from '@/lib/translate';
 import type { Player, PlayerSeasonStats, PlayerMatchAppearance } from '@/types/players';
+import { PlayerAvatar } from './PlayerAvatar';
 
 interface PlayerSheetProps {
   player: Player | null;
@@ -52,9 +53,7 @@ export function PlayerSheet({ player, stats, open, onOpenChange }: PlayerSheetPr
       >
         <SheetHeader className="text-left">
           <div className="flex items-center gap-4">
-            <div className="size-16 shrink-0 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500">
-              <User size={32} strokeWidth={2} aria-hidden="true" />
-            </div>
+            <PlayerAvatar photoUrl={player.photoUrl} size="lg" />
             <div className="flex-1 min-w-0">
               <SheetTitle className="font-condensed font-bold uppercase tracking-wide text-2xl">
                 {player.shirtNumber && (
