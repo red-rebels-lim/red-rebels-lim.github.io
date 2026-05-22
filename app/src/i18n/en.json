@@ -7,11 +7,52 @@
   "nav": {
     "calendar": "Calendar",
     "stats": "Statistics",
+    "squad": "Squad",
     "options": "Tools",
     "export": "Export (.ics)",
     "print": "Print",
     "install": "Install App",
     "settings": "Settings"
+  },
+  "squad": {
+    "colApps": "M",
+    "colGoals": "G",
+    "colCards": "C",
+    "positions": {
+      "GK": "Goalkeepers",
+      "DEF": "Defenders",
+      "MID": "Midfielders",
+      "FWD": "Forwards"
+    },
+    "subPositions": {
+      "Central": "Central",
+      "Wing": "Wing",
+      "Defensive": "Defensive",
+      "Attacking": "Attacking"
+    },
+    "row": {
+      "ariaLabel": "{{name}}: {{apps}} appearances, {{goals}} goals, {{cards}} cards"
+    },
+    "modal": {
+      "age": "{{age}} yrs",
+      "played": "Played",
+      "goals": "Goals",
+      "cards": "Cards",
+      "startsAndSubs": "{{starts}} start · {{subs}} sub",
+      "goalBreakdown": "{{openPlay}} open · {{penalty}} pen · {{og}} OG",
+      "cardsBreakdown": "Yellow / Red",
+      "matchLog": "Match Log",
+      "expand": "Show all",
+      "collapse": "Show less",
+      "noApps": "No appearances yet this season",
+      "start": "S",
+      "sub": "B",
+      "appearance": {
+        "start": "Started",
+        "sub": "Substitute",
+        "none": "Did not play"
+      }
+    }
   },
   "monthNav": {
     "previous": "Previous",
@@ -187,11 +228,7 @@
       "Anagennisi": "Anagennisi",
       "APOEL": "APOEL"
     },
-    "players": {
-      "Panagiotis Louka": "Panagiotis Louka",
-      "Georgios Christodoulou": "Georgios Christodoulou",
-      "Konstantinos Anthimou": "Konstantinos Anthimou"
-    },
+    "players": {},
     "leagues": {
       "2. Division": "2. Division",
       "Promotion Group": "Promotion Group",

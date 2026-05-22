@@ -8,6 +8,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { trackEvent } from '@/lib/analytics';
 
 const StatsPage = lazy(() => import('@/pages/StatsPage'));
+const SquadPage = lazy(() => import('@/pages/SquadPage'));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
 
 function PageSkeleton() {
@@ -51,6 +52,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<CalendarPage />} />
               <Route path="/stats" element={<StatsPage />} />
+              <Route path="/squad" element={<SquadPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
