@@ -26,7 +26,7 @@ export function PositionSection({ position, count, children }: PositionSectionPr
           <span className="text-slate-400 dark:text-slate-500 font-normal ml-2">({count})</span>
         </h2>
         <div
-          className="flex items-baseline gap-3 text-[10px] uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500 pr-7 tabular-nums"
+          className="flex items-baseline gap-3 text-xs uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400 pr-7 tabular-nums"
           aria-hidden="true"
         >
           <span className="w-7 text-right">{t('squad.colApps')}</span>
