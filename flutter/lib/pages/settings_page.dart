@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../state/app_state.dart';
+import '../theme.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -10,10 +12,16 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final theme = Theme.of(context);
+    final colors = AppColors.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(app.t('nav.settings'))),
-      body: ListView(
+    return Container(
+      margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      decoration: BoxDecoration(
+        color: colors.surfacePanel,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
           _SectionHeader(app.t('settings.display')),
@@ -47,7 +55,10 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: Text(app.t('settings.appVersion')),
-            trailing: const Text('1.0.0'),
+            trailing: FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) => Text(snapshot.data?.version ?? ''),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(24),
@@ -70,15 +81,11 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
       child: Text(
-        title,
-        style: theme.textTheme.labelLarge?.copyWith(
-          color: theme.colorScheme.primary,
-          fontWeight: FontWeight.bold,
-        ),
+        title.toUpperCase(),
+        style: condensed(size: 13, color: AppColors.of(context).mutedForeground, letterSpacing: 1.5),
       ),
     );
   }

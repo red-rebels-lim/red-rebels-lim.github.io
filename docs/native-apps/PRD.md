@@ -60,6 +60,8 @@ This section records the engineering challenge so the decision is auditable.
 
 **Product decision:** Build native apps using **Option B** as the technical strategy that fulfills the stakeholder's "truly native" intent sustainably. Option A remains documented as a fallback in the TRD. The full technical justification, with citations, is in [TRD §2](./TRD.md#2-architecture-decision).
 
+> **⚠️ Decision update (2026-07-10):** Implementation proceeded in **Flutter** and the stakeholder accepted Flutter as the stack (single Dart codebase for both platforms, `flutter/`). Option B is superseded — see the TRD §2 addendum. Two product-level consequences: the **web app's mobile view is the design ground truth** (overriding UX-1's "native conventions first" where they conflict), and delivery now follows [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) instead of §10's phasing. The parity matrix in §7 remains the authoritative scope.
+
 ---
 
 ## 4. Goals, Non-Goals & Constraints

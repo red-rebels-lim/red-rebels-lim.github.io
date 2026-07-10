@@ -13,26 +13,48 @@ class StatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(app.t('nav.stats')),
-          bottom: TabBar(
-            indicatorColor: Theme.of(context).brightness == Brightness.light ? Colors.white : brandRed,
-            labelColor: Theme.of(context).brightness == Brightness.light ? Colors.white : null,
-            tabs: [
-              Tab(text: '⚽ ${app.t('stats.mensFootball')}'),
-              Tab(text: '🏐 ${app.t('stats.mensVolleyball')}'),
-              Tab(text: '🏐 ${app.t('stats.womensVolleyball')}'),
-            ],
-          ),
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+        decoration: BoxDecoration(
+          color: colors.surfacePanel,
+          borderRadius: BorderRadius.circular(16),
         ),
-        body: const TabBarView(
+        clipBehavior: Clip.antiAlias,
+        child: Column(
           children: [
-            _FootballStatsTab(),
-            _VolleyballStatsTab(sport: Sport.volleyballMen),
-            _VolleyballStatsTab(sport: Sport.volleyballWomen),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  app.t('nav.stats').toUpperCase(),
+                  style: condensed(size: 18, color: colors.foreground, letterSpacing: 1.5),
+                ),
+              ),
+            ),
+            TabBar(
+              indicatorColor: brandRed,
+              labelColor: brandRed,
+              unselectedLabelColor: colors.mutedForeground,
+              labelStyle: condensed(size: 13, letterSpacing: 0.5),
+              tabs: [
+                Tab(text: '⚽ ${app.t('stats.mensFootball')}'),
+                Tab(text: '🏐 ${app.t('stats.mensVolleyball')}'),
+                Tab(text: '🏐 ${app.t('stats.womensVolleyball')}'),
+              ],
+            ),
+            const Expanded(
+              child: TabBarView(
+                children: [
+                  _FootballStatsTab(),
+                  _VolleyballStatsTab(sport: Sport.volleyballMen),
+                  _VolleyballStatsTab(sport: Sport.volleyballWomen),
+                ],
+              ),
+            ),
           ],
         ),
       ),
