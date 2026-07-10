@@ -15,6 +15,7 @@ import Parse from 'parse/node.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const EVENTS_FILE = path.resolve(__dirname, '../../app/src/data/events.ts');
+const CONSTANTS_FILE = path.resolve(__dirname, '../../app/src/data/constants.ts');
 
 // --- Init ---
 
@@ -50,11 +51,23 @@ const MONTH_TO_INDEX = {
   may: 4, june: 5, july: 6, august: 7,
 };
 
-const SEASON_YEAR = {
-  september: 2025, october: 2025, november: 2025, december: 2025,
-  january: 2026, february: 2026, march: 2026, april: 2026,
-  may: 2026, june: 2026, july: 2026, august: 2026,
-};
+// Season years come from app/src/data/constants.ts so the annual bump is a
+// single edit there — a stale copy here would silently mis-date every match.
+function seasonYearByMonth() {
+  const content = fs.readFileSync(CONSTANTS_FILE, 'utf-8');
+  const start = content.match(/SEASON_START_YEAR\s*=\s*(\d{4})/);
+  const end = content.match(/SEASON_END_YEAR\s*=\s*(\d{4})/);
+  if (!start || !end) {
+    throw new Error(`Cannot read SEASON_START_YEAR / SEASON_END_YEAR from ${CONSTANTS_FILE}`);
+  }
+  const startYear = Number(start[1]);
+  const endYear = Number(end[1]);
+  return {
+    september: startYear, october: startYear, november: startYear, december: startYear,
+    january: endYear, february: endYear, march: endYear, april: endYear,
+    may: endYear, june: endYear, july: endYear, august: endYear,
+  };
+}
 
 function parseEventsFile() {
   const content = fs.readFileSync(EVENTS_FILE, 'utf-8');
@@ -66,12 +79,13 @@ function parseEventsFile() {
 
 function getUpcomingMatches() {
   const events = parseEventsFile();
+  const seasonYear = seasonYearByMonth();
   const now = new Date();
   const upcoming = [];
 
   for (const [monthName, monthEvents] of Object.entries(events)) {
     const monthIndex = MONTH_TO_INDEX[monthName];
-    const year = SEASON_YEAR[monthName];
+    const year = seasonYear[monthName];
     if (monthIndex === undefined || year === undefined) continue;
 
     for (const event of monthEvents) {

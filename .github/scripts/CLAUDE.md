@@ -24,6 +24,8 @@ return fn();
 
 This is the silent-failure surface called out in the root CLAUDE.md and `app/src/data/CLAUDE.md`. Anything you ship that breaks the regex or makes the literal non-JS-evaluable will fail at the *next cron firing*, not in CI.
 
+`send-reminders.js` also regex-parses `SEASON_START_YEAR` / `SEASON_END_YEAR` out of `app/src/data/constants.ts` to assign years to month buckets — renaming those constants breaks the cron the same way.
+
 ## Channels
 
 `send-reminders.js` runs two channels in sequence: Web Push (always) and Telegram (if `TELEGRAM_BOT_TOKEN` is set). Each channel deduplicates per `(eventKey, hoursBefore, channel)` against the Parse class `ReminderLog`.

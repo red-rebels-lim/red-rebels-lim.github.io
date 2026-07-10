@@ -13,6 +13,7 @@ import { enrichWithFotMob } from './fotmob-enrichment.ts';
 import { enrichWithCfa } from './cfa-enrichment.ts';
 import { enrichWithDataproject } from './dataproject-enrichment.ts';
 import { fetchFotMobTeamFixtures } from './fotmob-fallback.ts';
+import { SEASON_START_YEAR, SEASON_END_YEAR } from '../../src/data/constants.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -810,6 +811,8 @@ function mergeExistingWithScraped(
 
 function updateCalendarData(fixtures: Fixture[]): Record<string, SportEvent[]> {
   const existingEvents = loadExistingEvents();
+  const hadScrapedEvents = Object.values(existingEvents)
+    .some(events => events.some(e => SCRAPED_SPORTS.includes(e.sport)));
   const changes: ChangeLog = {
     added: [],
     scoreUpdated: [],
@@ -937,9 +940,15 @@ function updateCalendarData(fixtures: Fixture[]): Record<string, SportEvent[]> {
   }
   console.log('-'.repeat(60));
 
-  // Write changes.json for notification system
+  // Write changes.json for notification system.
+  // On the first scrape of a fresh season every fixture counts as "added" —
+  // suppress those so subscribers don't get one push per fixture.
+  const notifiableChanges = hadScrapedEvents ? changes : { ...changes, added: [] };
+  if (!hadScrapedEvents && changes.added.length > 0) {
+    console.log(`ℹ️  Bootstrap scrape — suppressing ${changes.added.length} "added" notification(s)`);
+  }
   const changesPath = path.resolve(__dirname, '../../../changes.json');
-  fs.writeFileSync(changesPath, JSON.stringify(changes, null, 2), 'utf-8');
+  fs.writeFileSync(changesPath, JSON.stringify(notifiableChanges, null, 2), 'utf-8');
   console.log(`✓ Changes written to changes.json`);
 
   return existingEvents;
@@ -967,7 +976,7 @@ function saveToJson(fixtures: Fixture[]): void {
 
   const jsonData = {
     metadata: {
-      title: 'Nea Salamina Fixtures - Season 2025/2026',
+      title: `Nea Salamina Fixtures - Season ${SEASON_START_YEAR}/${SEASON_END_YEAR}`,
       scrapedAt: new Date().toISOString(),
       sources: {
         football: 'https://cfa.com.cy',

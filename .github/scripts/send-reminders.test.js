@@ -116,6 +116,23 @@ function makeEventsTs(hoursUntil = 24, sport = 'football-men') {
   })};`;
 }
 
+/**
+ * Build a constants.ts string for the season containing "now",
+ * matching how makeEventsTs dates its match (Sept–Aug season).
+ */
+function makeConstantsTs() {
+  const now = new Date();
+  const startYear = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
+  return `export const SEASON_START_YEAR = ${startYear};\nexport const SEASON_END_YEAR = ${startYear + 1};`;
+}
+
+/** Serve events.ts and constants.ts from the mocked fs by path. */
+function mockRepoFiles(eventsTs) {
+  fs.readFileSync.mockImplementation((filePath) =>
+    String(filePath).includes('constants.ts') ? makeConstantsTs() : eventsTs
+  );
+}
+
 // ── Pure helper tests ────────────────────────────────────────────────────────
 
 describe('sportEmoji', () => {
@@ -139,13 +156,13 @@ describe('main()', () => {
 
   it('exits early when no upcoming matches in 25h window', async () => {
     // Match 48h away — outside the window
-    fs.readFileSync.mockReturnValue(makeEventsTs(48));
+    mockRepoFiles(makeEventsTs(48));
     await expect(main()).rejects.toThrow('process.exit');
     expect(mockSendNotification).not.toHaveBeenCalled();
   });
 
   it('sends 24h reminder to subscriber who has 24h enabled', async () => {
-    fs.readFileSync.mockReturnValue(makeEventsTs(24));
+    mockRepoFiles(makeEventsTs(24));
     mockReminderLogFirst.mockResolvedValue(null); // not already sent
     mockPrefFind.mockResolvedValue([makePref({ reminderHours: [24, 2] })]);
 
@@ -157,7 +174,7 @@ describe('main()', () => {
   });
 
   it('sends 2h reminder to subscriber who has 2h enabled', async () => {
-    fs.readFileSync.mockReturnValue(makeEventsTs(2));
+    mockRepoFiles(makeEventsTs(2));
     mockReminderLogFirst.mockResolvedValue(null);
     mockPrefFind.mockResolvedValue([makePref({ reminderHours: [24, 2] })]);
 
@@ -169,7 +186,7 @@ describe('main()', () => {
   });
 
   it('does not send if reminder already logged (dedup)', async () => {
-    fs.readFileSync.mockReturnValue(makeEventsTs(24));
+    mockRepoFiles(makeEventsTs(24));
     // ReminderLog.first() returns an existing record
     mockReminderLogFirst.mockResolvedValue({ id: 'existing-log' });
 
@@ -182,14 +199,14 @@ describe('main()', () => {
     const eventsTs = `export const eventsData = ${JSON.stringify({
       march: [{ day: 20, sport: 'football-men', opponent: 'Omonia', location: 'home', time: '' }],
     })};`;
-    fs.readFileSync.mockReturnValue(eventsTs);
+    mockRepoFiles(eventsTs);
 
     await expect(main()).rejects.toThrow('process.exit');
     expect(mockSendNotification).not.toHaveBeenCalled();
   });
 
   it('cleans up expired subscription on 410', async () => {
-    fs.readFileSync.mockReturnValue(makeEventsTs(24));
+    mockRepoFiles(makeEventsTs(24));
     mockReminderLogFirst.mockResolvedValue(null);
     mockPrefFind
       .mockResolvedValueOnce([makePref({ subId: 'expired' })])  // prefs query
@@ -202,7 +219,7 @@ describe('main()', () => {
   });
 
   it('logs summary after sending', async () => {
-    fs.readFileSync.mockReturnValue(makeEventsTs(24));
+    mockRepoFiles(makeEventsTs(24));
     mockReminderLogFirst.mockResolvedValue(null);
     mockPrefFind.mockResolvedValue([makePref()]);
     mockSendNotification.mockResolvedValue(undefined);
