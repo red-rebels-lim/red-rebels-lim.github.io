@@ -18,8 +18,17 @@ class AppState extends ChangeNotifier {
       'dark' => ThemeMode.dark,
       _ => ThemeMode.system,
     };
-    _listView = prefs.getBool('listView') ?? false;
+    final storedView = prefs.getString('calendarView');
+    if (calendarViews.contains(storedView)) {
+      _calendarView = storedView!;
+    } else {
+      // Migrate the old boolean 'listView' preference.
+      _calendarView = (prefs.getBool('listView') ?? false) ? 'list' : 'grid';
+    }
   }
+
+  /// Calendar view modes, in header-switcher cycle order.
+  static const calendarViews = ['grid', 'list', 'cards'];
 
   final EventsRepository events;
   final I18n i18n;
@@ -27,13 +36,20 @@ class AppState extends ChangeNotifier {
 
   late String _language;
   late ThemeMode _themeMode;
-  late bool _listView;
+  late String _calendarView;
   FilterState _filters = const FilterState();
+
+  /// Registered by HomeShell so any widget can switch bottom-nav tabs.
+  void Function(int index)? tabNavigator;
 
   String get language => _language;
   ThemeMode get themeMode => _themeMode;
-  bool get listView => _listView;
+
+  /// 'grid' | 'list' | 'cards'.
+  String get calendarView => _calendarView;
   FilterState get filters => _filters;
+
+  void goToTab(int i) => tabNavigator?.call(i);
 
   /// Shorthand translation with the current language.
   String t(String key, [String? fallback]) => i18n.t(_language, key, fallback);
@@ -58,10 +74,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setListView(bool value) {
-    if (value == _listView) return;
-    _listView = value;
-    _prefs.setBool('listView', value);
+  void setCalendarView(String view) {
+    if (view == _calendarView || !calendarViews.contains(view)) return;
+    _calendarView = view;
+    _prefs.setString('calendarView', view);
     notifyListeners();
   }
 

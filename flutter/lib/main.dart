@@ -55,6 +55,15 @@ class _HomeShellState extends State<HomeShell> {
   int _index = 0;
 
   @override
+  void initState() {
+    super.initState();
+    // Let other widgets (e.g. the event details sheet) switch tabs.
+    context.read<AppState>().tabNavigator = (i) {
+      if (mounted) setState(() => _index = i);
+    };
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,

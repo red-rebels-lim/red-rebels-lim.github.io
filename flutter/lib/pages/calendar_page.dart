@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,9 +5,9 @@ import '../data/constants.dart';
 import '../models/events.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
+import '../widgets/calendar_cards_view.dart';
+import '../widgets/calendar_list_view.dart';
 import '../widgets/event_card.dart';
-import '../widgets/event_details_sheet.dart';
-import '../widgets/team_logo.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -51,7 +49,6 @@ class _CalendarPageState extends State<CalendarPage> {
     final colors = AppColors.of(context);
     return Column(
       children: [
-        const _NextMatchBanner(),
         Expanded(
           child: Container(
             margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -78,7 +75,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     }),
                     itemBuilder: (context, i) => _MonthView(
                       monthName: monthOrder[i],
-                      listView: app.listView,
+                      view: app.calendarView,
                       selectedDay: i == _monthIndex ? _selectedDay : null,
                       onDaySelected: (day) => setState(() {
                         _selectedDay = _selectedDay == day ? null : day;
@@ -152,13 +149,15 @@ class _MonthHeader extends StatelessWidget {
 class _MonthView extends StatelessWidget {
   const _MonthView({
     required this.monthName,
-    required this.listView,
+    required this.view,
     required this.selectedDay,
     required this.onDaySelected,
   });
 
   final String monthName;
-  final bool listView;
+
+  /// 'grid' | 'list' | 'cards'.
+  final String view;
   final int? selectedDay;
   final ValueChanged<int> onDaySelected;
 
@@ -167,15 +166,8 @@ class _MonthView extends StatelessWidget {
     final app = context.watch<AppState>();
     final events = app.filteredEventsFor(monthName)..sort((a, b) => a.day.compareTo(b.day));
 
-    if (listView) {
-      if (events.isEmpty) return _EmptyMonth(message: app.t('calendar.noEvents'));
-      return ListView.separated(
-        padding: const EdgeInsets.all(12),
-        itemCount: events.length,
-        separatorBuilder: (_, _) => const SizedBox(height: 8),
-        itemBuilder: (_, i) => EventCard(event: events[i], monthName: monthName),
-      );
-    }
+    if (view == 'list') return CalendarListView(monthName: monthName, events: events);
+    if (view == 'cards') return CalendarCardsView(monthName: monthName, events: events);
 
     final dayEvents = selectedDay == null ? const <SportEvent>[] : events.where((e) => e.day == selectedDay).toList();
 
@@ -200,14 +192,49 @@ class _MonthView extends StatelessWidget {
                       separatorBuilder: (_, _) => const SizedBox(height: 8),
                       itemBuilder: (_, i) => EventCard(event: events[i], monthName: monthName),
                     ))
-              : ListView.separated(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: dayEvents.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 8),
-                  itemBuilder: (_, i) => EventCard(event: dayEvents[i], monthName: monthName),
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: _SelectedDayChip(label: app.t('calendar.selectedDay')),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.separated(
+                        padding: const EdgeInsets.all(12),
+                        itemCount: dayEvents.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: 8),
+                        itemBuilder: (_, i) => EventCard(event: dayEvents[i], monthName: monthName),
+                      ),
+                    ),
+                  ],
                 ),
         ),
       ],
+      ),
+    );
+  }
+}
+
+class _SelectedDayChip extends StatelessWidget {
+  const _SelectedDayChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: colors.muted,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        label.toUpperCase(),
+        style: condensed(size: 11, color: colors.foreground, letterSpacing: 1.5),
       ),
     );
   }
@@ -367,87 +394,6 @@ class _EmptyMonth extends StatelessWidget {
     final theme = Theme.of(context);
     return Center(
       child: Text(message, style: theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-    );
-  }
-}
-
-/// Countdown banner for the next upcoming match (port of useCountdown).
-class _NextMatchBanner extends StatefulWidget {
-  const _NextMatchBanner();
-
-  @override
-  State<_NextMatchBanner> createState() => _NextMatchBannerState();
-}
-
-class _NextMatchBannerState extends State<_NextMatchBanner> {
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) => setState(() {}));
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final app = context.watch<AppState>();
-    final theme = Theme.of(context);
-    final next = app.events.nextUpcoming(DateTime.now());
-    if (next == null) return const SizedBox.shrink();
-
-    final e = next.event;
-    final opponent = app.teamName(e.opponent);
-    final remaining = next.date.difference(DateTime.now());
-    final countdown = remaining.isNegative
-        ? null
-        : '${remaining.inDays}d ${remaining.inHours % 24}h ${remaining.inMinutes % 60}m ${remaining.inSeconds % 60}s';
-
-    return Material(
-      color: brandRed,
-      child: InkWell(
-        onTap: () => showEventDetailsSheet(context, e, next.monthName),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Row(
-            children: [
-              TeamLogo(logoPath: e.logo, name: opponent, size: 32),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      app.t('stats.nextMatch'),
-                      style: theme.textTheme.labelSmall?.copyWith(color: Colors.white70),
-                    ),
-                    Text(
-                      e.location == MatchLocation.home ? '$teamName – $opponent' : '$opponent – $teamName',
-                      style: theme.textTheme.titleSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              if (countdown != null)
-                Text(
-                  countdown,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: Colors.white,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

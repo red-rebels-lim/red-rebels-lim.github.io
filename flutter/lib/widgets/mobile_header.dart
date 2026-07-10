@@ -37,9 +37,22 @@ class MobileHeader extends StatelessWidget {
           ),
           if (showCalendarActions) ...[
             _HeaderButton(
-              icon: app.listView ? Icons.grid_view_rounded : Icons.view_list_rounded,
-              tooltip: app.listView ? app.t('calendar.viewGrid') : app.t('calendar.viewList'),
-              onTap: () => app.setListView(!app.listView),
+              icon: switch (app.calendarView) {
+                'list' => Icons.view_list_rounded,
+                'cards' => Icons.view_agenda_outlined,
+                _ => Icons.grid_view_rounded,
+              },
+              tooltip: switch (app.calendarView) {
+                'list' => app.t('calendar.viewList'),
+                'cards' => app.t('calendar.viewCards'),
+                _ => app.t('calendar.viewGrid'),
+              },
+              onTap: () {
+                // Cycle grid → list → cards → grid.
+                const views = AppState.calendarViews;
+                final next = views[(views.indexOf(app.calendarView) + 1) % views.length];
+                app.setCalendarView(next);
+              },
             ),
             const SizedBox(width: 8),
             _HeaderButton(

@@ -6,6 +6,7 @@ import '../logic/football_stats.dart';
 import '../models/events.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
+import 'countdown_text.dart';
 import 'event_details_sheet.dart';
 import 'team_logo.dart';
 
@@ -72,6 +73,10 @@ class EventCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    if (!event.isPlayed && eventDateTime(monthName, event).isAfter(DateTime.now())) ...[
+                      const SizedBox(height: 2),
+                      CountdownText(target: eventDateTime(monthName, event)),
+                    ],
                   ],
                 ),
               ),
@@ -111,3 +116,11 @@ String _sportKey(Sport sport) => switch (sport) {
     };
 
 String sportLabelKey(Sport sport) => _sportKey(sport);
+
+/// `<Home team> vs <Away team>` ordered by the event location, matching the
+/// web CalendarListView/CardsView titles.
+String matchTitle(AppState app, SportEvent event) {
+  final own = app.teamName(teamName);
+  final opponent = app.teamName(event.opponent);
+  return event.location == MatchLocation.home ? '$own vs $opponent' : '$opponent vs $own';
+}
