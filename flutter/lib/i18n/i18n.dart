@@ -62,4 +62,12 @@ class I18n {
 
   /// Player names: strip parenthetical annotations like "(Πέναλτι)".
   String playerName(String raw) => raw.replaceAll(RegExp(r'\s*\(.*?\)\s*'), ' ').trim();
+
+  /// Fill i18next-style `{{name}}` placeholders in a translated string
+  /// (e.g. squad.modal.startsAndSubs → "{{starts}} start · {{subs}} sub").
+  static String interpolate(String template, Map<String, Object?> vars) {
+    var out = template;
+    vars.forEach((k, v) => out = out.replaceAll('{{$k}}', '$v'));
+    return out;
+  }
 }

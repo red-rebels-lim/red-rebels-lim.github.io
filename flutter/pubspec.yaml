@@ -29,6 +29,7 @@ flutter:
     - assets/i18n/
     - assets/images/
     - assets/images/bg/
+    - assets/images/players/
     - assets/images/team_logos/
 
   fonts:

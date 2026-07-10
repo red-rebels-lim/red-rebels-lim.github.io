@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:red_rebels_calendar/data/events_repository.dart';
+import 'package:red_rebels_calendar/data/players_repository.dart';
 import 'package:red_rebels_calendar/i18n/i18n.dart';
 import 'package:red_rebels_calendar/main.dart';
 import 'package:red_rebels_calendar/models/events.dart';
@@ -15,6 +16,7 @@ import 'package:red_rebels_calendar/widgets/event_details_sheet.dart';
 
 void main() {
   late EventsRepository events;
+  late PlayersRepository players;
   late I18n i18n;
   late SharedPreferences prefs;
 
@@ -24,12 +26,13 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues({});
     events = await EventsRepository.load();
+    players = await PlayersRepository.load();
     i18n = await I18n.load();
     prefs = await SharedPreferences.getInstance();
   });
 
   Widget wrap(Widget child) => ChangeNotifierProvider(
-        create: (_) => AppState(events: events, i18n: i18n, prefs: prefs),
+        create: (_) => AppState(events: events, players: players, i18n: i18n, prefs: prefs),
         child: MaterialApp(
           theme: buildTheme(Brightness.light),
           home: Scaffold(body: child),
@@ -64,7 +67,7 @@ void main() {
   testWidgets('App boots and shows the four navigation tabs', (tester) async {
     await tester.pumpWidget(
       ChangeNotifierProvider(
-        create: (_) => AppState(events: events, i18n: i18n, prefs: prefs),
+        create: (_) => AppState(events: events, players: players, i18n: i18n, prefs: prefs),
         child: const RedRebelsApp(),
       ),
     );

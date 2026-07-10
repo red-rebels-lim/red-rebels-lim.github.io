@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/events_repository.dart';
+import '../data/players_repository.dart';
 import '../i18n/i18n.dart';
 import '../models/events.dart';
 
 /// App-wide state: language, theme, calendar view mode and filters.
 class AppState extends ChangeNotifier {
-  AppState({required this.events, required this.i18n, required SharedPreferences prefs}) : _prefs = prefs {
+  AppState({
+    required this.events,
+    required this.players,
+    required this.i18n,
+    required SharedPreferences prefs,
+  }) : _prefs = prefs {
     // Default to the device locale (Greek device → Greek), like the web app.
     _language = prefs.getString('language') ??
         (PlatformDispatcher.instance.locale.languageCode == 'el' ? 'el' : 'en');
@@ -31,6 +37,7 @@ class AppState extends ChangeNotifier {
   static const calendarViews = ['grid', 'list', 'cards'];
 
   final EventsRepository events;
+  final PlayersRepository players;
   final I18n i18n;
   final SharedPreferences _prefs;
 
