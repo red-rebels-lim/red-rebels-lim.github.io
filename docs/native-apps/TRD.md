@@ -28,7 +28,15 @@ This TRD specifies how to build **truly-native** Android and iOS apps reaching p
 
 ## 2. Architecture Decision
 
-### 2.1 Recommendation: Kotlin Multiplatform (KMP) shared core + native UI
+> **⚠️ Decision update (2026-07-10) — Flutter supersedes the KMP recommendation below.**
+> Implementation proceeded in **Flutter** (`flutter/`), and the stakeholder confirmed Flutter as the accepted stack after review. §2.1–2.3 are retained for the decision record but are **no longer the plan of record**. Consequences of the change:
+> - One Dart codebase replaces the `:shared` KMP module + SwiftUI + Compose split; domain logic (models, season rules, stats, name mapping) lives in `flutter/lib/{models,logic,data}`.
+> - The UI is Flutter-rendered rather than platform widgets. The Guideline 4.2 analysis still holds (no WebView; Flutter apps are accepted on both stores) but the "100% native widgets" claim in §2.1 no longer applies.
+> - The **web app's mobile view is the design ground truth** (stakeholder decision, overrides PRD UX-1 where they conflict).
+> - Networking/push (§6–7) map to Flutter equivalents: Parse REST over `http`, `firebase_messaging` (FCM) + APNs. Backend plan is unchanged.
+> - Delivery follows [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md), which replaces the §14 build order.
+
+### 2.1 Recommendation: Kotlin Multiplatform (KMP) shared core + native UI *(superseded — see decision update above)*
 
 **Decision:** Build a **Kotlin Multiplatform** shared module (`:shared`) containing models, networking, stats/ICS logic, and preference/reminder logic, consumed by:
 - **Android:** Jetpack Compose UI (`:androidApp`) — Kotlin all the way down.

@@ -6,9 +6,13 @@ import 'data/events_repository.dart';
 import 'i18n/i18n.dart';
 import 'pages/calendar_page.dart';
 import 'pages/settings_page.dart';
+import 'pages/squad_page.dart';
 import 'pages/stats_page.dart';
 import 'state/app_state.dart';
 import 'theme.dart';
+import 'widgets/app_background.dart';
+import 'widgets/bottom_nav.dart';
+import 'widgets/mobile_header.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,37 +56,37 @@ class _HomeShellState extends State<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
-    final app = context.watch<AppState>();
-    return Scaffold(
-      body: IndexedStack(
-        index: _index,
-        children: const [
-          CalendarPage(),
-          StatsPage(),
-          SettingsPage(),
-        ],
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.calendar_month_outlined),
-            selectedIcon: const Icon(Icons.calendar_month),
-            label: app.t('nav.calendar'),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        const AppBackground(),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                MobileHeader(showCalendarActions: _index == 0),
+                Expanded(
+                  child: IndexedStack(
+                    index: _index,
+                    children: const [
+                      CalendarPage(),
+                      StatsPage(),
+                      SquadPage(),
+                      SettingsPage(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.bar_chart_outlined),
-            selectedIcon: const Icon(Icons.bar_chart),
-            label: app.t('nav.stats'),
+          bottomNavigationBar: BottomNav(
+            index: _index,
+            onSelect: (i) => setState(() => _index = i),
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.settings_outlined),
-            selectedIcon: const Icon(Icons.settings),
-            label: app.t('nav.settings'),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

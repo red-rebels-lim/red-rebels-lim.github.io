@@ -48,69 +48,61 @@ class _CalendarPageState extends State<CalendarPage> {
     final monthName = monthOrder[_monthIndex];
     final info = monthInfo(monthName);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(app.t('common.brandText')),
-        actions: [
-          IconButton(
-            icon: Icon(app.listView ? Icons.calendar_view_month : Icons.view_list),
-            tooltip: app.listView ? app.t('calendar.viewGrid') : app.t('calendar.viewList'),
-            onPressed: () => app.setListView(!app.listView),
-          ),
-          IconButton(
-            icon: Badge(
-              isLabelVisible: app.filters.isActive,
-              child: const Icon(Icons.filter_list),
+    final colors = AppColors.of(context);
+    return Column(
+      children: [
+        const _NextMatchBanner(),
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+            decoration: BoxDecoration(
+              color: colors.surfacePanel,
+              borderRadius: BorderRadius.circular(16),
             ),
-            tooltip: app.t('filters.title'),
-            onPressed: () => _showFilterSheet(context),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          const _NextMatchBanner(),
-          _MonthHeader(
-            monthName: monthName,
-            year: info.year,
-            onPrevious: _monthIndex > 0 ? () => _goToMonth(_monthIndex - 1) : null,
-            onNext: _monthIndex < monthOrder.length - 1 ? () => _goToMonth(_monthIndex + 1) : null,
-            onToday: () {
-              final target = monthOrder.indexOf(app.events.initialMonth(DateTime.now()));
-              _goToMonth(target);
-            },
-          ),
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: monthOrder.length,
-              onPageChanged: (i) => setState(() {
-                _monthIndex = i;
-                _selectedDay = null;
-              }),
-              itemBuilder: (context, i) => _MonthView(
-                monthName: monthOrder[i],
-                listView: app.listView,
-                selectedDay: i == _monthIndex ? _selectedDay : null,
-                onDaySelected: (day) => setState(() {
-                  _selectedDay = _selectedDay == day ? null : day;
-                }),
-              ),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: [
+                _MonthHeader(
+                  monthName: monthName,
+                  year: info.year,
+                  onPrevious: _monthIndex > 0 ? () => _goToMonth(_monthIndex - 1) : null,
+                  onNext: _monthIndex < monthOrder.length - 1 ? () => _goToMonth(_monthIndex + 1) : null,
+                ),
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: monthOrder.length,
+                    onPageChanged: (i) => setState(() {
+                      _monthIndex = i;
+                      _selectedDay = null;
+                    }),
+                    itemBuilder: (context, i) => _MonthView(
+                      monthName: monthOrder[i],
+                      listView: app.listView,
+                      selectedDay: i == _monthIndex ? _selectedDay : null,
+                      onDaySelected: (day) => setState(() {
+                        _selectedDay = _selectedDay == day ? null : day;
+                      }),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
+}
 
-  void _showFilterSheet(BuildContext context) {
-    final app = context.read<AppState>();
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      builder: (_) => _FilterSheet(initial: app.filters, onApply: app.setFilters),
-    );
-  }
+/// Opens the calendar filter sheet. Called from the global [MobileHeader].
+void showCalendarFilterSheet(BuildContext context) {
+  final app = context.read<AppState>();
+  showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    builder: (_) => _FilterSheet(initial: app.filters, onApply: app.setFilters),
+  );
 }
 
 class _MonthHeader extends StatelessWidget {
@@ -119,14 +111,12 @@ class _MonthHeader extends StatelessWidget {
     required this.year,
     this.onPrevious,
     this.onNext,
-    required this.onToday,
   });
 
   final String monthName;
   final int year;
   final VoidCallback? onPrevious;
   final VoidCallback? onNext;
-  final VoidCallback onToday;
 
   @override
   Widget build(BuildContext context) {
@@ -143,12 +133,11 @@ class _MonthHeader extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              '${app.t('months.$monthName')} $year',
+              '${app.t('months.$monthName')} $year'.toUpperCase(),
               textAlign: TextAlign.center,
-              style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: condensed(size: 18, color: theme.colorScheme.onSurface, letterSpacing: 1.5),
             ),
           ),
-          TextButton(onPressed: onToday, child: Text(app.t('monthNav.jumpToToday'))),
           IconButton(
             onPressed: onNext,
             icon: const Icon(Icons.chevron_right),

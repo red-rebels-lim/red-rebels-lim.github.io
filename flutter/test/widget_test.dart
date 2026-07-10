@@ -23,7 +23,7 @@ void main() {
     prefs = await SharedPreferences.getInstance();
   });
 
-  testWidgets('App boots and shows the three navigation tabs', (tester) async {
+  testWidgets('App boots and shows the four navigation tabs', (tester) async {
     await tester.pumpWidget(
       ChangeNotifierProvider(
         create: (_) => AppState(events: events, i18n: i18n, prefs: prefs),
@@ -32,9 +32,11 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('Calendar'), findsWidgets);
-    expect(find.text('Statistics'), findsWidgets);
-    expect(find.text('Settings'), findsWidgets);
+    // Bottom-nav labels render uppercase (web design parity).
+    expect(find.text('CALENDAR'), findsWidgets);
+    expect(find.text('STATISTICS'), findsWidgets);
+    expect(find.text('SQUAD'), findsWidgets);
+    expect(find.text('SETTINGS'), findsWidgets);
 
     // Unmount so the countdown banner's periodic timer is disposed before
     // the pending-timer check runs.

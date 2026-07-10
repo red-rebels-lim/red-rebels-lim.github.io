@@ -1,3 +1,5 @@
+import 'dart:ui' show PlatformDispatcher;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,7 +10,9 @@ import '../models/events.dart';
 /// App-wide state: language, theme, calendar view mode and filters.
 class AppState extends ChangeNotifier {
   AppState({required this.events, required this.i18n, required SharedPreferences prefs}) : _prefs = prefs {
-    _language = prefs.getString('language') ?? 'en';
+    // Default to the device locale (Greek device → Greek), like the web app.
+    _language = prefs.getString('language') ??
+        (PlatformDispatcher.instance.locale.languageCode == 'el' ? 'el' : 'en');
     _themeMode = switch (prefs.getString('themeMode')) {
       'light' => ThemeMode.light,
       'dark' => ThemeMode.dark,
