@@ -1,6 +1,8 @@
 /// Ports of app/src/data/constants.ts and month-config.ts.
 library;
 
+import '../models/events.dart';
+
 const teamName = 'Νέα Σαλαμίνα';
 const seasonStartYear = 2025;
 const seasonEndYear = 2026;
@@ -38,6 +40,19 @@ MonthInfo monthInfo(String monthName) {
   final daysInMonth = DateTime(year, month + 1, 0).day;
   final startDay = DateTime(year, month, 1).weekday - 1;
   return MonthInfo(year: year, month: month, daysInMonth: daysInMonth, startDay: startDay);
+}
+
+/// Concrete kickoff [DateTime] for an event in a season month
+/// (midnight when the time is TBD/unparseable).
+DateTime eventDateTime(String monthName, SportEvent event) {
+  final info = monthInfo(monthName);
+  var hour = 0, minute = 0;
+  if (event.time.contains(':')) {
+    final parts = event.time.split(':');
+    hour = int.tryParse(parts[0]) ?? 0;
+    minute = int.tryParse(parts[1]) ?? 0;
+  }
+  return DateTime(info.year, info.month, event.day, hour, minute);
 }
 
 /// Greek team names (as stored in events.json) → English i18n keys
