@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/events_repository.dart';
+import 'data/players_repository.dart';
 import 'i18n/i18n.dart';
 import 'pages/calendar_page.dart';
 import 'pages/settings_page.dart';
@@ -17,11 +18,12 @@ import 'widgets/mobile_header.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final events = await EventsRepository.load();
+  final players = await PlayersRepository.load();
   final i18n = await I18n.load();
   final prefs = await SharedPreferences.getInstance();
   runApp(
     ChangeNotifierProvider(
-      create: (_) => AppState(events: events, i18n: i18n, prefs: prefs),
+      create: (_) => AppState(events: events, players: players, i18n: i18n, prefs: prefs),
       child: const RedRebelsApp(),
     ),
   );
