@@ -23,7 +23,13 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   runApp(
     ChangeNotifierProvider(
-      create: (_) => AppState(events: events, players: players, i18n: i18n, prefs: prefs),
+      create: (_) => AppState(
+        events: events,
+        players: players,
+        i18n: i18n,
+        prefs: prefs,
+        syncEnabled: true,
+      ),
       child: const RedRebelsApp(),
     ),
   );
@@ -53,16 +59,35 @@ class HomeShell extends StatefulWidget {
   State<HomeShell> createState() => _HomeShellState();
 }
 
-class _HomeShellState extends State<HomeShell> {
+class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   int _index = 0;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     // Let other widgets (e.g. the event details sheet) switch tabs.
-    context.read<AppState>().tabNavigator = (i) {
+    final app = context.read<AppState>();
+    app.tabNavigator = (i) {
       if (mounted) setState(() => _index = i);
     };
+    // Refresh fixtures from the live feed once the first frame is up
+    // (fire-and-forget; failures just flip the stale indicator).
+    WidgetsBinding.instance.addPostFrameCallback((_) => app.syncEvents());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Refresh on foreground, at most once per AppState.minSyncInterval.
+      context.read<AppState>().syncEvents(throttle: true);
+    }
   }
 
   @override

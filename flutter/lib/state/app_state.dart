@@ -1,6 +1,7 @@
 import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/events_repository.dart';
@@ -15,6 +16,8 @@ class AppState extends ChangeNotifier {
     required this.players,
     required this.i18n,
     required SharedPreferences prefs,
+    this.syncEnabled = false,
+    this.httpClientFactory,
   }) : _prefs = prefs {
     // Default to the device locale (Greek device → Greek), like the web app.
     _language = prefs.getString('language') ??
@@ -36,10 +39,33 @@ class AppState extends ChangeNotifier {
   /// Calendar view modes, in header-switcher cycle order.
   static const calendarViews = ['grid', 'list', 'cards'];
 
+  /// Minimum spacing between live-data sync attempts (app resume etc.).
+  static const minSyncInterval = Duration(minutes: 5);
+
   final EventsRepository events;
   final PlayersRepository players;
   final I18n i18n;
   final SharedPreferences _prefs;
+
+  /// Live-data refresh is opt-in (enabled by main.dart) so widget tests never
+  /// hit the network by default.
+  final bool syncEnabled;
+
+  /// Injectable HTTP client factory for tests; null → the repository creates
+  /// (and closes) its own client per refresh.
+  final http.Client Function()? httpClientFactory;
+
+  DateTime? _lastSyncAttempt;
+  DateTime? _lastSyncAt;
+  bool _lastSyncFailed = false;
+  bool _syncing = false;
+
+  /// When the last successful live-data sync completed, if any.
+  DateTime? get lastSyncAt => _lastSyncAt;
+
+  /// True when the most recent sync attempt failed — the calendar shows a
+  /// subtle stale-data indicator while this holds (FR-OFFLINE-2).
+  bool get lastSyncFailed => _lastSyncFailed;
 
   late String _language;
   late ThemeMode _themeMode;
@@ -57,6 +83,34 @@ class AppState extends ChangeNotifier {
   FilterState get filters => _filters;
 
   void goToTab(int i) => tabNavigator?.call(i);
+
+  /// Refreshes the fixtures and the squad roster from the live feeds.
+  ///
+  /// [throttle] skips the attempt when one happened within [minSyncInterval]
+  /// (used on app resume; the launch sync passes false). Failures keep the
+  /// current data and only flip [lastSyncFailed] — it is true when either
+  /// feed fails. Never throws.
+  Future<void> syncEvents({bool throttle = false}) async {
+    if (!syncEnabled || _syncing) return;
+    final now = DateTime.now();
+    if (throttle && _lastSyncAttempt != null && now.difference(_lastSyncAttempt!) < minSyncInterval) {
+      return;
+    }
+    _syncing = true;
+    _lastSyncAttempt = now;
+    try {
+      final results = await Future.wait([
+        events.refresh(client: httpClientFactory?.call()),
+        players.refresh(client: httpClientFactory?.call()),
+      ]);
+      final ok = results.every((r) => r);
+      _lastSyncFailed = !ok;
+      if (ok) _lastSyncAt = DateTime.now();
+    } finally {
+      _syncing = false;
+    }
+    notifyListeners();
+  }
 
   /// Shorthand translation with the current language.
   String t(String key, [String? fallback]) => i18n.t(_language, key, fallback);

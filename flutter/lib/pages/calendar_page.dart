@@ -65,6 +65,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   onPrevious: _monthIndex > 0 ? () => _goToMonth(_monthIndex - 1) : null,
                   onNext: _monthIndex < monthOrder.length - 1 ? () => _goToMonth(_monthIndex + 1) : null,
                 ),
+                if (app.lastSyncFailed) const _StaleDataIndicator(),
                 Expanded(
                   child: PageView.builder(
                     controller: _pageController,
@@ -139,6 +140,32 @@ class _MonthHeader extends StatelessWidget {
             onPressed: onNext,
             icon: const Icon(Icons.chevron_right),
             tooltip: app.t('monthNav.next'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Subtle stale-data row shown when the last live-data sync failed
+/// (FR-OFFLINE-2) — mirrors the web's muted FotMob-unavailable notice.
+class _StaleDataIndicator extends StatelessWidget {
+  const _StaleDataIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.cloud_off, size: 14, color: muted),
+          const SizedBox(width: 6),
+          Text(
+            app.t('errors.fetchFailed'),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: muted),
           ),
         ],
       ),
