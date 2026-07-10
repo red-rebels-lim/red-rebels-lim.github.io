@@ -49,7 +49,7 @@ export const SEASON_START_YEAR = <START_YEAR>;
 export const SEASON_END_YEAR = <END_YEAR>;
 ```
 
-These flow into `month-config.ts` (Sept–Dec → start year, Jan–Aug → end year), `ics-core.ts` (calendar name `Red Rebels Events YY/YY`), and FotMob caching.
+These flow into `month-config.ts` (Sept–Dec → start year, Jan–Aug → end year), `ics-core.ts` (calendar name `Red Rebels Events YY/YY`), and `ics-export.ts` (download filename). Two scripts also read this file at runtime — no separate edit needed, but know the dependency: `.github/scripts/send-reminders.js` regex-parses `SEASON_*_YEAR` to date matches (a bad edit here silently kills all reminders), and the scraper derives its `cfa_fixtures.json` season title from it.
 
 ### Step 3: Update scraper URLs and IDs
 
@@ -97,15 +97,31 @@ Spot-check `dist/index.html` (or running dev) for the empty-state experience whi
 
 Use the `run-scraper-locally` skill, or trigger `scrape.yml` via `workflow_dispatch`. The first run populates September fixtures. Successive runs through the season add championship-phase data once CFA publishes it.
 
+The first scrape after a reset is a bootstrap: the scraper detects the empty starting state and writes `changes.json` with `added: []`, so subscribers don't get one "new match" push per fixture. Later scrapes notify normally.
+
+### Step 8: Bump the Flutter app
+
+The native app (`flutter/`) duplicates the season and bundles its own copy of the events data:
+
+1. `flutter/lib/data/constants.dart` — update `seasonStartYear`, `seasonEndYear`, and the display string `seasonLabel` (e.g. `'26/27'`).
+2. After the first scrape populates `events.ts`, regenerate the bundled asset:
+
+   ```bash
+   node flutter/tool/generate_events_json.mjs
+   ```
+
+3. `flutter test` — note `flutter/test/widget_test.dart` asserts the stats contain matches, so it fails while the new season's events are still empty. Regenerate the asset only once fixtures exist, and ship a new app release so installed apps pick up the season.
+
 ## Common Mistakes
 
 - **Updating `SEASON_*_YEAR` but not the scraper URLs.** The scraper still hits last year's pages, returns nothing, the cron parser reads stale `events.ts`. Calendar looks frozen with no error.
 - **Updating CFA URLs but not DataProject IDs.** Football looks fine; volleyball tabs go blank.
 - **Bumping mid-season.** The CFA championship-phase URL doesn't exist until ~February. Don't paste a placeholder — leave the old URL until the new one is published, since the FotMob fallback covers football data well enough.
 - **Forgetting `events.ts` reset.** If you bump constants but leave last season's events, the calendar shows last year's matches under this year's date headers.
+- **Forgetting the Flutter app.** Bumping the web constants does nothing for `flutter/` — its constants and bundled `events.json` are separate copies (Step 8). Skipping it ships a native app frozen on last season.
 
 ## Notes
 
 - This is an annual flow; the user typically runs it once around late August / early September.
 - The rollover is intentionally not automated — the IDs are scraped from external sites that change schemas occasionally.
-- If `events.ts` is wiped, push subscribers won't get a flood of "new match" notifications — `send-notifications.js` only fires on a *change*, and an empty-to-populated transition isn't a change in the desired sense. (If this becomes a problem, gate the diff on `if previous events.length > 0`.)
+- If `events.ts` is wiped, push subscribers won't get a flood of "new match" notifications — the scraper suppresses `added` entries in `changes.json` when it starts from an empty events file (see `updateCalendarData` in `app/scripts/scraper/index.ts`). Score/time-update notifications are unaffected.
