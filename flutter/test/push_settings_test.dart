@@ -221,12 +221,12 @@ void main() {
       final app = appState(push: registration(backend(log), tokenProvider: FakeTokenProvider()));
       await tester.pumpWidget(wrap(app));
 
-      // One enabled channel switch, no shared preferences yet.
-      final channelSwitch = tester.widget<Switch>(find.byType(Switch));
-      expect(channelSwitch.onChanged, isNotNull);
+      // Enabled push channel switch, no shared preferences yet.
+      final pushSwitch = find.byKey(const Key('push-channel-switch'));
+      expect(tester.widget<Switch>(pushSwitch).onChanged, isNotNull);
       expect(find.text('24h'), findsNothing);
 
-      await tester.tap(find.byType(Switch));
+      await tester.tap(pushSwitch);
       await tester.pumpAndSettle();
 
       expect(app.pushRegistered, isTrue);
@@ -240,6 +240,7 @@ void main() {
       expect(find.text('New events added'), findsOneWidget);
       expect(find.text('Time/venue changes'), findsOneWidget);
       expect(find.text('Score updates'), findsOneWidget);
+      // Push channel switch, 3 sports, 3 alert types.
       expect(find.byType(Switch), findsNWidgets(7));
     });
 
@@ -305,7 +306,10 @@ void main() {
       );
       await tester.pumpWidget(wrap(app));
 
-      expect(tester.widget<Switch>(find.byType(Switch)).onChanged, isNull);
+      expect(
+        tester.widget<Switch>(find.byKey(const Key('push-channel-switch'))).onChanged,
+        isNull,
+      );
       expect(find.text('24h'), findsNothing);
     });
 
@@ -316,11 +320,14 @@ void main() {
       );
       await tester.pumpWidget(wrap(app));
 
-      await tester.tap(find.byType(Switch));
+      await tester.tap(find.byKey(const Key('push-channel-switch')));
       await tester.pumpAndSettle();
 
       expect(app.pushRegistered, isFalse);
-      expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+      expect(
+        tester.widget<Switch>(find.byKey(const Key('push-channel-switch'))).value,
+        isFalse,
+      );
       expect(find.text('Failed to update notifications. Please try again.'), findsOneWidget);
     });
   });
