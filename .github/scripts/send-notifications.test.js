@@ -6,11 +6,13 @@ const {
   mockPrefFind,
   mockDestroyAll,
   mockSubDestroy,
+  mockSendFcm,
 } = vi.hoisted(() => ({
   mockSendNotification: vi.fn(),
   mockPrefFind: vi.fn(),
   mockDestroyAll: vi.fn(),
   mockSubDestroy: vi.fn(),
+  mockSendFcm: vi.fn(),
 }));
 
 vi.mock('web-push', () => ({
@@ -47,6 +49,11 @@ vi.mock('parse/node.js', () => {
   };
 });
 
+vi.mock('./lib/fcm-sender.js', () => ({
+  sendFcmMessage: mockSendFcm,
+  isFcmConfigured: () => true,
+}));
+
 vi.mock('fs', () => ({
   default: {
     existsSync: vi.fn().mockReturnValue(true),
@@ -71,6 +78,22 @@ function makePref({
   auth = 'auth1',
 } = {}) {
   const sub = { id: subId, get: vi.fn((f) => ({ endpoint, p256dh, auth }[f])) };
+  return {
+    get: vi.fn((f) => ({
+      notifyNewEvents, notifyScoreUpdates, notifyTimeChanges, enabledSports, subscription: sub,
+    }[f])),
+  };
+}
+
+function makeFcmPref({
+  notifyNewEvents = true,
+  notifyScoreUpdates = true,
+  notifyTimeChanges = true,
+  enabledSports = ['football-men', 'volleyball-men', 'volleyball-women'],
+  subId = 'fcm-sub-1',
+  token = 'fcm-token-1',
+} = {}) {
+  const sub = { id: subId, get: vi.fn((f) => ({ platform: 'fcm', token }[f])) };
   return {
     get: vi.fn((f) => ({
       notifyNewEvents, notifyScoreUpdates, notifyTimeChanges, enabledSports, subscription: sub,
@@ -136,6 +159,9 @@ describe('buildPayload', () => {
 describe('main()', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.unstubAllEnvs();
+    // FCM channel is off by default; individual tests opt in.
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '');
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.spyOn(process, 'exit').mockImplementation(() => { throw new Error('process.exit'); });
@@ -145,6 +171,7 @@ describe('main()', () => {
     );
     mockDestroyAll.mockResolvedValue(undefined);
     mockSubDestroy.mockResolvedValue(undefined);
+    mockSendFcm.mockResolvedValue({ ok: true, unregistered: false });
   });
 
   it('exits early when changes.json is missing', async () => {
@@ -233,5 +260,86 @@ describe('main()', () => {
     await main();
 
     expect(mockSendNotification).toHaveBeenCalledTimes(2);
+  });
+
+  // ── FCM channel ────────────────────────────────────────────────────────────
+
+  function mockScoreChange() {
+    fs.readFileSync.mockImplementation((p) =>
+      String(p).endsWith('changes.json')
+        ? changesJson({ scoreUpdated: ['February 20: football-men vs Omonia (none → 2-1)'] })
+        : eventsTs()
+    );
+  }
+
+  it('sends FCM notification to fcm subscriber when FIREBASE_SERVICE_ACCOUNT is set', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockScoreChange();
+    mockPrefFind.mockResolvedValue([makeFcmPref()]);
+
+    await main();
+
+    expect(mockSendFcm).toHaveBeenCalledOnce();
+    const [token, msg] = mockSendFcm.mock.calls[0];
+    expect(token).toBe('fcm-token-1');
+    expect(msg.title).toContain('Score Update');
+    // The web-push loop must not try to deliver to the fcm subscription
+    expect(mockSendNotification).not.toHaveBeenCalled();
+  });
+
+  it('delivers to both web and fcm subscribers in one pass', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockScoreChange();
+    mockPrefFind.mockResolvedValue([makePref(), makeFcmPref()]);
+    mockSendNotification.mockResolvedValue(undefined);
+
+    await main();
+
+    expect(mockSendNotification).toHaveBeenCalledOnce();
+    expect(mockSendFcm).toHaveBeenCalledOnce();
+  });
+
+  it('skips FCM subscriber when FIREBASE_SERVICE_ACCOUNT is not set', async () => {
+    mockScoreChange();
+    mockPrefFind.mockResolvedValue([makeFcmPref()]);
+
+    await main();
+
+    expect(mockSendFcm).not.toHaveBeenCalled();
+    expect(mockSendNotification).not.toHaveBeenCalled();
+  });
+
+  it('skips fcm subscriber with notifyScoreUpdates: false', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockScoreChange();
+    mockPrefFind.mockResolvedValue([makeFcmPref({ notifyScoreUpdates: false })]);
+
+    await main();
+
+    expect(mockSendFcm).not.toHaveBeenCalled();
+  });
+
+  it('skips fcm subscriber whose enabledSports excludes the event sport', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockScoreChange();
+    mockPrefFind.mockResolvedValue([makeFcmPref({ enabledSports: ['volleyball-men'] })]);
+
+    await main();
+
+    expect(mockSendFcm).not.toHaveBeenCalled();
+  });
+
+  it('destroys subscription and preferences on unregistered FCM token', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockScoreChange();
+    mockPrefFind
+      .mockResolvedValueOnce([makeFcmPref({ subId: 'fcm-dead' })])  // main prefs query
+      .mockResolvedValueOnce([]);                                    // cleanup find
+    mockSendFcm.mockResolvedValue({ ok: false, unregistered: true });
+
+    await main();
+
+    expect(mockDestroyAll).toHaveBeenCalled();
+    expect(mockSubDestroy).toHaveBeenCalled();
   });
 });

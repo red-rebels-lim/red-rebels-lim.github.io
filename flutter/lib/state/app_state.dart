@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/events_repository.dart';
 import '../data/players_repository.dart';
 import '../i18n/i18n.dart';
+import '../logic/push_registration.dart';
 import '../models/events.dart';
 
 /// App-wide state: language, theme, calendar view mode and filters.
@@ -18,6 +20,7 @@ class AppState extends ChangeNotifier {
     required SharedPreferences prefs,
     this.syncEnabled = false,
     this.httpClientFactory,
+    this.push,
   }) : _prefs = prefs {
     // Default to the device locale (Greek device → Greek), like the web app.
     _language = prefs.getString('language') ??
@@ -34,6 +37,23 @@ class AppState extends ChangeNotifier {
       // Migrate the old boolean 'listView' preference.
       _calendarView = (prefs.getBool('listView') ?? false) ? 'list' : 'grid';
     }
+    _notifPrefs = _loadNotifPrefs(prefs);
+  }
+
+  /// Local storage key for the NotifPrefs JSON snapshot (renders the saved
+  /// notification preferences on restart without a network round-trip).
+  static const notifPrefsKey = 'notif_prefs';
+
+  static NotifPrefs _loadNotifPrefs(SharedPreferences prefs) {
+    final raw = prefs.getString(notifPrefsKey);
+    if (raw != null) {
+      try {
+        return NotifPrefs.fromJson(json.decode(raw) as Map<String, dynamic>);
+      } catch (_) {
+        // Corrupt snapshot — fall through to defaults.
+      }
+    }
+    return const NotifPrefs();
   }
 
   /// Calendar view modes, in header-switcher cycle order.
@@ -54,6 +74,12 @@ class AppState extends ChangeNotifier {
   /// Injectable HTTP client factory for tests; null → the repository creates
   /// (and closes) its own client per refresh.
   final http.Client Function()? httpClientFactory;
+
+  /// Push-registration layer (Back4App rows behind notifications). Null in
+  /// tests; when the build carries no Back4App credentials it is present but
+  /// disabled ([PushRegistration.available] is false) and every call no-ops —
+  /// mirrors the web, where empty env vars disable push locally.
+  final PushRegistration? push;
 
   DateTime? _lastSyncAttempt;
   DateTime? _lastSyncAt;
@@ -83,6 +109,83 @@ class AppState extends ChangeNotifier {
   FilterState get filters => _filters;
 
   void goToTab(int i) => tabNavigator?.call(i);
+
+  // ── Push notifications ────────────────────────────────────────────────
+
+  late NotifPrefs _notifPrefs;
+  bool _pushBusy = false;
+
+  /// Current notification preferences (local snapshot; the server row is the
+  /// source of truth and every change is written through to it).
+  NotifPrefs get notifPrefs => _notifPrefs;
+
+  /// True while an enable/disable request is in flight.
+  bool get pushBusy => _pushBusy;
+
+  /// True when this build can register for push: Back4App credentials are
+  /// present AND a platform token provider was wired in.
+  bool get pushAvailable => (push?.available ?? false) && push?.tokenProvider != null;
+
+  /// True when this device holds a registered push subscription.
+  bool get pushRegistered => push?.registered ?? false;
+
+  /// Permission → token → Back4App registration. Returns true when the
+  /// device ends up registered; false on denial or any failure (never throws).
+  Future<bool> enablePush() async {
+    final push = this.push;
+    final tokens = push?.tokenProvider;
+    if (push == null || tokens == null || !push.available || _pushBusy) return false;
+    _pushBusy = true;
+    notifyListeners();
+    try {
+      if (!await tokens.requestPermission()) return false;
+      final token = await tokens.getToken();
+      if (token == null) return false;
+      if (!await push.register(token)) return false;
+      // A fresh registration starts from the server-side defaults.
+      _notifPrefs = const NotifPrefs();
+      await _prefs.setString(notifPrefsKey, json.encode(_notifPrefs.toJson()));
+      return true;
+    } finally {
+      _pushBusy = false;
+      notifyListeners();
+    }
+  }
+
+  /// Deletes the registration (best-effort) and clears the local snapshot.
+  Future<void> disablePush() async {
+    final push = this.push;
+    if (push == null || _pushBusy) return;
+    _pushBusy = true;
+    notifyListeners();
+    try {
+      await push.unregister();
+      await _prefs.remove(notifPrefsKey);
+      _notifPrefs = const NotifPrefs();
+    } finally {
+      _pushBusy = false;
+      notifyListeners();
+    }
+  }
+
+  /// Optimistically applies [next], writes it through to the NotifPreference
+  /// row and persists it locally. On failure the previous value is restored
+  /// and false is returned (the caller surfaces the error).
+  Future<bool> updateNotifPrefs(NotifPrefs next) async {
+    final push = this.push;
+    if (push == null) return false;
+    final previous = _notifPrefs;
+    _notifPrefs = next;
+    notifyListeners();
+    final ok = await push.updatePreferences(next);
+    if (ok) {
+      await _prefs.setString(notifPrefsKey, json.encode(next.toJson()));
+    } else {
+      _notifPrefs = previous;
+      notifyListeners();
+    }
+    return ok;
+  }
 
   /// Refreshes the fixtures and the squad roster from the live feeds.
   ///

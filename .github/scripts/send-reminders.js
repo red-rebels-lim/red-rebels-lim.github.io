@@ -116,6 +116,26 @@ function getUpcomingMatches() {
 const REMINDER_TIERS = [24, 12, 2, 1];
 const WINDOW_MINUTES = 30;
 
+/**
+ * Destroy dead PushSubscription rows and their NotifPreference rows.
+ * Used by both the Web Push (410/404) and FCM (unregistered) channels.
+ */
+async function cleanupExpiredSubscriptions(ids, NotifPreference, PushSubscription) {
+  const uniqueIds = [...new Set(ids)];
+  console.log(`Cleaning up ${uniqueIds.length} expired subscription(s)`);
+  for (const id of uniqueIds) {
+    try {
+      const prefCleanup = new Parse.Query(NotifPreference);
+      prefCleanup.equalTo('subscription', PushSubscription.createWithoutData(id));
+      const prefsToDelete = await prefCleanup.find({ useMasterKey: true });
+      await Parse.Object.destroyAll(prefsToDelete, { useMasterKey: true });
+      await PushSubscription.createWithoutData(id).destroy({ useMasterKey: true });
+    } catch (err) {
+      console.error(`Failed to clean up ${id}:`, err.message);
+    }
+  }
+}
+
 // --- Main ---
 
 async function main() {
@@ -177,6 +197,8 @@ async function main() {
       for (const pref of prefs) {
         const sub = pref.get('subscription');
         if (!sub) continue;
+        // FCM device subscriptions are handled by the FCM channel below
+        if (sub.get('platform') === 'fcm') continue;
 
         const pushSubscription = {
           endpoint: sub.get('endpoint'),
@@ -211,19 +233,7 @@ async function main() {
 
   // Clean up expired subscriptions
   if (expiredIds.length > 0) {
-    const uniqueIds = [...new Set(expiredIds)];
-    console.log(`Cleaning up ${uniqueIds.length} expired subscription(s)`);
-    for (const id of uniqueIds) {
-      try {
-        const prefCleanup = new Parse.Query(NotifPreference);
-        prefCleanup.equalTo('subscription', PushSubscription.createWithoutData(id));
-        const prefsToDelete = await prefCleanup.find({ useMasterKey: true });
-        await Parse.Object.destroyAll(prefsToDelete, { useMasterKey: true });
-        await PushSubscription.createWithoutData(id).destroy({ useMasterKey: true });
-      } catch (err) {
-        console.error(`Failed to clean up ${id}:`, err.message);
-      }
-    }
+    await cleanupExpiredSubscriptions(expiredIds, NotifPreference, PushSubscription);
   }
 
   console.log(`\nWeb Push summary: ${sent} sent, ${skipped} skipped/failed`);
@@ -286,6 +296,87 @@ async function main() {
       }
     }
     console.log(`Telegram summary: ${tgSent} sent, ${tgFailed} failed`);
+  }
+
+  // --- FCM reminders (Android app) ---
+  const { FIREBASE_SERVICE_ACCOUNT } = process.env;
+  if (!FIREBASE_SERVICE_ACCOUNT) {
+    console.log('FIREBASE_SERVICE_ACCOUNT not set — skipping FCM channel');
+  } else {
+    const { sendFcmMessage } = await import('./lib/fcm-sender.js');
+    let fcmSent = 0;
+    let fcmFailed = 0;
+    const fcmExpiredIds = [];
+
+    for (const match of upcoming) {
+      for (const tier of REMINDER_TIERS) {
+        const lowerBound = tier - WINDOW_MINUTES / 60;
+        const upperBound = tier + WINDOW_MINUTES / 60;
+        if (match.hoursUntil < lowerBound || match.hoursUntil > upperBound) continue;
+
+        // Dedup for fcm channel — same eventKey format as the other channels
+        const fcmLogQuery = new Parse.Query(ReminderLog);
+        fcmLogQuery.equalTo('eventKey', match.eventKey);
+        fcmLogQuery.equalTo('hoursBefore', tier);
+        fcmLogQuery.equalTo('channel', 'fcm');
+        if (await fcmLogQuery.first({ useMasterKey: true })) continue;
+
+        const prefQuery = new Parse.Query(NotifPreference);
+        prefQuery.equalTo('disabled', false);
+        prefQuery.containedIn('reminderHours', [tier]);
+        prefQuery.containedIn('enabledSports', [match.sport]);
+        prefQuery.include('subscription');
+        prefQuery.limit(1000);
+        const prefs = await prefQuery.find({ useMasterKey: true });
+
+        // Platform lives on the pointed-to PushSubscription — filter in JS.
+        // Tier/sport are re-checked here as a guard alongside the Parse constraints.
+        const fcmPrefs = prefs.filter((pref) => {
+          const sub = pref.get('subscription');
+          if (!sub || sub.get('platform') !== 'fcm' || !sub.get('token')) return false;
+          return (
+            (pref.get('reminderHours') || []).includes(tier) &&
+            (pref.get('enabledSports') || []).includes(match.sport)
+          );
+        });
+
+        if (fcmPrefs.length === 0) continue;
+
+        const reminderPayload = buildReminderPayload(match, tier);
+
+        for (const pref of fcmPrefs) {
+          const sub = pref.get('subscription');
+          try {
+            const result = await sendFcmMessage(sub.get('token'), {
+              title: reminderPayload.title,
+              body: reminderPayload.body,
+              data: { tag: reminderPayload.tag, url: reminderPayload.url },
+            });
+            if (result.ok) fcmSent++;
+            else {
+              if (result.unregistered) fcmExpiredIds.push(sub.id);
+              fcmFailed++;
+            }
+          } catch (err) {
+            console.error('FCM send failed:', err.message);
+            fcmFailed++;
+          }
+        }
+
+        const log = new ReminderLog();
+        log.set('eventKey', match.eventKey);
+        log.set('hoursBefore', tier);
+        log.set('channel', 'fcm');
+        log.set('sentAt', new Date());
+        await log.save(null, { useMasterKey: true });
+      }
+    }
+
+    if (fcmExpiredIds.length > 0) {
+      await cleanupExpiredSubscriptions(fcmExpiredIds, NotifPreference, PushSubscription);
+    }
+
+    console.log(`FCM summary: ${fcmSent} sent, ${fcmFailed} failed`);
   }
 }
 

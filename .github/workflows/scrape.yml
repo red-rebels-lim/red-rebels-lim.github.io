@@ -57,6 +57,7 @@ jobs:
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           BACK4APP_APP_ID: ${{ secrets.BACK4APP_APP_ID }}
           BACK4APP_MASTER_KEY: ${{ secrets.BACK4APP_MASTER_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
       - name: Create PR with changes
         if: steps.check_changes.outputs.changes_detected == 'true'
