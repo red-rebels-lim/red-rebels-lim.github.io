@@ -110,6 +110,25 @@ class AppState extends ChangeNotifier {
 
   void goToTab(int i) => tabNavigator?.call(i);
 
+  String? _pendingEventKey;
+
+  /// Deep-link target set by the push notification-tap handlers and consumed
+  /// once by the calendar page (via [consumePendingEventKey]).
+  String? get pendingEventKey => _pendingEventKey;
+
+  set pendingEventKey(String? key) {
+    _pendingEventKey = key;
+    notifyListeners();
+  }
+
+  /// Clears and returns [pendingEventKey]. No notify — the consumer is
+  /// already mid-build when it takes the key.
+  String? consumePendingEventKey() {
+    final key = _pendingEventKey;
+    _pendingEventKey = null;
+    return key;
+  }
+
   // ── Push notifications ────────────────────────────────────────────────
 
   late NotifPrefs _notifPrefs;

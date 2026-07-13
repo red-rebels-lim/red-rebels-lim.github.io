@@ -4,6 +4,15 @@ on:
   schedule:
     - cron: '*/30 * * * *'
   workflow_dispatch:
+    inputs:
+      test_fcm_token:
+        description: 'FCM device token to send a test push to'
+        required: true
+        type: string
+      test_event_key:
+        description: 'Optional eventKey for the deep-link data payload'
+        required: false
+        type: string
 
 jobs:
   remind:
@@ -22,6 +31,7 @@ jobs:
         working-directory: .github/scripts
 
       - name: Send reminders
+        if: github.event_name != 'workflow_dispatch'
         run: node send-reminders.js
         working-directory: .github/scripts
         env:
@@ -32,3 +42,13 @@ jobs:
           BACK4APP_MASTER_KEY: ${{ secrets.BACK4APP_MASTER_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Send test push
+        if: github.event_name == 'workflow_dispatch'
+        run: node send-test-push.js
+        working-directory: .github/scripts
+        env:
+          TZ: Europe/Nicosia
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          TEST_FCM_TOKEN: ${{ inputs.test_fcm_token }}
+          TEST_EVENT_KEY: ${{ inputs.test_event_key }}

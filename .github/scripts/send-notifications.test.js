@@ -283,8 +283,28 @@ describe('main()', () => {
     const [token, msg] = mockSendFcm.mock.calls[0];
     expect(token).toBe('fcm-token-1');
     expect(msg.title).toContain('Score Update');
+    // Deep-link data derived from the change desc + events.ts
+    expect(msg.data.eventKey).toBe('february-20-football-men-Omonia');
+    expect(msg.data.sport).toBe('football-men');
     // The web-push loop must not try to deliver to the fcm subscription
     expect(mockSendNotification).not.toHaveBeenCalled();
+  });
+
+  it('omits eventKey when the change desc does not match a known event', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    fs.readFileSync.mockImplementation((p) =>
+      String(p).endsWith('changes.json')
+        ? changesJson({ scoreUpdated: ['March 5: football-men vs Unknown FC (none → 2-1)'] })
+        : eventsTs()
+    );
+    mockPrefFind.mockResolvedValue([makeFcmPref()]);
+
+    await main();
+
+    expect(mockSendFcm).toHaveBeenCalledOnce();
+    const [, msg] = mockSendFcm.mock.calls[0];
+    expect(msg.data.eventKey).toBeNull();
+    expect(msg.data.sport).toBe('football-men');
   });
 
   it('delivers to both web and fcm subscribers in one pass', async () => {

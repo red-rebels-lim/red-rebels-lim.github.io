@@ -350,7 +350,12 @@ async function main() {
             const result = await sendFcmMessage(sub.get('token'), {
               title: reminderPayload.title,
               body: reminderPayload.body,
-              data: { tag: reminderPayload.tag, url: reminderPayload.url },
+              data: {
+                eventKey: match.eventKey,
+                sport: match.sport,
+                tag: reminderPayload.tag,
+                url: reminderPayload.url,
+              },
             });
             if (result.ok) fcmSent++;
             else {
