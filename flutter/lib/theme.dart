@@ -476,5 +476,18 @@ ThemeData buildTheme(String visualTheme, Brightness brightness) {
       margin: EdgeInsets.zero,
     ),
     bottomSheetTheme: BottomSheetThemeData(backgroundColor: c.card),
+    // Web SettingsToggle parity: red track when on, grey when off. Material's
+    // default inactive track derives from the scheme surface, which vanishes
+    // against cinema's near-black background — surfaceTileRaised stays
+    // visible on every palette.
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected) ? Colors.white : c.mutedForeground,
+      ),
+      trackColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected) ? c.primary : c.surfaceTileRaised,
+      ),
+      trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
+    ),
   );
 }
