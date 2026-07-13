@@ -81,6 +81,26 @@ function extractSport(desc) {
   return match ? match[1] : null;
 }
 
+/**
+ * Derive the app's eventKey (`${monthName}-${day}-${sport}-${opponent}`,
+ * same format as send-reminders.js) from a change description, verified
+ * against events.ts so the key always names a real event. Returns null when
+ * the desc doesn't parse or the event isn't found (the app then falls back
+ * to opening the calendar tab).
+ */
+function deriveEventKey(desc, eventsData) {
+  const m = desc.match(/^(\w+)\s+(\d+):\s*([\w-]+)\s+vs\s+(.+?)(?:\s*\(|$)/);
+  if (!m) return null;
+  const [, monthName, day, sport, opponent] = m;
+  const month = monthName.toLowerCase();
+  const monthEvents = eventsData[month] || [];
+  const event = monthEvents.find(
+    e => e.day === parseInt(day) && e.sport === sport && e.opponent === opponent.trim()
+  );
+  if (!event) return null;
+  return `${month}-${event.day}-${event.sport}-${event.opponent}`;
+}
+
 // buildPayload is now imported from lib/message-builder.js as buildChangePayload
 
 const PREF_FIELDS = {
@@ -153,6 +173,7 @@ async function main() {
     for (const desc of items) {
       const sport = extractSport(desc);
       const location = lookupLocation(desc, eventsData);
+      const eventKey = deriveEventKey(desc, eventsData);
       const payload = buildChangePayload(changeType, desc, sport, location);
       if (!payload) continue;
 
@@ -180,10 +201,12 @@ async function main() {
             continue;
           }
           try {
+            // eventKey/sport may be null (underivable desc) — sendFcmMessage
+            // drops null data values, and the app falls back to the calendar.
             const result = await sendFcmMessage(sub.get('token'), {
               title: payload.title,
               body: payload.body,
-              data: { tag: payload.tag, url: payload.url },
+              data: { eventKey, sport, tag: payload.tag, url: payload.url },
             });
             if (result.ok) fcmSent++;
             else {

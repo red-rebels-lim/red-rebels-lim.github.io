@@ -276,6 +276,11 @@ describe('main()', () => {
     expect(token).toBe('fcm-token-1');
     expect(msg.title).toContain('24h');
     expect(msg.body).toContain('Omonia');
+    // Deep-link data for the app's notification-tap handler
+    expect(msg.data.eventKey).toMatch(/^\w+-\d+-football-men-Omonia$/);
+    expect(msg.data.sport).toBe('football-men');
+    expect(msg.data.tag).toBe(`reminder-24h-${msg.data.eventKey}`);
+    expect(msg.data.url).toBe('/');
     // The web-push loop must not try to deliver to the fcm subscription
     expect(mockSendNotification).not.toHaveBeenCalled();
   });

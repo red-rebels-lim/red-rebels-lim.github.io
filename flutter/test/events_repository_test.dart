@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:red_rebels_calendar/data/events_repository.dart';
 import 'package:red_rebels_calendar/data/players_repository.dart';
 import 'package:red_rebels_calendar/i18n/i18n.dart';
+import 'package:red_rebels_calendar/models/events.dart';
 import 'package:red_rebels_calendar/pages/calendar_page.dart';
 import 'package:red_rebels_calendar/state/app_state.dart';
 import 'package:red_rebels_calendar/theme.dart';
@@ -104,6 +105,82 @@ void main() {
       final repo = await EventsRepository.load(cacheFile: cacheFile);
 
       expect(repo.allEvents().length, greaterThan(1));
+    });
+  });
+
+  group('EventsRepository.findByEventKey', () {
+    test('resolves a football key with spaces in the opponent', () async {
+      final repo = await EventsRepository.load(cacheFile: cacheFile);
+
+      final de = repo.findByEventKey('september-12-football-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ');
+
+      expect(de, isNotNull);
+      expect(de!.monthName, 'september');
+      expect(de.event.day, 12);
+      expect(de.event.sport, Sport.footballMen);
+      expect(de.event.opponent, 'ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ');
+    });
+
+    test('resolves a volleyball-women key (sport ids contain dashes)', () async {
+      final repo = await EventsRepository.load(cacheFile: cacheFile);
+
+      final de = repo.findByEventKey('november-1-volleyball-women-ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)');
+
+      expect(de, isNotNull);
+      expect(de!.event.sport, Sport.volleyballWomen);
+      expect(de.event.opponent, 'ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)');
+    });
+
+    test('resolves a volleyball-men key', () async {
+      final repo = await EventsRepository.load(cacheFile: cacheFile);
+
+      final de = repo.findByEventKey('october-17-volleyball-men-ΠΑΦΙΑΚΟΣ');
+
+      expect(de, isNotNull);
+      expect(de!.event.sport, Sport.volleyballMen);
+    });
+
+    test('resolves an opponent containing a dash (synthetic cache)', () async {
+      await (await cacheFile())!.writeAsString(json.encode({
+        'events': {
+          'september': [
+            {
+              'day': 21,
+              'sport': 'football-men',
+              'location': 'home',
+              'opponent': 'ΤΕΣΤ-ΟΜΑΔΑ',
+              'time': '19:00',
+              'status': 'upcoming',
+            },
+          ],
+        },
+      }));
+      final repo = await EventsRepository.load(cacheFile: cacheFile);
+
+      final de = repo.findByEventKey('september-21-football-men-ΤΕΣΤ-ΟΜΑΔΑ');
+
+      expect(de, isNotNull);
+      expect(de!.event.opponent, 'ΤΕΣΤ-ΟΜΑΔΑ');
+    });
+
+    test('returns null on any mismatch or malformed key', () async {
+      final repo = await EventsRepository.load(cacheFile: cacheFile);
+
+      // Unknown month
+      expect(repo.findByEventKey('foo-12-football-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ'), isNull);
+      // Day mismatch
+      expect(repo.findByEventKey('september-13-football-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ'), isNull);
+      // Non-numeric day
+      expect(repo.findByEventKey('september-x-football-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ'), isNull);
+      // Unknown sport
+      expect(repo.findByEventKey('september-12-handball-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ'), isNull);
+      // Unknown opponent
+      expect(repo.findByEventKey('september-12-football-men-ΑΓΝΩΣΤΗ ΟΜΑΔΑ'), isNull);
+      // Missing segments
+      expect(repo.findByEventKey('september'), isNull);
+      expect(repo.findByEventKey('september-12'), isNull);
+      expect(repo.findByEventKey('september-12-football-men-'), isNull);
+      expect(repo.findByEventKey(''), isNull);
     });
   });
 

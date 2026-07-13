@@ -156,6 +156,47 @@ class EventsRepository {
     return result;
   }
 
+  /// Resolves a cron notification eventKey — `<month>-<day>-<sport>-<opponent>`
+  /// (the format used by .github/scripts/send-reminders.js) — to its event.
+  ///
+  /// Sport ids themselves contain dashes ('football-men', 'volleyball-women'),
+  /// so after splitting off month and day the remainder is matched against the
+  /// known ids before treating the rest (which may contain spaces or dashes)
+  /// as the opponent. Returns null on any mismatch.
+  DatedEvent? findByEventKey(String key) {
+    final afterMonth = key.indexOf('-');
+    if (afterMonth <= 0) return null;
+    final month = key.substring(0, afterMonth);
+    if (!monthOrder.contains(month)) return null;
+
+    final afterDay = key.indexOf('-', afterMonth + 1);
+    if (afterDay < 0) return null;
+    final day = int.tryParse(key.substring(afterMonth + 1, afterDay));
+    if (day == null) return null;
+
+    final rest = key.substring(afterDay + 1);
+    Sport? sport;
+    String opponent = '';
+    for (final s in Sport.values) {
+      if (rest.startsWith('${s.id}-')) {
+        sport = s;
+        opponent = rest.substring(s.id.length + 1);
+        break;
+      }
+    }
+    if (sport == null || opponent.isEmpty) return null;
+
+    for (final de in allEvents()) {
+      if (de.monthName == month &&
+          de.event.day == day &&
+          de.event.sport == sport &&
+          de.event.opponent == opponent) {
+        return de;
+      }
+    }
+    return null;
+  }
+
   /// The next event that hasn't kicked off yet (falls back to status when no time).
   DatedEvent? nextUpcoming(DateTime now) {
     for (final de in allEvents()) {

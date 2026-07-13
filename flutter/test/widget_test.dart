@@ -8,6 +8,7 @@ import 'package:red_rebels_calendar/data/players_repository.dart';
 import 'package:red_rebels_calendar/i18n/i18n.dart';
 import 'package:red_rebels_calendar/main.dart';
 import 'package:red_rebels_calendar/models/events.dart';
+import 'package:red_rebels_calendar/pages/calendar_page.dart';
 import 'package:red_rebels_calendar/state/app_state.dart';
 import 'package:red_rebels_calendar/theme.dart';
 import 'package:red_rebels_calendar/widgets/calendar_cards_view.dart';
@@ -109,6 +110,30 @@ void main() {
 
     expect(find.text('3 - 0'), findsOneWidget);
     expect(find.text('WIN'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('Pending eventKey opens the details sheet for that match', (tester) async {
+    final app = AppState(events: events, players: players, i18n: i18n, prefs: prefs);
+    await tester.pumpWidget(
+      ChangeNotifierProvider.value(
+        value: app,
+        child: MaterialApp(
+          theme: buildTheme(Brightness.light),
+          home: const Scaffold(body: CalendarPage()),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('MATCH RESULT'), findsNothing);
+
+    // Simulate a notification tap deep-linking to a real bundled event.
+    app.pendingEventKey = 'september-12-football-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ';
+    await tester.pumpAndSettle();
+
+    expect(find.text('MATCH RESULT'), findsOneWidget); // played-event sheet header
+    expect(app.pendingEventKey, isNull); // consumed once
 
     await tester.pumpWidget(const SizedBox());
   });

@@ -80,10 +80,17 @@ void _wirePushHandlers(
 
   if (!firebaseReady) return;
   try {
-    // Tapping a notification lands the user on the calendar tab.
-    FirebaseMessaging.onMessageOpenedApp.listen((_) => app.goToTab(0));
+    // Tapping a notification lands the user on the calendar tab; when the
+    // payload carries an eventKey the calendar opens that match's details.
+    void handleTap(RemoteMessage message) {
+      final key = message.data['eventKey'];
+      if (key is String && key.isNotEmpty) app.pendingEventKey = key;
+      app.goToTab(0);
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen(handleTap);
     FirebaseMessaging.instance.getInitialMessage().then((message) {
-      if (message != null) app.goToTab(0);
+      if (message != null) handleTap(message);
     }).catchError((_) {});
   } catch (_) {
     // Messaging unavailable — notification taps just open the app normally.

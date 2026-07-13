@@ -8,6 +8,7 @@ import '../theme.dart';
 import '../widgets/calendar_cards_view.dart';
 import '../widgets/calendar_list_view.dart';
 import '../widgets/event_card.dart';
+import '../widgets/event_details_sheet.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -40,9 +41,31 @@ class _CalendarPageState extends State<CalendarPage> {
     _pageController.animateToPage(index, duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
   }
 
+  /// Consumes a notification-tap deep link: jumps to the event's month and
+  /// opens its details sheet. Unresolvable keys just show the calendar.
+  void _maybeOpenPendingEvent(AppState app) {
+    if (app.pendingEventKey == null) return;
+    final key = app.consumePendingEventKey();
+    final target = key == null ? null : app.events.findByEventKey(key);
+    if (target == null) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final index = monthOrder.indexOf(target.monthName);
+      if (index >= 0 && index != _monthIndex) {
+        if (_pageController.hasClients) _pageController.jumpToPage(index);
+        setState(() {
+          _monthIndex = index;
+          _selectedDay = null;
+        });
+      }
+      showEventDetailsSheet(context, target.event, target.monthName);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
+    _maybeOpenPendingEvent(app);
     final monthName = monthOrder[_monthIndex];
     final info = monthInfo(monthName);
 
