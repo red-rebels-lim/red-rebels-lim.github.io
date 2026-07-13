@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Adaptive launcher icon background (flutter_launcher_icons). -->
+    <color name="ic_launcher_background">#ffffff</color>
+    <!-- Brand red, accent for FCM notifications (web primary #E02520). -->
+    <color name="notification_color">#E02520</color>
+</resources>
