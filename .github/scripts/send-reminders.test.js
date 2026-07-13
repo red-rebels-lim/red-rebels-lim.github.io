@@ -8,6 +8,7 @@ const {
   mockReminderLogSave,
   mockDestroyAll,
   mockSubDestroy,
+  mockSendFcm,
 } = vi.hoisted(() => ({
   mockSendNotification: vi.fn(),
   mockReminderLogFirst: vi.fn(),
@@ -15,6 +16,7 @@ const {
   mockReminderLogSave: vi.fn(),
   mockDestroyAll: vi.fn(),
   mockSubDestroy: vi.fn(),
+  mockSendFcm: vi.fn(),
 }));
 
 vi.mock('web-push', () => ({
@@ -64,6 +66,11 @@ vi.mock('parse/node.js', () => {
   };
 });
 
+vi.mock('./lib/fcm-sender.js', () => ({
+  sendFcmMessage: mockSendFcm,
+  isFcmConfigured: () => true,
+}));
+
 vi.mock('fs', () => ({
   default: {
     readFileSync: vi.fn(),
@@ -92,6 +99,26 @@ function makePref({
   return {
     get: vi.fn((field) => ({
       disabled,
+      reminderHours,
+      enabledSports,
+      subscription: sub,
+    }[field])),
+  };
+}
+
+function makeFcmPref({
+  reminderHours = [24, 2],
+  enabledSports = ['football-men', 'volleyball-men', 'volleyball-women'],
+  subId = 'fcm-sub-1',
+  token = 'fcm-token-1',
+} = {}) {
+  const sub = {
+    id: subId,
+    get: vi.fn((field) => ({ platform: 'fcm', token }[field])),
+  };
+  return {
+    get: vi.fn((field) => ({
+      disabled: false,
       reminderHours,
       enabledSports,
       subscription: sub,
@@ -146,12 +173,17 @@ describe('sportEmoji', () => {
 describe('main()', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.unstubAllEnvs();
+    // Optional channels are off by default; individual tests opt in.
+    vi.stubEnv('TELEGRAM_BOT_TOKEN', '');
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '');
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.spyOn(process, 'exit').mockImplementation(() => { throw new Error('process.exit'); });
     mockReminderLogSave.mockResolvedValue(undefined);
     mockDestroyAll.mockResolvedValue(undefined);
     mockSubDestroy.mockResolvedValue(undefined);
+    mockSendFcm.mockResolvedValue({ ok: true, unregistered: false });
   });
 
   it('exits early when no upcoming matches in 25h window', async () => {
@@ -227,5 +259,86 @@ describe('main()', () => {
     await main();
 
     expect(mockReminderLogSave).toHaveBeenCalled(); // ReminderLog entry written
+  });
+
+  // ── FCM channel ────────────────────────────────────────────────────────────
+
+  it('sends FCM reminder to fcm subscriber when FIREBASE_SERVICE_ACCOUNT is set', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockRepoFiles(makeEventsTs(24));
+    mockReminderLogFirst.mockResolvedValue(null);
+    mockPrefFind.mockResolvedValue([makeFcmPref()]);
+
+    await main();
+
+    expect(mockSendFcm).toHaveBeenCalledOnce();
+    const [token, msg] = mockSendFcm.mock.calls[0];
+    expect(token).toBe('fcm-token-1');
+    expect(msg.title).toContain('24h');
+    expect(msg.body).toContain('Omonia');
+    // The web-push loop must not try to deliver to the fcm subscription
+    expect(mockSendNotification).not.toHaveBeenCalled();
+  });
+
+  it('skips FCM channel when FIREBASE_SERVICE_ACCOUNT is not set', async () => {
+    mockRepoFiles(makeEventsTs(24));
+    mockReminderLogFirst.mockResolvedValue(null);
+    mockPrefFind.mockResolvedValue([makeFcmPref()]);
+
+    await main();
+
+    expect(mockSendFcm).not.toHaveBeenCalled();
+    expect(mockSendNotification).not.toHaveBeenCalled();
+  });
+
+  it('does not send FCM if reminder already logged for the fcm channel (dedup)', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockRepoFiles(makeEventsTs(24));
+    mockReminderLogFirst
+      .mockResolvedValueOnce(null)                 // web-push dedup → proceed
+      .mockResolvedValueOnce({ id: 'fcm-log' });   // fcm dedup → already sent
+    mockPrefFind.mockResolvedValue([makeFcmPref()]);
+
+    await main();
+
+    expect(mockSendFcm).not.toHaveBeenCalled();
+  });
+
+  it('does not send FCM to subscriber without the tier enabled', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockRepoFiles(makeEventsTs(24)); // 24h tier fires
+    mockReminderLogFirst.mockResolvedValue(null);
+    mockPrefFind.mockResolvedValue([makeFcmPref({ reminderHours: [12, 2] })]);
+
+    await main();
+
+    expect(mockSendFcm).not.toHaveBeenCalled();
+  });
+
+  it('does not send FCM to subscriber whose enabledSports excludes the sport', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockRepoFiles(makeEventsTs(24, 'football-men'));
+    mockReminderLogFirst.mockResolvedValue(null);
+    mockPrefFind.mockResolvedValue([makeFcmPref({ enabledSports: ['volleyball-men'] })]);
+
+    await main();
+
+    expect(mockSendFcm).not.toHaveBeenCalled();
+  });
+
+  it('destroys subscription and preferences on unregistered FCM token', async () => {
+    vi.stubEnv('FIREBASE_SERVICE_ACCOUNT', '{"project_id":"p"}');
+    mockRepoFiles(makeEventsTs(24));
+    mockReminderLogFirst.mockResolvedValue(null);
+    mockPrefFind
+      .mockResolvedValueOnce([makeFcmPref({ subId: 'fcm-dead' })]) // web-push prefs query
+      .mockResolvedValueOnce([makeFcmPref({ subId: 'fcm-dead' })]) // fcm prefs query
+      .mockResolvedValueOnce([]);                                   // cleanup find
+    mockSendFcm.mockResolvedValue({ ok: false, unregistered: true });
+
+    await main();
+
+    expect(mockDestroyAll).toHaveBeenCalled();
+    expect(mockSubDestroy).toHaveBeenCalled();
   });
 });

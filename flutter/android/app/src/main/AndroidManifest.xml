@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Fetch live fixtures (events.json) from red-rebels.com. -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Push notifications on API 33+; requested at runtime by firebase_messaging. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:label="Red Rebels"
         android:name="${applicationName}"

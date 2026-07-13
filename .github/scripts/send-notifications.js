@@ -129,9 +129,20 @@ async function main() {
     process.exit(0);
   }
 
+  // FCM channel (Android app) — optional, like Telegram in send-reminders.js
+  const fcmEnabled = Boolean(process.env.FIREBASE_SERVICE_ACCOUNT);
+  let sendFcmMessage;
+  if (fcmEnabled) {
+    ({ sendFcmMessage } = await import('./lib/fcm-sender.js'));
+  } else {
+    console.log('FIREBASE_SERVICE_ACCOUNT not set — skipping FCM channel');
+  }
+
   let sent = 0;
   let failed = 0;
   let skipped = 0;
+  let fcmSent = 0;
+  let fcmFailed = 0;
   const expiredIds = [];
 
   // 3. For each change, send to matching subscribers
@@ -160,6 +171,34 @@ async function main() {
 
         const sub = pref.get('subscription');
         if (!sub) continue;
+
+        // FCM device subscriptions go through the FCM channel; preference
+        // flag + sport checks above apply identically to both channels.
+        if (sub.get('platform') === 'fcm') {
+          if (!fcmEnabled) {
+            skipped++;
+            continue;
+          }
+          try {
+            const result = await sendFcmMessage(sub.get('token'), {
+              title: payload.title,
+              body: payload.body,
+              data: { tag: payload.tag, url: payload.url },
+            });
+            if (result.ok) fcmSent++;
+            else {
+              if (result.unregistered) {
+                console.log(`Unregistered FCM token: ${sub.id}`);
+                expiredIds.push(sub.id);
+              }
+              fcmFailed++;
+            }
+          } catch (err) {
+            console.error(`FCM send failed for ${sub.id}:`, err.message);
+            fcmFailed++;
+          }
+          continue;
+        }
 
         const pushSubscription = {
           endpoint: sub.get('endpoint'),
@@ -211,6 +250,9 @@ async function main() {
   }
 
   console.log(`\nSummary: ${sent} sent, ${failed} failed, ${skipped} skipped`);
+  if (fcmEnabled) {
+    console.log(`FCM summary: ${fcmSent} sent, ${fcmFailed} failed`);
+  }
 }
 
 const isMain = process.argv[1] &&
