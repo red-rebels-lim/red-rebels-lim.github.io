@@ -90,7 +90,8 @@
       "WebFetch(domain:github.com)",
       "Bash(flutter build *)",
       "Bash(flutter analyze *)",
-      "Bash(flutter test *)"
+      "Bash(flutter test *)",
+      "Bash(flutter pub *)"
     ]
   },
   "enableAllProjectMcpServers": true,

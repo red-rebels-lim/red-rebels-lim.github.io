@@ -33,7 +33,7 @@ void main() {
     create: (_) =>
         AppState(events: events, players: players, i18n: i18n, prefs: prefs),
     child: MaterialApp(
-      theme: buildTheme(Brightness.light),
+      theme: buildTheme('default', Brightness.light),
       home: Scaffold(body: child),
     ),
   );

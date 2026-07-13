@@ -55,6 +55,23 @@ flutter:
           weight: 600
         - asset: assets/fonts/BarlowCondensed-Bold.ttf
           weight: 700
+    # Visual-theme fonts (variable TTFs from google/fonts, OFL alongside;
+    # weights are pinned via TextStyle.fontVariations in theme.dart).
+    - family: SpaceGrotesk
+      fonts:
+        - asset: assets/fonts/space_grotesk/SpaceGrotesk.ttf
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/jetbrains_mono/JetBrainsMono.ttf
+    - family: Orbitron
+      fonts:
+        - asset: assets/fonts/orbitron/Orbitron.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter.ttf
+    - family: RobotoCondensed
+      fonts:
+        - asset: assets/fonts/RobotoCondensed.ttf
 
 flutter_launcher_icons:
   android: true

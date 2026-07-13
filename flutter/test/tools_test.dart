@@ -164,7 +164,7 @@ void main() {
       await tester.pumpWidget(ChangeNotifierProvider.value(
         value: app,
         child: MaterialApp(
-          theme: buildTheme(Brightness.light),
+          theme: buildTheme('default', Brightness.light),
           home: const Scaffold(body: SettingsPage()),
         ),
       ));
@@ -191,7 +191,7 @@ void main() {
     Widget sheetOpener(SportEvent event) => ChangeNotifierProvider(
           create: (_) => appState(),
           child: MaterialApp(
-            theme: buildTheme(Brightness.light),
+            theme: buildTheme('default', Brightness.light),
             home: Scaffold(
               body: Builder(
                 builder: (context) => Center(

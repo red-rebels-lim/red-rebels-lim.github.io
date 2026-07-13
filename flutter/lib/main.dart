@@ -19,7 +19,9 @@ import 'state/app_state.dart';
 import 'theme.dart';
 import 'widgets/app_background.dart';
 import 'widgets/bottom_nav.dart';
+import 'widgets/hud_frame.dart';
 import 'widgets/intro_dialog.dart';
+import 'widgets/marquee.dart';
 import 'widgets/mobile_header.dart';
 
 Future<void> main() async {
@@ -107,8 +109,8 @@ class RedRebelsApp extends StatelessWidget {
     return MaterialApp(
       title: 'Red Rebels',
       debugShowCheckedModeBanner: false,
-      theme: buildTheme(Brightness.light),
-      darkTheme: buildTheme(Brightness.dark),
+      theme: buildTheme(app.visualTheme, Brightness.light),
+      darkTheme: buildTheme(app.visualTheme, Brightness.dark),
       themeMode: app.themeMode,
       home: const HomeShell(),
     );
@@ -176,15 +178,20 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
             child: Column(
               children: [
                 MobileHeader(showCalendarActions: _index == 0),
+                // Brutalism-only ticker (renders nothing on other themes).
+                const Marquee(),
                 Expanded(
-                  child: IndexedStack(
-                    index: _index,
-                    children: const [
-                      CalendarPage(),
-                      StatsPage(),
-                      SquadPage(),
-                      SettingsPage(),
-                    ],
+                  // Neon-only corner brackets (pass-through on other themes).
+                  child: HudFrame(
+                    child: IndexedStack(
+                      index: _index,
+                      children: const [
+                        CalendarPage(),
+                        StatsPage(),
+                        SquadPage(),
+                        SettingsPage(),
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -10,6 +10,7 @@ import '../data/players_repository.dart';
 import '../i18n/i18n.dart';
 import '../logic/push_registration.dart';
 import '../models/events.dart';
+import '../theme.dart' show visualThemes;
 
 /// App-wide state: language, theme, calendar view mode and filters.
 class AppState extends ChangeNotifier {
@@ -30,6 +31,9 @@ class AppState extends ChangeNotifier {
       'dark' => ThemeMode.dark,
       _ => ThemeMode.system,
     };
+    final storedVisualTheme = prefs.getString(visualThemeKey);
+    _visualTheme =
+        visualThemes.contains(storedVisualTheme) ? storedVisualTheme! : 'default';
     final storedView = prefs.getString('calendarView');
     if (calendarViews.contains(storedView)) {
       _calendarView = storedView!;
@@ -62,6 +66,9 @@ class AppState extends ChangeNotifier {
 
   /// Calendar view modes, in header-switcher cycle order.
   static const calendarViews = ['grid', 'list', 'cards'];
+
+  /// Local storage key for the visual theme (web `visual_theme` parity).
+  static const visualThemeKey = 'visual_theme';
 
   /// Minimum spacing between live-data sync attempts (app resume etc.).
   static const minSyncInterval = Duration(minutes: 5);
@@ -99,6 +106,7 @@ class AppState extends ChangeNotifier {
 
   late String _language;
   late ThemeMode _themeMode;
+  late String _visualTheme;
   late String _calendarView;
   FilterState _filters = const FilterState();
 
@@ -107,6 +115,9 @@ class AppState extends ChangeNotifier {
 
   String get language => _language;
   ThemeMode get themeMode => _themeMode;
+
+  /// 'default' | 'brutalism' | 'cinema' | 'neon'.
+  String get visualTheme => _visualTheme;
 
   /// 'grid' | 'list' | 'cards'.
   String get calendarView => _calendarView;
@@ -263,6 +274,13 @@ class AppState extends ChangeNotifier {
       ThemeMode.dark => 'dark',
       ThemeMode.system => 'system',
     });
+    notifyListeners();
+  }
+
+  void setVisualTheme(String theme) {
+    if (theme == _visualTheme || !visualThemes.contains(theme)) return;
+    _visualTheme = theme;
+    _prefs.setString(visualThemeKey, theme);
     notifyListeners();
   }
 

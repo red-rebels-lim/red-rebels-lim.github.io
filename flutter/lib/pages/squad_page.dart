@@ -45,7 +45,7 @@ class SquadPage extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
       decoration: BoxDecoration(
         color: colors.surfacePanel,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(colors.panelRadius),
       ),
       clipBehavior: Clip.antiAlias,
       child: ListView(

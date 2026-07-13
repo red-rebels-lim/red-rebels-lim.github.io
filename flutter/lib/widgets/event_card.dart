@@ -8,9 +8,10 @@ import '../state/app_state.dart';
 import '../theme.dart';
 import 'countdown_text.dart';
 import 'event_details_sheet.dart';
-import 'team_logo.dart';
 
-/// One event row in list/day views. Tapping opens the details sheet.
+/// One event row in the grid's selected-day list — a port of the web
+/// UpcomingEventCard: date/score badge, sport label + title + date line,
+/// trailing chevron. Tapping opens the details sheet.
 class EventCard extends StatelessWidget {
   const EventCard({super.key, required this.event, required this.monthName});
 
@@ -21,91 +22,133 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final theme = Theme.of(context);
-    final opponent = app.teamName(event.opponent);
-    final isHome = event.location == MatchLocation.home;
+    final colors = AppColors.of(context);
+    final info = monthInfo(monthName);
     final result = event.isPlayed ? matchResult(event.score, event.location, event.penalties) : null;
 
-    final resultColor = switch (result) {
+    // Played matches are tinted by result; upcoming ones by sport accent
+    // (web: win green / draw amber / loss red, else blue for VB, red for FB).
+    final accent = switch (result) {
       MatchResult.win => winGreen,
       MatchResult.draw => drawAmber,
       MatchResult.loss => lossRed,
-      null => theme.colorScheme.outline,
+      null => sportColor(event.sport),
     };
 
-    return Card(
-      color: theme.colorScheme.surfaceContainerLow,
+    final monthLabel = app.t('months.$monthName');
+    final monthAbbrev = monthLabel.substring(0, monthLabel.length < 3 ? monthLabel.length : 3);
+    final hasScore = event.isPlayed && event.score != null;
+    final hasTime = event.time.contains(':');
+    final isVolleyball = event.sport == Sport.volleyballMen || event.sport == Sport.volleyballWomen;
+    final competitionLabel = [
+      app.t(_sportKey(event.sport)),
+      if (event.isCup) app.t('calendar.cup'),
+    ].join(' ');
+    final target = eventDateTime(monthName, event);
+    final radius = BorderRadius.circular(colors.cardRadius);
+
+    TextStyle accentLabel(double size) => TextStyle(
+          fontSize: size,
+          fontWeight: FontWeight.bold,
+          color: accent,
+          letterSpacing: 0.5,
+        );
+
+    return Material(
+      color: colors.surfaceTile,
+      borderRadius: radius,
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: radius,
         onTap: () => showEventDetailsSheet(context, event, monthName),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
+              // Date (upcoming) or score (played) badge.
               Container(
-                width: 4,
-                height: 48,
+                width: 64,
+                height: 64,
                 decoration: BoxDecoration(
-                  color: sportColor(event.sport),
-                  borderRadius: BorderRadius.circular(2),
+                  color: accent.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      hasScore ? event.score! : '${event.day}',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: accent),
+                    ),
+                    Text(
+                      (hasScore ? app.t('popover.${result?.name ?? 'upcoming'}') : monthAbbrev).toUpperCase(),
+                      style: accentLabel(10),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 10),
-              TeamLogo(logoPath: event.logo, name: opponent),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
+              // Sport/competition label, title, date · time, countdown.
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        Icon(
+                          isVolleyball ? Icons.sports_volleyball : Icons.sports_soccer,
+                          size: 14,
+                          color: accent,
+                        ),
+                        const SizedBox(width: 6),
+                        Flexible(
+                          child: Text(
+                            competitionLabel.toUpperCase(),
+                            style: accentLabel(10),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
                     Text(
-                      isHome ? '$teamName – $opponent' : '$opponent – $teamName',
-                      style: theme.textTheme.titleSmall,
+                      matchTitle(app, event),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
                     Text(
-                      [
-                        '${sportEmoji[event.sport.id]} ${app.t(_sportKey(event.sport))}',
-                        if (event.isCup) app.t('calendar.cup'),
-                        '$monthDayLabel ${event.time.isEmpty ? app.t('popover.tbd') : event.time}',
-                      ].join(' · '),
-                      style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      '$monthAbbrev ${event.day}, ${info.year}${hasTime ? ' • ${event.time}' : ''}',
+                      style: TextStyle(fontSize: 12, color: colors.mutedForeground),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (!event.isPlayed && eventDateTime(monthName, event).isAfter(DateTime.now())) ...[
-                      const SizedBox(height: 2),
-                      CountdownText(target: eventDateTime(monthName, event)),
+                    if (!event.isPlayed && target.isAfter(DateTime.now())) ...[
+                      const SizedBox(height: 4),
+                      CountdownText(target: target),
                     ],
                   ],
                 ),
               ),
               const SizedBox(width: 8),
-              if (event.isPlayed && event.score != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: resultColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    event.score!,
-                    style: TextStyle(fontWeight: FontWeight.bold, color: resultColor),
-                  ),
-                )
-              else
-                Icon(
-                  isHome ? Icons.home_outlined : Icons.directions_bus_outlined,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+              // Decorative chevron.
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: colors.surfaceTileRaised),
+                child: Icon(Icons.chevron_right, size: 18, color: theme.colorScheme.onSurface),
+              ),
             ],
           ),
         ),
       ),
     );
   }
-
-  String get monthDayLabel => '${event.day}';
 }
 
 String _sportKey(Sport sport) => switch (sport) {
@@ -118,9 +161,12 @@ String _sportKey(Sport sport) => switch (sport) {
 String sportLabelKey(Sport sport) => _sportKey(sport);
 
 /// `<Home team> vs <Away team>` ordered by the event location, matching the
-/// web CalendarListView/CardsView titles.
+/// web CalendarListView/CardsView titles. The own team goes through the
+/// translation table via its canonical uppercase key ('ΝΕΑ ΣΑΛΑΜΙΝΑ' — see
+/// greekToTeamKey) so English mode renders 'Nea Salamis'; unmapped names
+/// fall back to the Greek string.
 String matchTitle(AppState app, SportEvent event) {
-  final own = app.teamName(teamName);
+  final own = app.teamName('ΝΕΑ ΣΑΛΑΜΙΝΑ');
   final opponent = app.teamName(event.opponent);
   return event.location == MatchLocation.home ? '$own vs $opponent' : '$opponent vs $own';
 }
