@@ -6,7 +6,7 @@
 | **Basis** | Parity audit of 2026-07-10 (Flutter code vs `app/` mobile view vs [PRD](./PRD.md) §7 matrix) |
 | **Stack decision** | Flutter is the accepted stack for the native apps (supersedes the TRD's KMP recommendation — see TRD §2 addendum) |
 | **Design baseline** | The web app **mobile view** is the visual ground truth. Where this conflicts with PRD UX-1 ("native conventions first"), the web design wins. |
-| **Status** | Phase 1 in progress |
+| **Status** | Phases 1–5 delivered (iOS push pending Apple Developer membership); Phase 6 in progress; Phases 7–10 scheduled 2026-07-13 |
 
 Audit summary that drives this plan: of the PRD's 44 parity-matrix rows the Flutter app implemented 15, partially covered 7, and missed 22 — including 5 Must-priority rows (all notifications) — and its visual design was generic Material 3 rather than the web app's design language.
 
@@ -67,10 +67,57 @@ Audit summary that drives this plan: of the PRD's 44 parity-matrix rows the Flut
 
 ## Phase 6 — Tools & polish
 
-- Share match (native share sheet), add-to-calendar via native calendar APIs, Telegram deep link, short native first-run intro, GitHub link in About.
-- Optional / decide later: FotMob league table, analytics, the three alternate visual themes (PRD priority: Could).
+- Share match (native share sheet), add-to-calendar via native calendar APIs, short native first-run intro, GitHub link in About.
+- ~~Telegram deep link~~ — **dropped 2026-07-13 (stakeholder decision, resolves PRD §12 Q2):** native push supersedes Telegram inside the apps; the bot remains for non-app users via the web.
 
 **Exit criteria:** PRD Should-rows closed; store-launch prep (listings, screenshots, privacy labels) can begin as its own track.
+
+## Phase 7 — Visual themes *(stakeholder decision 2026-07-13: in scope, next after Phase 6)*
+
+**Goal:** the web's three alternate visual themes — brutalism, cinema, neon — selectable in Settings, alongside default.
+
+- Generalize `AppColors` from two palettes (light/dark) to theme-keyed sets (4 themes × 2 modes), token values ported exactly from `app/src/index.css`.
+- Bundle Space Grotesk, JetBrains Mono, Orbitron (OFL, like Barlow).
+- Structural widgets: Marquee ticker (brutalism), HudFrame corner brackets (neon), gradient background variant (cinema).
+- Settings "Visual Theme" picker persisted like the web's `visual_theme`; per-theme widget tests.
+
+**Exit criteria:** each theme matches its web mobile counterpart side-by-side; theme choice survives restart.
+
+## Phase 8 — FotMob live stats
+
+**Goal:** close the last big Stats-page parity gap — the web blocks powered by FotMob at runtime.
+
+- League Table, League Rankings, football Top Scorers, Next Match banner, fetched from FotMob like `app/src/lib/fotmob.ts` (same caching intent), through the app's existing HTTP layer.
+- Degrade gracefully exactly like the web (FR/UX-6): loading skeletons, unavailable-banner on failure, everything else still renders.
+
+**Exit criteria:** football tab shows live standings/scorers when online; airplane mode shows the local-computed stats untouched.
+
+## Phase 9 — Home-screen widget (PRD N-2, Should)
+
+**Goal:** next-match/countdown widget on both platforms — the highest-value native extra.
+
+- Android Glance widget + iOS WidgetKit extension reading the cached events snapshot; deep-links into the app.
+- Ship after Phase 5 PR 2 (iOS push) unblocks, so the iOS work lands in one Xcode pass.
+
+**Exit criteria:** widget shows the next fixture with countdown on both platforms and survives data refresh.
+
+## Phase 10 — Small parity gaps (one batch PR)
+
+- Opponent Scout section in the event sheet (web popover tab: opponent form + head-to-head).
+- Global sports filter in Settings (persistent football/volleyball toggles filtering calendar, stats, squad — web `sport_filters` parity).
+- Notification preview in Settings (sample notifications, web SET-10).
+- Volleyball streaks card (logic already computed, never rendered).
+- Goal distribution chart (last missing stats visualization).
+- Calendar-feed subscription (webcal link / add-all-upcoming — complements Phase 6's single-match add).
+
+**Exit criteria:** the PRD §7 matrix has no remaining unimplemented Must/Should rows besides externally-blocked items.
+
+## Unscheduled / post-launch
+
+- **iOS push (Phase 5 PR 2)** — externally blocked: Apple Developer membership + APNs `.p8` upload to Firebase; config + physical-device test once cleared.
+- Analytics (X-4, Could — carries store privacy-label implications; decide before store submission).
+- iOS Live Activities, app shortcuts, standings widget (PRD N-3/N-5/N-6, Could).
+- Intentionally not applicable on mobile: print calendar, PWA install, keyboard shortcuts.
 
 ---
 

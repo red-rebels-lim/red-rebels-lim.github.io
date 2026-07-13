@@ -1,3 +1,4 @@
+import 'package:add_2_calendar/add_2_calendar.dart' as a2c;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,6 +11,11 @@ import '../theme.dart';
 import 'countdown_text.dart';
 import 'event_card.dart' show matchTitle, sportLabelKey;
 import 'team_logo.dart';
+
+/// Bridge to the add_2_calendar platform channel — injectable so widget
+/// tests can assert the tap without a real plugin behind it.
+@visibleForTesting
+Future<bool> Function(a2c.Event event) addEventToDeviceCalendar = a2c.Add2Calendar.addEvent2Cal;
 
 void showEventDetailsSheet(BuildContext context, SportEvent event, String monthName) {
   showModalBottomSheet<void>(
@@ -287,8 +293,53 @@ class _EventDetails extends StatelessWidget {
             style: condensed(size: 14, color: Colors.white, letterSpacing: 1.5),
           ),
         ),
+
+        // ── Add to calendar (upcoming with a confirmed kickoff time only) ──
+        if (!event.isPlayed && hasTime) ...[
+          const SizedBox(height: 10),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              foregroundColor: brandRed,
+              side: const BorderSide(color: brandRed),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: const StadiumBorder(),
+            ),
+            onPressed: () => _addToCalendar(context, app),
+            child: Text(
+              '📅 ${app.t('settings.exportCalendar')}'.toUpperCase(),
+              style: condensed(size: 14, color: brandRed, letterSpacing: 1.5),
+            ),
+          ),
+        ],
       ],
     );
+  }
+
+  /// Hands the match to the device calendar (SET-6/FR-CAL-ADD). Only called
+  /// for upcoming events with a confirmed time — TBD events hide the button.
+  Future<void> _addToCalendar(BuildContext context, AppState app) async {
+    final start = eventDateTime(monthName, event);
+    final calEvent = a2c.Event(
+      title: matchTitle(app, event),
+      startDate: start,
+      endDate: start.add(const Duration(hours: 2)),
+      location: event.venue != null ? app.venueName(event.venue!) : null,
+      description: '${app.t(sportLabelKey(event.sport))} · '
+          '${event.isCup ? app.t('calendar.cup') : app.t('popover.competition')}',
+    );
+    try {
+      final ok = await addEventToDeviceCalendar(calEvent);
+      if (!ok && context.mounted) _showCalendarError(context, app);
+    } catch (_) {
+      if (context.mounted) _showCalendarError(context, app);
+    }
+  }
+
+  /// Same bottom-snackbar error pattern as the settings page.
+  static void _showCalendarError(BuildContext context, AppState app) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(app.t('error.title'))));
   }
 
   /// Tab list built exactly like the web EventPopover (lines 354-367).

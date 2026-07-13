@@ -56,6 +56,10 @@ class AppState extends ChangeNotifier {
     return const NotifPrefs();
   }
 
+  /// Local storage flag: first-run intro already shown (versioned so a
+  /// future redesign of the intro can re-trigger it).
+  static const introSeenKey = 'intro_seen_v1';
+
   /// Calendar view modes, in header-switcher cycle order.
   static const calendarViews = ['grid', 'list', 'cards'];
 
@@ -233,6 +237,11 @@ class AppState extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  /// True once the first-run intro has been dismissed (skip or finish).
+  bool get introSeen => _prefs.getBool(introSeenKey) ?? false;
+
+  Future<void> markIntroSeen() => _prefs.setBool(introSeenKey, true);
 
   /// Shorthand translation with the current language.
   String t(String key, [String? fallback]) => i18n.t(_language, key, fallback);

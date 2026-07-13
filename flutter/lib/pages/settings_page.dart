@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../logic/push_registration.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
+
+/// Public repository, linked from the About section (SET-11).
+const githubRepoUrl = 'https://github.com/red-rebels-lim/red-rebels-lim.github.io';
+
+/// Bridge to url_launcher — injectable so widget tests can assert launches
+/// without a real plugin behind them.
+@visibleForTesting
+Future<bool> Function(Uri url) openExternalUrl =
+    (url) => launchUrl(url, mode: LaunchMode.externalApplication);
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -62,6 +72,26 @@ class SettingsPage extends StatelessWidget {
             trailing: FutureBuilder<PackageInfo>(
               future: PackageInfo.fromPlatform(),
               builder: (context, snapshot) => Text(snapshot.data?.version ?? ''),
+            ),
+          ),
+          // Own transparent Material: the tappable tile's ink must not paint on
+          // the panel's decorated background (framework assertion).
+          Material(
+            type: MaterialType.transparency,
+            child: ListTile(
+              leading: const Icon(Icons.code),
+              title: Text(
+                app.t('settings.viewOnGithub'),
+                style: const TextStyle(color: accentRed, fontWeight: FontWeight.w500),
+              ),
+              trailing: Icon(Icons.open_in_new, size: 16, color: colors.mutedForeground),
+              onTap: () async {
+                try {
+                  await openExternalUrl(Uri.parse(githubRepoUrl));
+                } catch (_) {
+                  // Best-effort: no browser available is not worth an error UI.
+                }
+              },
             ),
           ),
           Padding(
@@ -156,12 +186,16 @@ class _NotificationsSection extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2, color: accentRed),
                 )
               : Switch(
+                  key: const Key('push-channel-switch'),
                   value: app.pushRegistered,
                   onChanged: app.pushAvailable
                       ? (on) => _togglePush(context, app, on)
                       : null,
                 ),
         ),
+        // Telegram deliberately has no channel row here: native push supersedes
+        // it in the apps (stakeholder decision, PRD §12 Q2 — the bot remains
+        // for non-app users via the web settings page).
         // ── Shared preferences (visible while registered, web parity) ──
         if (app.pushRegistered) ...[
           _SubLabel(app.t('settings.reminderTimes')),
