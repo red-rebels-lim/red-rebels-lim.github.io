@@ -1,3 +1,5 @@
+import 'dart:ui' show FontVariation, lerpDouble;
+
 import 'package:flutter/material.dart';
 
 import 'models/events.dart';
@@ -12,6 +14,9 @@ const accentRed = Color(0xFFDC2828);
 const winGreen = Color(0xFF4CAF50);
 const drawAmber = Color(0xFFFFC107);
 const lossRed = Color(0xFFF44336);
+
+/// Visual themes, in web picker order (`useVisualTheme.ts`).
+const visualThemes = ['default', 'brutalism', 'cinema', 'neon'];
 
 /// Sport accents (web chart tokens).
 Color sportColor(Sport sport) => switch (sport) {
@@ -28,9 +33,15 @@ Color formColor(String result) => switch (result) {
       _ => const Color(0xFF999999),
     };
 
-/// Per-brightness palette mirroring `:root` / `.dark` in index.css.
-class AppColors {
+/// Per-theme, per-brightness palette mirroring the token blocks in
+/// index.css (`:root`/`.dark` for default; `.theme-brutalism`,
+/// `.theme-cinema`, `.theme-neon` with their `.light` variants).
+///
+/// Registered as a [ThemeExtension] on [ThemeData] by [buildTheme], so
+/// widgets resolve the active visual theme via [AppColors.of].
+class AppColors extends ThemeExtension<AppColors> {
   const AppColors({
+    required this.themeId,
     required this.background,
     required this.foreground,
     required this.card,
@@ -42,7 +53,21 @@ class AppColors {
     required this.navBackground,
     required this.navBorder,
     required this.navInactive,
+    this.surfaceTile = const Color(0xFF1E293B),
+    this.surfaceTileRaised = const Color(0xFF334155),
+    this.primary = brandRed,
+    this.neonCyan,
+    this.panelRadius = 16,
+    this.cardRadius = 12,
+    this.headingFontFamily = 'BarlowCondensed',
+    this.bodyFontFamily = 'Barlow',
+    this.headingTrackingDelta = 0,
+    this.headingGlow = false,
   });
+
+  /// 'default' | 'brutalism' | 'cinema' | 'neon' — which token block this
+  /// palette was ported from (lets structural widgets branch on the theme).
+  final String themeId;
 
   final Color background;
   final Color foreground;
@@ -52,13 +77,54 @@ class AppColors {
   final Color border;
   final Color primaryBorderSubtle;
 
-  /// Translucent panel behind the calendar/stats content (web `bg-white/70`).
+  /// Translucent panel behind the calendar/stats content (web `bg-white/70`
+  /// for default; the theme's `--surface-overlay` for the alternates).
   final Color surfacePanel;
   final Color navBackground;
   final Color navBorder;
   final Color navInactive;
 
+  /// Web mobile calendar tiles — month-nav buttons and UpcomingEventCard
+  /// background (Tailwind `bg-slate-100 dark:bg-[#1e293b]`). These are
+  /// literal utility classes on the web, so they do not vary per visual
+  /// theme — only per brightness. Defaults are the dark values; light
+  /// palettes override.
+  final Color surfaceTile;
+
+  /// Raised chip on a tile — the card chevron circle (web
+  /// `bg-slate-200 dark:bg-slate-700`).
+  final Color surfaceTileRaised;
+
+  /// Web `--primary` — brand red everywhere except neon dark (`#FF2D20`).
+  final Color primary;
+
+  /// Web `--neon-cyan` — set only by the neon theme (HUD brackets, nav glow).
+  final Color? neonCyan;
+
+  /// Corner radius of the frosted page panels (web `--radius`-driven:
+  /// brutalism/neon 0, cinema larger).
+  final double panelRadius;
+
+  /// Corner radius for cards and inner tiles.
+  final double cardRadius;
+
+  /// Heading font (web `--font-heading`); null = platform default.
+  final String? headingFontFamily;
+
+  /// Body font (web `--font-body`); null = platform default.
+  final String? bodyFontFamily;
+
+  /// Extra letter-spacing added to condensed headings (brutalism's wide
+  /// uppercase tracking, CSS `letter-spacing: 3px`).
+  final double headingTrackingDelta;
+
+  /// Neon `text-shadow: 0 0 8px currentColor` on condensed headings.
+  final bool headingGlow;
+
+  // ── Default theme (`:root` / `.dark`) ──────────────────────────────────
+
   static const light = AppColors(
+    themeId: 'default',
     background: Color(0xFFF8FAFC),
     foreground: Color(0xFF1E293B),
     card: Color(0xFFFFFFFF),
@@ -70,9 +136,12 @@ class AppColors {
     navBackground: Color(0xFFF1F5F9),
     navBorder: Color(0xFFE2E8F0),
     navInactive: Color(0xFF94A3B8),
+    surfaceTile: Color(0xFFF1F5F9),
+    surfaceTileRaised: Color(0xFFE2E8F0),
   );
 
   static const dark = AppColors(
+    themeId: 'default',
     background: Color(0xFF0A1810),
     foreground: Color(0xFFF8FAFC),
     card: Color(0xFF1A0F0F),
@@ -80,18 +149,259 @@ class AppColors {
     mutedForeground: Color(0xFF94A3B8),
     border: Color(0x4DE02520),
     primaryBorderSubtle: Color(0x33E02520),
-    surfacePanel: Color(0x141E293B),
+    // Web dark renders the calendar with no panel box at all
+    // (`bg-white/70 dark:bg-transparent`).
+    surfacePanel: Color(0x00000000),
     navBackground: Color(0xCC1E293B),
     navBorder: Color(0x14FFFFFF),
     navInactive: Color(0xFF94A3B8),
   );
 
+  // ── Brutalism (`.theme-brutalism`) ──────────────────────────────────────
+
+  static const brutalismLight = AppColors(
+    themeId: 'brutalism',
+    background: Color(0xFFF8FAFC),
+    foreground: Color(0xFF1E293B),
+    card: Color(0xFFFFFFFF),
+    muted: Color(0xFFE2E8F0),
+    mutedForeground: Color(0xFF64748B),
+    border: Color(0xFFCBD5E1),
+    primaryBorderSubtle: Color(0xFFE2E8F0),
+    surfacePanel: Color(0xCCF8FAFC),
+    navBackground: Color(0xFFF8FAFC),
+    navBorder: brandRed, // CSS: nav border-top 2px solid var(--primary)
+    navInactive: Color(0xFF64748B),
+    surfaceTile: Color(0xFFF1F5F9),
+    surfaceTileRaised: Color(0xFFE2E8F0),
+    panelRadius: 0,
+    cardRadius: 0,
+    headingFontFamily: 'SpaceGrotesk',
+    bodyFontFamily: 'SpaceGrotesk',
+    headingTrackingDelta: 1.5,
+  );
+
+  static const brutalismDark = AppColors(
+    themeId: 'brutalism',
+    background: Color(0xFF09090B),
+    foreground: Color(0xFFFAFAFA),
+    card: Color(0xFF09090B),
+    muted: Color(0xFF27272A),
+    mutedForeground: Color(0xFFA1A1AA),
+    border: Color(0xFF3F3F46),
+    primaryBorderSubtle: Color(0xFF3F3F46),
+    surfacePanel: Color(0xCC09090B),
+    navBackground: Color(0xFF09090B),
+    navBorder: brandRed,
+    navInactive: Color(0xFFA1A1AA),
+    panelRadius: 0,
+    cardRadius: 0,
+    headingFontFamily: 'SpaceGrotesk',
+    bodyFontFamily: 'SpaceGrotesk',
+    headingTrackingDelta: 1.5,
+  );
+
+  // ── Cinema (`.theme-cinema`) ────────────────────────────────────────────
+  // The web specifies Inter for body+headings; Inter is not bundled, so the
+  // platform default (Roboto / SF) stands in — the closest neutral grotesque.
+
+  static const cinemaLight = AppColors(
+    themeId: 'cinema',
+    background: Color(0xFFF8FAFC),
+    foreground: Color(0xFF1E293B),
+    card: Color(0xFFFFFFFF),
+    muted: Color(0xFFF1F5F9),
+    mutedForeground: Color(0xFF64748B),
+    border: Color(0x14000000),
+    primaryBorderSubtle: Color(0x0F000000),
+    surfacePanel: Color(0x99F8FAFC),
+    navBackground: Color(0xD9F8FAFC),
+    navBorder: Color(0x14000000),
+    navInactive: Color(0xFF64748B),
+    surfaceTile: Color(0xFFF1F5F9),
+    surfaceTileRaised: Color(0xFFE2E8F0),
+    panelRadius: 24,
+    cardRadius: 16,
+    headingFontFamily: null,
+    bodyFontFamily: null,
+  );
+
+  static const cinemaDark = AppColors(
+    themeId: 'cinema',
+    background: Color(0xFF020203),
+    foreground: Color(0xFFEDEDEF),
+    card: Color(0xFF0A0A0C),
+    muted: Color(0xFF18181B),
+    mutedForeground: Color(0xFF8A8F98),
+    border: Color(0x14FFFFFF),
+    primaryBorderSubtle: Color(0x14FFFFFF),
+    surfacePanel: Color(0x99020203),
+    navBackground: Color(0xBF020203),
+    navBorder: Color(0x14FFFFFF),
+    navInactive: Color(0xFF8A8F98),
+    panelRadius: 24,
+    cardRadius: 16,
+    headingFontFamily: null,
+    bodyFontFamily: null,
+  );
+
+  // ── Neon HUD (`.theme-neon`) ────────────────────────────────────────────
+
+  static const neonLight = AppColors(
+    themeId: 'neon',
+    background: Color(0xFFF0F4F8),
+    foreground: Color(0xFF1A202C),
+    card: Color(0xFFFFFFFF),
+    muted: Color(0xFFE2E8F0),
+    mutedForeground: Color(0xFF718096),
+    border: Color(0x330891B2),
+    primaryBorderSubtle: Color(0x1A0891B2),
+    surfacePanel: Color(0xCCF0F4F8),
+    navBackground: Color(0xEBF0F4F8),
+    navBorder: Color(0x330891B2),
+    navInactive: Color(0xFF718096),
+    surfaceTile: Color(0xFFF1F5F9),
+    surfaceTileRaised: Color(0xFFE2E8F0),
+    primary: brandRed,
+    neonCyan: Color(0xFF0891B2),
+    panelRadius: 0,
+    cardRadius: 0,
+    headingFontFamily: 'Orbitron',
+    bodyFontFamily: 'JetBrainsMono',
+  );
+
+  static const neonDark = AppColors(
+    themeId: 'neon',
+    background: Color(0xFF0A0A0F),
+    foreground: Color(0xFFE4E4E7),
+    card: Color(0xFF12121A),
+    muted: Color(0xFF1E1E2A),
+    mutedForeground: Color(0xFF71717A),
+    border: Color(0x2600FFFF),
+    primaryBorderSubtle: Color(0x1A00FFFF),
+    surfacePanel: Color(0xCC0A0A0F),
+    navBackground: Color(0xE60A0A0F),
+    navBorder: Color(0x2600FFFF),
+    navInactive: Color(0xFF71717A),
+    primary: Color(0xFFFF2D20),
+    neonCyan: Color(0xFF00FFFF),
+    panelRadius: 0,
+    cardRadius: 0,
+    headingFontFamily: 'Orbitron',
+    bodyFontFamily: 'JetBrainsMono',
+    headingGlow: true,
+  );
+
+  /// Palette for a visual theme + brightness. Unknown ids fall back to the
+  /// default theme (mirrors `useVisualTheme`'s validation).
+  static AppColors resolve(String visualTheme, Brightness brightness) {
+    final dark = brightness == Brightness.dark;
+    return switch (visualTheme) {
+      'brutalism' => dark ? brutalismDark : brutalismLight,
+      'cinema' => dark ? cinemaDark : cinemaLight,
+      'neon' => dark ? neonDark : neonLight,
+      _ => dark ? AppColors.dark : AppColors.light,
+    };
+  }
+
   static AppColors of(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? dark : light;
+      Theme.of(context).extension<AppColors>()!;
+
+  @override
+  AppColors copyWith({
+    String? themeId,
+    Color? background,
+    Color? foreground,
+    Color? card,
+    Color? muted,
+    Color? mutedForeground,
+    Color? border,
+    Color? primaryBorderSubtle,
+    Color? surfacePanel,
+    Color? navBackground,
+    Color? navBorder,
+    Color? navInactive,
+    Color? surfaceTile,
+    Color? surfaceTileRaised,
+    Color? primary,
+    Color? neonCyan,
+    double? panelRadius,
+    double? cardRadius,
+    String? headingFontFamily,
+    String? bodyFontFamily,
+    double? headingTrackingDelta,
+    bool? headingGlow,
+  }) =>
+      AppColors(
+        themeId: themeId ?? this.themeId,
+        background: background ?? this.background,
+        foreground: foreground ?? this.foreground,
+        card: card ?? this.card,
+        muted: muted ?? this.muted,
+        mutedForeground: mutedForeground ?? this.mutedForeground,
+        border: border ?? this.border,
+        primaryBorderSubtle: primaryBorderSubtle ?? this.primaryBorderSubtle,
+        surfacePanel: surfacePanel ?? this.surfacePanel,
+        navBackground: navBackground ?? this.navBackground,
+        navBorder: navBorder ?? this.navBorder,
+        navInactive: navInactive ?? this.navInactive,
+        surfaceTile: surfaceTile ?? this.surfaceTile,
+        surfaceTileRaised: surfaceTileRaised ?? this.surfaceTileRaised,
+        primary: primary ?? this.primary,
+        neonCyan: neonCyan ?? this.neonCyan,
+        panelRadius: panelRadius ?? this.panelRadius,
+        cardRadius: cardRadius ?? this.cardRadius,
+        headingFontFamily: headingFontFamily ?? this.headingFontFamily,
+        bodyFontFamily: bodyFontFamily ?? this.bodyFontFamily,
+        headingTrackingDelta: headingTrackingDelta ?? this.headingTrackingDelta,
+        headingGlow: headingGlow ?? this.headingGlow,
+      );
+
+  @override
+  AppColors lerp(ThemeExtension<AppColors>? other, double t) {
+    if (other is! AppColors) return this;
+    // Discrete tokens (theme id, fonts, flags) snap at the midpoint.
+    final snap = t < 0.5 ? this : other;
+    return AppColors(
+      themeId: snap.themeId,
+      background: Color.lerp(background, other.background, t)!,
+      foreground: Color.lerp(foreground, other.foreground, t)!,
+      card: Color.lerp(card, other.card, t)!,
+      muted: Color.lerp(muted, other.muted, t)!,
+      mutedForeground: Color.lerp(mutedForeground, other.mutedForeground, t)!,
+      border: Color.lerp(border, other.border, t)!,
+      primaryBorderSubtle: Color.lerp(primaryBorderSubtle, other.primaryBorderSubtle, t)!,
+      surfacePanel: Color.lerp(surfacePanel, other.surfacePanel, t)!,
+      navBackground: Color.lerp(navBackground, other.navBackground, t)!,
+      navBorder: Color.lerp(navBorder, other.navBorder, t)!,
+      navInactive: Color.lerp(navInactive, other.navInactive, t)!,
+      surfaceTile: Color.lerp(surfaceTile, other.surfaceTile, t)!,
+      surfaceTileRaised: Color.lerp(surfaceTileRaised, other.surfaceTileRaised, t)!,
+      primary: Color.lerp(primary, other.primary, t)!,
+      neonCyan: Color.lerp(neonCyan, other.neonCyan, t),
+      panelRadius: lerpDouble(panelRadius, other.panelRadius, t)!,
+      cardRadius: lerpDouble(cardRadius, other.cardRadius, t)!,
+      headingFontFamily: snap.headingFontFamily,
+      bodyFontFamily: snap.bodyFontFamily,
+      headingTrackingDelta:
+          lerpDouble(headingTrackingDelta, other.headingTrackingDelta, t)!,
+      headingGlow: snap.headingGlow,
+    );
+  }
 }
 
-/// Barlow Condensed style for headings, nav labels and section titles
-/// (web `font-condensed` — always paired with uppercase text).
+// The active heading tokens, captured by [buildTheme] so [condensed] stays a
+// context-free helper (its many call sites pass no BuildContext). Only one
+// visual theme is ever active per app, and heading typography does not vary
+// with brightness, so a module-level snapshot is safe.
+String? _headingFontFamily = 'BarlowCondensed';
+double _headingTrackingDelta = 0;
+bool _headingGlow = false;
+
+/// Heading style for nav labels and section titles (web `font-condensed` —
+/// always paired with uppercase text). The font family follows the active
+/// visual theme's `--font-heading`: Barlow Condensed (default), Space
+/// Grotesk (brutalism), platform default (cinema), Orbitron (neon).
 TextStyle condensed({
   double size = 14,
   FontWeight weight = FontWeight.w700,
@@ -99,18 +409,34 @@ TextStyle condensed({
   double letterSpacing = 1.0,
 }) =>
     TextStyle(
-      fontFamily: 'BarlowCondensed',
+      fontFamily: _headingFontFamily,
+      // None of the heading fonts (Barlow Condensed, Space Grotesk, Orbitron)
+      // cover Greek. Without an in-app fallback, Flutter falls through to the
+      // platform font, which on some devices renders a lunate Σ ("C") and
+      // drops tonos accents. Roboto Condensed carries full Greek and keeps
+      // the narrow proportions the design leans on.
+      fontFamilyFallback: const ['RobotoCondensed'],
+      // The alternate heading fonts ship as variable TTFs; pin the weight
+      // axis so bold headings render properly (static fonts ignore this).
+      fontVariations: [FontVariation.weight(weight.value.toDouble())],
       fontSize: size,
       fontWeight: weight,
       color: color,
-      letterSpacing: letterSpacing,
+      letterSpacing: letterSpacing + _headingTrackingDelta,
+      // Neon: text-shadow 0 0 8px currentColor on condensed headings.
+      shadows: _headingGlow && color != null
+          ? [Shadow(color: color.withValues(alpha: 0.8), blurRadius: 8)]
+          : null,
     );
 
-ThemeData buildTheme(Brightness brightness) {
-  final c = brightness == Brightness.dark ? AppColors.dark : AppColors.light;
+ThemeData buildTheme(String visualTheme, Brightness brightness) {
+  final c = AppColors.resolve(visualTheme, brightness);
+  _headingFontFamily = c.headingFontFamily;
+  _headingTrackingDelta = c.headingTrackingDelta;
+  _headingGlow = c.headingGlow;
   final scheme = ColorScheme(
     brightness: brightness,
-    primary: brandRed,
+    primary: c.primary,
     onPrimary: Colors.white,
     secondary: c.muted,
     onSecondary: c.foreground,
@@ -124,16 +450,29 @@ ThemeData buildTheme(Brightness brightness) {
     outline: c.border,
     onSurfaceVariant: c.mutedForeground,
   );
+  // Body fonts (Barlow, Space Grotesk) lack Greek; Inter covers it and is
+  // exactly the web's fallback in its `'Barlow', 'Inter', sans-serif` stack.
+  // Wired through textTheme because ThemeData(fontFamily:) has no fallback
+  // parameter. JetBrains Mono (neon body) has native Greek — the fallback is
+  // simply never consulted there.
+  const bodyFallback = ['Inter'];
+  final baseText = ThemeData(brightness: brightness, useMaterial3: true)
+      .textTheme
+      .apply(fontFamily: c.bodyFontFamily, fontFamilyFallback: bodyFallback);
   return ThemeData(
     colorScheme: scheme,
     useMaterial3: true,
-    fontFamily: 'Barlow',
-    // The stadium photo (AppBackground) sits behind every page.
+    fontFamily: c.bodyFontFamily,
+    textTheme: baseText,
+    extensions: [c],
+    // AppBackground (photo / gradient / solid) sits behind every page.
     scaffoldBackgroundColor: Colors.transparent,
     cardTheme: CardThemeData(
       elevation: 0,
       color: c.card,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(c.cardRadius)),
+      ),
       margin: EdgeInsets.zero,
     ),
     bottomSheetTheme: BottomSheetThemeData(backgroundColor: c.card),

@@ -211,7 +211,7 @@ void main() {
     Widget wrap(AppState app) => ChangeNotifierProvider.value(
           value: app,
           child: MaterialApp(
-            theme: buildTheme(Brightness.light),
+            theme: buildTheme('default', Brightness.light),
             home: const Scaffold(body: SettingsPage()),
           ),
         );

@@ -16,6 +16,14 @@ const githubRepoUrl = 'https://github.com/red-rebels-lim/red-rebels-lim.github.i
 Future<bool> Function(Uri url) openExternalUrl =
     (url) => launchUrl(url, mode: LaunchMode.externalApplication);
 
+/// Picker option labels (web `themeLabels` — settings.theme* i18n keys).
+String _themeLabel(AppState app, String theme) => switch (theme) {
+      'brutalism' => app.t('settings.themeBrutalism', 'Brutalism'),
+      'cinema' => app.t('settings.themeCinema', 'Cinema'),
+      'neon' => app.t('settings.themeNeon', 'Neon HUD'),
+      _ => app.t('settings.themeDefault', 'Default'),
+    };
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -29,7 +37,7 @@ class SettingsPage extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
       decoration: BoxDecoration(
         color: colors.surfacePanel,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(colors.panelRadius),
       ),
       clipBehavior: Clip.antiAlias,
       child: ListView(
@@ -37,6 +45,26 @@ class SettingsPage extends StatelessWidget {
         children: [
           _SectionHeader(app.t('settings.notifications')),
           const _NotificationsSection(),
+          const Divider(),
+          // Web section order: notifications, visual theme, display.
+          _SectionHeader(app.t('settings.visualTheme')),
+          ListTile(
+            leading: const Icon(Icons.palette_outlined),
+            title: Text(app.t('settings.visualTheme')),
+            trailing: DropdownButton<String>(
+              key: const Key('visual-theme-select'),
+              value: app.visualTheme,
+              underline: const SizedBox.shrink(),
+              borderRadius: BorderRadius.circular(colors.cardRadius),
+              items: [
+                for (final theme in visualThemes)
+                  DropdownMenuItem(value: theme, child: Text(_themeLabel(app, theme))),
+              ],
+              onChanged: (theme) {
+                if (theme != null) app.setVisualTheme(theme);
+              },
+            ),
+          ),
           const Divider(),
           _SectionHeader(app.t('settings.display')),
           ListTile(

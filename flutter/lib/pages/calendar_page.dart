@@ -77,7 +77,7 @@ class _CalendarPageState extends State<CalendarPage> {
             margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
             decoration: BoxDecoration(
               color: colors.surfacePanel,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(colors.panelRadius),
             ),
             clipBehavior: Clip.antiAlias,
             child: Column(
@@ -144,13 +144,13 @@ class _MonthHeader extends StatelessWidget {
     final app = context.watch<AppState>();
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          IconButton(
-            onPressed: onPrevious,
-            icon: const Icon(Icons.chevron_left),
+          _MonthNavButton(
+            icon: Icons.chevron_left,
             tooltip: app.t('monthNav.previous'),
+            onTap: onPrevious,
           ),
           Expanded(
             child: Text(
@@ -159,12 +159,51 @@ class _MonthHeader extends StatelessWidget {
               style: condensed(size: 18, color: theme.colorScheme.onSurface, letterSpacing: 1.5),
             ),
           ),
-          IconButton(
-            onPressed: onNext,
-            icon: const Icon(Icons.chevron_right),
+          _MonthNavButton(
+            icon: Icons.chevron_right,
             tooltip: app.t('monthNav.next'),
+            onTap: onNext,
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Standalone rounded-square month-nav button, matching the web's
+/// `p-2 rounded-lg bg-slate-100 dark:bg-[#1e293b]` chevron buttons.
+class _MonthNavButton extends StatelessWidget {
+  const _MonthNavButton({required this.icon, required this.tooltip, this.onTap});
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = AppColors.of(context);
+    final radius = BorderRadius.circular(10);
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: colors.surfaceTile,
+        borderRadius: radius,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: radius,
+          child: SizedBox(
+            width: 40,
+            height: 40,
+            child: Icon(
+              icon,
+              size: 20,
+              color: onTap == null
+                  ? theme.colorScheme.onSurface.withValues(alpha: 0.3)
+                  : theme.colorScheme.onSurface,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -221,48 +260,42 @@ class _MonthView extends StatelessWidget {
 
     final dayEvents = selectedDay == null ? const <SportEvent>[] : events.where((e) => e.day == selectedDay).toList();
 
+    // Web parity: nothing renders below the grid until a day is selected
+    // (UpcomingEventsList returns null when no day/events are selected).
     return LayoutBuilder(
       builder: (context, constraints) => Column(
-      children: [
-        _MonthGrid(
-          monthName: monthName,
-          events: events,
-          selectedDay: selectedDay,
-          onDaySelected: onDaySelected,
-          maxHeight: constraints.maxHeight * 0.6,
-        ),
-        const Divider(height: 1),
-        Expanded(
-          child: dayEvents.isEmpty
-              ? (events.isEmpty
-                  ? _EmptyMonth(message: app.t('calendar.noEvents'))
-                  : ListView.separated(
-                      padding: const EdgeInsets.all(12),
-                      itemCount: events.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 8),
-                      itemBuilder: (_, i) => EventCard(event: events[i], monthName: monthName),
-                    ))
-              : Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: _SelectedDayChip(label: app.t('calendar.selectedDay')),
+        children: [
+          _MonthGrid(
+            monthName: monthName,
+            events: events,
+            selectedDay: selectedDay,
+            onDaySelected: onDaySelected,
+            maxHeight: constraints.maxHeight * 0.6,
+          ),
+          Expanded(
+            child: dayEvents.isEmpty
+                ? const SizedBox.shrink()
+                : Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: _SelectedDayChip(label: app.t('calendar.selectedDay')),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.all(12),
-                        itemCount: dayEvents.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 8),
-                        itemBuilder: (_, i) => EventCard(event: dayEvents[i], monthName: monthName),
+                      Expanded(
+                        child: ListView.separated(
+                          padding: const EdgeInsets.all(12),
+                          itemCount: dayEvents.length,
+                          separatorBuilder: (_, _) => const SizedBox(height: 8),
+                          itemBuilder: (_, i) => EventCard(event: dayEvents[i], monthName: monthName),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-        ),
-      ],
+                    ],
+                  ),
+          ),
+        ],
       ),
     );
   }
@@ -332,20 +365,28 @@ class _MonthGrid extends StatelessWidget {
         ),
       ));
     }
+    // Adjacent-month days render dimmed and non-interactive (web shows
+    // leading and trailing overflow numbers at ~35% opacity).
+    final prevMonthDays = DateTime(info.year, info.month, 0).day;
     for (var i = 0; i < info.startDay; i++) {
-      cells.add(const SizedBox.shrink());
+      cells.add(_OverflowDayCell(day: prevMonthDays - info.startDay + 1 + i));
     }
     for (var day = 1; day <= info.daysInMonth; day++) {
       final dayEvents = eventsByDay[day] ?? const <SportEvent>[];
       final isToday = isCurrentMonth && day == now.day;
       final isSelected = day == selectedDay;
       cells.add(_DayCell(
+        key: ValueKey('day-cell-$day'),
         day: day,
         events: dayEvents,
         isToday: isToday,
         isSelected: isSelected,
         onTap: dayEvents.isEmpty ? null : () => onDaySelected(day),
       ));
+    }
+    final trailing = (7 - (info.startDay + info.daysInMonth) % 7) % 7;
+    for (var day = 1; day <= trailing; day++) {
+      cells.add(_OverflowDayCell(day: day));
     }
 
     // Size cells to their natural 1.1 aspect ratio, but never let the grid
@@ -374,6 +415,7 @@ class _MonthGrid extends StatelessWidget {
 
 class _DayCell extends StatelessWidget {
   const _DayCell({
+    super.key,
     required this.day,
     required this.events,
     required this.isToday,
@@ -390,6 +432,9 @@ class _DayCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // Web parity: event days carry no decoration of their own — only the
+    // sport dots mark them. Selected day gets the red fill; today (when not
+    // selected) gets a 2px red ring.
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
@@ -397,12 +442,10 @@ class _DayCell extends StatelessWidget {
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: isSelected
-              ? brandRed.withValues(alpha: 0.15)
-              : events.isNotEmpty
-                  ? theme.colorScheme.surfaceContainerHigh
-                  : null,
-          border: isToday ? Border.all(color: brandRed, width: 2) : null,
+          color: isSelected ? brandRed.withValues(alpha: 0.2) : null,
+          border: isToday && !isSelected
+              ? Border.all(color: brandRed.withValues(alpha: 0.5), width: 2)
+              : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -410,8 +453,8 @@ class _DayCell extends StatelessWidget {
             Text(
               '$day',
               style: theme.textTheme.bodySmall?.copyWith(
-                fontWeight: isToday || events.isNotEmpty ? FontWeight.bold : null,
-                color: isToday ? brandRed : null,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                color: isSelected || isToday ? brandRed : theme.colorScheme.onSurface,
               ),
             ),
             if (events.isNotEmpty)
@@ -434,16 +477,22 @@ class _DayCell extends StatelessWidget {
   }
 }
 
-class _EmptyMonth extends StatelessWidget {
-  const _EmptyMonth({required this.message});
+/// Dimmed, non-interactive number for a leading/trailing adjacent-month day.
+class _OverflowDayCell extends StatelessWidget {
+  const _OverflowDayCell({required this.day});
 
-  final String message;
+  final int day;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Center(
-      child: Text(message, style: theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+      child: Text(
+        '$day',
+        style: theme.textTheme.bodySmall?.copyWith(
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
+        ),
+      ),
     );
   }
 }

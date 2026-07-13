@@ -300,7 +300,7 @@ void main() {
         ChangeNotifierProvider.value(
           value: app,
           child: MaterialApp(
-            theme: buildTheme(Brightness.light),
+            theme: buildTheme('default', Brightness.light),
             home: const Scaffold(body: CalendarPage()),
           ),
         ),
