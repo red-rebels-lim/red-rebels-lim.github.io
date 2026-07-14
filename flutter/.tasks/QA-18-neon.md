@@ -2,7 +2,7 @@
 
 **Status:** todo
 **Batch:** themes (`fix/qa-themes`)
-**Register rows:** THM-05 (P2), THM-06 (P3)
+**Register rows:** THM-05 (P2), THM-06 (P3), THM-07 (P3 — decided 2026-07-14: animate)
 **Depends on:** -
 **Estimated scope:** Medium
 
@@ -19,6 +19,12 @@ Captures `29-calendar-neon-*`, `28-settings-neon-*`:
    - Day numerals: web uses the default sans for day numbers (Orbitron only for the month
      title + weekday row); the app applies a techno/mono face to the numbers too.
    - Today cell: web = filled pink square; app = red outlined rounded square.
+
+3. **THM-07 scanlines — decided 2026-07-14: ANIMATE.** The app's scanline overlay is
+   static; the web's has an animated feel (slow vertical drift/flicker — read the exact CSS
+   animation in the neon block of `index.css`). Recreate in the neon overlay layer
+   (`widgets/app_background.dart` or `hud_frame.dart`) with an `AnimationController`;
+   freeze under `MediaQuery.disableAnimations`.
 
 HUD corner brackets and the glowing Orbitron month title already match ✓ (`hud_frame.dart`).
 
@@ -41,5 +47,6 @@ HUD corner brackets and the glowing Orbitron month title already match ✓ (`hud
 
 - [ ] Neon calendar + settings side-by-side match: cyan active nav, white panel, plain day
       numerals, filled today cell
+- [ ] Scanlines animate like the web; frozen under reduced-motion; no jank
 - [ ] `flutter analyze && flutter test` green; neon variant tests updated
-- [ ] Pairs 28/29 re-captured; THM-05/06 → FIXED
+- [ ] Pairs 28/29 re-captured; THM-05/06/07 → FIXED

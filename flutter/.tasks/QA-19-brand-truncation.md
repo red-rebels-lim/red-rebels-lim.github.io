@@ -14,8 +14,9 @@ while the web always fits the full `Red Rebels Calendar` at the same viewport wi
 In the default theme the app fits fine.
 
 Root cause to confirm: app title font-size/letter-spacing per theme larger than web's, or
-the four header buttons squeezing the title (web has three — GLB-02 decision pending; do
-NOT remove the button here, but be aware the final width changes if QA-25 removes it).
+the header buttons squeezing the title. Note the header ends up with **three** buttons
+(view/filter/theme — share removed by QA-01 per the GLB-02 decision); verify the title fits
+against that final set.
 
 ## Ground truth
 

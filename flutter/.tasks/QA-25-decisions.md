@@ -1,32 +1,25 @@
-# QA-25: Stakeholder decisions holding pen
+# QA-25: Stakeholder decisions — RESOLVED 2026-07-14
 
-**Status:** blocked (waiting on stakeholder)
-**Batch:** — (feeds every batch)
-**Register rows:** GLB-02, CAL-02, CAL-03, SET-02, SET-06 (print half), SET-08 (system option), GRK-01, THM-04, THM-07, FUN-02
-**Depends on:** stakeholder answers
-**Estimated scope:** n/a — decision log
+**Status:** done (all 10 questions answered by the stakeholder, 2026-07-14)
+**Batch:** — (decision log)
 
-Do **not** resolve any of these inside another task. When a decision lands, either move the
-row into the owning task (fix) or mark the register row ACCEPTED with the quote + date.
+All previously blocked register rows are resolved. Where a decision creates work, the
+owning task has been updated. Do not re-litigate these inside other tasks.
 
-## The questions
-
-| Row | Question | Options |
+| Row | Decision | Consequence |
 |---|---|---|
-| GLB-02 | App has a filter button; web mobile has **no way to open filters at all** (keyboard shortcut only) | (a) treat as WEB-BUG: add a filter trigger to the web header (needs sign-off to touch `app/`), keep the app button styled to match; (b) exact copy: remove the app button |
-| CAL-02 | Month nav at season boundaries | (a) keep app's disabled chevrons (ACCEPT); (b) copy web's wrap-around |
-| CAL-03 | Web resets to current month on Calendar tab re-entry; app preserves | (a) ACCEPT app behavior; (b) copy the reset |
-| SET-02 | Single native `Notifications` toggle vs web's 3-channel list | confirm the single-toggle presentation is the accepted native translation (Telegram already dropped 2026-07-13) |
-| SET-06 | `Print Calendar` row on a phone | (a) omit (ACCEPT difference); (b) include (share-to-print intent) |
-| SET-08 | Web dark theme = plain toggle; app also offers explicit "system" | default plan (QA-14): toggle + implicit follow-system-until-first-toggle, byte-matching web behavior — object only if an explicit system option must stay |
-| GRK-01 | Greek uppercase keeps tonos in app (`ΡΥΘΜΊΣΕΙΣ`); browsers drop it (`ΡΥΘΜΙΣΕΙΣ`) | (a) ACCEPT Dart behavior; (b) strip tonos on uppercase via a helper (typographically the Greek convention) — affects all uppercase Greek text app-wide |
-| THM-04 | Cinema animated ambient blobs | (a) skip on mobile (ACCEPT); (b) port with animation |
-| THM-07 | Neon scanlines animated-feel vs static | (a) ACCEPT static; (b) animate |
-| FUN-02 | First-run intro: app 3-page dialog vs web 7-step anchored tour | (a) ACCEPT re-imagined dialog (PRD CAL-10 said "re-imagine"); (b) build the anchored tour |
+| GLB-02 | **Keep the app's filter button. Remove ALL sharing from the Flutter app** — the header share button *and* the event-sheet share chip. Web stays unchanged | QA-01 (header: view → filter → theme, no share), QA-06 (sheet: no share chip). Deliberate deviation from web, recorded in register |
+| CAL-02 | Keep disabled chevrons at season boundaries | Register ACCEPTED, no work |
+| CAL-03 | Keep app's month persistence across tab switches | Register ACCEPTED, no work |
+| SET-02 | "Only native push notifications on the flutter app. Anything else can be removed" | Single toggle confirmed; no Web Push/Telegram/Calendar-Sync channel rows. Register ACCEPTED |
+| SET-03 | Dropped (follows SET-02: native push only — no auto-sync channel) | Removed from QA-21 scope. Export Calendar is unaffected |
+| SET-06 (print) | Omit Print Calendar on phones | Register ACCEPTED (print half); QA-21 still delivers Export Calendar |
+| SET-08 | **Keep the app's 3-way theme control** (system / light / dark) | Removed from QA-14 scope. Register ACCEPTED |
+| GRK-01 | **Strip tonos on uppercase Greek app-wide** (match browsers / Greek convention) | Added to QA-15 |
+| THM-04 | **Port the cinema animated gradient blobs** | Added to QA-17 |
+| THM-07 | **Animate the neon scanlines** | Added to QA-18 |
+| FUN-02 | **Build the web's anchored first-run tour, "as detailed as possible in both languages"** | New task QA-26 (replaces the 3-page intro dialog) |
 
-## Notes
-
-- GRK-01 answer should be recorded in `flutter/CLAUDE.md` (or the repo CLAUDE.md domain
-  glossary) either way — it will recur.
-- If GLB-02(a): the web change is a separate `app/` PR with its own sign-off, CSP untouched,
-  and the register row reclassified WEB-BUG.
+Side effects applied:
+- FUN-03 (share-output comparison) is moot — QA-23 cancelled.
+- QA-19 (brand truncation) must verify title width with the final 3-button header.

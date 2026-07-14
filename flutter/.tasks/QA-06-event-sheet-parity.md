@@ -25,6 +25,9 @@ Per finding, web → app:
    App shows only `🚌 Away` + share; venue becomes a plain text line; **and app adds a date
    line the web sheet never shows**. Port: time chip, venue pill, Cup chip, plane emoji
    (web uses ✈️ not 🚌), remove the date line.
+   **Share decision (QA-25/GLB-02, 2026-07-14): the app gets NO share chip** — omit it from
+   the ported chips row (deliberate deviation from web) and remove the app's share plumbing
+   for the sheet.
 3. **EVT-03 (P2) competition label.** Web: `CYPRUS 2ND DIVISION · MATCHDAY 1` (league name
    even for cup ties, cup-ness carried by the chip). App: `CUP · MATCHDAY 1`. Match the web
    string source (`lib/translate.ts` league naming → flutter i18n equivalent keys).
@@ -53,7 +56,7 @@ Per finding, web → app:
 ## Acceptance criteria
 
 - [ ] Win/loss/dark sheets side-by-side identical: tint, chips, pills, labels, fallback logo
-- [ ] No date line; venue pill; time + Cup chips present where web shows them
+- [ ] No date line; venue pill; time + Cup chips present where web shows them; NO share chip
 - [ ] CTA visible without scrolling at initial sheet height
 - [ ] Tabs restyled; no drag handle
 - [ ] `flutter analyze && flutter test` green; sheet widget tests extended (tint per result,

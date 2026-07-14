@@ -1,8 +1,8 @@
-# QA-01: System chrome — red status bar, theme-icon semantics, back button, view glyphs
+# QA-01: System chrome — red status bar, theme-icon semantics, back button, view glyphs, share removal
 
 **Status:** todo
 **Batch:** calendar (`fix/qa-calendar`)
-**Register rows:** GLB-01 (P2), GLB-03 (P2), GLB-04 (P2), CAL-05 (P3)
+**Register rows:** GLB-01 (P2), GLB-03 (P2), GLB-04 (P2), CAL-05 (P3), GLB-02 (decided)
 **Depends on:** -
 **Estimated scope:** Small/Medium
 
@@ -43,7 +43,10 @@ Four header/chrome mismatches verified on the emulator (captures `01/02-grid-*`,
   with the theme's red + `Brightness.light` icons; wire through `AppColors` so brutalism/
   cinema/neon keep their own header treatment (verify what the PWA does per theme before
   hardcoding — under neon/cinema the web theme-color stays red).
-- Do NOT touch the filter button here — its fate is a stakeholder decision (GLB-02, QA-25).
+- **GLB-02 decision (2026-07-14)**: keep the filter button, **remove the header share
+  button** — final button set is view → filter → theme (calendar page) / theme (+back) on
+  other pages. Strip the share handler + any now-dead share plumbing reachable only from it
+  (the sheet chip removal happens in QA-06).
 
 ## Acceptance criteria
 
@@ -51,5 +54,6 @@ Four header/chrome mismatches verified on the emulator (captures `01/02-grid-*`,
 - [ ] Sun icon in light mode, moon in dark, both red, matching web SVG shapes
 - [ ] Back button on Stats/Squad identical to web (position, colors, radius) and functional
 - [ ] View-switcher glyphs pixel-match the web icons in all three states
+- [ ] No share button anywhere in the header; filter button retained and functional
 - [ ] `flutter analyze && flutter test` green; widget tests updated for header changes
 - [ ] Affected pairs re-captured; register rows GLB-01/03/04, CAL-05 → FIXED

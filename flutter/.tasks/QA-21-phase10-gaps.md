@@ -1,8 +1,8 @@
-# QA-21: Phase 10 gaps — opponent scout, sports filter, notification preview, calendar sync/export
+# QA-21: Phase 10 gaps — opponent scout, sports filter, notification preview, calendar export
 
 **Status:** todo
 **Batch:** functional-gaps (`fix/qa-functional`) — plan **Phase 10** items surfaced as findings
-**Register rows:** EVT-12 (P2), SET-05 (P2), SET-04 (P2), SET-03 (P2), SET-06 export half (P2)
+**Register rows:** EVT-12 (P2), SET-05 (P2), SET-04 (P2), SET-06 export half (P2) — SET-03 dropped (decided 2026-07-14: native push only, no sync channel)
 **Depends on:** QA-06 (sheet restyle), QA-13 (settings shell)
 **Estimated scope:** Large (four features; consider sub-PRs inside the batch)
 
@@ -17,13 +17,12 @@
 3. **SET-04 Notification Preview.** Expandable `NOTIFICATION PREVIEW` footer row in the
    notifications card showing sample notification content (web SET-10 PRD row). Expand it
    on the PWA and capture before building.
-4. **SET-03 / SET-06 Calendar Sync + Export.** Web has (a) a `Calendar Sync` channel toggle
-   — "Auto-sync to your calendar app" — and (b) `TOOLS → Export Calendar` (`13b-*-pwa`).
-   The app shipped only per-match add-to-calendar (Phase 6, via the injectable
-   `addEventToDeviceCalendar` bridge). Add the settings rows; native behavior = webcal/ics
-   subscription or add-all-upcoming per plan Phase 10 ("calendar-feed subscription…
-   complements Phase 6's single-match add"). `Print Calendar` is explicitly **out** —
-   stakeholder decision (QA-25).
+4. **SET-06 Export Calendar.** Web `TOOLS → Export Calendar` (`13b-*-pwa`). Add the tools
+   row; native behavior = webcal/ics subscription or add-all-upcoming per plan Phase 10
+   ("calendar-feed subscription… complements Phase 6's single-match add") via the
+   injectable `addEventToDeviceCalendar` bridge / an intent on the .ics URL.
+   **Out of scope by decision (2026-07-14, QA-25):** `Print Calendar` (omitted on phones)
+   and the SET-03 `Calendar Sync` channel toggle (native push only — no sync channel row).
 
 ## Ground truth
 
@@ -45,4 +44,4 @@
 - [ ] Each feature matches a fresh PWA capture of the same state, EN + EL
 - [ ] Sports filter persists and filters all three surfaces like web
 - [ ] `flutter analyze && flutter test` green with tests per feature (bridge-mocked)
-- [ ] Register rows EVT-12, SET-03/04/05, SET-06(export) → FIXED
+- [ ] Register rows EVT-12, SET-04/05, SET-06(export) → FIXED

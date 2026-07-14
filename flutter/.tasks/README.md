@@ -23,20 +23,20 @@ Ground truth = the installed PWA on the same emulator + web sources under `app/s
 - Theming only through `AppColors` / `condensed()` in `lib/theme.dart` — no hardcoded values
   in widgets. UI strings only via `app.t()` with existing i18n keys (new keys need
   stakeholder sign-off).
-- Rows classified NEEDS-STAKEHOLDER-DECISION are **blocked** until answered — tracked in
-  TASK-QA-20; don't start them, don't silently resolve them inside another task.
+- All 10 NEEDS-STAKEHOLDER-DECISION rows were answered on 2026-07-14 — decisions and their
+  consequences are logged in QA-25; the owning tasks below already reflect them.
 
 ## Batch → task map
 
 | Batch (branch) | Tasks | Register rows |
 |---|---|---|
-| calendar (`fix/qa-calendar`) | QA-01…QA-07 | GLB-01/03/04/05/06/07, CAL-01/04/05/06, EVT-01…EVT-11 |
+| calendar (`fix/qa-calendar`) | QA-01…QA-07 | GLB-01/02/03/04/05/06/07, CAL-01/04/05/06, EVT-01…EVT-11 |
 | stats (`fix/qa-stats`) | QA-08…QA-11 | STA-01…STA-06 (volleyball part), STA-08/09/10 |
 | squad (`fix/qa-squad`) | QA-12 | SQD-01/02/03 |
-| settings (`fix/qa-settings`) | QA-13…QA-15 | SET-01/07/08/09, GRK-02 |
-| themes (`fix/qa-themes`) | QA-16…QA-19 | THM-01/02/03/05/06/08 |
-| functional-gaps (`fix/qa-functional`) | QA-20…QA-24 | STA-07, STA-06 (football), EVT-12, SET-03/04/05/06, FUN-01/03 |
-| decisions (blocked) | QA-25 | GLB-02, CAL-02/03, SET-02, SET-06 (print), SET-08 (system option), GRK-01, THM-04/07, FUN-02 |
+| settings (`fix/qa-settings`) | QA-13…QA-15 | SET-01/07/09, GRK-01/02 |
+| themes (`fix/qa-themes`) | QA-16…QA-19 | THM-01/02/03/04/05/06/07/08 |
+| functional-gaps (`fix/qa-functional`) | QA-20…QA-22, QA-26, QA-24 | STA-07, STA-06 (football), EVT-12, SET-04/05/06(export), FUN-01/02 |
+| decision log (done) | QA-25 | GLB-02, CAL-02/03, SET-02/03, SET-06 (print), SET-08, GRK-01, THM-04/07, FUN-02/03 — all answered 2026-07-14 |
 
 ## Overlap with the previously planned phases (IMPLEMENTATION_PLAN.md)
 
@@ -61,7 +61,7 @@ Everything else in the register (~40 rows) is new QA-only work not covered by an
 
 | ID | Title | Batch | Status | Depends on |
 |----|-------|-------|--------|------------|
-| QA-01 | System chrome: red status bar, theme-icon semantics, back button, view glyphs | calendar | todo | - |
+| QA-01 | System chrome: status bar, theme icon, back button, view glyphs, share removal | calendar | todo | - |
 | QA-02 | Background overlay darkness + per-page panel structure | calendar | todo | - |
 | QA-03 | Volleyball accent color: purple → blue everywhere | calendar | todo | - |
 | QA-04 | Calendar grid: blank leading cells + day-card nits | calendar | todo | - |
@@ -74,15 +74,16 @@ Everything else in the register (~40 rows) is new QA-only work not covered by an
 | QA-11 | Top scorers rows (volleyball) + head-to-head table styling | stats | todo | QA-09 |
 | QA-12 | Squad borders, player-sheet tile wrap + close X | squad | todo | - |
 | QA-13 | Settings structure: section chips + white cards + icon tiles | settings | todo | - |
-| QA-14 | Settings controls: language row, dark-theme toggle, version string | settings | todo | QA-13 |
-| QA-15 | Greek: "Γλώσσα" mid-word wrap | settings | todo | QA-14 |
+| QA-14 | Settings controls: language row, version string | settings | todo | QA-13 |
+| QA-15 | Greek: "Γλώσσα" wrap + strip tonos on uppercase | settings | todo | QA-14 |
 | QA-16 | Brutalism: square corners + 2px borders | themes | todo | - |
-| QA-17 | Cinema: typography, two-tone brand, plain header buttons | themes | todo | - |
-| QA-18 | Neon: cyan active nav, grid panel fill, day numerals, today cell | themes | todo | - |
+| QA-17 | Cinema: typography, two-tone brand, plain buttons, animated blobs | themes | todo | - |
+| QA-18 | Neon: cyan active nav, panel fill, numerals, today cell, animated scanlines | themes | todo | - |
 | QA-19 | Theme fonts: brand title truncation | themes | todo | QA-17 |
 | QA-20 | Phase 8: FotMob blocks (standings, rankings, top scorers, next match) | functional | todo | - |
-| QA-21 | Phase 10 gaps: opponent scout, sports filter, notification preview, calendar sync/export | functional | todo | - |
+| QA-21 | Phase 10 gaps: opponent scout, sports filter, notification preview, calendar export | functional | todo | QA-06, QA-13 |
 | QA-22 | Cold-start hang: verify launch sync is non-blocking | functional | todo | - |
-| QA-23 | Share output: capture + compare both share texts | functional | todo | - |
+| QA-23 | Share output comparison | functional | cancelled (sharing removed per GLB-02 decision) | - |
+| QA-26 | First-run anchored tour (7-step, EN+EL, replaces intro dialog) | functional | todo | QA-01, QA-13 |
 | QA-24 | Full re-capture + register close-out (Phase 4 exit) | functional | todo | all |
-| QA-25 | Stakeholder decisions holding pen (10 register rows) | - | blocked | stakeholder |
+| QA-25 | Stakeholder decision log (10 rows) | - | done (answered 2026-07-14) | - |

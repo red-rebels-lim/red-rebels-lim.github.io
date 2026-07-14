@@ -22,7 +22,7 @@ marked *Phase 8/10*). Greek rows (GRK) ride with the batch that owns the affecte
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
 | GLB-01 | status bar | all pages, both modes | Web keeps the red `theme-color` status bar with light icons in light *and* dark; app draws a background-colored status bar with dark icons | P2 | BUG | OPEN |
-| GLB-02 | header | all pages | App adds a 4th header button (filter funnel). Web mobile header has exactly three (view/share/theme); web's FilterPanel only opens via keyboard shortcut — mobile web users have **no** filter entry point | P2 | NEEDS-STAKEHOLDER-DECISION — likely WEB-BUG on the web side; decide: add a web trigger (web change, needs sign-off) or drop the app button for exact copy | OPEN |
+| GLB-02 | header | all pages | App adds a 4th header button (filter funnel). Web mobile header has exactly three (view/share/theme); web's FilterPanel only opens via keyboard shortcut — mobile web users have **no** filter entry point | P2 | DECIDED 2026-07-14: **keep the app's filter button; remove ALL sharing from the app** (header button + event-sheet chip); web unchanged | ACCEPTED (implement removal in QA-01/QA-06) |
 | GLB-03 | header | all pages | Theme-toggle icon semantics inverted: web icon shows the *current* state (moon when dark), app shows the *target* state (moon when light) | P2 | BUG | OPEN |
 | GLB-04 | header | Stats & Squad pages | Web shows a circular back button before the title on non-calendar pages; app never renders one | P2 | BUG | OPEN |
 | GLB-05 | page container | list/cards views, settings | App wraps every page in one large frosted rounded panel. Web only panels the calendar grid and stats; list/cards rows and settings cards sit directly on the background | P2 | BUG | OPEN |
@@ -34,8 +34,8 @@ marked *Phase 8/10*). Greek rows (GRK) ride with the batch that owns the affecte
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
 | CAL-01 | grid | all months | App renders leading previous-month day numbers (grayed); web leaves leading cells blank (both show trailing next-month days grayed) | P2 | BUG | OPEN |
-| CAL-02 | month nav | season boundaries | App disables the chevrons at Aug 2025 / Aug 2026; web wraps within the season | P3 | NEEDS-STAKEHOLDER-DECISION (previously accepted; re-approve or copy the wrap) | OPEN |
-| CAL-03 | month nav | tab switch | Web resets to the current month when re-entering the Calendar tab; app preserves the last browsed month | P3 | NEEDS-STAKEHOLDER-DECISION (app behavior is arguably better; exact copy would reset) | OPEN |
+| CAL-02 | month nav | season boundaries | App disables the chevrons at Aug 2025 / Aug 2026; web wraps within the season | P3 | DECIDED 2026-07-14: keep the app's disabled chevrons | ACCEPTED |
+| CAL-03 | month nav | tab switch | Web resets to the current month when re-entering the Calendar tab; app preserves the last browsed month | P3 | DECIDED 2026-07-14: keep the app's month persistence | ACCEPTED |
 | CAL-04 | cards/list rows | light | Event-card and row borders are red-tinted in app; web uses `border-slate-200` / `dark:border-slate-800` (volleyball cards blue-tinted) | P2 | BUG (previously accepted deviation, reopened) | OPEN |
 | CAL-05 | header view icon | list/cards | App's view-switcher glyphs differ from the web's icon set (list/cards icons) | P3 | BUG | OPEN |
 | CAL-06 | day-selected cards | grid + selection | Minor: app card paddings/title truncation point differ slightly (title cuts later than web) | P3 | BUG | OPEN |
@@ -88,20 +88,20 @@ are **not rendered by the web mobile stats tabs either** — no parity differenc
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
 | SET-01 | page structure | settings | Web: chip-styled section labels + white cards with colored rounded icon tiles per row; app: one frosted panel, plain rows, thin dividers, bare icons | P1 | BUG | OPEN |
-| SET-02 | notification channels | settings | Web lists three channels (Web Push, Telegram Bot, Calendar Sync, each with a description); app has a single `Notifications — Match Reminders` toggle | P2 | NEEDS-STAKEHOLDER-DECISION — native FCM deliberately replaced Web Push/Telegram (2026-07-13 decision); confirm the single-toggle presentation | OPEN |
-| SET-03 | calendar sync | settings | Web `Calendar Sync — auto-sync to your calendar app` channel missing in app (Phase 6 shipped only per-match add-to-calendar) | P2 | BUG — *Phase 10 / webcal* (functional-gaps batch) | OPEN |
+| SET-02 | notification channels | settings | Web lists three channels (Web Push, Telegram Bot, Calendar Sync, each with a description); app has a single `Notifications — Match Reminders` toggle | P2 | DECIDED 2026-07-14: "only native push notifications on the flutter app — anything else can be removed" | ACCEPTED |
+| SET-03 | calendar sync | settings | Web `Calendar Sync — auto-sync to your calendar app` channel missing in app (Phase 6 shipped only per-match add-to-calendar) | P2 | DECIDED 2026-07-14: dropped per the SET-02 "native push only" ruling — no sync channel in the app; Export Calendar (SET-06) still lands via QA-21 | ACCEPTED |
 | SET-04 | notification preview | settings | Web has an expandable `NOTIFICATION PREVIEW` block; app has none | P2 | BUG — *Phase 10* (functional-gaps batch) | OPEN |
 | SET-05 | sports filter | settings | Web `SPORTS FILTER` section (Football / Volleyball global toggles); app has none | P2 | BUG — *Phase 10* (functional-gaps batch) | OPEN |
-| SET-06 | tools | settings | Web `TOOLS` card: Export Calendar + Print Calendar; app has neither | P2 | BUG for Export Calendar (functional-gaps); NEEDS-STAKEHOLDER-DECISION for Print on a phone | OPEN |
+| SET-06 | tools | settings | Web `TOOLS` card: Export Calendar + Print Calendar; app has neither | P2 | BUG for Export Calendar (functional-gaps); Print DECIDED 2026-07-14: omit on phones | OPEN (export only) |
 | SET-07 | language control | settings | Web: `Language` row with value + chevron; app: inline segmented `English / Greek` control | P2 | BUG | OPEN |
-| SET-08 | dark theme control | settings | Web: single toggle; app: 3-way segmented control (system / light / dark) | P2 | BUG (extra system option — flag if stakeholder wants to keep it) | OPEN |
+| SET-08 | dark theme control | settings | Web: single toggle; app: 3-way segmented control (system / light / dark) | P2 | DECIDED 2026-07-14: keep the app's 3-way control | ACCEPTED |
 | SET-09 | about | settings | Web shows `v1.0.0`; app shows `1.0.0` | P3 | BUG | OPEN |
 
 ## Greek
 
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
-| GRK-01 | uppercase accents | all Greek uppercase text | App keeps tonos on uppercase (`ΕΙΔΟΠΟΙΉΣΕΙΣ`, `ΡΥΘΜΊΣΕΙΣ`, `ΝΊΚΗ`); browsers with `lang=el` drop it (`ΕΙΔΟΠΟΙΗΣΕΙΣ`) | P2 | NEEDS-STAKEHOLDER-DECISION (handoff-designated ASK; strippable in Dart if wanted) | OPEN |
+| GRK-01 | uppercase accents | all Greek uppercase text | App keeps tonos on uppercase (`ΕΙΔΟΠΟΙΉΣΕΙΣ`, `ΡΥΘΜΊΣΕΙΣ`, `ΝΊΚΗ`); browsers with `lang=el` drop it (`ΕΙΔΟΠΟΙΗΣΕΙΣ`) | P2 | BUG — DECIDED 2026-07-14: strip tonos on uppercase app-wide (QA-15) | OPEN |
 | GRK-02 | settings labels | Greek settings | `Γλώσσα` wraps mid-word (`Γλώσσ / α`) next to the segmented control; web never breaks the word | P2 | BUG | OPEN |
 
 ## Visual themes
@@ -111,10 +111,10 @@ are **not rendered by the web mobile stats tabs either** — no parity differenc
 | THM-01 | brutalism | calendar + settings | App keeps rounded corners on cards/buttons/chips; web brutalism is flat and square | P2 | BUG | OPEN |
 | THM-02 | brutalism | header/nav borders | App ported only colors; web uses 2px borders (app ~1px) | P3 | BUG (known deviation, reopened) | OPEN |
 | THM-03 | cinema | all pages | Cinema typography not applied in app (web: Inter body, two-tone brand title, plain non-circular header buttons); app looks identical to default theme. Inter is already bundled — port is trivial | P2 | BUG (known deviation, reopened) | OPEN |
-| THM-04 | cinema | background | Web animated ambient gradient blobs; app static | P3 | NEEDS-STAKEHOLDER-DECISION (animation cost on mobile) | OPEN |
+| THM-04 | cinema | background | Web animated ambient gradient blobs; app static | P3 | BUG — DECIDED 2026-07-14: port the animation (QA-17) | OPEN |
 | THM-05 | neon | bottom nav | Web active tab is cyan with glow; app active tab stays red | P2 | BUG | OPEN |
 | THM-06 | neon | calendar grid | Web keeps a white panel behind the HUD brackets; app draws the grid straight on the page background. Day numerals also use a techno/mono face in app vs plain sans on web; today-cell is filled pink on web vs red outline in app | P3 | BUG | OPEN |
-| THM-07 | neon | scanlines | Static in app vs animated-feel CSS on web | P3 | NEEDS-STAKEHOLDER-DECISION (known deviation) | OPEN |
+| THM-07 | neon | scanlines | Static in app vs animated-feel CSS on web | P3 | BUG — DECIDED 2026-07-14: animate (QA-18) | OPEN |
 | THM-08 | brutalism/cinema/neon | header brand | App brand title truncates (`Red Rebels Cal…`) under the wide-tracking theme fonts; web fits the full title | P2 | BUG | OPEN |
 
 ## Functional / behavior
@@ -122,8 +122,8 @@ are **not rendered by the web mobile stats tabs either** — no parity differenc
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
 | FUN-01 | cold start | force-stop + flaky network | App hung ~90 s on the splash screen once after force-stop with degraded emulator network — suspected blocking launch sync. Web shell paints immediately from SW cache | P2 | BUG (PLAUSIBLE — reproduce & verify against the HTTP layer's cache fallback) | OPEN |
-| FUN-02 | first-run intro | fresh install | App: 3-page dialog; web: 7-step anchored tour | P2 | NEEDS-STAKEHOLDER-DECISION (PRD CAL-10 said "re-imagine"; handoff says ASK) | OPEN |
-| FUN-03 | share output | header/sheet share | Not yet compared (native share sheet intercepts) — capture the shared text of both in the calendar batch | P3 | BUG (unverified) | OPEN |
+| FUN-02 | first-run intro | fresh install | App: 3-page dialog; web: 7-step anchored tour | P2 | BUG — DECIDED 2026-07-14: build the anchored tour, "as detailed as possible in both languages" (QA-26) | OPEN |
+| FUN-03 | share output | header/sheet share | Not yet compared (native share sheet intercepts) | P3 | DECIDED 2026-07-14: all sharing removed from the app (see GLB-02) — nothing left to compare | ACCEPTED (moot) |
 
 ## Verified equal (no finding)
 
