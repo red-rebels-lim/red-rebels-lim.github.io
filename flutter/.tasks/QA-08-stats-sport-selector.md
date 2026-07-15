@@ -1,6 +1,6 @@
 # QA-08: Stats sport selector — Material TabBar → wrapping pill buttons
 
-**Status:** todo
+**Status:** done (PR #86, merged 2026-07-15)
 **Batch:** stats (`fix/qa-stats`)
 **Register rows:** STA-01 (P2)
 **Depends on:** -

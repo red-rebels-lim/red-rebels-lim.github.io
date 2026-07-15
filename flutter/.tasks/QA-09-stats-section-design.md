@@ -1,6 +1,6 @@
 # QA-09: Stats section design — white cards → frosted-panel sections, web order, drop extras
 
-**Status:** todo
+**Status:** done (PR #86, merged 2026-07-15)
 **Batch:** stats (`fix/qa-stats`)
 **Register rows:** STA-02 (P1), STA-08 (P2)
 **Depends on:** QA-08
