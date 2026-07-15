@@ -61,13 +61,13 @@ Everything else in the register (~40 rows) is new QA-only work not covered by an
 
 | ID | Title | Batch | Status | Depends on |
 |----|-------|-------|--------|------------|
-| QA-01 | System chrome: status bar, theme icon, back button, view glyphs, share removal | calendar | todo | - |
-| QA-02 | Background overlay darkness + per-page panel structure | calendar | todo | - |
-| QA-03 | Volleyball accent color: purple → blue everywhere | calendar | todo | - |
-| QA-04 | Calendar grid: blank leading cells + day-card nits | calendar | todo | - |
-| QA-05 | Event-card / list-row borders: red-tint → slate (+ volleyball blue tint) | calendar | todo | QA-03 |
-| QA-06 | Event sheet visual parity (tint, chips, pills, labels, CTA, tabs) | calendar | todo | QA-03 |
-| QA-07 | Goalscorers tab: per-team side layout | calendar | todo | QA-06 |
+| QA-01 | System chrome: status bar, theme icon, back button, view glyphs, share removal | calendar | done (PR #84) | - |
+| QA-02 | Background overlay darkness + per-page panel structure | calendar | done (PR #84) | - |
+| QA-03 | Volleyball accent color: purple → blue everywhere | calendar | done (PR #84) | - |
+| QA-04 | Calendar grid: blank leading cells + day-card nits | calendar | done (PR #84) | - |
+| QA-05 | Event-card / list-row borders: red-tint → slate (+ volleyball blue tint) | calendar | done (PR #84) | QA-03 |
+| QA-06 | Event sheet visual parity (tint, chips, pills, labels, CTA, tabs) | calendar | done (PR #84) | QA-03 |
+| QA-07 | Goalscorers tab: per-team side layout | calendar | done (PR #84) | QA-06 |
 | QA-08 | Stats sport selector: TabBar → wrapping pill buttons | stats | todo | - |
 | QA-09 | Stats section design: cards → frosted-panel sections, web order, drop extras | stats | todo | QA-08 |
 | QA-10 | Stats section content: season summary, set breakdown, performance split, form subtitle | stats | todo | QA-09 |
