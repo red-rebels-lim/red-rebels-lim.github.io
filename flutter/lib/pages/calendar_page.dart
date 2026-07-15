@@ -437,6 +437,9 @@ class _MonthGrid extends StatelessWidget {
               child: SizedBox(
                 height: _cellHeight,
                 child: Row(
+                  // Stretch so each cell fills the full 48px row — otherwise
+                  // fills/dots hug the day number instead of the cell bounds.
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     for (var slot = week * 7; slot < week * 7 + 7; slot++)
                       Expanded(child: _buildCell(context, slot, isCurrentMonth ? now.day : null)),
@@ -545,8 +548,10 @@ class _DayCell extends StatelessWidget {
             if (dots.isNotEmpty)
               Positioned(
                 bottom: 4,
+                left: 0,
+                right: 0,
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     for (final (i, color) in dots.indexed)
                       Container(
