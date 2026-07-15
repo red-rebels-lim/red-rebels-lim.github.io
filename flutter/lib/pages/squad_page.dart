@@ -173,11 +173,14 @@ class _PositionSection extends StatelessWidget {
               ],
             ),
           ),
-          // ── Rows card ──
+          // ── Rows card — web: `border border-slate-200 dark:border-slate-800`
+          //    (QA SQD-01: slate, not the red-tinted primary border) ──
           Container(
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerLow,
-              border: Border.all(color: colors.primaryBorderSubtle),
+              border: Border.all(
+                color: theme.brightness == Brightness.dark ? twSlate800 : twSlate200,
+              ),
               borderRadius: BorderRadius.circular(8),
             ),
             clipBehavior: Clip.antiAlias,
@@ -188,7 +191,7 @@ class _PositionSection extends StatelessWidget {
                     Divider(
                       height: 1,
                       thickness: 1,
-                      color: colors.primaryBorderSubtle,
+                      color: theme.brightness == Brightness.dark ? twSlate800 : twSlate200,
                     ),
                   _PlayerRow(
                     player: player,
