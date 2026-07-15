@@ -115,6 +115,26 @@ class SheetResultStyle {
 /// Visual themes, in web picker order (`useVisualTheme.ts`).
 const visualThemes = ['default', 'brutalism', 'cinema', 'neon'];
 
+/// Display uppercase matching browsers with `lang=el` (QA GRK-01, decided
+/// 2026-07-14): Greek drops the tonos on uppercase (ΡΥΘΜΊΣΕΙΣ → ΡΥΘΜΙΣΕΙΣ)
+/// but keeps the dialytika (Ϊ/Ϋ — ΒΟΛΕΪ stays). Dart's `toUpperCase()` keeps
+/// the accents, so every DISPLAY call site uses this instead. Never use it
+/// for data normalization (alias matching keeps plain `toUpperCase()`).
+extension DisplayUpper on String {
+  static const _tonosMap = {
+    'Ά': 'Α', 'Έ': 'Ε', 'Ή': 'Η', 'Ί': 'Ι', 'Ό': 'Ο', 'Ύ': 'Υ', 'Ώ': 'Ω',
+  };
+
+  String get upperNoTonos {
+    var s = toUpperCase();
+    for (final e in _tonosMap.entries) {
+      s = s.replaceAll(e.key, e.value);
+    }
+    // Combining acute/grave left over from ΐ/ΰ-style inputs.
+    return s.replaceAll('́', '').replaceAll('̀', '');
+  }
+}
+
 /// Sport accents as the web calendar renders them: `text-primary` red for
 /// football, `text-blue-500` for ALL volleyball (the web never uses the
 /// women's purple on calendar surfaces — QA register GLB-07).

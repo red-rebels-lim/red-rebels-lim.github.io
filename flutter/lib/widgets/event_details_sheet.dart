@@ -107,7 +107,7 @@ class _EventDetails extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 12),
               child: Text(
-                (_isFootballPlayed ? app.t('popover.matchResult') : matchTitle(app, event)).toUpperCase(),
+                (_isFootballPlayed ? app.t('popover.matchResult') : matchTitle(app, event)).upperNoTonos,
                 textAlign: TextAlign.center,
                 style: condensed(
                   size: 13,
@@ -150,7 +150,7 @@ class _EventDetails extends StatelessWidget {
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Text(
-                      app.t('popover.${result?.name ?? 'upcoming'}').toUpperCase(),
+                      app.t('popover.${result?.name ?? 'upcoming'}').upperNoTonos,
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w900,
@@ -203,7 +203,7 @@ class _EventDetails extends StatelessWidget {
             [
               app.t('popover.competition'),
               if (event.matchday != null) '${app.t('popover.matchday')} ${event.matchday}',
-            ].join(' · ').toUpperCase(),
+            ].join(' · ').upperNoTonos,
             textAlign: TextAlign.center,
             style: condensed(size: 12, color: mutedLabel, letterSpacing: 2),
           ),
@@ -245,7 +245,7 @@ class _EventDetails extends StatelessWidget {
                   dividerColor: dark ? Colors.white.withValues(alpha: 0.1) : twSlate200,
                   labelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1),
                   labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  tabs: [for (final tab in tabs) Tab(text: tab.label.toUpperCase(), height: 40)],
+                  tabs: [for (final tab in tabs) Tab(text: tab.label.upperNoTonos, height: 40)],
                 ),
                 SizedBox(
                   height: 240,
@@ -268,7 +268,7 @@ class _EventDetails extends StatelessWidget {
         if (event.isPlayed && (event.reportEN != null || event.reportEL != null)) ...[
           const SizedBox(height: 12),
           Text(
-            app.t('matchReport.title').toUpperCase(),
+            app.t('matchReport.title').upperNoTonos,
             style: condensed(size: 12, color: theme.colorScheme.onSurfaceVariant, letterSpacing: 2),
           ),
           const SizedBox(height: 8),
@@ -298,7 +298,7 @@ class _EventDetails extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   child: Text(
-                    '📊 ${app.t('popover.viewAllStats')}'.toUpperCase(),
+                    '📊 ${app.t('popover.viewAllStats')}'.upperNoTonos,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 14,
@@ -326,7 +326,7 @@ class _EventDetails extends StatelessWidget {
             ),
             onPressed: () => _addToCalendar(context, app),
             child: Text(
-              '📅 ${app.t('settings.exportCalendar')}'.toUpperCase(),
+              '📅 ${app.t('settings.exportCalendar')}'.upperNoTonos,
               style: condensed(size: 14, color: brandRed, letterSpacing: 1.5),
             ),
           ),
@@ -426,7 +426,7 @@ class _MeetingDetails extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  app.t('popover.time').toUpperCase(),
+                  app.t('popover.time').upperNoTonos,
                   style: condensed(size: 11, color: colors.mutedForeground, letterSpacing: 1.5),
                 ),
                 const SizedBox(height: 8),

@@ -76,7 +76,7 @@ class _IntroDialogState extends State<IntroDialog> {
               ),
               const SizedBox(height: 16),
               Text(
-                app.t(page.titleKey).toUpperCase(),
+                app.t(page.titleKey).upperNoTonos,
                 textAlign: TextAlign.center,
                 style: condensed(size: 18, color: theme.colorScheme.onSurface, letterSpacing: 1.5),
               ),
@@ -123,7 +123,7 @@ class _IntroDialogState extends State<IntroDialog> {
                     ),
                     onPressed: _isLast ? _dismiss : () => setState(() => _page++),
                     child: Text(
-                      app.t(_isLast ? 'onboarding.finish' : 'onboarding.next').toUpperCase(),
+                      app.t(_isLast ? 'onboarding.finish' : 'onboarding.next').upperNoTonos,
                       style: condensed(size: 13, color: Colors.white, letterSpacing: 1.2),
                     ),
                   ),

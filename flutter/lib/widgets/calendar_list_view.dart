@@ -63,7 +63,7 @@ class _SectionLabel extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            text.toUpperCase(),
+            text.upperNoTonos,
             style: condensed(size: 12, color: colors.mutedForeground, letterSpacing: 2),
           ),
           const SizedBox(width: 8),
@@ -120,7 +120,7 @@ class _ListRow extends StatelessWidget {
                       children: [
                         Text('${event.day}', style: condensed(size: 18, color: theme.colorScheme.onSurface)),
                         Text(
-                          monthAbbrev.substring(0, monthAbbrev.length < 3 ? monthAbbrev.length : 3).toUpperCase(),
+                          monthAbbrev.substring(0, monthAbbrev.length < 3 ? monthAbbrev.length : 3).upperNoTonos,
                           style: TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.bold,
@@ -140,13 +140,13 @@ class _ListRow extends StatelessWidget {
                   Text.rich(
                     TextSpan(children: [
                       TextSpan(
-                        text: app.t(sportLabelKey(event.sport)).toUpperCase(),
+                        text: app.t(sportLabelKey(event.sport)).upperNoTonos,
                         style: condensed(size: 10, color: sportColor(event.sport), letterSpacing: 1.5),
                       ),
                       if (event.isCup)
                         // Web: `text-amber-500` cup tag.
                         TextSpan(
-                          text: '  ${app.t('calendar.cup').toUpperCase()}',
+                          text: '  ${app.t('calendar.cup').upperNoTonos}',
                           style: condensed(size: 10, color: twAmber500, letterSpacing: 1.5),
                         ),
                     ]),
@@ -177,7 +177,7 @@ class _ListRow extends StatelessWidget {
             // Result label or kickoff time.
             if (event.isPlayed && result != null)
               Text(
-                app.t('popover.${result.name}').toUpperCase(),
+                app.t('popover.${result.name}').upperNoTonos,
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: resultColor),
               )
             else if (hasTime)

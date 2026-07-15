@@ -30,7 +30,7 @@ class StatsPage extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  app.t('nav.stats').toUpperCase(),
+                  app.t('nav.stats').upperNoTonos,
                   style: condensed(size: 18, color: colors.foreground, letterSpacing: 1.5),
                 ),
               ),

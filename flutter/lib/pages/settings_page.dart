@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../logic/push_registration.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
+import '../widgets/web_toggle.dart';
 
 /// Public repository, linked from the About section (SET-11).
 const githubRepoUrl = 'https://github.com/red-rebels-lim/red-rebels-lim.github.io';
@@ -24,111 +25,217 @@ String _themeLabel(AppState app, String theme) => switch (theme) {
       _ => app.t('settings.themeDefault', 'Default'),
     };
 
+/// Settings page rebuilt on the web `SettingsPage.tsx` shell (QA SET-01):
+/// chip-styled section labels + white cards with 40px icon tiles, sitting
+/// directly on the page background (no frosted panel). Deliberate deviations
+/// per the 2026-07-14 stakeholder decisions: a single native-push channel
+/// (SET-02), no Telegram/Calendar-Sync channels (SET-03), the 3-way theme
+/// control stays (SET-08); Sports Filter / Tools / Notification Preview
+/// arrive with the functional-gaps batch (QA-21).
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
-    final theme = Theme.of(context);
-    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-      decoration: BoxDecoration(
-        color: colors.surfacePanel,
-        borderRadius: BorderRadius.circular(colors.panelRadius),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        children: [
-          _SectionHeader(app.t('settings.notifications')),
-          const _NotificationsSection(),
-          const Divider(),
-          // Web section order: notifications, visual theme, display.
-          _SectionHeader(app.t('settings.visualTheme')),
-          ListTile(
-            leading: const Icon(Icons.palette_outlined),
-            title: Text(app.t('settings.visualTheme')),
-            trailing: DropdownButton<String>(
-              key: const Key('visual-theme-select'),
-              value: app.visualTheme,
-              underline: const SizedBox.shrink(),
-              borderRadius: BorderRadius.circular(colors.cardRadius),
-              items: [
-                for (final theme in visualThemes)
-                  DropdownMenuItem(value: theme, child: Text(_themeLabel(app, theme))),
-              ],
-              onChanged: (theme) {
-                if (theme != null) app.setVisualTheme(theme);
-              },
+    return ListView(
+      padding: const EdgeInsets.only(bottom: 40),
+      children: [
+        _Section(
+          title: app.t('settings.notifications'),
+          child: const _NotificationsCard(),
+        ),
+        _Section(
+          title: app.t('settings.visualTheme'),
+          child: _RowTile(
+            iconTile: _IconTile(
+              icon: Icons.palette_outlined,
+              background: accentRed.withValues(alpha: 0.1),
+              color: accentRed,
             ),
-          ),
-          const Divider(),
-          _SectionHeader(app.t('settings.display')),
-          ListTile(
-            leading: const Icon(Icons.language),
-            title: Text(app.t('settings.language')),
-            trailing: SegmentedButton<String>(
-              segments: [
-                ButtonSegment(value: 'en', label: Text(app.t('settings.languageEnglish'))),
-                ButtonSegment(value: 'el', label: Text(app.t('settings.languageGreek'))),
-              ],
-              selected: {app.language},
-              onSelectionChanged: (s) => app.setLanguage(s.first),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.dark_mode_outlined),
-            title: Text(app.t('settings.darkTheme')),
-            trailing: SegmentedButton<ThemeMode>(
-              segments: const [
-                ButtonSegment(value: ThemeMode.system, icon: Icon(Icons.brightness_auto)),
-                ButtonSegment(value: ThemeMode.light, icon: Icon(Icons.light_mode)),
-                ButtonSegment(value: ThemeMode.dark, icon: Icon(Icons.dark_mode)),
-              ],
-              selected: {app.themeMode},
-              onSelectionChanged: (s) => app.setThemeMode(s.first),
-            ),
-          ),
-          const Divider(),
-          _SectionHeader(app.t('settings.about')),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: Text(app.t('settings.appVersion')),
-            trailing: FutureBuilder<PackageInfo>(
-              future: PackageInfo.fromPlatform(),
-              builder: (context, snapshot) => Text(snapshot.data?.version ?? ''),
-            ),
-          ),
-          // Own transparent Material: the tappable tile's ink must not paint on
-          // the panel's decorated background (framework assertion).
-          Material(
-            type: MaterialType.transparency,
-            child: ListTile(
-              leading: const Icon(Icons.code),
-              title: Text(
-                app.t('settings.viewOnGithub'),
-                style: const TextStyle(color: accentRed, fontWeight: FontWeight.w500),
+            label: app.t('settings.visualTheme'),
+            isLast: true,
+            trailing: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: dark ? Colors.white.withValues(alpha: 0.05) : const Color(0xFFF1F5F9),
+                border: Border.all(color: AppColors.of(context).primaryBorderSubtle),
+                borderRadius: BorderRadius.circular(8),
               ),
-              trailing: Icon(Icons.open_in_new, size: 16, color: colors.mutedForeground),
-              onTap: () async {
-                try {
-                  await openExternalUrl(Uri.parse(githubRepoUrl));
-                } catch (_) {
-                  // Best-effort: no browser available is not worth an error UI.
-                }
-              },
+              child: DropdownButton<String>(
+                key: const Key('visual-theme-select'),
+                value: app.visualTheme,
+                underline: const SizedBox.shrink(),
+                borderRadius: BorderRadius.circular(8),
+                items: [
+                  for (final theme in visualThemes)
+                    DropdownMenuItem(value: theme, child: Text(_themeLabel(app, theme), style: const TextStyle(fontSize: 14))),
+                ],
+                onChanged: (theme) {
+                  if (theme != null) app.setVisualTheme(theme);
+                },
+              ),
             ),
           ),
+        ),
+        _Section(
+          title: app.t('settings.display'),
+          child: Column(
+            children: [
+              // Web toggleLanguage: the row itself flips EN ↔ EL (SET-07).
+              _RowTile(
+                iconTile: const _IconTile(icon: Icons.language),
+                label: app.t('settings.language'),
+                value: app.language == 'el'
+                    ? app.t('settings.languageGreek')
+                    : app.t('settings.languageEnglish'),
+                hasChevron: true,
+                onTap: () => app.setLanguage(app.language == 'en' ? 'el' : 'en'),
+              ),
+              // 3-way control kept by stakeholder decision (SET-08). It is
+              // too wide to share a row with the Greek label ("Σκοτεινό
+              // Θέμα"), so it sits under the label instead (QA GRK-02: no
+              // mid-word truncation).
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const _IconTile(icon: Icons.dark_mode_outlined),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            app.t('settings.darkTheme'),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.of(context).foreground,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: SegmentedButton<ThemeMode>(
+                        showSelectedIcon: false,
+                        style: SegmentedButton.styleFrom(
+                          visualDensity: const VisualDensity(horizontal: -3, vertical: -3),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        segments: const [
+                          ButtonSegment(value: ThemeMode.system, icon: Icon(Icons.brightness_auto, size: 16)),
+                          ButtonSegment(value: ThemeMode.light, icon: Icon(Icons.light_mode, size: 16)),
+                          ButtonSegment(value: ThemeMode.dark, icon: Icon(Icons.dark_mode, size: 16)),
+                        ],
+                        selected: {app.themeMode},
+                        onSelectionChanged: (s) => app.setThemeMode(s.first),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        _Section(
+          title: app.t('settings.about'),
+          child: Column(
+            children: [
+              _RowTile(
+                iconTile: const _IconTile(icon: Icons.info_outline),
+                label: app.t('settings.appVersion'),
+                trailing: FutureBuilder<PackageInfo>(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (context, snapshot) => Text(
+                    // Web shows `v${__APP_VERSION__}` (SET-09).
+                    snapshot.hasData ? 'v${snapshot.data!.version}' : '',
+                    style: TextStyle(fontSize: 14, color: dark ? twSlate400 : twSlate500),
+                  ),
+                ),
+              ),
+              _RowTile(
+                iconTile: const _IconTile(icon: Icons.code),
+                label: app.t('settings.viewOnGithub'),
+                labelColor: accentRed,
+                isLast: true,
+                trailing: const Icon(Icons.open_in_new, size: 20, color: twSlate400),
+                onTap: () async {
+                  try {
+                    await openExternalUrl(Uri.parse(githubRepoUrl));
+                  } catch (_) {
+                    // Best-effort: no browser available is not worth an error UI.
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+        // Web footer: plain xs slate-500 line.
+        Padding(
+          padding: const EdgeInsets.only(top: 32, bottom: 40),
+          child: Text(
+            app.t('settings.madeWith'),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 12, color: twSlate500),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Web `SettingsSection`: chip-styled title + white/#1e293b rounded card.
+class _Section extends StatelessWidget {
+  const _Section({required this.title, required this.child});
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Padding(
-            padding: const EdgeInsets.all(24),
-            child: Text(
-              '❤️ ${app.t('settings.madeWith')}',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            padding: const EdgeInsets.only(left: 4, bottom: 12),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: dark ? Colors.transparent : const Color(0xB3FFFFFF),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                title.upperNoTonos,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.7,
+                  color: dark ? twSlate400 : twSlate700,
+                ),
+              ),
             ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: dark ? twSlate800 : Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: dark ? Colors.transparent : twSlate200),
+              boxShadow: dark
+                  ? null
+                  : const [BoxShadow(color: Color(0x14000000), blurRadius: 2, offset: Offset(0, 1))],
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: child,
           ),
         ],
       ),
@@ -136,11 +243,115 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-/// Web parity (SettingsPage.tsx NOTIFICATIONS section): a Channels group with
-/// the push channel row, then — while registered — the shared preferences:
-/// Reminder Times chips, Sports toggles and Alert Types toggles.
-class _NotificationsSection extends StatelessWidget {
-  const _NotificationsSection();
+/// Web `SettingsRow`: 56px min-height row with a 40px icon tile, optional
+/// value/chevron/trailing and a hairline divider below (unless last).
+class _RowTile extends StatelessWidget {
+  const _RowTile({
+    required this.iconTile,
+    required this.label,
+    this.labelColor,
+    this.value,
+    this.hasChevron = false,
+    this.trailing,
+    this.onTap,
+    this.isLast = false,
+  });
+
+  final Widget iconTile;
+  final String label;
+  final Color? labelColor;
+  final String? value;
+  final bool hasChevron;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+  final bool isLast;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final colors = AppColors.of(context);
+    final row = Container(
+      constraints: const BoxConstraints(minHeight: 56),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: isLast
+          ? null
+          : BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: dark ? twSlate700.withValues(alpha: 0.5) : const Color(0xFFF1F5F9),
+                ),
+              ),
+            ),
+      child: Row(
+        children: [
+          iconTile,
+          const SizedBox(width: 16),
+          Expanded(
+            // Word-boundary wrap only — never mid-word (QA GRK-02).
+            child: Text(
+              label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                height: 1.2,
+                color: labelColor ?? colors.foreground,
+              ),
+            ),
+          ),
+          if (value != null) ...[
+            const SizedBox(width: 8),
+            Text(value!, style: TextStyle(fontSize: 14, color: dark ? twSlate400 : twSlate500)),
+          ],
+          if (hasChevron) ...[
+            const SizedBox(width: 4),
+            const Icon(Icons.chevron_right, size: 20, color: twSlate400),
+          ],
+          if (trailing != null) ...[
+            const SizedBox(width: 8),
+            trailing!,
+          ],
+        ],
+      ),
+    );
+    if (onTap == null) return row;
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(onTap: onTap, child: row),
+    );
+  }
+}
+
+/// Web icon tile: 40px rounded-lg, slate fill unless a custom tint is given.
+class _IconTile extends StatelessWidget {
+  const _IconTile({required this.icon, this.background, this.color, this.size = 40});
+
+  final IconData icon;
+  final Color? background;
+  final Color? color;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: background ?? (dark ? twSlate800.withValues(alpha: 0.8) : const Color(0xFFF1F5F9)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Icon(icon, size: size / 2, color: color ?? (dark ? twSlate400 : twSlate500)),
+    );
+  }
+}
+
+/// NOTIFICATIONS card (web SettingsPage.tsx): a Channels group with the push
+/// row, then — while registered — Reminder Times chips, Sports and Alert
+/// Types toggles. Native push is the only channel (QA-25/SET-02 decision).
+class _NotificationsCard extends StatelessWidget {
+  const _NotificationsCard();
 
   /// Shows the shared error copy near the bottom of the screen.
   static void _showError(BuildContext context, AppState app) {
@@ -184,93 +395,159 @@ class _NotificationsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
-    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
     final prefs = app.notifPrefs;
+    final divider = Border(
+      top: BorderSide(color: dark ? twSlate700.withValues(alpha: 0.5) : const Color(0xFFF1F5F9)),
+    );
+
+    Widget subLabel(String text) => Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text(
+            text.upperNoTonos,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.8,
+              color: dark ? twSlate400 : twSlate500,
+            ),
+          ),
+        );
+
+    Widget prefRow(String label, bool value, ValueChanged<bool> onChanged) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+              ),
+              WebToggle(checked: value, onChanged: () => onChanged(!value)),
+            ],
+          ),
+        );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _SubLabel(app.t('settings.channels')),
-        // ── Push channel row ──
-        ListTile(
-          leading: Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: accentRed.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Icon(Icons.notifications_outlined, size: 18, color: accentRed),
+        // ── Channels ──
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              subLabel(app.t('settings.channels')),
+              Row(
+                children: [
+                  const _IconTile(
+                    icon: Icons.notifications_outlined,
+                    background: Color(0x1ADC2828),
+                    color: accentRed,
+                    size: 32,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          app.t('settings.notifications'),
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          app.t('settings.matchReminders'),
+                          style: TextStyle(fontSize: 10, color: dark ? twSlate500 : twSlate400),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (app.pushBusy)
+                    const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: accentRed),
+                    )
+                  else
+                    WebToggle(
+                      key: const Key('push-channel-switch'),
+                      checked: app.pushRegistered,
+                      onChanged: app.pushAvailable
+                          ? () => _togglePush(context, app, !app.pushRegistered)
+                          : null,
+                    ),
+                ],
+              ),
+            ],
           ),
-          title: Text(app.t('settings.notifications')),
-          subtitle: Text(
-            app.t('settings.matchReminders'),
-            style: TextStyle(fontSize: 12, color: colors.mutedForeground),
-          ),
-          trailing: app.pushBusy
-              ? const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: accentRed),
-                )
-              : Switch(
-                  key: const Key('push-channel-switch'),
-                  value: app.pushRegistered,
-                  onChanged: app.pushAvailable
-                      ? (on) => _togglePush(context, app, on)
-                      : null,
-                ),
         ),
-        // Telegram deliberately has no channel row here: native push supersedes
-        // it in the apps (stakeholder decision, PRD §12 Q2 — the bot remains
-        // for non-app users via the web settings page).
         // ── Shared preferences (visible while registered, web parity) ──
         if (app.pushRegistered) ...[
-          _SubLabel(app.t('settings.reminderTimes')),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
+          Container(
+            decoration: BoxDecoration(border: divider),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (final hour in const [24, 12, 2, 1])
-                  _ReminderChip(
-                    label: '${hour}h',
-                    active: prefs.reminderHours.contains(hour),
-                    onTap: () => _toggleReminderHour(context, app, hour),
+                subLabel(app.t('settings.reminderTimes')),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final hour in const [24, 12, 2, 1])
+                      _ReminderChip(
+                        label: '${hour}h',
+                        active: prefs.reminderHours.contains(hour),
+                        onTap: () => _toggleReminderHour(context, app, hour),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(border: divider),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                subLabel(app.t('settings.sports')),
+                for (final (sport, labelKey) in const [
+                  ('football-men', 'sports.footballMen'),
+                  ('volleyball-men', 'sports.volleyballMen'),
+                  ('volleyball-women', 'sports.volleyballWomen'),
+                ])
+                  prefRow(
+                    app.t(labelKey),
+                    prefs.enabledSports.contains(sport),
+                    (_) => _toggleSport(context, app, sport),
                   ),
               ],
             ),
           ),
-          _SubLabel(app.t('settings.sports')),
-          for (final (sport, labelKey) in const [
-            ('football-men', 'sports.footballMen'),
-            ('volleyball-men', 'sports.volleyballMen'),
-            ('volleyball-women', 'sports.volleyballWomen'),
-          ])
-            _PrefSwitchRow(
-              label: app.t(labelKey),
-              value: prefs.enabledSports.contains(sport),
-              onChanged: (_) => _toggleSport(context, app, sport),
+          Container(
+            decoration: BoxDecoration(border: divider),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                subLabel(app.t('settings.alertTypes')),
+                prefRow(
+                  app.t('settings.newEvents'),
+                  prefs.notifyNewEvents,
+                  (on) => _update(context, app, prefs.copyWith(notifyNewEvents: on)),
+                ),
+                prefRow(
+                  app.t('settings.timeChanges'),
+                  prefs.notifyTimeChanges,
+                  (on) => _update(context, app, prefs.copyWith(notifyTimeChanges: on)),
+                ),
+                prefRow(
+                  app.t('settings.scoreUpdates'),
+                  prefs.notifyScoreUpdates,
+                  (on) => _update(context, app, prefs.copyWith(notifyScoreUpdates: on)),
+                ),
+              ],
             ),
-          _SubLabel(app.t('settings.alertTypes')),
-          _PrefSwitchRow(
-            label: app.t('settings.newEvents'),
-            value: prefs.notifyNewEvents,
-            onChanged: (on) =>
-                _update(context, app, prefs.copyWith(notifyNewEvents: on)),
-          ),
-          _PrefSwitchRow(
-            label: app.t('settings.timeChanges'),
-            value: prefs.notifyTimeChanges,
-            onChanged: (on) =>
-                _update(context, app, prefs.copyWith(notifyTimeChanges: on)),
-          ),
-          _PrefSwitchRow(
-            label: app.t('settings.scoreUpdates'),
-            value: prefs.notifyScoreUpdates,
-            onChanged: (on) =>
-                _update(context, app, prefs.copyWith(notifyScoreUpdates: on)),
           ),
         ],
       ],
@@ -278,27 +555,8 @@ class _NotificationsSection extends StatelessWidget {
   }
 }
 
-/// Small uppercase group label inside a section (web `text-xs font-bold
-/// uppercase tracking-wider`).
-class _SubLabel extends StatelessWidget {
-  const _SubLabel(this.title);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-      child: Text(
-        title.toUpperCase(),
-        style: condensed(size: 12, color: AppColors.of(context).mutedForeground, letterSpacing: 1.2),
-      ),
-    );
-  }
-}
-
 /// Pill toggle for a reminder tier (web ReminderChip: active = brand red with
-/// white text, inactive = muted).
+/// white text, inactive = slate).
 class _ReminderChip extends StatelessWidget {
   const _ReminderChip({required this.label, required this.active, required this.onTap});
 
@@ -308,60 +566,24 @@ class _ReminderChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
     return Material(
-      color: active ? brandRed : colors.muted,
+      color: active ? brandRed : (dark ? twSlate700 : twSlate200),
       borderRadius: BorderRadius.circular(999),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(999),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Text(
             label,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w700,
-              color: active ? Colors.white : colors.mutedForeground,
+              color: active ? Colors.white : (dark ? twSlate300 : twSlate600),
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Compact label + trailing switch row for the shared notification prefs.
-class _PrefSwitchRow extends StatelessWidget {
-  const _PrefSwitchRow({required this.label, required this.value, required this.onChanged});
-
-  final String label;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      dense: true,
-      visualDensity: const VisualDensity(vertical: -2),
-      title: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-      trailing: Switch(value: value, onChanged: onChanged),
-    );
-  }
-}
-
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader(this.title);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-      child: Text(
-        title.toUpperCase(),
-        style: condensed(size: 13, color: AppColors.of(context).mutedForeground, letterSpacing: 1.5),
       ),
     );
   }

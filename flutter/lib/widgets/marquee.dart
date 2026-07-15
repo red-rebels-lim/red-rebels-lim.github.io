@@ -54,7 +54,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
           Padding(
             padding: const EdgeInsets.only(right: 48),
             child: Text(
-              label.toUpperCase(),
+              label.upperNoTonos,
               maxLines: 1,
               style: condensed(
                 size: 11,

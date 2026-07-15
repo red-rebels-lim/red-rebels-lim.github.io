@@ -169,8 +169,11 @@ void main() {
         ),
       ));
 
-      await tester.ensureVisible(find.text('View on GitHub'));
-      await tester.tap(find.text('View on GitHub'));
+      // ensureVisible only guarantees partial visibility on the 600px test
+      // surface — drag the whole list up so the About card is fully on-screen.
+      await tester.drag(find.byType(ListView), const Offset(0, -600));
+      await tester.pump();
+      await tester.tap(find.byIcon(Icons.code));
       await tester.pumpAndSettle();
 
       expect(launched, [Uri.parse(githubRepoUrl)]);

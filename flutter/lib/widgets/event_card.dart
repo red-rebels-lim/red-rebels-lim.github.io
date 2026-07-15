@@ -88,7 +88,7 @@ class EventCard extends StatelessWidget {
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: accent),
                     ),
                     Text(
-                      (hasScore ? app.t('popover.${result?.name ?? 'upcoming'}') : monthAbbrev).toUpperCase(),
+                      (hasScore ? app.t('popover.${result?.name ?? 'upcoming'}') : monthAbbrev).upperNoTonos,
                       style: accentLabel(10),
                     ),
                   ],
@@ -110,7 +110,7 @@ class EventCard extends StatelessWidget {
                         const SizedBox(width: 6),
                         Flexible(
                           child: Text(
-                            competitionLabel.toUpperCase(),
+                            competitionLabel.upperNoTonos,
                             style: accentLabel(10),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
