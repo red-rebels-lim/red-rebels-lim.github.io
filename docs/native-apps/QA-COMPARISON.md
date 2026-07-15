@@ -63,16 +63,16 @@ marked *Phase 8/10*). Greek rows (GRK) ride with the batch that owns the affecte
 
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
-| STA-01 | sport selector | stats page | Web uses wrapping pill buttons (active solid red); app uses a Material TabBar with emoji icons whose labels truncate (`Men's Volleybal`, `Women's Volley`) | P2 | BUG (previously accepted, reopened) | OPEN |
-| STA-02 | section design | all tabs | Web sections sit on the frosted panel with uppercase condensed headings and bordered stat tiles; app renders white Material cards with sentence-case bold headings. Section order also differs | P1 | BUG | OPEN |
-| STA-03 | season summary | football + volleyball | Web: 3×3 tile grid (label above value, red Points) for football; hero `Win Rate` / `Points` tiles for volleyball. App: uniform rows inside one card and adds `W%` / `Difference` stats the web doesn't show | P2 | BUG | OPEN |
-| STA-04 | set breakdown | volleyball tabs | Web: Sets Won/Lost horizontal bars + three win-scoreline tiles (3-0/3-1/3-2, red counts); app: six numeric tiles including loss scorelines, no bars | P2 | BUG | OPEN |
-| STA-05 | performance split | all tabs | Web: Home/Away emoji tiles with colored `12W 2D 0L` counts; app ("Home vs Away"): progress bars with percentages and `14P 12W 2D 0L · 27-6` strings | P2 | BUG | OPEN |
-| STA-06 | top scorers | volleyball (local data) + football (FotMob) | Web: avatar pill rows, #1 highlighted with red border + red count, no match count; app: plain numbered list with `points / matches` | P2 | BUG (volleyball fixable now; football list arrives with Phase 8) | OPEN |
+| STA-01 | sport selector | stats page | Web uses wrapping pill buttons (active solid red); app uses a Material TabBar with emoji icons whose labels truncate (`Men's Volleybal`, `Women's Volley`) | P2 | BUG (previously accepted, reopened) | FIXED (PR #86) |
+| STA-02 | section design | all tabs | Web sections sit on the frosted panel with uppercase condensed headings and bordered stat tiles; app renders white Material cards with sentence-case bold headings. Section order also differs | P1 | BUG | FIXED (PR #86) |
+| STA-03 | season summary | football + volleyball | Web: 3×3 tile grid (label above value, red Points) for football; hero `Win Rate` / `Points` tiles for volleyball. App: uniform rows inside one card and adds `W%` / `Difference` stats the web doesn't show | P2 | BUG | FIXED (PR #86) |
+| STA-04 | set breakdown | volleyball tabs | Web: Sets Won/Lost horizontal bars + three win-scoreline tiles (3-0/3-1/3-2, red counts); app: six numeric tiles including loss scorelines, no bars | P2 | BUG | FIXED (PR #86) |
+| STA-05 | performance split | all tabs | Web: Home/Away emoji tiles with colored `12W 2D 0L` counts; app ("Home vs Away"): progress bars with percentages and `14P 12W 2D 0L · 27-6` strings | P2 | BUG | FIXED (PR #86) |
+| STA-06 | top scorers | volleyball (local data) + football (FotMob) | Web: avatar pill rows, #1 highlighted with red border + red count, no match count; app: plain numbered list with `points / matches` | P2 | BUG (volleyball fixable now; football list arrives with Phase 8) | FIXED (PR #86 — volleyball; football list arrives with Phase 8 / QA-20) |
 | STA-07 | FotMob blocks | football tab | Missing in app: League Standing tables (Promotion Group / 2. Division), League Rankings tiles, football Top Scorers, Next Match banner | P2 | BUG — *Phase 8* (functional-gaps batch) | OPEN |
-| STA-08 | extra sections | football + volleyball | App renders `Records`, `Season Progress` (football) and `Records` (volleyball) — the web stats tabs render neither | P2 | BUG (remove for exact copy; flag if stakeholder wants to keep) | OPEN |
-| STA-09 | recent form | all tabs | Web shows a `Last 5 Matches` subtitle under the heading; app omits it | P3 | BUG | OPEN |
-| STA-10 | head-to-head | football + volleyball | Web table has a header band, uppercase column headers and yellow Draw column; app has plain sentence-case headers and unstyled D column | P3 | BUG | OPEN |
+| STA-08 | extra sections | football + volleyball | App renders `Records`, `Season Progress` (football) and `Records` (volleyball) — the web stats tabs render neither | P2 | BUG (remove for exact copy; flag if stakeholder wants to keep) | FIXED (PR #86) |
+| STA-09 | recent form | all tabs | Web shows a `Last 5 Matches` subtitle under the heading; app omits it | P3 | BUG | FIXED (PR #86) |
+| STA-10 | head-to-head | football + volleyball | Web table has a header band, uppercase column headers and yellow Draw column; app has plain sentence-case headers and unstyled D column | P3 | BUG | FIXED (PR #86) |
 
 *Not findings:* goal-distribution chart and the volleyball streaks card (plan Phase 10 items)
 are **not rendered by the web mobile stats tabs either** — no parity difference exists today.
@@ -81,30 +81,30 @@ are **not rendered by the web mobile stats tabs either** — no parity differenc
 
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
-| SQD-01 | roster rows / stat tiles | squad + player sheet | Borders red-tinted in app; web uses slate borders | P3 | BUG | OPEN |
-| SQD-02 | player sheet | stat tiles | App `GOALS` subtitle (`2 open · 0 pen · 0 OG`) wraps to two lines (narrower tile); web keeps one line | P3 | BUG | OPEN |
-| SQD-03 | player sheet | chrome | Web has a close X; app only the drag handle | P3 | BUG | OPEN |
+| SQD-01 | roster rows / stat tiles | squad + player sheet | Borders red-tinted in app; web uses slate borders | P3 | BUG | FIXED (PR #87) |
+| SQD-02 | player sheet | stat tiles | App `GOALS` subtitle (`2 open · 0 pen · 0 OG`) wraps to two lines (narrower tile); web keeps one line | P3 | BUG | FIXED (PR #87) |
+| SQD-03 | player sheet | chrome | Web has a close X; app only the drag handle | P3 | BUG | FIXED (PR #87) |
 
 ## Settings
 
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
-| SET-01 | page structure | settings | Web: chip-styled section labels + white cards with colored rounded icon tiles per row; app: one frosted panel, plain rows, thin dividers, bare icons | P1 | BUG | OPEN |
+| SET-01 | page structure | settings | Web: chip-styled section labels + white cards with colored rounded icon tiles per row; app: one frosted panel, plain rows, thin dividers, bare icons | P1 | BUG | FIXED (PR #88) |
 | SET-02 | notification channels | settings | Web lists three channels (Web Push, Telegram Bot, Calendar Sync, each with a description); app has a single `Notifications — Match Reminders` toggle | P2 | DECIDED 2026-07-14: "only native push notifications on the flutter app — anything else can be removed" | ACCEPTED |
 | SET-03 | calendar sync | settings | Web `Calendar Sync — auto-sync to your calendar app` channel missing in app (Phase 6 shipped only per-match add-to-calendar) | P2 | DECIDED 2026-07-14: dropped per the SET-02 "native push only" ruling — no sync channel in the app; Export Calendar (SET-06) still lands via QA-21 | ACCEPTED |
 | SET-04 | notification preview | settings | Web has an expandable `NOTIFICATION PREVIEW` block; app has none | P2 | BUG — *Phase 10* (functional-gaps batch) | OPEN |
 | SET-05 | sports filter | settings | Web `SPORTS FILTER` section (Football / Volleyball global toggles); app has none | P2 | BUG — *Phase 10* (functional-gaps batch) | OPEN |
 | SET-06 | tools | settings | Web `TOOLS` card: Export Calendar + Print Calendar; app has neither | P2 | BUG for Export Calendar (functional-gaps); Print DECIDED 2026-07-14: omit on phones | OPEN (export only) |
-| SET-07 | language control | settings | Web: `Language` row with value + chevron; app: inline segmented `English / Greek` control | P2 | BUG | OPEN |
+| SET-07 | language control | settings | Web: `Language` row with value + chevron; app: inline segmented `English / Greek` control | P2 | BUG | FIXED (PR #88) |
 | SET-08 | dark theme control | settings | Web: single toggle; app: 3-way segmented control (system / light / dark) | P2 | DECIDED 2026-07-14: keep the app's 3-way control | ACCEPTED |
-| SET-09 | about | settings | Web shows `v1.0.0`; app shows `1.0.0` | P3 | BUG | OPEN |
+| SET-09 | about | settings | Web shows `v1.0.0`; app shows `1.0.0` | P3 | BUG | FIXED (PR #88) |
 
 ## Greek
 
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
-| GRK-01 | uppercase accents | all Greek uppercase text | App keeps tonos on uppercase (`ΕΙΔΟΠΟΙΉΣΕΙΣ`, `ΡΥΘΜΊΣΕΙΣ`, `ΝΊΚΗ`); browsers with `lang=el` drop it (`ΕΙΔΟΠΟΙΗΣΕΙΣ`) | P2 | BUG — DECIDED 2026-07-14: strip tonos on uppercase app-wide (QA-15) | OPEN |
-| GRK-02 | settings labels | Greek settings | `Γλώσσα` wraps mid-word (`Γλώσσ / α`) next to the segmented control; web never breaks the word | P2 | BUG | OPEN |
+| GRK-01 | uppercase accents | all Greek uppercase text | App keeps tonos on uppercase (`ΕΙΔΟΠΟΙΉΣΕΙΣ`, `ΡΥΘΜΊΣΕΙΣ`, `ΝΊΚΗ`); browsers with `lang=el` drop it (`ΕΙΔΟΠΟΙΗΣΕΙΣ`) | P2 | BUG — DECIDED 2026-07-14: strip tonos on uppercase app-wide (QA-15) | FIXED (PR #88) |
+| GRK-02 | settings labels | Greek settings | `Γλώσσα` wraps mid-word (`Γλώσσ / α`) next to the segmented control; web never breaks the word | P2 | BUG | FIXED (PR #88) |
 
 ## Visual themes
 

@@ -68,14 +68,14 @@ Everything else in the register (~40 rows) is new QA-only work not covered by an
 | QA-05 | Event-card / list-row borders: red-tint → slate (+ volleyball blue tint) | calendar | done (PR #84) | QA-03 |
 | QA-06 | Event sheet visual parity (tint, chips, pills, labels, CTA, tabs) | calendar | done (PR #84) | QA-03 |
 | QA-07 | Goalscorers tab: per-team side layout | calendar | done (PR #84) | QA-06 |
-| QA-08 | Stats sport selector: TabBar → wrapping pill buttons | stats | todo | - |
-| QA-09 | Stats section design: cards → frosted-panel sections, web order, drop extras | stats | todo | QA-08 |
-| QA-10 | Stats section content: season summary, set breakdown, performance split, form subtitle | stats | todo | QA-09 |
-| QA-11 | Top scorers rows (volleyball) + head-to-head table styling | stats | todo | QA-09 |
-| QA-12 | Squad borders, player-sheet tile wrap + close X | squad | todo | - |
-| QA-13 | Settings structure: section chips + white cards + icon tiles | settings | todo | - |
-| QA-14 | Settings controls: language row, version string | settings | todo | QA-13 |
-| QA-15 | Greek: "Γλώσσα" wrap + strip tonos on uppercase | settings | todo | QA-14 |
+| QA-08 | Stats sport selector: TabBar → wrapping pill buttons | stats | done (PR #86) | - |
+| QA-09 | Stats section design: cards → frosted-panel sections, web order, drop extras | stats | done (PR #86) | QA-08 |
+| QA-10 | Stats section content: season summary, set breakdown, performance split, form subtitle | stats | done (PR #86) | QA-09 |
+| QA-11 | Top scorers rows (volleyball) + head-to-head table styling | stats | done (PR #86) | QA-09 |
+| QA-12 | Squad borders, player-sheet tile wrap + close X | squad | done (PR #87) | - |
+| QA-13 | Settings structure: section chips + white cards + icon tiles | settings | done (PR #88) | - |
+| QA-14 | Settings controls: language row, version string | settings | done (PR #88) | QA-13 |
+| QA-15 | Greek: "Γλώσσα" wrap + strip tonos on uppercase | settings | done (PR #88) | QA-14 |
 | QA-16 | Brutalism: square corners + 2px borders | themes | todo | - |
 | QA-17 | Cinema: typography, two-tone brand, plain buttons, animated blobs | themes | todo | - |
 | QA-18 | Neon: cyan active nav, panel fill, numerals, today cell, animated scanlines | themes | todo | - |

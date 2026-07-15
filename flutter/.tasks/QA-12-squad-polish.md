@@ -1,6 +1,6 @@
 # QA-12: Squad borders, player-sheet tile wrap + close X
 
-**Status:** todo
+**Status:** done (PR #87, merged 2026-07-15)
 **Batch:** squad (`fix/qa-squad`)
 **Register rows:** SQD-01 (P3), SQD-02 (P3), SQD-03 (P3)
 **Depends on:** -

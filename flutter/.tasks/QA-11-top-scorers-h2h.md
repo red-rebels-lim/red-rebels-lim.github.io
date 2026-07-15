@@ -1,6 +1,6 @@
 # QA-11: Top scorers rows (volleyball) + head-to-head table styling
 
-**Status:** todo
+**Status:** done (PR #86, merged 2026-07-15)
 **Batch:** stats (`fix/qa-stats`)
 **Register rows:** STA-06 volleyball half (P2), STA-10 (P3)
 **Depends on:** QA-09
