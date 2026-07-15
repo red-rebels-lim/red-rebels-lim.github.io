@@ -1,6 +1,6 @@
 # QA-02: Background overlay darkness + per-page panel structure
 
-**Status:** todo
+**Status:** done (PR #84, merged 2026-07-15)
 **Batch:** calendar (`fix/qa-calendar`)
 **Register rows:** GLB-06 (P2), GLB-05 (P2)
 **Depends on:** -
