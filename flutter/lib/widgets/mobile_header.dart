@@ -130,11 +130,21 @@ class _HeaderButton extends StatelessWidget {
           child: SizedBox(
             width: 40,
             height: 40,
-            child: Badge(
-              isLabelVisible: showBadge,
-              alignment: Alignment.topRight,
-              offset: const Offset(-8, 8),
-              child: Icon(icon, size: iconSize, color: iconColor),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(icon, size: iconSize, color: iconColor),
+                if (showBadge)
+                  Positioned(
+                    top: 7,
+                    right: 7,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(shape: BoxShape.circle, color: accentRed),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),

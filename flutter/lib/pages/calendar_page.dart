@@ -204,7 +204,13 @@ void showCalendarFilterSheet(BuildContext context) {
   showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
-    builder: (_) => _FilterSheet(initial: app.filters, onApply: app.setFilters),
+    // Content-sized up to 90% of the screen — the default (non-scroll-
+    // controlled) cap is ~56%, which the chip rows + search field overflow.
+    isScrollControlled: true,
+    constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+    builder: (_) => SingleChildScrollView(
+      child: _FilterSheet(initial: app.filters, onApply: app.setFilters),
+    ),
   );
 }
 
