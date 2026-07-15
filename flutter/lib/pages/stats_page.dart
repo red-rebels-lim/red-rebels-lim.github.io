@@ -7,197 +7,154 @@ import '../models/events.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 
-class StatsPage extends StatelessWidget {
+/// Stats page ported from the web `StatsPage.tsx` + `components/stats/*`:
+/// one frosted panel holding the heading, the wrapping pill sport selector
+/// and the active tab's sections — the whole page scrolls together, and the
+/// sections use the web's `stat-section` design (uppercase condensed titles,
+/// bordered translucent tiles). FotMob blocks (league table / rankings /
+/// football top scorers / next match) are Phase 8 (tracker QA-20) and render
+/// nothing here, exactly like the web with no FotMob data.
+class StatsPage extends StatefulWidget {
   const StatsPage({super.key});
+
+  @override
+  State<StatsPage> createState() => _StatsPageState();
+}
+
+class _StatsPageState extends State<StatsPage> {
+  String _activeTab = 'football';
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final colors = AppColors.of(context);
-    return DefaultTabController(
-      length: 3,
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-        decoration: BoxDecoration(
-          color: colors.surfacePanel,
-          borderRadius: BorderRadius.circular(colors.panelRadius),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  app.t('nav.stats').upperNoTonos,
-                  style: condensed(size: 18, color: colors.foreground, letterSpacing: 1.5),
-                ),
-              ),
+    final dark = Theme.of(context).brightness == Brightness.dark;
+
+    final tabs = [
+      ('football', app.t('stats.mensFootball')),
+      ('volleyball-men', app.t('stats.mensVolleyball')),
+      ('volleyball-women', app.t('stats.womensVolleyball')),
+    ];
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      decoration: BoxDecoration(
+        color: colors.surfacePanel,
+        borderRadius: BorderRadius.circular(colors.panelRadius),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: ListView(
+        padding: const EdgeInsets.all(12),
+        children: [
+          // Web: `text-lg font-bold text-slate-900 dark:text-slate-100`,
+          // sentence case, body font.
+          Text(
+            app.t('nav.stats'),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: dark ? const Color(0xFFF1F5F9) : const Color(0xFF0F172A),
             ),
-            TabBar(
-              indicatorColor: brandRed,
-              labelColor: brandRed,
-              unselectedLabelColor: colors.mutedForeground,
-              labelStyle: condensed(size: 13, letterSpacing: 0.5),
-              tabs: [
-                Tab(text: '⚽ ${app.t('stats.mensFootball')}'),
-                Tab(text: '🏐 ${app.t('stats.mensVolleyball')}'),
-                Tab(text: '🏐 ${app.t('stats.womensVolleyball')}'),
+          ),
+          const SizedBox(height: 8),
+          // Sport selector: wrapping pills (never truncates — QA STA-01).
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final (value, label) in tabs)
+                  _SportPill(
+                    label: label,
+                    selected: _activeTab == value,
+                    onTap: () => setState(() => _activeTab = value),
+                  ),
               ],
             ),
-            const Expanded(
-              child: TabBarView(
-                children: [
-                  _FootballStatsTab(),
-                  _VolleyballStatsTab(sport: Sport.volleyballMen),
-                  _VolleyballStatsTab(sport: Sport.volleyballWomen),
-                ],
-              ),
+          ),
+          if (_activeTab == 'football')
+            const _FootballSections()
+          else
+            _VolleyballSections(
+              sport: _activeTab == 'volleyball-men' ? Sport.volleyballMen : Sport.volleyballWomen,
             ),
-          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Web pill: `px-4 py-2 rounded-full text-xs font-bold tracking-wide`;
+/// active `bg-primary text-white`, inactive slate-200 / #1a1a1a.
+class _SportPill extends StatelessWidget {
+  const _SportPill({required this.label, required this.selected, required this.onTap});
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Material(
+      color: selected ? colors.primary : (dark ? const Color(0xFF1A1A1A) : twSlate200),
+      borderRadius: BorderRadius.circular(999),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(999),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.3,
+              color: selected ? Colors.white : (dark ? twSlate400 : twSlate600),
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class _FootballStatsTab extends StatelessWidget {
-  const _FootballStatsTab();
+// ── Tab compositions (web FootballStatsTab / VolleyballStatsTab order) ──────
+
+class _FootballSections extends StatelessWidget {
+  const _FootballSections();
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final stats = calculateFootballStats(app.events);
-
-    if (stats.overall.played == 0) {
-      return Center(child: Text(app.t('stats.noMatchesYet')));
-    }
-
-    return ListView(
-      padding: const EdgeInsets.all(16),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _SectionCard(
-          title: app.t('stats.overallStats'),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  _StatBox(label: app.t('stats.matches'), value: '${stats.overall.played}'),
-                  _StatBox(label: app.t('stats.wins'), value: '${stats.overall.wins}', color: winGreen),
-                  _StatBox(label: app.t('stats.draws'), value: '${stats.overall.draws}', color: drawAmber),
-                  _StatBox(label: app.t('stats.losses'), value: '${stats.overall.losses}', color: lossRed),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  _StatBox(label: app.t('stats.points'), value: '${stats.overall.points}'),
-                  _StatBox(label: app.t('stats.winPct'), value: '${stats.overall.winPercentage}%'),
-                  _StatBox(label: app.t('stats.goals'), value: '${stats.overall.goalsFor}-${stats.overall.goalsAgainst}'),
-                  _StatBox(
-                    label: app.t('stats.goalDifference'),
-                    value: stats.overall.goalDifference >= 0 ? '+${stats.overall.goalDifference}' : '${stats.overall.goalDifference}',
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  _StatBox(label: app.t('stats.cleanSheets'), value: '${stats.cleanSheets}'),
-                  _StatBox(label: app.t('stats.avgGoalsFor'), value: '${stats.avgGoalsFor}'),
-                  _StatBox(label: app.t('stats.avgGoalsAgainst'), value: '${stats.avgGoalsAgainst}'),
-                ],
-              ),
-            ],
-          ),
+        _SeasonSummarySection(stats: stats),
+        _RecentFormSection(results: [for (final m in stats.recentForm) (m.result, app.teamName(m.opponent), m.score)]),
+        // FotMob League Table slot (Phase 8 / QA-20)
+        _PerformanceSplitSection(
+          home: (stats.home.played, stats.home.wins, stats.home.draws, stats.home.losses),
+          away: (stats.away.played, stats.away.wins, stats.away.draws, stats.away.losses),
+          showDraws: true,
         ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.recentForm'),
-          child: _FormRow(results: [for (final m in stats.recentForm) (m.result, app.teamName(m.opponent), m.score)]),
-        ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.homeVsAway'),
-          child: Column(
-            children: [
-              _SplitRow(label: app.t('stats.home'), stats: _splitText(stats.home), winPct: stats.home.winPercentage),
-              const SizedBox(height: 8),
-              _SplitRow(label: app.t('stats.away'), stats: _splitText(stats.away), winPct: stats.away.winPercentage),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.streaks'),
-          child: Column(
-            children: [
-              _KeyValueRow(app.t('stats.currentStreak'), _streakLabel(app, stats.currentStreak)),
-              _KeyValueRow(app.t('stats.longestWinStreak'), '${stats.longestWinStreak}'),
-              _KeyValueRow(app.t('stats.longestUnbeatenStreak'), '${stats.longestUnbeatenStreak}'),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.records'),
-          child: Column(
-            children: [
-              if (stats.biggestWin != null)
-                _KeyValueRow(app.t('stats.biggestWin'), '${app.teamName(stats.biggestWin!.opponent)} (${stats.biggestWin!.score})'),
-              if (stats.heaviestDefeat != null)
-                _KeyValueRow(app.t('stats.heaviestDefeat'), '${app.teamName(stats.heaviestDefeat!.opponent)} (${stats.heaviestDefeat!.score})'),
-              if (stats.biggestWin == null && stats.heaviestDefeat == null) Text(app.t('stats.noData')),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.seasonProgress'),
-          subtitle: app.t('stats.seasonProgressSummary'),
-          child: SizedBox(
-            height: 140,
-            child: CustomPaint(
-              size: Size.infinite,
-              painter: _SparklinePainter(
-                values: [0, ...stats.pointsProgression.map((p) => p.points.toDouble())],
-                color: brandRed,
-                gridColor: Theme.of(context).colorScheme.outlineVariant,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.headToHead'),
-          child: _H2HTable(
-            rows: [
-              for (final h in stats.headToHead.take(10))
-                (app.teamName(h.opponent), h.played, h.wins, h.draws, h.losses, '${h.goalsFor}-${h.goalsAgainst}'),
-            ],
-            hasDraws: true,
-          ),
+        // FotMob Top Scorers + League Rankings slots (Phase 8 / QA-20)
+        _HeadToHeadSection(
+          rows: [
+            for (final h in stats.headToHead.take(10))
+              (app.teamName(h.opponent), h.played, h.wins, h.draws, h.losses, '${h.goalsFor}-${h.goalsAgainst}'),
+          ],
         ),
       ],
     );
   }
-
-  String _splitText(TeamStats s) => '${s.played}P ${s.wins}W ${s.draws}D ${s.losses}L · ${s.goalsFor}-${s.goalsAgainst}';
-
-  String _streakLabel(AppState app, StreakInfo streak) {
-    final type = switch (streak.type) {
-      'W' => app.t('stats.wins'),
-      'D' => app.t('stats.draws'),
-      'L' => app.t('stats.losses'),
-      _ => app.t('stats.longestUnbeatenStreak'),
-    };
-    return '${streak.count} $type';
-  }
 }
 
-class _VolleyballStatsTab extends StatelessWidget {
-  const _VolleyballStatsTab({required this.sport});
+class _VolleyballSections extends StatelessWidget {
+  const _VolleyballSections({required this.sport});
 
   final Sport sport;
 
@@ -205,181 +162,211 @@ class _VolleyballStatsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final stats = calculateVolleyballStats(app.events, sport);
+    final women = sport == Sport.volleyballWomen;
 
-    if (stats.overall.played == 0) {
-      return Center(child: Text(app.t('stats.noMatchesYet')));
-    }
+    final recentForm = _RecentFormSection(
+      results: [for (final m in stats.recentForm) (m.result, app.teamName(m.opponent), m.score)],
+    );
+    final seasonSummary = _VolleyballSummarySection(stats: stats, women: women);
+    final performanceSplit = _PerformanceSplitSection(
+      home: (stats.home.played, stats.home.wins, null, stats.home.losses),
+      away: (stats.away.played, stats.away.wins, null, stats.away.losses),
+      showDraws: false,
+    );
+    // Web volleyball TopScorers keeps the raw feed names (no i18n lookup).
+    final topScorers = _TopScorersSection(
+      scorers: [for (final s in stats.topScorers) (s.name, s.totalPoints)],
+    );
 
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        _SectionCard(
-          title: app.t('stats.overallStats'),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  _StatBox(label: app.t('stats.matches'), value: '${stats.overall.played}'),
-                  _StatBox(label: app.t('stats.winsCount'), value: '${stats.overall.wins}', color: winGreen),
-                  _StatBox(label: app.t('stats.lossesCount'), value: '${stats.overall.losses}', color: lossRed),
-                  _StatBox(label: app.t('stats.winRate'), value: '${stats.overall.winPercentage}%'),
-                ],
+    // Web: women = Recent Form → Summary → Split → Scorers;
+    //      men = Summary → Set Breakdown → Recent Form → Split → Scorers.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: women
+          ? [recentForm, seasonSummary, performanceSplit, topScorers]
+          : [
+              seasonSummary,
+              _SetBreakdownSection(
+                setsWon: stats.overall.setsWon,
+                setsLost: stats.overall.setsLost,
+                threeZero: stats.setBreakdown.threeZero,
+                threeOne: stats.setBreakdown.threeOne,
+                threeTwo: stats.setBreakdown.threeTwo,
               ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  _StatBox(label: app.t('stats.setsWon'), value: '${stats.overall.setsWon}'),
-                  _StatBox(label: app.t('stats.setsLost'), value: '${stats.overall.setsLost}'),
-                  _StatBox(label: app.t('stats.setWinPct'), value: '${stats.overall.setWinPercentage}%'),
-                  _StatBox(label: app.t('stats.totalPoints'), value: '${stats.overall.pointsScored}'),
-                ],
-              ),
+              recentForm,
+              performanceSplit,
+              topScorers,
             ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.recentForm'),
-          child: _FormRow(results: [for (final m in stats.recentForm) (m.result, app.teamName(m.opponent), m.score)]),
-        ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.setBreakdown'),
-          child: Row(
-            children: [
-              _StatBox(label: '3-0', value: '${stats.setBreakdown.threeZero}', color: winGreen),
-              _StatBox(label: '3-1', value: '${stats.setBreakdown.threeOne}', color: winGreen),
-              _StatBox(label: '3-2', value: '${stats.setBreakdown.threeTwo}', color: winGreen),
-              _StatBox(label: '2-3', value: '${stats.setBreakdown.twoThree}', color: lossRed),
-              _StatBox(label: '1-3', value: '${stats.setBreakdown.oneThree}', color: lossRed),
-              _StatBox(label: '0-3', value: '${stats.setBreakdown.zeroThree}', color: lossRed),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.homeVsAway'),
-          child: Column(
-            children: [
-              _SplitRow(
-                label: app.t('stats.home'),
-                stats: '${stats.home.played}P ${stats.home.wins}W ${stats.home.losses}L · ${stats.home.setsWon}-${stats.home.setsLost}',
-                winPct: stats.home.winPercentage,
-              ),
-              const SizedBox(height: 8),
-              _SplitRow(
-                label: app.t('stats.away'),
-                stats: '${stats.away.played}P ${stats.away.wins}W ${stats.away.losses}L · ${stats.away.setsWon}-${stats.away.setsLost}',
-                winPct: stats.away.winPercentage,
-              ),
-            ],
-          ),
-        ),
-        if (stats.topScorers.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          _SectionCard(
-            title: app.t('stats.topScorers'),
-            child: Column(
-              children: [
-                for (final (i, s) in stats.topScorers.indexed)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 24, child: Text('${i + 1}.', style: const TextStyle(fontWeight: FontWeight.bold))),
-                        Expanded(child: Text(app.i18n.playerName(s.name), maxLines: 1, overflow: TextOverflow.ellipsis)),
-                        Text('${s.totalPoints}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                        Text(' / ${s.matchesPlayed}', style: Theme.of(context).textTheme.bodySmall),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.records'),
-          child: Column(
-            children: [
-              if (stats.biggestWin != null)
-                _KeyValueRow(app.t('stats.biggestWin'), '${app.teamName(stats.biggestWin!.opponent)} (${stats.biggestWin!.score})'),
-              if (stats.heaviestDefeat != null)
-                _KeyValueRow(app.t('stats.heaviestDefeat'), '${app.teamName(stats.heaviestDefeat!.opponent)} (${stats.heaviestDefeat!.score})'),
-              if (stats.biggestWin == null && stats.heaviestDefeat == null) Text(app.t('stats.noData')),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        _SectionCard(
-          title: app.t('stats.headToHead'),
-          child: _H2HTable(
-            rows: [
-              for (final h in stats.headToHead.take(10))
-                (app.teamName(h.opponent), h.played, h.wins, null, h.losses, '${h.setsWon}-${h.setsLost}'),
-            ],
-            hasDraws: false,
-          ),
-        ),
-      ],
     );
   }
 }
 
-// --- shared building blocks ---
+// ── Shared building blocks (web `stat-section` / tile classes) ──────────────
 
-class _SectionCard extends StatelessWidget {
-  const _SectionCard({required this.title, this.subtitle, required this.child});
+/// `stat-section`: 24px bottom margin; `stat-section-title`: 18px condensed
+/// uppercase, 16px below.
+class _Section extends StatelessWidget {
+  const _Section({required this.title, required this.child});
 
   final String title;
-  final String? subtitle;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Card(
-      color: theme.colorScheme.surfaceContainerLow,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
-            if (subtitle != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Text(subtitle!, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-              ),
-            const SizedBox(height: 12),
-            child,
-          ],
-        ),
+    final colors = AppColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(title.upperNoTonos, style: condensed(size: 18, color: colors.foreground, letterSpacing: 0.9)),
+          const SizedBox(height: 16),
+          child,
+        ],
       ),
     );
   }
 }
 
-class _StatBox extends StatelessWidget {
-  const _StatBox({required this.label, required this.value, this.color});
+/// Web stat tile chrome: `rounded-lg bg-white/5 dark:bg-[#1a1a1a]/50 border
+/// border-slate-200 dark:border-slate-800`.
+BoxDecoration _tileDecoration(bool dark) => BoxDecoration(
+      color: dark ? const Color(0x801A1A1A) : const Color(0x0DFFFFFF),
+      border: Border.all(color: dark ? twSlate800 : twSlate200),
+      borderRadius: BorderRadius.circular(8),
+    );
 
-  final String label;
-  final String value;
-  final Color? color;
+class _SeasonSummarySection extends StatelessWidget {
+  const _SeasonSummarySection({required this.stats});
+
+  final FootballStats stats;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Expanded(
-      child: Column(
+    final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final green = dark ? const Color(0xFF4ADE80) : const Color(0xFF16A34A);
+
+    final cards = <(String, String, Color?)>[
+      (app.t('stats.matches'), '${stats.overall.played}', null),
+      (app.t('stats.wins'), '${stats.overall.wins}', green),
+      (app.t('stats.draws'), '${stats.overall.draws}', null),
+      (app.t('stats.losses'), '${stats.overall.losses}', colors.primary),
+      (app.t('stats.goals'), '${stats.overall.goalsFor}-${stats.overall.goalsAgainst}', null),
+      (app.t('stats.points'), '${stats.overall.points}', colors.primary),
+      (app.t('stats.cleanSheets'), '${stats.cleanSheets}', null),
+      (app.t('stats.avgGoalsFor'), '${stats.avgGoalsFor}', null),
+      (app.t('stats.avgGoalsAgainst'), '${stats.avgGoalsAgainst}', null),
+    ];
+
+    return _Section(
+      title: app.t('stats.seasonSummary'),
+      child: _TileGrid(
+        columns: 3,
         children: [
-          Text(value, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: color)),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-            maxLines: 2,
+          for (final (label, value, color) in cards)
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: _tileDecoration(dark),
+              child: Column(
+                children: [
+                  _TileLabel(label, center: true),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: color ?? colors.foreground,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VolleyballSummarySection extends StatelessWidget {
+  const _VolleyballSummarySection({required this.stats, required this.women});
+
+  final VolleyballStats stats;
+  final bool women;
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final green = dark ? const Color(0xFF4ADE80) : const Color(0xFF16A34A);
+
+    // Web hero pair: women = Points + Sets Won; men = Win Rate + Points.
+    final heroes = women
+        ? [
+            (app.t('stats.totalPoints'), '${stats.overall.pointsScored}'),
+            (app.t('stats.setsWon'), '${stats.overall.setsWon}'),
+          ]
+        : [
+            (app.t('stats.winRate'), '${stats.overall.winPercentage}%'),
+            (app.t('stats.totalPoints'), '${stats.overall.pointsScored}'),
+          ];
+
+    return _Section(
+      title: app.t('stats.seasonSummary'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              for (final (i, hero) in heroes.indexed) ...[
+                if (i > 0) const SizedBox(width: 16),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: _tileDecoration(dark),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _TileLabel(hero.$1),
+                        const SizedBox(height: 4),
+                        Text(
+                          hero.$2,
+                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: colors.primary),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 16),
+          _TileGrid(
+            columns: 3,
+            children: [
+              for (final (label, value, color) in <(String, String, Color?)>[
+                (app.t('stats.matches'), '${stats.overall.played}', null),
+                (app.t('stats.wins'), '${stats.overall.wins}', green),
+                (app.t('stats.losses'), '${stats.overall.losses}', colors.primary),
+              ])
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: _tileDecoration(dark),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(child: _TileLabel(label)),
+                      Text(
+                        value,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color ?? colors.foreground),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
           ),
         ],
       ),
@@ -387,206 +374,440 @@ class _StatBox extends StatelessWidget {
   }
 }
 
-class _FormRow extends StatelessWidget {
-  const _FormRow({required this.results});
+class _SetBreakdownSection extends StatelessWidget {
+  const _SetBreakdownSection({
+    required this.setsWon,
+    required this.setsLost,
+    required this.threeZero,
+    required this.threeOne,
+    required this.threeTwo,
+  });
+
+  final int setsWon;
+  final int setsLost;
+  final int threeZero;
+  final int threeOne;
+  final int threeTwo;
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final total = setsWon + setsLost;
+
+    Widget bar(String label, int value, Color fill) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 80,
+                child: Text(
+                  label,
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: colors.mutedForeground),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(999),
+                  child: LinearProgressIndicator(
+                    value: total == 0 ? 0 : value / total,
+                    minHeight: 24,
+                    backgroundColor: dark ? Colors.white.withValues(alpha: 0.05) : const Color(0x0D000000),
+                    color: fill,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 32,
+                child: Text(
+                  '$value',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: colors.foreground),
+                ),
+              ),
+            ],
+          ),
+        );
+
+    return _Section(
+      title: app.t('stats.setBreakdown'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          bar(app.t('stats.setsWon'), setsWon, brandRed),
+          bar(app.t('stats.setsLost'), setsLost, colors.mutedForeground.withValues(alpha: 0.3)),
+          const SizedBox(height: 8),
+          _TileGrid(
+            columns: 3,
+            children: [
+              for (final (label, value) in [('3-0', threeZero), ('3-1', threeOne), ('3-2', threeTwo)])
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: _tileDecoration(dark),
+                  child: Column(
+                    children: [
+                      Text(label, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: colors.foreground)),
+                      Text('$value', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: colors.primary)),
+                      _TileLabel(app.t('stats.winsCount'), center: true),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RecentFormSection extends StatelessWidget {
+  const _RecentFormSection({required this.results});
 
   /// (result, opponent, score)
   final List<(String, String, String)> results;
 
   @override
   Widget build(BuildContext context) {
-    if (results.isEmpty) return Text(Provider.of<AppState>(context, listen: false).t('stats.noData'));
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        for (final (result, opponent, score) in results)
-          Tooltip(
-            message: '$opponent $score',
-            triggerMode: TooltipTriggerMode.tap,
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: formColor(result)),
-              alignment: Alignment.center,
-              child: Text(result, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _SplitRow extends StatelessWidget {
-  const _SplitRow({required this.label, required this.stats, required this.winPct});
-
-  final String label;
-  final String stats;
-  final int winPct;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(label, style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold)),
-            const Spacer(),
-            Text(stats, style: theme.textTheme.bodySmall),
-          ],
-        ),
-        const SizedBox(height: 4),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: LinearProgressIndicator(
-            value: winPct / 100,
-            minHeight: 8,
-            backgroundColor: theme.colorScheme.surfaceContainerHighest,
-            color: brandRed,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text('$winPct%', style: theme.textTheme.labelSmall),
-      ],
-    );
-  }
-}
-
-class _KeyValueRow extends StatelessWidget {
-  const _KeyValueRow(this.label, this.value);
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
+    return _Section(
+      title: app.t('stats.recentForm'),
+      child: Column(
         children: [
-          Expanded(child: Text(label, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant))),
-          const SizedBox(width: 12),
-          Flexible(child: Text(value, textAlign: TextAlign.end, style: const TextStyle(fontWeight: FontWeight.w600))),
+          Text(
+            app.t('stats.last5Matches'),
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, color: colors.mutedForeground),
+          ),
+          const SizedBox(height: 12),
+          if (results.isEmpty)
+            Text(app.t('stats.noData'), style: TextStyle(color: colors.mutedForeground))
+          else
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                for (final (result, opponent, score) in results)
+                  Tooltip(
+                    message: '$opponent ($score)',
+                    triggerMode: TooltipTriggerMode.tap,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: formColor(result)),
+                      alignment: Alignment.center,
+                      child: Text(
+                        result,
+                        style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
         ],
       ),
     );
   }
 }
 
-class _H2HTable extends StatelessWidget {
-  const _H2HTable({required this.rows, required this.hasDraws});
+class _PerformanceSplitSection extends StatelessWidget {
+  const _PerformanceSplitSection({required this.home, required this.away, required this.showDraws});
 
-  /// (opponent, played, wins, draws (null for volleyball), losses, goals/sets)
-  final List<(String, int, int, int?, int, String)> rows;
-  final bool hasDraws;
+  /// (played, wins, draws, losses) — draws null for volleyball.
+  final (int, int, int?, int) home;
+  final (int, int, int?, int) away;
+  final bool showDraws;
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
-    final theme = Theme.of(context);
-    if (rows.isEmpty) return Text(app.t('stats.noData'));
+    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final green = dark ? const Color(0xFF4ADE80) : const Color(0xFF16A34A);
+    final yellow = dark ? const Color(0xFFFACC15) : twYellow500;
 
-    TextStyle? headerStyle = theme.textTheme.labelSmall?.copyWith(
-      color: theme.colorScheme.onSurfaceVariant,
-      fontWeight: FontWeight.bold,
-    );
-
-    return Table(
-      columnWidths: {
-        0: const FlexColumnWidth(3),
-        1: const FlexColumnWidth(1),
-        2: const FlexColumnWidth(1),
-        if (hasDraws) 3: const FlexColumnWidth(1),
-        hasDraws ? 4 : 3: const FlexColumnWidth(1),
-        hasDraws ? 5 : 4: const FlexColumnWidth(2),
-      },
-      children: [
-        TableRow(
-          children: [
-            Text(app.t('stats.opponent'), style: headerStyle),
-            Text(app.t('stats.played'), style: headerStyle, textAlign: TextAlign.center),
-            Text(app.t('stats.w'), style: headerStyle, textAlign: TextAlign.center),
-            if (hasDraws) Text(app.t('stats.d'), style: headerStyle, textAlign: TextAlign.center),
-            Text(app.t('stats.l'), style: headerStyle, textAlign: TextAlign.center),
-            Text(app.t('stats.goalsCol'), style: headerStyle, textAlign: TextAlign.end),
-          ],
-        ),
-        for (final (opponent, played, wins, draws, losses, goals) in rows)
-          TableRow(
+    Widget tile(String label, String emoji, (int, int, int?, int) data) {
+      final (played, wins, draws, losses) = data;
+      return Expanded(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: _tileDecoration(dark),
+          child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text(opponent, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.bodySmall),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: dark ? twSlate800 : twSlate200,
+                ),
+                alignment: Alignment.center,
+                child: Text(emoji, style: const TextStyle(fontSize: 20)),
               ),
-              Text('$played', textAlign: TextAlign.center, style: theme.textTheme.bodySmall),
-              Text('$wins', textAlign: TextAlign.center, style: theme.textTheme.bodySmall?.copyWith(color: winGreen, fontWeight: FontWeight.bold)),
-              if (hasDraws)
-                Text('${draws ?? 0}', textAlign: TextAlign.center, style: theme.textTheme.bodySmall),
-              Text('$losses', textAlign: TextAlign.center, style: theme.textTheme.bodySmall?.copyWith(color: lossRed)),
-              Text(goals, textAlign: TextAlign.end, style: theme.textTheme.bodySmall),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _TileLabel(label),
+                    Text.rich(
+                      TextSpan(children: [
+                        TextSpan(
+                          text: '$played ',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: colors.foreground),
+                        ),
+                        TextSpan(
+                          text: app.t('stats.matches'),
+                          style: TextStyle(fontSize: 12, color: twSlate500),
+                        ),
+                      ]),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text.rich(
+                      TextSpan(children: [
+                        TextSpan(text: '$wins${app.t('stats.w')}  ', style: TextStyle(color: green)),
+                        if (showDraws)
+                          TextSpan(text: '${draws ?? 0}${app.t('stats.d')}  ', style: TextStyle(color: yellow)),
+                        TextSpan(text: '$losses${app.t('stats.l')}', style: TextStyle(color: colors.primary)),
+                      ]),
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-      ],
+        ),
+      );
+    }
+
+    return _Section(
+      title: app.t('stats.performanceSplit'),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            tile(app.t('stats.home'), '🏠', home),
+            const SizedBox(width: 12),
+            tile(app.t('stats.away'), '✈️', away),
+          ],
+        ),
+      ),
     );
   }
 }
 
-/// Lightweight line chart for points progression (replaces the web app's
-/// charting library).
-class _SparklinePainter extends CustomPainter {
-  _SparklinePainter({required this.values, required this.color, required this.gridColor});
+/// Shared top-scorers rows (volleyball now; QA-20 reuses it for the FotMob
+/// football list). Web: #1 row gets the primary border + primary count.
+class _TopScorersSection extends StatelessWidget {
+  const _TopScorersSection({required this.scorers});
 
-  final List<double> values;
-  final Color color;
-  final Color gridColor;
+  /// (name, value)
+  final List<(String, int)> scorers;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    if (values.length < 2) return;
-    final maxValue = values.reduce((a, b) => a > b ? a : b);
-    if (maxValue == 0) return;
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    if (scorers.isEmpty) return const SizedBox.shrink();
 
-    final gridPaint = Paint()
-      ..color = gridColor
-      ..strokeWidth = 0.5;
-    for (var i = 1; i <= 3; i++) {
-      final y = size.height * i / 4;
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
-    }
-
-    final path = Path();
-    for (var i = 0; i < values.length; i++) {
-      final x = size.width * i / (values.length - 1);
-      final y = size.height - (values[i] / maxValue) * size.height;
-      if (i == 0) {
-        path.moveTo(x, y);
-      } else {
-        path.lineTo(x, y);
-      }
-    }
-
-    final fillPath = Path.from(path)
-      ..lineTo(size.width, size.height)
-      ..lineTo(0, size.height)
-      ..close();
-    canvas.drawPath(
-      fillPath,
-      Paint()..color = color.withValues(alpha: 0.12),
-    );
-    canvas.drawPath(
-      path,
-      Paint()
-        ..color = color
-        ..strokeWidth = 2.5
-        ..style = PaintingStyle.stroke
-        ..strokeJoin = StrokeJoin.round,
+    return _Section(
+      title: app.t('stats.topScorers'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (i, scorer) in scorers.indexed)
+            Container(
+              margin: EdgeInsets.only(top: i == 0 ? 0 : 8),
+              padding: const EdgeInsets.all(12),
+              decoration: _tileDecoration(dark).copyWith(
+                border: i == 0 ? Border.all(color: colors.primary) : null,
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 16,
+                    child: Text('${i + 1}', style: const TextStyle(fontSize: 14, color: twSlate400, fontWeight: FontWeight.w500)),
+                  ),
+                  const SizedBox(width: 12),
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: dark ? twSlate700 : twSlate300,
+                    ),
+                    alignment: Alignment.center,
+                    child: const Text('👤', style: TextStyle(fontSize: 18)),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      scorer.$1,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.w500, color: colors.foreground),
+                    ),
+                  ),
+                  Text(
+                    '${scorer.$2}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: i == 0 ? colors.primary : colors.foreground,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
+}
+
+class _HeadToHeadSection extends StatelessWidget {
+  const _HeadToHeadSection({required this.rows});
+
+  /// (opponent, played, wins, draws, losses, goals)
+  final List<(String, int, int, int, int, String)> rows;
 
   @override
-  bool shouldRepaint(_SparklinePainter oldDelegate) =>
-      oldDelegate.values != values || oldDelegate.color != color;
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final headerBg = dark ? twSlate800.withValues(alpha: 0.5) : const Color(0xFFF1F5F9);
+    final rowBorder = BorderSide(color: dark ? twSlate800 : twSlate200);
+
+    if (rows.isEmpty) {
+      return _Section(
+        title: app.t('stats.headToHead'),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Text(
+            app.t('stats.noData'),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: colors.mutedForeground),
+          ),
+        ),
+      );
+    }
+
+    Widget headerCell(String text, {TextAlign align = TextAlign.center}) => Container(
+          color: headerBg,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          child: Text(
+            text.upperNoTonos,
+            textAlign: align,
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: dark ? twSlate400 : twSlate500),
+          ),
+        );
+
+    Widget cell(Widget child) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          child: child,
+        );
+
+    TextStyle bold(Color color) => TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: color);
+
+    return _Section(
+      title: app.t('stats.headToHead'),
+      child: Table(
+        columnWidths: const {
+          0: FlexColumnWidth(3),
+          1: FlexColumnWidth(1),
+          2: FlexColumnWidth(1),
+          3: FlexColumnWidth(1),
+          4: FlexColumnWidth(1),
+          5: FlexColumnWidth(1.6),
+        },
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        children: [
+          TableRow(
+            decoration: BoxDecoration(border: Border(bottom: rowBorder)),
+            children: [
+              headerCell(app.t('stats.opponent'), align: TextAlign.left),
+              headerCell(app.t('stats.played')),
+              headerCell(app.t('stats.w')),
+              headerCell(app.t('stats.d')),
+              headerCell(app.t('stats.l')),
+              headerCell(app.t('stats.goalsCol')),
+            ],
+          ),
+          for (final (opponent, played, wins, draws, losses, goals) in rows)
+            TableRow(
+              decoration: BoxDecoration(border: Border(bottom: rowBorder)),
+              children: [
+                cell(Text(opponent, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: colors.foreground))),
+                cell(Text('$played', textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: colors.mutedForeground))),
+                cell(Text('$wins', textAlign: TextAlign.center, style: bold(const Color(0xFF4ADE80)))),
+                cell(Text('$draws', textAlign: TextAlign.center, style: bold(const Color(0xFFFACC15)))),
+                cell(Text('$losses', textAlign: TextAlign.center, style: bold(const Color(0xFFF87171)))),
+                cell(Text(goals, textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: colors.mutedForeground))),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Small helpers ────────────────────────────────────────────────────────────
+
+class _TileLabel extends StatelessWidget {
+  const _TileLabel(this.text, {this.center = false});
+
+  final String text;
+  final bool center;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Text(
+      text,
+      textAlign: center ? TextAlign.center : TextAlign.start,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: dark ? twSlate400 : twSlate500),
+    );
+  }
+}
+
+/// Fixed-column grid built from rows (the web `grid grid-cols-3 gap-3`).
+class _TileGrid extends StatelessWidget {
+  const _TileGrid({required this.columns, required this.children});
+
+  final int columns;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = <Widget>[];
+    for (var i = 0; i < children.length; i += columns) {
+      rows.add(Padding(
+        padding: EdgeInsets.only(top: i == 0 ? 0 : 12),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var j = 0; j < columns; j++) ...[
+                if (j > 0) const SizedBox(width: 12),
+                Expanded(
+                  child: i + j < children.length ? children[i + j] : const SizedBox.shrink(),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ));
+    }
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: rows);
+  }
 }

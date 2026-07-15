@@ -1,6 +1,6 @@
 # QA-03: Volleyball accent color — purple → blue everywhere
 
-**Status:** todo
+**Status:** done (PR #84, merged 2026-07-15)
 **Batch:** calendar (`fix/qa-calendar`)
 **Register rows:** GLB-07 (P1)
 **Depends on:** -

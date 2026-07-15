@@ -14,17 +14,17 @@ void showPlayerSheet(
   Player player,
   PlayerSeasonStats stats,
 ) {
+  // Web sheet chrome: no drag handle, close X inside the content (QA SQD-03).
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
-    showDragHandle: true,
     builder: (_) => DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.7,
       maxChildSize: 0.95,
       builder: (context, controller) => SingleChildScrollView(
         controller: controller,
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         child: _PlayerDetails(player: player, stats: stats),
       ),
     ),
@@ -74,6 +74,16 @@ class _PlayerDetailsState extends State<_PlayerDetails> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // ── Close X (web Radix sheet chrome) ──
+        Align(
+          alignment: Alignment.centerRight,
+          child: IconButton(
+            icon: const Icon(Icons.close, size: 20),
+            color: colors.mutedForeground,
+            tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
         // ── Header: avatar + name + bio badges ──
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -291,11 +301,14 @@ class _StatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = AppColors.of(context);
+    final dark = theme.brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(12),
+      // Web StatTile: `bg-white/70 dark:bg-[#1a1a1a]/50 border-slate-200
+      // dark:border-slate-800` (QA SQD-01).
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerLow,
-        border: Border.all(color: colors.primaryBorderSubtle),
+        color: dark ? const Color(0x801A1A1A) : const Color(0xB3FFFFFF),
+        border: Border.all(color: dark ? twSlate800 : twSlate200),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -320,9 +333,16 @@ class _StatTile extends StatelessWidget {
           ),
           if (detail != null) ...[
             const SizedBox(height: 4),
-            Text(
-              detail!,
-              style: TextStyle(fontSize: 11, color: colors.mutedForeground),
+            // Web keeps the detail on one line (`text-[11px]`, QA SQD-02);
+            // scale down rather than wrap when the tile is narrow.
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                detail!,
+                maxLines: 1,
+                style: TextStyle(fontSize: 11, color: colors.mutedForeground),
+              ),
             ),
           ],
         ],

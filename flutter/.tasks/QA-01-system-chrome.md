@@ -1,6 +1,6 @@
 # QA-01: System chrome — red status bar, theme-icon semantics, back button, view glyphs, share removal
 
-**Status:** todo
+**Status:** done (PR #84, merged 2026-07-15)
 **Batch:** calendar (`fix/qa-calendar`)
 **Register rows:** GLB-01 (P2), GLB-03 (P2), GLB-04 (P2), CAL-05 (P3), GLB-02 (decided)
 **Depends on:** -

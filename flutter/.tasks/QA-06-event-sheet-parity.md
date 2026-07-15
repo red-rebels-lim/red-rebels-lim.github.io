@@ -1,6 +1,6 @@
 # QA-06: Event sheet visual parity — tint, chips, pills, labels, CTA, tabs
 
-**Status:** todo
+**Status:** done (PR #84, merged 2026-07-15)
 **Batch:** calendar (`fix/qa-calendar`)
 **Register rows:** EVT-01 (P1), EVT-02 (P2), EVT-03 (P2), EVT-05 (P3), EVT-06 (P3), EVT-07 (P3), EVT-08 (P3), EVT-09 (P3), EVT-10 (P3), EVT-11 (P3)
 **Depends on:** QA-03
