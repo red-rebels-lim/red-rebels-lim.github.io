@@ -27,7 +27,10 @@ class BottomNav extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: colors.navBackground,
-        border: Border(top: BorderSide(color: colors.navBorder)),
+        // Brutalism: 2px solid primary top border (THM-02).
+        border: Border(
+          top: BorderSide(color: colors.navBorder, width: colors.chromeBorderWidth),
+        ),
       ),
       child: SafeArea(
         top: false,
@@ -41,7 +44,7 @@ class BottomNav extends StatelessWidget {
                   icon: i == index ? items[i].$2 : items[i].$1,
                   label: items[i].$3,
                   active: i == index,
-                  inactiveColor: colors.navInactive,
+                  colors: colors,
                   onTap: () => onSelect(i),
                 ),
             ],
@@ -57,19 +60,21 @@ class _NavItem extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.active,
-    required this.inactiveColor,
+    required this.colors,
     required this.onTap,
   });
 
   final IconData icon;
   final String label;
   final bool active;
-  final Color inactiveColor;
+  final AppColors colors;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final color = active ? accentRed : inactiveColor;
+    // Neon: active tab goes cyan with a glow (THM-05); brutalism gives it a
+    // red-tinted square block (`nav a.active`, THM-01).
+    final color = active ? colors.navActive : colors.navInactive;
     return Semantics(
       selected: active,
       button: true,
@@ -77,12 +82,20 @@ class _NavItem extends StatelessWidget {
       child: InkResponse(
         onTap: onTap,
         radius: 32,
-        child: Padding(
+        child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          color: active ? colors.navActiveBg : null,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 22, color: color),
+              Icon(
+                icon,
+                size: 22,
+                color: color,
+                shadows: active && colors.navActiveGlow
+                    ? [Shadow(color: color.withValues(alpha: 0.8), blurRadius: 10)]
+                    : null,
+              ),
               const SizedBox(height: 3),
               Text(
                 label.upperNoTonos,

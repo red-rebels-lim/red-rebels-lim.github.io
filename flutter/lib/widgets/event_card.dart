@@ -78,7 +78,7 @@ class EventCard extends StatelessWidget {
                 height: 64,
                 decoration: BoxDecoration(
                   color: accent.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: colors.br(8),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -148,7 +148,7 @@ class EventCard extends StatelessWidget {
               Container(
                 width: 32,
                 height: 32,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: colors.surfaceTileRaised),
+                decoration: BoxDecoration(borderRadius: colors.br(999), color: colors.surfaceTileRaised),
                 child: Icon(Icons.chevron_right, size: 18, color: theme.colorScheme.onSurface),
               ),
             ],

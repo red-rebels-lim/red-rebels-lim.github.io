@@ -181,7 +181,7 @@ class _PositionSection extends StatelessWidget {
               border: Border.all(
                 color: theme.brightness == Brightness.dark ? twSlate800 : twSlate200,
               ),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: colors.br(8),
             ),
             clipBehavior: Clip.antiAlias,
             child: Column(

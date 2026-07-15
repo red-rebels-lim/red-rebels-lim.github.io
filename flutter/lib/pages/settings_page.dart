@@ -62,13 +62,13 @@ class SettingsPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: dark ? Colors.white.withValues(alpha: 0.05) : const Color(0xFFF1F5F9),
                 border: Border.all(color: AppColors.of(context).primaryBorderSubtle),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppColors.of(context).br(8),
               ),
               child: DropdownButton<String>(
                 key: const Key('visual-theme-select'),
                 value: app.visualTheme,
                 underline: const SizedBox.shrink(),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppColors.of(context).br(8),
                 items: [
                   for (final theme in visualThemes)
                     DropdownMenuItem(value: theme, child: Text(_themeLabel(app, theme), style: const TextStyle(fontSize: 14))),
@@ -212,7 +212,7 @@ class _Section extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: dark ? Colors.transparent : const Color(0xB3FFFFFF),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: AppColors.of(context).br(4),
               ),
               child: Text(
                 title.upperNoTonos,
@@ -228,7 +228,7 @@ class _Section extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: dark ? twSlate800 : Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppColors.of(context).br(12),
               border: Border.all(color: dark ? Colors.transparent : twSlate200),
               boxShadow: dark
                   ? null
@@ -340,7 +340,7 @@ class _IconTile extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         color: background ?? (dark ? twSlate800.withValues(alpha: 0.8) : const Color(0xFFF1F5F9)),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppColors.of(context).br(8),
       ),
       child: Icon(icon, size: size / 2, color: color ?? (dark ? twSlate400 : twSlate500)),
     );
@@ -569,10 +569,10 @@ class _ReminderChip extends StatelessWidget {
     final dark = Theme.of(context).brightness == Brightness.dark;
     return Material(
       color: active ? brandRed : (dark ? twSlate700 : twSlate200),
-      borderRadius: BorderRadius.circular(999),
+      borderRadius: AppColors.of(context).br(999),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: AppColors.of(context).br(999),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Text(

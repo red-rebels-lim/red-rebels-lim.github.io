@@ -181,6 +181,14 @@ class AppColors extends ThemeExtension<AppColors> {
     this.bodyFontFamily = 'Barlow',
     this.headingTrackingDelta = 0,
     this.headingGlow = false,
+    this.squareCorners = false,
+    this.headerBorder = const Color(0x14FFFFFF),
+    this.chromeBorderWidth = 1,
+    this.navActive = accentRed,
+    this.navActiveGlow = false,
+    this.navActiveBg,
+    this.headerButtonBg,
+    this.ambientBlobs = false,
   });
 
   /// 'default' | 'brutalism' | 'cinema' | 'neon' — which token block this
@@ -239,6 +247,40 @@ class AppColors extends ThemeExtension<AppColors> {
   /// Neon `text-shadow: 0 0 8px currentColor` on condensed headings.
   final bool headingGlow;
 
+  /// Brutalism and neon zero `--radius` AND `.rounded-full`, squaring every
+  /// corner — chips, pills and circular buttons included (THM-01).
+  final bool squareCorners;
+
+  /// Web header underline: `border-slate-200 dark:border-[var(--border-subtle)]`
+  /// (brutalism overrides both modes to `var(--border)`).
+  final Color headerBorder;
+
+  /// Header/nav border width — brutalism draws 2px chrome borders (THM-02).
+  final double chromeBorderWidth;
+
+  /// Active bottom-nav tab color — cyan under neon (THM-05), red elsewhere.
+  final Color navActive;
+
+  /// Neon dark: `text-shadow: 0 0 10px var(--neon-cyan)` on the active tab.
+  final bool navActiveGlow;
+
+  /// Brutalism: `nav a.active { background: rgba(224,37,32,0.08) }`.
+  final Color? navActiveBg;
+
+  /// Cinema drops the circular header-button fills (THM-03); null keeps the
+  /// default `bg-slate-100 dark:bg-[#1e293b]` tile.
+  final Color? headerButtonBg;
+
+  /// Web `AppBackground` drifts two ambient blobs in dark mode on the
+  /// default and cinema themes (THM-04).
+  final bool ambientBlobs;
+
+  /// Corner radius for a web `rounded-*` utility: every rounded class maps
+  /// through `--radius`, which brutalism/neon zero. [base] is the web
+  /// default-theme pixel value (999 for `rounded-full`).
+  BorderRadius br(double base) =>
+      squareCorners ? BorderRadius.zero : BorderRadius.circular(base);
+
   // ── Default theme (`:root` / `.dark`) ──────────────────────────────────
 
   static const light = AppColors(
@@ -256,6 +298,8 @@ class AppColors extends ThemeExtension<AppColors> {
     navInactive: Color(0xFF94A3B8),
     surfaceTile: Color(0xFFF1F5F9),
     surfaceTileRaised: Color(0xFFE2E8F0),
+    headerBorder: Color(0xFFE2E8F0),
+    ambientBlobs: true,
   );
 
   static const dark = AppColors(
@@ -273,9 +317,14 @@ class AppColors extends ThemeExtension<AppColors> {
     navBackground: Color(0xCC1E293B),
     navBorder: Color(0x14FFFFFF),
     navInactive: Color(0xFF94A3B8),
+    ambientBlobs: true,
   );
 
   // ── Brutalism (`.theme-brutalism`) ──────────────────────────────────────
+  // Body text stays Barlow: the web hardcodes `font-['Barlow',sans-serif]`
+  // on <main>, so `--font-body` never reaches page content — only headings
+  // (`.font-condensed` → `--font-heading`) vary per theme. The wide 3px
+  // tracking applies to the `h1` brand title only, not all headings.
 
   static const brutalismLight = AppColors(
     themeId: 'brutalism',
@@ -286,7 +335,7 @@ class AppColors extends ThemeExtension<AppColors> {
     mutedForeground: Color(0xFF64748B),
     border: Color(0xFFCBD5E1),
     primaryBorderSubtle: Color(0xFFE2E8F0),
-    surfacePanel: Color(0xCCF8FAFC),
+    surfacePanel: Color(0xB3FFFFFF),
     navBackground: Color(0xFFF8FAFC),
     navBorder: brandRed, // CSS: nav border-top 2px solid var(--primary)
     navInactive: Color(0xFF64748B),
@@ -295,8 +344,10 @@ class AppColors extends ThemeExtension<AppColors> {
     panelRadius: 0,
     cardRadius: 0,
     headingFontFamily: 'SpaceGrotesk',
-    bodyFontFamily: 'SpaceGrotesk',
-    headingTrackingDelta: 1.5,
+    squareCorners: true,
+    headerBorder: Color(0xFFCBD5E1),
+    chromeBorderWidth: 2,
+    navActiveBg: Color(0x14E02520),
   );
 
   static const brutalismDark = AppColors(
@@ -308,20 +359,22 @@ class AppColors extends ThemeExtension<AppColors> {
     mutedForeground: Color(0xFFA1A1AA),
     border: Color(0xFF3F3F46),
     primaryBorderSubtle: Color(0xFF3F3F46),
-    surfacePanel: Color(0xCC09090B),
+    surfacePanel: Color(0x00000000),
     navBackground: Color(0xFF09090B),
     navBorder: brandRed,
     navInactive: Color(0xFFA1A1AA),
     panelRadius: 0,
     cardRadius: 0,
     headingFontFamily: 'SpaceGrotesk',
-    bodyFontFamily: 'SpaceGrotesk',
-    headingTrackingDelta: 1.5,
+    squareCorners: true,
+    headerBorder: Color(0xFF3F3F46),
+    chromeBorderWidth: 2,
+    navActiveBg: Color(0x14E02520),
   );
 
   // ── Cinema (`.theme-cinema`) ────────────────────────────────────────────
-  // The web specifies Inter for body+headings; Inter is not bundled, so the
-  // platform default (Roboto / SF) stands in — the closest neutral grotesque.
+  // Headings switch to Inter (`--font-heading`); body stays Barlow like
+  // every theme (hardcoded on the web's <main>).
 
   static const cinemaLight = AppColors(
     themeId: 'cinema',
@@ -332,7 +385,7 @@ class AppColors extends ThemeExtension<AppColors> {
     mutedForeground: Color(0xFF64748B),
     border: Color(0x14000000),
     primaryBorderSubtle: Color(0x0F000000),
-    surfacePanel: Color(0x99F8FAFC),
+    surfacePanel: Color(0xB3FFFFFF),
     navBackground: Color(0xD9F8FAFC),
     navBorder: Color(0x14000000),
     navInactive: Color(0xFF64748B),
@@ -340,8 +393,10 @@ class AppColors extends ThemeExtension<AppColors> {
     surfaceTileRaised: Color(0xFFE2E8F0),
     panelRadius: 24,
     cardRadius: 16,
-    headingFontFamily: null,
-    bodyFontFamily: null,
+    headingFontFamily: 'Inter',
+    headerBorder: Color(0xFFE2E8F0),
+    headerButtonBg: Color(0x00000000),
+    ambientBlobs: true,
   );
 
   static const cinemaDark = AppColors(
@@ -353,14 +408,16 @@ class AppColors extends ThemeExtension<AppColors> {
     mutedForeground: Color(0xFF8A8F98),
     border: Color(0x14FFFFFF),
     primaryBorderSubtle: Color(0x14FFFFFF),
-    surfacePanel: Color(0x99020203),
+    surfacePanel: Color(0x00000000),
     navBackground: Color(0xBF020203),
     navBorder: Color(0x14FFFFFF),
     navInactive: Color(0xFF8A8F98),
     panelRadius: 24,
     cardRadius: 16,
-    headingFontFamily: null,
-    bodyFontFamily: null,
+    headingFontFamily: 'Inter',
+    headerBorder: Color(0x1AFFFFFF),
+    headerButtonBg: Color(0x00000000),
+    ambientBlobs: true,
   );
 
   // ── Neon HUD (`.theme-neon`) ────────────────────────────────────────────
@@ -374,7 +431,7 @@ class AppColors extends ThemeExtension<AppColors> {
     mutedForeground: Color(0xFF718096),
     border: Color(0x330891B2),
     primaryBorderSubtle: Color(0x1A0891B2),
-    surfacePanel: Color(0xCCF0F4F8),
+    surfacePanel: Color(0xB3FFFFFF),
     navBackground: Color(0xEBF0F4F8),
     navBorder: Color(0x330891B2),
     navInactive: Color(0xFF718096),
@@ -385,7 +442,9 @@ class AppColors extends ThemeExtension<AppColors> {
     panelRadius: 0,
     cardRadius: 0,
     headingFontFamily: 'Orbitron',
-    bodyFontFamily: 'JetBrainsMono',
+    squareCorners: true,
+    headerBorder: Color(0xFFE2E8F0),
+    navActive: Color(0xFF0891B2),
   );
 
   static const neonDark = AppColors(
@@ -397,7 +456,7 @@ class AppColors extends ThemeExtension<AppColors> {
     mutedForeground: Color(0xFF71717A),
     border: Color(0x2600FFFF),
     primaryBorderSubtle: Color(0x1A00FFFF),
-    surfacePanel: Color(0xCC0A0A0F),
+    surfacePanel: Color(0x00000000),
     navBackground: Color(0xE60A0A0F),
     navBorder: Color(0x2600FFFF),
     navInactive: Color(0xFF71717A),
@@ -406,8 +465,11 @@ class AppColors extends ThemeExtension<AppColors> {
     panelRadius: 0,
     cardRadius: 0,
     headingFontFamily: 'Orbitron',
-    bodyFontFamily: 'JetBrainsMono',
     headingGlow: true,
+    squareCorners: true,
+    headerBorder: Color(0x1A00FFFF),
+    navActive: Color(0xFF00FFFF),
+    navActiveGlow: true,
   );
 
   /// Palette for a visual theme + brightness. Unknown ids fall back to the
@@ -449,6 +511,14 @@ class AppColors extends ThemeExtension<AppColors> {
     String? bodyFontFamily,
     double? headingTrackingDelta,
     bool? headingGlow,
+    bool? squareCorners,
+    Color? headerBorder,
+    double? chromeBorderWidth,
+    Color? navActive,
+    bool? navActiveGlow,
+    Color? navActiveBg,
+    Color? headerButtonBg,
+    bool? ambientBlobs,
   }) =>
       AppColors(
         themeId: themeId ?? this.themeId,
@@ -473,6 +543,14 @@ class AppColors extends ThemeExtension<AppColors> {
         bodyFontFamily: bodyFontFamily ?? this.bodyFontFamily,
         headingTrackingDelta: headingTrackingDelta ?? this.headingTrackingDelta,
         headingGlow: headingGlow ?? this.headingGlow,
+        squareCorners: squareCorners ?? this.squareCorners,
+        headerBorder: headerBorder ?? this.headerBorder,
+        chromeBorderWidth: chromeBorderWidth ?? this.chromeBorderWidth,
+        navActive: navActive ?? this.navActive,
+        navActiveGlow: navActiveGlow ?? this.navActiveGlow,
+        navActiveBg: navActiveBg ?? this.navActiveBg,
+        headerButtonBg: headerButtonBg ?? this.headerButtonBg,
+        ambientBlobs: ambientBlobs ?? this.ambientBlobs,
       );
 
   @override
@@ -504,6 +582,14 @@ class AppColors extends ThemeExtension<AppColors> {
       headingTrackingDelta:
           lerpDouble(headingTrackingDelta, other.headingTrackingDelta, t)!,
       headingGlow: snap.headingGlow,
+      squareCorners: snap.squareCorners,
+      headerBorder: Color.lerp(headerBorder, other.headerBorder, t)!,
+      chromeBorderWidth: lerpDouble(chromeBorderWidth, other.chromeBorderWidth, t)!,
+      navActive: Color.lerp(navActive, other.navActive, t)!,
+      navActiveGlow: snap.navActiveGlow,
+      navActiveBg: Color.lerp(navActiveBg, other.navActiveBg, t),
+      headerButtonBg: Color.lerp(headerButtonBg, other.headerButtonBg, t),
+      ambientBlobs: snap.ambientBlobs,
     );
   }
 }

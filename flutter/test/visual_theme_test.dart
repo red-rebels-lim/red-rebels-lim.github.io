@@ -25,9 +25,10 @@ void main() {
     i18n = await I18n.load();
   });
 
-  Future<AppState> pumpApp(WidgetTester tester, {String? visualTheme}) async {
+  Future<AppState> pumpApp(WidgetTester tester, {String? visualTheme, bool dark = false}) async {
     SharedPreferences.setMockInitialValues({
       AppState.visualThemeKey: ?visualTheme,
+      if (dark) 'themeMode': 'dark',
       // Keep the first-run intro out of the way of these tests.
       AppState.introSeenKey: true,
     });
@@ -55,30 +56,65 @@ void main() {
       expect(AppColors.dark.surfaceTile, const Color(0xFF1E293B));
       expect(AppColors.brutalismDark.surfaceTile, const Color(0xFF1E293B));
 
-      // Brutalism: zero radius, Space Grotesk, zinc-black background.
+      // Brutalism: zero radius, Space Grotesk HEADINGS, zinc-black
+      // background, 2px chrome borders (THM-02), red-tinted active nav
+      // block. Body stays Barlow — the web hardcodes it on <main>, so
+      // `--font-body` never reaches page content.
       expect(AppColors.brutalismDark.background, const Color(0xFF09090B));
       expect(AppColors.brutalismDark.panelRadius, 0);
       expect(AppColors.brutalismDark.cardRadius, 0);
-      expect(AppColors.brutalismDark.bodyFontFamily, 'SpaceGrotesk');
+      expect(AppColors.brutalismDark.squareCorners, isTrue);
+      expect(AppColors.brutalismDark.headingFontFamily, 'SpaceGrotesk');
+      expect(AppColors.brutalismDark.bodyFontFamily, 'Barlow');
+      expect(AppColors.brutalismDark.chromeBorderWidth, 2);
+      expect(AppColors.brutalismDark.headerBorder, const Color(0xFF3F3F46));
+      expect(AppColors.brutalismDark.navActiveBg, const Color(0x14E02520));
       expect(AppColors.brutalismLight.navBorder, brandRed);
 
-      // Cinema: near-black background, larger radius, no bundled font.
+      // Cinema: near-black background, larger radius, Inter headings,
+      // plain header buttons, ambient blobs in dark (THM-03/04).
       expect(AppColors.cinemaDark.background, const Color(0xFF020203));
       expect(AppColors.cinemaDark.panelRadius, greaterThan(AppColors.dark.panelRadius));
-      expect(AppColors.cinemaDark.headingFontFamily, isNull);
+      expect(AppColors.cinemaDark.headingFontFamily, 'Inter');
+      expect(AppColors.cinemaDark.squareCorners, isFalse);
+      expect(AppColors.cinemaDark.headerButtonBg, const Color(0x00000000));
+      expect(AppColors.cinemaDark.ambientBlobs, isTrue);
+      expect(AppColors.cinemaLight.ambientBlobs, isTrue); // gated on dark at build
+      expect(AppColors.dark.ambientBlobs, isTrue);
+      expect(AppColors.brutalismDark.ambientBlobs, isFalse);
+      expect(AppColors.neonDark.ambientBlobs, isFalse);
 
-      // Neon: cyan accent, shifted primary (dark only), zero radius.
+      // Neon: cyan accent, shifted primary (dark only), zero radius, cyan
+      // active nav with glow in dark (THM-05).
       expect(AppColors.neonDark.neonCyan, const Color(0xFF00FFFF));
       expect(AppColors.neonDark.primary, const Color(0xFFFF2D20));
       expect(AppColors.neonLight.neonCyan, const Color(0xFF0891B2));
       expect(AppColors.neonLight.primary, brandRed);
       expect(AppColors.neonDark.panelRadius, 0);
+      expect(AppColors.neonDark.squareCorners, isTrue);
       expect(AppColors.neonDark.headingFontFamily, 'Orbitron');
-      expect(AppColors.neonDark.bodyFontFamily, 'JetBrainsMono');
+      expect(AppColors.neonDark.bodyFontFamily, 'Barlow');
+      expect(AppColors.neonDark.navActive, const Color(0xFF00FFFF));
+      expect(AppColors.neonDark.navActiveGlow, isTrue);
+      expect(AppColors.neonLight.navActive, const Color(0xFF0891B2));
+      expect(AppColors.neonLight.navActiveGlow, isFalse);
+      expect(AppColors.dark.navActive, accentRed);
+
+      // Web panel is `bg-white/70 dark:bg-transparent` for EVERY theme
+      // (CalendarPage line is theme-independent — THM-06).
+      expect(AppColors.neonLight.surfacePanel, const Color(0xB3FFFFFF));
+      expect(AppColors.neonDark.surfacePanel, const Color(0x00000000));
+      expect(AppColors.brutalismDark.surfacePanel, const Color(0x00000000));
 
       // Non-neon themes expose no cyan accent.
       expect(AppColors.dark.neonCyan, isNull);
       expect(AppColors.brutalismDark.neonCyan, isNull);
+
+      // `br()`: rounded-* squares out under brutalism/neon only.
+      expect(AppColors.brutalismDark.br(999), BorderRadius.zero);
+      expect(AppColors.neonDark.br(8), BorderRadius.zero);
+      expect(AppColors.dark.br(8), BorderRadius.circular(8));
+      expect(AppColors.cinemaDark.br(999), BorderRadius.circular(999));
     });
 
     test('buildTheme registers the palette as a ThemeExtension', () {
@@ -128,6 +164,35 @@ void main() {
 
       await pumpApp(tester);
       expect(find.byKey(const Key('marquee-ticker')), findsNothing);
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('ambient blobs drift on default + cinema dark only (THM-04)', (tester) async {
+      await pumpApp(tester, dark: true);
+      expect(find.byKey(const Key('ambient-blobs')), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+
+      await pumpApp(tester, visualTheme: 'cinema', dark: true);
+      expect(find.byKey(const Key('ambient-blobs')), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+
+      // Light mode and the other themes stay blob-free.
+      await pumpApp(tester, visualTheme: 'cinema');
+      expect(find.byKey(const Key('ambient-blobs')), findsNothing);
+      await tester.pumpWidget(const SizedBox());
+
+      await pumpApp(tester, visualTheme: 'neon', dark: true);
+      expect(find.byKey(const Key('ambient-blobs')), findsNothing);
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('neon scanlines render in dark mode only (THM-07)', (tester) async {
+      await pumpApp(tester, visualTheme: 'neon', dark: true);
+      expect(find.byKey(const Key('neon-scanlines')), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+
+      await pumpApp(tester, visualTheme: 'neon');
+      expect(find.byKey(const Key('neon-scanlines')), findsNothing);
       await tester.pumpWidget(const SizedBox());
     });
 

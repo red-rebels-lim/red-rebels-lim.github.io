@@ -100,10 +100,10 @@ class _SportPill extends StatelessWidget {
     final dark = Theme.of(context).brightness == Brightness.dark;
     return Material(
       color: selected ? colors.primary : (dark ? const Color(0xFF1A1A1A) : twSlate200),
-      borderRadius: BorderRadius.circular(999),
+      borderRadius: colors.br(999),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: colors.br(999),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text(
@@ -230,11 +230,14 @@ class _Section extends StatelessWidget {
 
 /// Web stat tile chrome: `rounded-lg bg-white/5 dark:bg-[#1a1a1a]/50 border
 /// border-slate-200 dark:border-slate-800`.
-BoxDecoration _tileDecoration(bool dark) => BoxDecoration(
-      color: dark ? const Color(0x801A1A1A) : const Color(0x0DFFFFFF),
-      border: Border.all(color: dark ? twSlate800 : twSlate200),
-      borderRadius: BorderRadius.circular(8),
-    );
+BoxDecoration _tileDecoration(BuildContext context) {
+  final dark = Theme.of(context).brightness == Brightness.dark;
+  return BoxDecoration(
+    color: dark ? const Color(0x801A1A1A) : const Color(0x0DFFFFFF),
+    border: Border.all(color: dark ? twSlate800 : twSlate200),
+    borderRadius: AppColors.of(context).br(8),
+  );
+}
 
 class _SeasonSummarySection extends StatelessWidget {
   const _SeasonSummarySection({required this.stats});
@@ -268,7 +271,7 @@ class _SeasonSummarySection extends StatelessWidget {
           for (final (label, value, color) in cards)
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: _tileDecoration(dark),
+              decoration: _tileDecoration(context),
               child: Column(
                 children: [
                   _TileLabel(label, center: true),
@@ -326,7 +329,7 @@ class _VolleyballSummarySection extends StatelessWidget {
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.all(16),
-                    decoration: _tileDecoration(dark),
+                    decoration: _tileDecoration(context),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -354,7 +357,7 @@ class _VolleyballSummarySection extends StatelessWidget {
               ])
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: _tileDecoration(dark),
+                  decoration: _tileDecoration(context),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -410,7 +413,7 @@ class _SetBreakdownSection extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(999),
+                  borderRadius: colors.br(999),
                   child: LinearProgressIndicator(
                     value: total == 0 ? 0 : value / total,
                     minHeight: 24,
@@ -446,7 +449,7 @@ class _SetBreakdownSection extends StatelessWidget {
               for (final (label, value) in [('3-0', threeZero), ('3-1', threeOne), ('3-2', threeTwo)])
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: _tileDecoration(dark),
+                  decoration: _tileDecoration(context),
                   child: Column(
                     children: [
                       Text(label, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: colors.foreground)),
@@ -498,7 +501,7 @@ class _RecentFormSection extends StatelessWidget {
                     child: Container(
                       width: 40,
                       height: 40,
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: formColor(result)),
+                      decoration: BoxDecoration(borderRadius: AppColors.of(context).br(999), color: formColor(result)),
                       alignment: Alignment.center,
                       child: Text(
                         result,
@@ -535,14 +538,14 @@ class _PerformanceSplitSection extends StatelessWidget {
       return Expanded(
         child: Container(
           padding: const EdgeInsets.all(16),
-          decoration: _tileDecoration(dark),
+          decoration: _tileDecoration(context),
           child: Row(
             children: [
               Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                  borderRadius: AppColors.of(context).br(999),
                   color: dark ? twSlate800 : twSlate200,
                 ),
                 alignment: Alignment.center,
@@ -627,7 +630,7 @@ class _TopScorersSection extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(top: i == 0 ? 0 : 8),
               padding: const EdgeInsets.all(12),
-              decoration: _tileDecoration(dark).copyWith(
+              decoration: _tileDecoration(context).copyWith(
                 border: i == 0 ? Border.all(color: colors.primary) : null,
               ),
               child: Row(
@@ -641,7 +644,7 @@ class _TopScorersSection extends StatelessWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+                      borderRadius: AppColors.of(context).br(999),
                       color: dark ? twSlate700 : twSlate300,
                     ),
                     alignment: Alignment.center,

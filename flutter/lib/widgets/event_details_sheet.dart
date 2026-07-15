@@ -51,7 +51,9 @@ class _EventSheetSurface extends StatelessWidget {
           colors: [style.surface, style.surfaceBottom],
         ),
         border: Border(top: BorderSide(color: style.borderColor)),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(
+          top: AppColors.of(context).br(24).topLeft,
+        ),
       ),
       clipBehavior: Clip.antiAlias,
       child: SingleChildScrollView(
@@ -147,7 +149,7 @@ class _EventDetails extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: resultStyle.badgeBg,
                       border: Border.all(color: resultStyle.badgeBorder),
-                      borderRadius: BorderRadius.circular(999),
+                      borderRadius: AppColors.of(context).br(999),
                     ),
                     child: Text(
                       app.t('popover.${result?.name ?? 'upcoming'}').upperNoTonos,
@@ -283,7 +285,7 @@ class _EventDetails extends StatelessWidget {
           const SizedBox(height: 16),
           Material(
             clipBehavior: Clip.antiAlias,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppColors.of(context).br(16),
             child: Ink(
               decoration: const BoxDecoration(
                 // Web: `bg-gradient-to-r from-primary to-red-700`.
@@ -421,7 +423,7 @@ class _MeetingDetails extends StatelessWidget {
             decoration: BoxDecoration(
               color: dark ? Colors.white.withValues(alpha: 0.05) : const Color(0xFFF8FAFC),
               border: Border.all(color: colors.primaryBorderSubtle, width: 2),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: colors.br(12),
             ),
             child: Column(
               children: [
@@ -459,7 +461,7 @@ class _InfoChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: dark ? Colors.white.withValues(alpha: 0.08) : const Color(0xFFF1F5F9),
         border: Border.all(color: dark ? Colors.white.withValues(alpha: 0.1) : twSlate200),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: AppColors.of(context).br(999),
       ),
       child: Text(
         '$icon $label',
@@ -481,7 +483,7 @@ class _CupChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: twAmber500.withValues(alpha: 0.2),
         border: Border.all(color: twAmber500.withValues(alpha: 0.3)),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: AppColors.of(context).br(999),
       ),
       child: Text(
         '🏆 ${app.t('calendar.cup')}',
@@ -833,7 +835,7 @@ class _SubsTab extends StatelessWidget {
     Widget subRow(Substitution s) => Container(
           margin: const EdgeInsets.only(bottom: 6),
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: rowBg, borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(color: rowBg, borderRadius: colors.br(8)),
           child: Row(
             children: [
               Expanded(
