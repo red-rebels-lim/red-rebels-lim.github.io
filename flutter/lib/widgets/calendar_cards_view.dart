@@ -69,11 +69,11 @@ class _MatchCard extends StatelessWidget {
 
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: colors.br(12),
         side: BorderSide(color: colors.primaryBorderSubtle),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: colors.br(12),
         onTap: () => showEventDetailsSheet(context, event, monthName),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -95,7 +95,7 @@ class _MatchCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: accent.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(999),
+                      borderRadius: colors.br(999),
                     ),
                     child: Text(
                       app.t(sportLabelKey(event.sport)).upperNoTonos,
@@ -149,7 +149,7 @@ class _MatchCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
                         color: resultColor.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(999),
+                        borderRadius: colors.br(999),
                       ),
                       child: Text(
                         app.t('popover.${result.name}').upperNoTonos,

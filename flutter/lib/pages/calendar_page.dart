@@ -297,7 +297,7 @@ class _MonthNavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = AppColors.of(context);
-    final radius = BorderRadius.circular(8);
+    final radius = colors.br(8);
     return Tooltip(
       message: tooltip,
       child: Material(
@@ -363,7 +363,7 @@ class _SelectedDayChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: dark ? Colors.transparent : const Color(0xB3FFFFFF),
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: AppColors.of(context).br(4),
       ),
       child: Text(
         label.upperNoTonos,
@@ -525,12 +525,13 @@ class _DayCell extends StatelessWidget {
     final dots = dotColorsFor(events);
     // Web: selected = red 20% fill + bold red number; today (unselected) =
     // 2px red ring + semibold red number; else medium slate number.
+    final colors = AppColors.of(context);
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: colors.br(8),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: colors.br(8),
           color: isSelected ? accentRed.withValues(alpha: 0.2) : null,
           border: isToday && !isSelected
               ? Border.all(color: accentRed.withValues(alpha: 0.5), width: 2)
@@ -564,7 +565,7 @@ class _DayCell extends StatelessWidget {
                         width: 4,
                         height: 4,
                         margin: EdgeInsets.only(left: i == 0 ? 0 : 2),
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+                        decoration: BoxDecoration(borderRadius: colors.br(999), color: color),
                       ),
                   ],
                 ),

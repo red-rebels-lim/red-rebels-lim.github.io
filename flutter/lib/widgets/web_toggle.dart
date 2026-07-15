@@ -14,6 +14,7 @@ class WebToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
+    final colors = AppColors.of(context);
     return Semantics(
       toggled: checked,
       button: true,
@@ -30,15 +31,16 @@ class WebToggle extends StatelessWidget {
             alignment: checked ? Alignment.centerRight : Alignment.centerLeft,
             decoration: BoxDecoration(
               color: checked ? accentRed : (dark ? twSlate700 : twSlate200),
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: colors.br(999),
             ),
             child: Container(
               width: 27,
               height: 27,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
+              // Thumb is `rounded-full` too — square under brutalism/neon.
+              decoration: BoxDecoration(
+                borderRadius: colors.br(999),
                 color: Colors.white,
-                boxShadow: [BoxShadow(color: Color(0x22000000), blurRadius: 2)],
+                boxShadow: const [BoxShadow(color: Color(0x22000000), blurRadius: 2)],
               ),
             ),
           ),

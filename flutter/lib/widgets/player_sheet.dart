@@ -125,7 +125,7 @@ class _PlayerDetailsState extends State<_PlayerDetails> {
                         ),
                         decoration: BoxDecoration(
                           color: brandRed.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: colors.br(6),
                         ),
                         child: Text(
                           app
@@ -180,7 +180,7 @@ class _PlayerDetailsState extends State<_PlayerDetails> {
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               border: Border.all(color: colors.border),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: colors.br(8),
             ),
             child: Text(
               app.t('squad.modal.noApps'),
@@ -309,7 +309,7 @@ class _StatTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: dark ? const Color(0x801A1A1A) : const Color(0xB3FFFFFF),
         border: Border.all(color: dark ? twSlate800 : twSlate200),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: colors.br(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -388,7 +388,7 @@ class _MatchLogRow extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: badgeColor!.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: colors.br(4),
               ),
               child: Text(
                 badgeLabel,
@@ -422,7 +422,7 @@ class _MatchLogRow extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               decoration: BoxDecoration(
                 color: brandRed.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: colors.br(4),
               ),
               child: Text(
                 '${entry.goals}⚽',
