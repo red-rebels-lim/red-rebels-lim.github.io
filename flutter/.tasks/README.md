@@ -76,10 +76,10 @@ Everything else in the register (~40 rows) is new QA-only work not covered by an
 | QA-13 | Settings structure: section chips + white cards + icon tiles | settings | done (PR #88) | - |
 | QA-14 | Settings controls: language row, version string | settings | done (PR #88) | QA-13 |
 | QA-15 | Greek: "Γλώσσα" wrap + strip tonos on uppercase | settings | done (PR #88) | QA-14 |
-| QA-16 | Brutalism: square corners + 2px borders | themes | todo | - |
-| QA-17 | Cinema: typography, two-tone brand, plain buttons, animated blobs | themes | todo | - |
-| QA-18 | Neon: cyan active nav, panel fill, numerals, today cell, animated scanlines | themes | todo | - |
-| QA-19 | Theme fonts: brand title truncation | themes | todo | QA-17 |
+| QA-16 | Brutalism: square corners + 2px borders | themes | done (PR #90) | - |
+| QA-17 | Cinema: typography, two-tone brand, plain buttons, animated blobs | themes | done (PR #90) | - |
+| QA-18 | Neon: cyan active nav, panel fill, numerals, today cell, animated scanlines | themes | done (PR #90) | - |
+| QA-19 | Theme fonts: brand title truncation | themes | done (PR #90) | QA-17 |
 | QA-20 | Phase 8: FotMob blocks (standings, rankings, top scorers, next match) | functional | todo | - |
 | QA-21 | Phase 10 gaps: opponent scout, sports filter, notification preview, calendar export | functional | todo | QA-06, QA-13 |
 | QA-22 | Cold-start hang: verify launch sync is non-blocking | functional | todo | - |
