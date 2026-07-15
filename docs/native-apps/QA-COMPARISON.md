@@ -21,40 +21,42 @@ marked *Phase 8/10*). Greek rows (GRK) ride with the batch that owns the affecte
 
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
-| GLB-01 | status bar | all pages, both modes | Web keeps the red `theme-color` status bar with light icons in light *and* dark; app draws a background-colored status bar with dark icons | P2 | BUG | OPEN |
-| GLB-02 | header | all pages | App adds a 4th header button (filter funnel). Web mobile header has exactly three (view/share/theme); web's FilterPanel only opens via keyboard shortcut — mobile web users have **no** filter entry point | P2 | DECIDED 2026-07-14: **keep the app's filter button; remove ALL sharing from the app** (header button + event-sheet chip); web unchanged | ACCEPTED (implement removal in QA-01/QA-06) |
-| GLB-03 | header | all pages | Theme-toggle icon semantics inverted: web icon shows the *current* state (moon when dark), app shows the *target* state (moon when light) | P2 | BUG | OPEN |
-| GLB-04 | header | Stats & Squad pages | Web shows a circular back button before the title on non-calendar pages; app never renders one | P2 | BUG | OPEN |
-| GLB-05 | page container | list/cards views, settings | App wraps every page in one large frosted rounded panel. Web only panels the calendar grid and stats; list/cards rows and settings cards sit directly on the background | P2 | BUG | OPEN |
-| GLB-06 | background | all pages, light | App's light-mode overlay over `mobile.webp` is far lighter (heavy white haze, washed out); web keeps the photo darker and richer | P2 | BUG | OPEN |
-| GLB-07 | sport colors | grid dots, list labels, cards chips, everywhere | Women's volleyball rendered purple `#9C27B0` in app; web renders **all** volleyball blue (dots, labels, chips) | P1 | BUG (previously accepted deviation, reopened per exact-copy criterion) | OPEN |
+| GLB-01 | status bar | all pages, both modes | Web keeps the red `theme-color` status bar with light icons in light *and* dark; app draws a background-colored status bar with dark icons | P2 | BUG | FIXED (PR #84) |
+| GLB-02 | header | all pages | App adds a 4th header button (filter funnel). Web mobile header has exactly three (view/share/theme); web's FilterPanel only opens via keyboard shortcut — mobile web users have **no** filter entry point | P2 | DECIDED 2026-07-14: **keep the app's filter button; remove ALL sharing from the app** (header button + event-sheet chip); web unchanged | ACCEPTED — removal shipped in PR #84 |
+| GLB-03 | header | all pages | Theme-toggle icon semantics inverted: web icon shows the *current* state (moon when dark), app shows the *target* state (moon when light) | P2 | BUG | FIXED (PR #84) |
+| GLB-04 | header | Stats & Squad pages | Web shows a circular back button before the title on non-calendar pages; app never renders one | P2 | BUG | FIXED (PR #84) |
+| GLB-05 | page container | list/cards views, settings | App wraps every page in one large frosted rounded panel. Web only panels the calendar grid and stats; list/cards rows and settings cards sit directly on the background | P2 | BUG | FIXED (PR #84) |
+| GLB-06 | background | all pages, light | App's light-mode overlay over `mobile.webp` is far lighter (heavy white haze, washed out); web keeps the photo darker and richer | P2 | BUG | FIXED (PR #84) |
+| GLB-07 | sport colors | grid dots, list labels, cards chips, everywhere | Women's volleyball rendered purple `#9C27B0` in app; web renders **all** volleyball blue (dots, labels, chips) | P1 | BUG (previously accepted deviation, reopened per exact-copy criterion) | FIXED (PR #84) |
 
 ## Calendar
 
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
-| CAL-01 | grid | all months | App renders leading previous-month day numbers (grayed); web leaves leading cells blank (both show trailing next-month days grayed) | P2 | BUG | OPEN |
+| CAL-01 | grid | all months | App renders leading previous-month day numbers (grayed); web leaves leading cells blank (both show trailing next-month days grayed) | P2 | BUG | FIXED (PR #84) |
 | CAL-02 | month nav | season boundaries | App disables the chevrons at Aug 2025 / Aug 2026; web wraps within the season | P3 | DECIDED 2026-07-14: keep the app's disabled chevrons | ACCEPTED |
 | CAL-03 | month nav | tab switch | Web resets to the current month when re-entering the Calendar tab; app preserves the last browsed month | P3 | DECIDED 2026-07-14: keep the app's month persistence | ACCEPTED |
-| CAL-04 | cards/list rows | light | Event-card and row borders are red-tinted in app; web uses `border-slate-200` / `dark:border-slate-800` (volleyball cards blue-tinted) | P2 | BUG (previously accepted deviation, reopened) | OPEN |
-| CAL-05 | header view icon | list/cards | App's view-switcher glyphs differ from the web's icon set (list/cards icons) | P3 | BUG | OPEN |
-| CAL-06 | day-selected cards | grid + selection | Minor: app card paddings/title truncation point differ slightly (title cuts later than web) | P3 | BUG | OPEN |
+| CAL-04 | cards/list rows | light | Event-card and row borders are red-tinted in app; web uses `border-slate-200` / `dark:border-slate-800` (volleyball cards blue-tinted) | P2 | BUG (previously accepted deviation, reopened) | FIXED (PR #84) |
+| CAL-05 | header view icon | list/cards | App's view-switcher glyphs differ from the web's icon set (list/cards icons) | P3 | BUG | FIXED (PR #84) |
+| CAL-06 | day-selected cards | grid + selection | Minor: app card paddings/title truncation point differ slightly (title cuts later than web) | P3 | BUG | FIXED (PR #84) |
+| CAL-07 | grid selection | current month | Web pre-selects today when viewing the current month (`findDefaultDay`); app started with no selection | P3 | BUG (found during the fix batch) | FIXED (PR #84) |
+| CAL-08 | view switch | grid ↔ list/cards | Switching views snapped the visible month back to the initial month (PageController re-attach); month now preserved | P2 | BUG (app-only, found during the fix batch) | FIXED (PR #84) |
 
 ## Event sheet
 
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
-| EVT-01 | sheet surface | played events | Web tints the whole sheet by result (pale green win / pale red loss, gradient to bottom); app sheet is plain white/dark | P1 | BUG | OPEN |
-| EVT-02 | chips row | all sheets | Web shows kickoff-time chip (`⏰ 18:30`, `🕐 90+3'`), venue pill (`📍 …`), yellow `🏆 Cup` chip, `✈️ Away` chip and share; app shows only `🚌 Away` + share, renders the venue as plain text, and adds a date line the web sheet doesn't have | P2 | BUG | OPEN |
-| EVT-03 | competition label | cup matches | Web prints the league name (`CYPRUS 2ND DIVISION · MATCHDAY 1`) plus the Cup chip; app prints `CUP · MATCHDAY 1` and no chip | P2 | BUG | OPEN |
-| EVT-04 | goalscorers tab | played football | Web lays scorers out per team side (home left / away right, minute + ball inline); app renders a single left-aligned list with minutes right | P2 | BUG | OPEN |
-| EVT-05 | sheet title | volleyball | Web titles the sheet with the fixture (`NEA SALAMIS VS AEL`); app always says `MATCH RESULT` | P3 | BUG | OPEN |
-| EVT-06 | penalties | cup shootout | Web renders `Penalties: 1-3` in amber; app in gray | P3 | BUG | OPEN |
-| EVT-07 | result pill | all sheets | Web WIN/LOSS pill is filled with a pale tint; app pill is outlined on white | P3 | BUG | OPEN |
-| EVT-08 | opponent logo fallback | teams without crest | Web shows a generic shield glyph; app shows a letter avatar in a pink circle | P3 | BUG | OPEN |
-| EVT-09 | CTA | football sheets | Web shows `VIEW ALL STATISTICS` inside the initial sheet height; app requires expanding/scrolling to reach it | P3 | BUG | OPEN |
-| EVT-10 | sheet chrome | all sheets | App adds a Material drag handle; web has none. App sheet lacks the web's close X on player sheets (present on event sheets) | P3 | BUG | OPEN |
-| EVT-11 | tabs | football sheets | App tabs stretch full-width (Material TabBar); web tabs are compact and left-aligned | P3 | BUG | OPEN |
+| EVT-01 | sheet surface | played events | Web tints the whole sheet by result (pale green win / pale red loss, gradient to bottom); app sheet is plain white/dark | P1 | BUG | FIXED (PR #84) |
+| EVT-02 | chips row | all sheets | Web shows kickoff-time chip (`⏰ 18:30`, `🕐 90+3'`), venue pill (`📍 …`), yellow `🏆 Cup` chip, `✈️ Away` chip and share; app shows only `🚌 Away` + share, renders the venue as plain text, and adds a date line the web sheet doesn't have | P2 | BUG | FIXED (PR #84) |
+| EVT-03 | competition label | cup matches | Web prints the league name (`CYPRUS 2ND DIVISION · MATCHDAY 1`) plus the Cup chip; app prints `CUP · MATCHDAY 1` and no chip | P2 | BUG | FIXED (PR #84) |
+| EVT-04 | goalscorers tab | played football | Web lays scorers out per team side (home left / away right, minute + ball inline); app renders a single left-aligned list with minutes right | P2 | BUG | FIXED (PR #84) |
+| EVT-05 | sheet title | volleyball | Web titles the sheet with the fixture (`NEA SALAMIS VS AEL`); app always says `MATCH RESULT` | P3 | BUG | FIXED (PR #84) |
+| EVT-06 | penalties | cup shootout | Web renders `Penalties: 1-3` in amber; app in gray | P3 | BUG | FIXED (PR #84) |
+| EVT-07 | result pill | all sheets | Web WIN/LOSS pill is filled with a pale tint; app pill is outlined on white | P3 | BUG | FIXED (PR #84) |
+| EVT-08 | opponent logo fallback | teams without crest | Web shows a generic shield glyph; app shows a letter avatar in a pink circle | P3 | BUG | FIXED (PR #84) |
+| EVT-09 | CTA | football sheets | Web shows `VIEW ALL STATISTICS` inside the initial sheet height; app requires expanding/scrolling to reach it | P3 | BUG | FIXED (PR #84) |
+| EVT-10 | sheet chrome | all sheets | App adds a Material drag handle; web has none. App sheet lacks the web's close X on player sheets (present on event sheets) | P3 | BUG | FIXED (PR #84) |
+| EVT-11 | tabs | football sheets | App tabs stretch full-width (Material TabBar); web tabs are compact and left-aligned | P3 | BUG | FIXED (PR #84) |
 | EVT-12 | opponent scout | event sheet | Web has an opponent-scout popover tab (opponent form + head-to-head); app has nothing | P2 | BUG — *Phase 10* (functional-gaps batch) | OPEN |
 
 ## Stats

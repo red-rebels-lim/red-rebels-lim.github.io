@@ -1,6 +1,6 @@
 # QA-05: Event-card / list-row borders — red-tint → slate (+ blue tint for volleyball)
 
-**Status:** todo
+**Status:** done (PR #84, merged 2026-07-15)
 **Batch:** calendar (`fix/qa-calendar`)
 **Register rows:** CAL-04 (P2)
 **Depends on:** QA-03 (volleyball blue must land first so the blue tint uses the right token)

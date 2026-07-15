@@ -1,6 +1,6 @@
 # QA-07: Goalscorers tab — per-team side layout
 
-**Status:** todo
+**Status:** done (PR #84, merged 2026-07-15)
 **Batch:** calendar (`fix/qa-calendar`)
 **Register rows:** EVT-04 (P2)
 **Depends on:** QA-06

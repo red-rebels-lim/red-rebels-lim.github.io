@@ -1,6 +1,6 @@
 # QA-04: Calendar grid — blank leading cells + day-card nits
 
-**Status:** todo
+**Status:** done (PR #84, merged 2026-07-15)
 **Batch:** calendar (`fix/qa-calendar`)
 **Register rows:** CAL-01 (P2), CAL-06 (P3)
 **Depends on:** -
