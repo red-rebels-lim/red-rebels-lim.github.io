@@ -98,7 +98,7 @@ class _MatchCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Text(
-                      app.t(sportLabelKey(event.sport)).toUpperCase(),
+                      app.t(sportLabelKey(event.sport)).upperNoTonos,
                       style: condensed(size: 10, color: accent, letterSpacing: 1.5),
                     ),
                   ),
@@ -152,7 +152,7 @@ class _MatchCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
-                        app.t('popover.${result.name}').toUpperCase(),
+                        app.t('popover.${result.name}').upperNoTonos,
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class _MatchCard extends StatelessWidget {
                     )
                   else
                     Text(
-                      app.t('popover.upcoming').toUpperCase(),
+                      app.t('popover.upcoming').upperNoTonos,
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,

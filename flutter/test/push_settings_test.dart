@@ -15,6 +15,7 @@ import 'package:red_rebels_calendar/i18n/i18n.dart';
 import 'package:red_rebels_calendar/logic/push_registration.dart';
 import 'package:red_rebels_calendar/pages/settings_page.dart';
 import 'package:red_rebels_calendar/state/app_state.dart';
+import 'package:red_rebels_calendar/widgets/web_toggle.dart';
 import 'package:red_rebels_calendar/theme.dart';
 
 /// Scripted [PushTokenProvider] — no Firebase anywhere in the test suite.
@@ -223,7 +224,7 @@ void main() {
 
       // Enabled push channel switch, no shared preferences yet.
       final pushSwitch = find.byKey(const Key('push-channel-switch'));
-      expect(tester.widget<Switch>(pushSwitch).onChanged, isNotNull);
+      expect(tester.widget<WebToggle>(pushSwitch).onChanged, isNotNull);
       expect(find.text('24h'), findsNothing);
 
       await tester.tap(pushSwitch);
@@ -241,7 +242,7 @@ void main() {
       expect(find.text('Time/venue changes'), findsOneWidget);
       expect(find.text('Score updates'), findsOneWidget);
       // Push channel switch, 3 sports, 3 alert types.
-      expect(find.byType(Switch), findsNWidgets(7));
+      expect(find.byType(WebToggle), findsNWidgets(7));
     });
 
     testWidgets('tapping a reminder chip PUTs the updated hours JSON', (tester) async {
@@ -307,7 +308,7 @@ void main() {
       await tester.pumpWidget(wrap(app));
 
       expect(
-        tester.widget<Switch>(find.byKey(const Key('push-channel-switch'))).onChanged,
+        tester.widget<WebToggle>(find.byKey(const Key('push-channel-switch'))).onChanged,
         isNull,
       );
       expect(find.text('24h'), findsNothing);
@@ -325,7 +326,7 @@ void main() {
 
       expect(app.pushRegistered, isFalse);
       expect(
-        tester.widget<Switch>(find.byKey(const Key('push-channel-switch'))).value,
+        tester.widget<WebToggle>(find.byKey(const Key('push-channel-switch'))).checked,
         isFalse,
       );
       expect(find.text('Failed to update notifications. Please try again.'), findsOneWidget);

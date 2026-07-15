@@ -268,7 +268,7 @@ class _MonthHeader extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              '${app.t('months.$monthName')} $year'.toUpperCase(),
+              '${app.t('months.$monthName')} $year'.upperNoTonos,
               textAlign: TextAlign.center,
               style: condensed(size: 18, color: theme.colorScheme.onSurface, letterSpacing: 1),
             ),
@@ -366,7 +366,7 @@ class _SelectedDayChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
-        label.toUpperCase(),
+        label.upperNoTonos,
         style: condensed(size: 11, color: dark ? twSlate400 : twSlate700, letterSpacing: 1.5),
       ),
     );
@@ -427,7 +427,7 @@ class _MonthGrid extends StatelessWidget {
                   Expanded(
                     child: Center(
                       child: Text(
-                        app.t('days.$key').substring(0, 3).toUpperCase(),
+                        app.t('days.$key').substring(0, 3).upperNoTonos,
                         // Web: `text-xs font-bold text-slate-700
                         // dark:text-slate-400 font-condensed tracking-wider`.
                         style: condensed(size: 12, color: dark ? twSlate400 : twSlate700, letterSpacing: 1),

@@ -117,7 +117,7 @@ class _PositionSection extends StatelessWidget {
                         TextSpan(
                           text: app
                               .t('squad.positions.${position.id}')
-                              .toUpperCase(),
+                              .upperNoTonos,
                         ),
                         TextSpan(
                           text: '  (${players.length})',
@@ -144,7 +144,7 @@ class _PositionSection extends StatelessWidget {
                       SizedBox(
                         width: 28,
                         child: Text(
-                          app.t('squad.colApps').toUpperCase(),
+                          app.t('squad.colApps').upperNoTonos,
                           textAlign: TextAlign.right,
                           style: captionStyle,
                         ),
@@ -153,7 +153,7 @@ class _PositionSection extends StatelessWidget {
                       SizedBox(
                         width: 20,
                         child: Text(
-                          app.t('squad.colGoals').toUpperCase(),
+                          app.t('squad.colGoals').upperNoTonos,
                           textAlign: TextAlign.right,
                           style: captionStyle,
                         ),
@@ -162,7 +162,7 @@ class _PositionSection extends StatelessWidget {
                       SizedBox(
                         width: 20,
                         child: Text(
-                          app.t('squad.colCards').toUpperCase(),
+                          app.t('squad.colCards').upperNoTonos,
                           textAlign: TextAlign.right,
                           style: captionStyle,
                         ),
@@ -244,7 +244,7 @@ class _PlayerRow extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                player.displayName(app.language).toUpperCase(),
+                player.displayName(app.language).upperNoTonos,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: condensed(

@@ -85,7 +85,7 @@ class _NavItem extends StatelessWidget {
               Icon(icon, size: 22, color: color),
               const SizedBox(height: 3),
               Text(
-                label.toUpperCase(),
+                label.upperNoTonos,
                 style: condensed(size: 10, color: color, letterSpacing: 1.2),
               ),
             ],

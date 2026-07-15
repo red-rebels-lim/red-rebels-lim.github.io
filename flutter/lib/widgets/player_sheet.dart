@@ -103,7 +103,7 @@ class _PlayerDetailsState extends State<_PlayerDetails> {
                             style: const TextStyle(color: brandRed),
                           ),
                         TextSpan(
-                          text: player.displayName(app.language).toUpperCase(),
+                          text: player.displayName(app.language).upperNoTonos,
                         ),
                       ],
                     ),
@@ -130,7 +130,7 @@ class _PlayerDetailsState extends State<_PlayerDetails> {
                         child: Text(
                           app
                               .t('squad.positions.${player.position.id}')
-                              .toUpperCase(),
+                              .upperNoTonos,
                           style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
@@ -236,7 +236,7 @@ class _PlayerDetailsState extends State<_PlayerDetails> {
             children: [
               Expanded(
                 child: Text(
-                  app.t('squad.modal.matchLog').toUpperCase(),
+                  app.t('squad.modal.matchLog').upperNoTonos,
                   style: condensed(
                     size: 13,
                     color: colors.mutedForeground,
@@ -266,7 +266,7 @@ class _PlayerDetailsState extends State<_PlayerDetails> {
                               ? 'squad.modal.collapse'
                               : 'squad.modal.expand',
                         )
-                        .toUpperCase(),
+                        .upperNoTonos,
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -315,7 +315,7 @@ class _StatTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label.toUpperCase(),
+            label.upperNoTonos,
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
@@ -377,7 +377,7 @@ class _MatchLogRow extends StatelessWidget {
             width: 56,
             child: Text(
               // Web parity: English month key abbreviation, e.g. "SEP 4".
-              '${entry.month.substring(0, 3).toUpperCase()} ${entry.day}',
+              '${entry.month.substring(0, 3).upperNoTonos} ${entry.day}',
               style: TextStyle(fontSize: 12, color: colors.mutedForeground),
             ),
           ),

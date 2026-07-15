@@ -219,7 +219,7 @@ class _Section extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(title.toUpperCase(), style: condensed(size: 18, color: colors.foreground, letterSpacing: 0.9)),
+          Text(title.upperNoTonos, style: condensed(size: 18, color: colors.foreground, letterSpacing: 0.9)),
           const SizedBox(height: 16),
           child,
         ],
@@ -704,7 +704,7 @@ class _HeadToHeadSection extends StatelessWidget {
           color: headerBg,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
           child: Text(
-            text.toUpperCase(),
+            text.upperNoTonos,
             textAlign: align,
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: dark ? twSlate400 : twSlate500),
           ),
