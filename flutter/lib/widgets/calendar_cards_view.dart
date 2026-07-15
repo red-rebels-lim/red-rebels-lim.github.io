@@ -54,11 +54,12 @@ class _MatchCard extends StatelessWidget {
     final colors = AppColors.of(context);
     final info = monthInfo(monthName);
     final result = event.isPlayed ? matchResult(event.score, event.location, event.penalties) : null;
+    // Web MatchCard `resultStyles`: green-500 / yellow-500 / red-500.
     final resultColor = switch (result) {
-      MatchResult.win => winGreen,
-      MatchResult.draw => drawAmber,
-      MatchResult.loss => lossRed,
-      null => brandRed,
+      MatchResult.win => twGreen500,
+      MatchResult.draw => twYellow500,
+      MatchResult.loss => twRed500,
+      null => colors.primary,
     };
     final monthAbbrev = app.t('months.$monthName');
     final dateLabel =
@@ -119,7 +120,7 @@ class _MatchCard extends StatelessWidget {
                 style: condensed(
                   size: event.isPlayed ? 30 : 24,
                   weight: FontWeight.w800,
-                  color: event.isPlayed ? resultColor : brandRed,
+                  color: event.isPlayed ? resultColor : colors.primary,
                 ).copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
               ),
               const SizedBox(height: 10),
@@ -136,9 +137,10 @@ class _MatchCard extends StatelessWidget {
                         style: theme.textTheme.bodySmall?.copyWith(color: colors.mutedForeground),
                       ),
                       if (event.isCup)
+                        // Web: `text-amber-500` cup tag.
                         TextSpan(
                           text: '  ${app.t('calendar.cup')}',
-                          style: theme.textTheme.bodySmall?.copyWith(color: drawAmber, fontWeight: FontWeight.bold),
+                          style: theme.textTheme.bodySmall?.copyWith(color: twAmber500, fontWeight: FontWeight.bold),
                         ),
                     ]),
                   ),
@@ -162,11 +164,11 @@ class _MatchCard extends StatelessWidget {
                   else
                     Text(
                       app.t('popover.upcoming').toUpperCase(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1,
-                        color: brandRed,
+                        color: colors.primary,
                       ),
                     ),
                 ],

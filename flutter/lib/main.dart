@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -167,17 +168,27 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    // Web parity (QA GLB-01): the PWA keeps a red status bar with light icons
+    // in every mode/theme — its `theme-color` meta is a hardcoded #E02520.
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: Stack(
       fit: StackFit.expand,
       children: [
         const AppBackground(),
         Scaffold(
           backgroundColor: Colors.transparent,
-          body: SafeArea(
-            bottom: false,
-            child: Column(
+          body: Column(
               children: [
-                MobileHeader(showCalendarActions: _index == 0),
+                Container(height: MediaQuery.paddingOf(context).top, color: brandRed),
+                MobileHeader(
+                  showCalendarActions: _index == 0,
+                  onBack: _index == 0 ? null : () => setState(() => _index = 0),
+                ),
                 // Brutalism-only ticker (renders nothing on other themes).
                 const Marquee(),
                 Expanded(
@@ -195,7 +206,6 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                   ),
                 ),
               ],
-            ),
           ),
           bottomNavigationBar: BottomNav(
             index: _index,
@@ -203,6 +213,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
           ),
         ),
       ],
+      ),
     );
   }
 }

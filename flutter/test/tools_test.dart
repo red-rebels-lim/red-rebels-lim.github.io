@@ -239,7 +239,10 @@ void main() {
       await tester.tap(find.text('open'));
       await tester.pumpAndSettle();
 
-      expect(find.text('TBD'), findsOneWidget); // sheet is open, time unknown
+      // Sheet is open (upcoming badge); web shows no TBD text — time appears
+      // only as a chip, and only when a kickoff time is confirmed.
+      expect(find.text('UPCOMING'), findsOneWidget);
+      expect(find.text('⏰', findRichText: true), findsNothing);
       expect(find.text('📅 EXPORT CALENDAR'), findsNothing);
     });
 
