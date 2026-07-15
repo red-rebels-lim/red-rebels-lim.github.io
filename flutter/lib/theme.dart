@@ -2,6 +2,7 @@ import 'dart:ui' show FontVariation, lerpDouble;
 
 import 'package:flutter/material.dart';
 
+import 'logic/football_stats.dart' show MatchResult;
 import 'models/events.dart';
 
 /// Design tokens ported from the web app (`app/src/index.css`).
@@ -15,14 +16,111 @@ const winGreen = Color(0xFF4CAF50);
 const drawAmber = Color(0xFFFFC107);
 const lossRed = Color(0xFFF44336);
 
+/// Tailwind palette values the web calendar surfaces use literally
+/// (`text-green-500`, `bg-blue-500/10`, `text-amber-500`, …). The stat
+/// tokens above stay for the charts; these are for list/cards/sheet parity.
+const twGreen500 = Color(0xFF22C55E);
+const twYellow500 = Color(0xFFEAB308);
+const twRed500 = Color(0xFFEF4444);
+const twBlue500 = Color(0xFF3B82F6);
+const twBlue400 = Color(0xFF60A5FA);
+const twAmber500 = Color(0xFFF59E0B);
+const twAmber400 = Color(0xFFFBBF24);
+const twSlate200 = Color(0xFFE2E8F0);
+const twSlate300 = Color(0xFFCBD5E1);
+const twSlate400 = Color(0xFF94A3B8);
+const twSlate500 = Color(0xFF64748B);
+const twSlate600 = Color(0xFF475569);
+const twSlate700 = Color(0xFF334155);
+const twSlate800 = Color(0xFF1E293B);
+
+/// Result-tinted event-sheet surface, ported from EventPopover's
+/// `resultBadge` class map (`dialogBg`/`dialogBorder`/badge/score colors).
+class SheetResultStyle {
+  const SheetResultStyle({
+    required this.surface,
+    required this.surfaceBottom,
+    required this.borderColor,
+    required this.badgeBg,
+    required this.badgeBorder,
+    required this.badgeText,
+    required this.score,
+  });
+
+  final Color surface;
+
+  /// Dark mode uses a `to-[#0a0a0a]` gradient; light mode is flat.
+  final Color surfaceBottom;
+  final Color borderColor;
+  final Color badgeBg;
+  final Color badgeBorder;
+  final Color badgeText;
+  final Color score;
+
+  static SheetResultStyle of(MatchResult? result, {required bool dark}) {
+    switch (result) {
+      case MatchResult.win:
+        return dark
+            ? const SheetResultStyle(
+                surface: Color(0xFF0A1A0A), surfaceBottom: Color(0xFF0A0A0A),
+                borderColor: Color(0x8022C55E),
+                badgeBg: Color(0xFF1A6B1A), badgeBorder: Color(0xFF2D8A2D),
+                badgeText: Color(0xFF86EFAC), score: Color(0xFF86EFAC))
+            : const SheetResultStyle(
+                surface: Color(0xFFF0FDF4), surfaceBottom: Color(0xFFF0FDF4),
+                borderColor: Color(0x8022C55E),
+                badgeBg: Color(0xFFDCFCE7), badgeBorder: Color(0xFF4ADE80),
+                badgeText: Color(0xFF15803D), score: Color(0xFF16A34A));
+      case MatchResult.draw:
+        return dark
+            ? const SheetResultStyle(
+                surface: Color(0xFF1A1A0A), surfaceBottom: Color(0xFF0A0A0A),
+                borderColor: Color(0x80EAB308),
+                badgeBg: Color(0xFF6B5A00), badgeBorder: Color(0xFF8A7500),
+                badgeText: Color(0xFFFDE047), score: Color(0xFFFDE047))
+            : const SheetResultStyle(
+                surface: Color(0xFFFEFCE8), surfaceBottom: Color(0xFFFEFCE8),
+                borderColor: Color(0x80EAB308),
+                badgeBg: Color(0xFFFEF9C3), badgeBorder: Color(0xFFFACC15),
+                badgeText: Color(0xFFA16207), score: Color(0xFFCA8A04));
+      case MatchResult.loss:
+        return dark
+            ? const SheetResultStyle(
+                surface: Color(0xFF1A0A0A), surfaceBottom: Color(0xFF0A0A0A),
+                borderColor: Color(0x80EF4444),
+                badgeBg: Color(0xFF6B1A1A), badgeBorder: Color(0xFF8A2020),
+                badgeText: Color(0xFFFCA5A5), score: Color(0xFFFCA5A5))
+            : const SheetResultStyle(
+                surface: Color(0xFFFEF2F2), surfaceBottom: Color(0xFFFEF2F2),
+                borderColor: Color(0x80EF4444),
+                badgeBg: Color(0xFFFEE2E2), badgeBorder: Color(0xFFF87171),
+                badgeText: Color(0xFFB91C1C), score: Color(0xFFDC2626));
+      case null:
+        // Upcoming: white / dark surface-dark→#0a0a0a gradient, primary border.
+        return dark
+            ? const SheetResultStyle(
+                surface: Color(0xFF1A0F0F), surfaceBottom: Color(0xFF0A0A0A),
+                borderColor: Color(0x66E02520),
+                badgeBg: Color(0xFF2A1A1A), badgeBorder: Color(0x66E02520),
+                badgeText: Color(0xFFFCA5A5), score: Colors.white)
+            : const SheetResultStyle(
+                surface: Colors.white, surfaceBottom: Colors.white,
+                borderColor: Color(0x66E02520),
+                badgeBg: twSlate200, badgeBorder: Color(0x66E02520),
+                badgeText: Color(0xFFB91C1C), score: Colors.black);
+    }
+  }
+}
+
 /// Visual themes, in web picker order (`useVisualTheme.ts`).
 const visualThemes = ['default', 'brutalism', 'cinema', 'neon'];
 
-/// Sport accents (web chart tokens).
+/// Sport accents as the web calendar renders them: `text-primary` red for
+/// football, `text-blue-500` for ALL volleyball (the web never uses the
+/// women's purple on calendar surfaces — QA register GLB-07).
 Color sportColor(Sport sport) => switch (sport) {
       Sport.footballMen => brandRed,
-      Sport.volleyballMen => const Color(0xFF2196F3),
-      Sport.volleyballWomen => const Color(0xFF9C27B0),
+      Sport.volleyballMen || Sport.volleyballWomen => twBlue500,
       Sport.meeting => const Color(0xFF757575),
     };
 

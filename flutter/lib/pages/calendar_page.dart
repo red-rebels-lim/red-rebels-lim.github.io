@@ -18,15 +18,31 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  late final PageController _pageController;
+  late PageController _pageController;
   late int _monthIndex;
-  int? _selectedDay;
+  int? _userSelectedDay;
+
+  /// The grid and list/cards modes host separate PageViews; a re-attached
+  /// controller would snap back to its construction-time `initialPage`, so
+  /// the controller is rebuilt at the current month on every view switch.
+  String? _attachedView;
 
   @override
   void initState() {
     super.initState();
     final app = context.read<AppState>();
     _monthIndex = monthOrder.indexOf(app.events.initialMonth(DateTime.now()));
+    _pageController = PageController(initialPage: _monthIndex);
+    _attachedView = app.calendarView;
+  }
+
+  void _syncControllerToView(String view) {
+    if (_attachedView == view) return;
+    _attachedView = view;
+    // The outgoing PageView detaches at the end of this build — dispose its
+    // controller only after the frame.
+    final old = _pageController;
+    WidgetsBinding.instance.addPostFrameCallback((_) => old.dispose());
     _pageController = PageController(initialPage: _monthIndex);
   }
 
@@ -39,6 +55,15 @@ class _CalendarPageState extends State<CalendarPage> {
   void _goToMonth(int index) {
     if (index < 0 || index >= monthOrder.length) return;
     _pageController.animateToPage(index, duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
+  }
+
+  /// Web `findDefaultDay`: today is pre-selected when viewing the current
+  /// month; other months start with no selection.
+  int? _defaultDay(String monthName) {
+    final info = monthInfo(monthName);
+    final now = DateTime.now();
+    final isCurrentMonth = info.year == now.year && info.month == now.month;
+    return isCurrentMonth ? now.day : null;
   }
 
   /// Consumes a notification-tap deep link: jumps to the event's month and
@@ -55,7 +80,7 @@ class _CalendarPageState extends State<CalendarPage> {
         if (_pageController.hasClients) _pageController.jumpToPage(index);
         setState(() {
           _monthIndex = index;
-          _selectedDay = null;
+          _userSelectedDay = null;
         });
       }
       showEventDetailsSheet(context, target.event, target.monthName);
@@ -68,47 +93,104 @@ class _CalendarPageState extends State<CalendarPage> {
     _maybeOpenPendingEvent(app);
     final monthName = monthOrder[_monthIndex];
     final info = monthInfo(monthName);
+    final view = app.calendarView;
+    _syncControllerToView(view);
+    final selectedDay = _userSelectedDay ?? _defaultDay(monthName);
 
     final colors = AppColors.of(context);
+
+    // Web structure: a `bg-white/70 dark:bg-transparent rounded-2xl` panel
+    // wraps ONLY the month nav (+ the grid in grid view); list/cards rows
+    // float directly on the page background below it.
+    final panel = Container(
+      margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: colors.surfacePanel,
+        borderRadius: BorderRadius.circular(colors.panelRadius),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _MonthHeader(
+            monthName: monthName,
+            year: info.year,
+            onPrevious: _monthIndex > 0 ? () => _goToMonth(_monthIndex - 1) : null,
+            onNext: _monthIndex < monthOrder.length - 1 ? () => _goToMonth(_monthIndex + 1) : null,
+          ),
+          if (app.lastSyncFailed) const _StaleDataIndicator(),
+          if (view == 'grid')
+            SizedBox(
+              height: _MonthGrid.heightFor(monthName),
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: monthOrder.length,
+                onPageChanged: (i) => setState(() {
+                  _monthIndex = i;
+                  _userSelectedDay = null;
+                }),
+                itemBuilder: (context, i) => _GridPage(
+                  monthName: monthOrder[i],
+                  selectedDay: i == _monthIndex ? selectedDay : null,
+                  onDaySelected: (day) => setState(() => _userSelectedDay = day),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+
+    if (view == 'grid') {
+      final events = app.filteredEventsFor(monthName)..sort((a, b) => a.day.compareTo(b.day));
+      final dayEvents =
+          selectedDay == null ? const <SportEvent>[] : events.where((e) => e.day == selectedDay).toList();
+      return Column(
+        children: [
+          panel,
+          // Web UpcomingEventsList: hidden entirely when the selected day has
+          // no events; label chip + cards on the bare background.
+          Expanded(
+            child: dayEvents.isEmpty
+                ? const SizedBox.shrink()
+                : ListView(
+                    padding: const EdgeInsets.fromLTRB(8, 24, 8, 16),
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: _SelectedDayChip(label: app.t('calendar.selectedDay')),
+                      ),
+                      const SizedBox(height: 12),
+                      for (final (i, e) in dayEvents.indexed) ...[
+                        if (i > 0) const SizedBox(height: 12),
+                        EventCard(event: e, monthName: monthName),
+                      ],
+                    ],
+                  ),
+          ),
+        ],
+      );
+    }
+
+    // List / cards: standalone month-nav panel, view content below on the
+    // background, month swipe preserved via the PageView.
     return Column(
       children: [
+        panel,
         Expanded(
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-            decoration: BoxDecoration(
-              color: colors.surfacePanel,
-              borderRadius: BorderRadius.circular(colors.panelRadius),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                _MonthHeader(
-                  monthName: monthName,
-                  year: info.year,
-                  onPrevious: _monthIndex > 0 ? () => _goToMonth(_monthIndex - 1) : null,
-                  onNext: _monthIndex < monthOrder.length - 1 ? () => _goToMonth(_monthIndex + 1) : null,
-                ),
-                if (app.lastSyncFailed) const _StaleDataIndicator(),
-                Expanded(
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: monthOrder.length,
-                    onPageChanged: (i) => setState(() {
-                      _monthIndex = i;
-                      _selectedDay = null;
-                    }),
-                    itemBuilder: (context, i) => _MonthView(
-                      monthName: monthOrder[i],
-                      view: app.calendarView,
-                      selectedDay: i == _monthIndex ? _selectedDay : null,
-                      onDaySelected: (day) => setState(() {
-                        _selectedDay = _selectedDay == day ? null : day;
-                      }),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: monthOrder.length,
+            onPageChanged: (i) => setState(() {
+              _monthIndex = i;
+              _userSelectedDay = null;
+            }),
+            itemBuilder: (context, i) {
+              final events = app.filteredEventsFor(monthOrder[i])..sort((a, b) => a.day.compareTo(b.day));
+              return view == 'list'
+                  ? CalendarListView(monthName: monthOrder[i], events: events)
+                  : CalendarCardsView(monthName: monthOrder[i], events: events);
+            },
           ),
         ),
       ],
@@ -124,6 +206,32 @@ void showCalendarFilterSheet(BuildContext context) {
     showDragHandle: true,
     builder: (_) => _FilterSheet(initial: app.filters, onApply: app.setFilters),
   );
+}
+
+class _GridPage extends StatelessWidget {
+  const _GridPage({required this.monthName, required this.selectedDay, required this.onDaySelected});
+
+  final String monthName;
+  final int? selectedDay;
+  final ValueChanged<int> onDaySelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final events = app.filteredEventsFor(monthName)..sort((a, b) => a.day.compareTo(b.day));
+    // Non-scrolling scroll view: the shared PageView height tracks the
+    // CURRENT month, so a neighbor month with one more week row would
+    // otherwise overflow by 52px mid-swipe.
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: _MonthGrid(
+        monthName: monthName,
+        events: events,
+        selectedDay: selectedDay,
+        onDaySelected: onDaySelected,
+      ),
+    );
+  }
 }
 
 class _MonthHeader extends StatelessWidget {
@@ -144,7 +252,7 @@ class _MonthHeader extends StatelessWidget {
     final app = context.watch<AppState>();
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       child: Row(
         children: [
           _MonthNavButton(
@@ -156,7 +264,7 @@ class _MonthHeader extends StatelessWidget {
             child: Text(
               '${app.t('months.$monthName')} $year'.toUpperCase(),
               textAlign: TextAlign.center,
-              style: condensed(size: 18, color: theme.colorScheme.onSurface, letterSpacing: 1.5),
+              style: condensed(size: 18, color: theme.colorScheme.onSurface, letterSpacing: 1),
             ),
           ),
           _MonthNavButton(
@@ -170,8 +278,8 @@ class _MonthHeader extends StatelessWidget {
   }
 }
 
-/// Standalone rounded-square month-nav button, matching the web's
-/// `p-2 rounded-lg bg-slate-100 dark:bg-[#1e293b]` chevron buttons.
+/// Web month-nav chevron: `p-2 rounded-lg bg-slate-100 dark:bg-[#1e293b]`
+/// with a 16px stroke icon — a 32px rounded square.
 class _MonthNavButton extends StatelessWidget {
   const _MonthNavButton({required this.icon, required this.tooltip, this.onTap});
 
@@ -183,7 +291,7 @@ class _MonthNavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = AppColors.of(context);
-    final radius = BorderRadius.circular(10);
+    final radius = BorderRadius.circular(8);
     return Tooltip(
       message: tooltip,
       child: Material(
@@ -193,11 +301,11 @@ class _MonthNavButton extends StatelessWidget {
           onTap: onTap,
           borderRadius: radius,
           child: SizedBox(
-            width: 40,
-            height: 40,
+            width: 32,
+            height: 32,
             child: Icon(
               icon,
-              size: 20,
+              size: 18,
               color: onTap == null
                   ? theme.colorScheme.onSurface.withValues(alpha: 0.3)
                   : theme.colorScheme.onSurface,
@@ -235,72 +343,8 @@ class _StaleDataIndicator extends StatelessWidget {
   }
 }
 
-class _MonthView extends StatelessWidget {
-  const _MonthView({
-    required this.monthName,
-    required this.view,
-    required this.selectedDay,
-    required this.onDaySelected,
-  });
-
-  final String monthName;
-
-  /// 'grid' | 'list' | 'cards'.
-  final String view;
-  final int? selectedDay;
-  final ValueChanged<int> onDaySelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final app = context.watch<AppState>();
-    final events = app.filteredEventsFor(monthName)..sort((a, b) => a.day.compareTo(b.day));
-
-    if (view == 'list') return CalendarListView(monthName: monthName, events: events);
-    if (view == 'cards') return CalendarCardsView(monthName: monthName, events: events);
-
-    final dayEvents = selectedDay == null ? const <SportEvent>[] : events.where((e) => e.day == selectedDay).toList();
-
-    // Web parity: nothing renders below the grid until a day is selected
-    // (UpcomingEventsList returns null when no day/events are selected).
-    return LayoutBuilder(
-      builder: (context, constraints) => Column(
-        children: [
-          _MonthGrid(
-            monthName: monthName,
-            events: events,
-            selectedDay: selectedDay,
-            onDaySelected: onDaySelected,
-            maxHeight: constraints.maxHeight * 0.6,
-          ),
-          Expanded(
-            child: dayEvents.isEmpty
-                ? const SizedBox.shrink()
-                : Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: _SelectedDayChip(label: app.t('calendar.selectedDay')),
-                        ),
-                      ),
-                      Expanded(
-                        child: ListView.separated(
-                          padding: const EdgeInsets.all(12),
-                          itemCount: dayEvents.length,
-                          separatorBuilder: (_, _) => const SizedBox(height: 8),
-                          itemBuilder: (_, i) => EventCard(event: dayEvents[i], monthName: monthName),
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
+/// Web `SELECTED DAY` chip: `bg-white/70 dark:bg-transparent text-slate-700
+/// dark:text-slate-400 px-2 py-1 rounded`.
 class _SelectedDayChip extends StatelessWidget {
   const _SelectedDayChip({required this.label});
 
@@ -308,16 +352,16 @@ class _SelectedDayChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: colors.muted,
-        borderRadius: BorderRadius.circular(6),
+        color: dark ? Colors.transparent : const Color(0xB3FFFFFF),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         label.toUpperCase(),
-        style: condensed(size: 11, color: colors.foreground, letterSpacing: 1.5),
+        style: condensed(size: 11, color: dark ? twSlate400 : twSlate700, letterSpacing: 1.5),
       ),
     );
   }
@@ -329,21 +373,31 @@ class _MonthGrid extends StatelessWidget {
     required this.events,
     required this.selectedDay,
     required this.onDaySelected,
-    required this.maxHeight,
   });
 
   final String monthName;
   final List<SportEvent> events;
   final int? selectedDay;
   final ValueChanged<int> onDaySelected;
-  final double maxHeight;
 
   static const _dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+  /// Web cells are a fixed `h-12` (48px) with a ~24px header row and `p-4`
+  /// container padding — intrinsic height, no stretching.
+  static const _cellHeight = 48.0;
+  static const _headerHeight = 28.0;
+  static const _padding = 16.0;
+
+  static double heightFor(String monthName) {
+    final info = monthInfo(monthName);
+    final weeks = (info.startDay + info.daysInMonth + 6) ~/ 7;
+    return _padding * 2 + _headerHeight + weeks * (_cellHeight + 4);
+  }
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
-    final theme = Theme.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
     final info = monthInfo(monthName);
     final now = DateTime.now();
     final isCurrentMonth = info.year == now.year && info.month == now.month;
@@ -353,64 +407,91 @@ class _MonthGrid extends StatelessWidget {
       eventsByDay.putIfAbsent(e.day, () => []).add(e);
     }
 
-    final cells = <Widget>[];
-    for (final key in _dayKeys) {
-      cells.add(Center(
-        child: Text(
-          app.t('days.$key').substring(0, 3).toUpperCase(),
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ));
-    }
-    // Adjacent-month days render dimmed and non-interactive (web shows
-    // leading and trailing overflow numbers at ~35% opacity).
-    final prevMonthDays = DateTime(info.year, info.month, 0).day;
-    for (var i = 0; i < info.startDay; i++) {
-      cells.add(_OverflowDayCell(day: prevMonthDays - info.startDay + 1 + i));
-    }
-    for (var day = 1; day <= info.daysInMonth; day++) {
-      final dayEvents = eventsByDay[day] ?? const <SportEvent>[];
-      final isToday = isCurrentMonth && day == now.day;
-      final isSelected = day == selectedDay;
-      cells.add(_DayCell(
-        key: ValueKey('day-cell-$day'),
-        day: day,
-        events: dayEvents,
-        isToday: isToday,
-        isSelected: isSelected,
-        onTap: dayEvents.isEmpty ? null : () => onDaySelected(day),
-      ));
-    }
-    final trailing = (7 - (info.startDay + info.daysInMonth) % 7) % 7;
-    for (var day = 1; day <= trailing; day++) {
-      cells.add(_OverflowDayCell(day: day));
-    }
-
-    // Size cells to their natural 1.1 aspect ratio, but never let the grid
-    // exceed maxHeight (small screens, landscape, test surfaces).
-    final totalRows = 1 + ((info.startDay + info.daysInMonth + 6) ~/ 7);
+    final weeks = (info.startDay + info.daysInMonth + 6) ~/ 7;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final cellWidth = constraints.maxWidth / 7;
-          final naturalHeight = cellWidth / 1.1;
-          final cellHeight = naturalHeight * totalRows > maxHeight ? maxHeight / totalRows : naturalHeight;
-          return GridView.count(
-            crossAxisCount: 7,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: cellWidth / cellHeight,
-            children: cells,
-          );
-        },
+      padding: const EdgeInsets.all(_padding),
+      child: Column(
+        children: [
+          SizedBox(
+            height: _headerHeight,
+            child: Row(
+              children: [
+                for (final key in _dayKeys)
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        app.t('days.$key').substring(0, 3).toUpperCase(),
+                        // Web: `text-xs font-bold text-slate-700
+                        // dark:text-slate-400 font-condensed tracking-wider`.
+                        style: condensed(size: 12, color: dark ? twSlate400 : twSlate700, letterSpacing: 1),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          for (var week = 0; week < weeks; week++)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: SizedBox(
+                height: _cellHeight,
+                child: Row(
+                  children: [
+                    for (var slot = week * 7; slot < week * 7 + 7; slot++)
+                      Expanded(child: _buildCell(context, slot, isCurrentMonth ? now.day : null)),
+                  ],
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
+
+  Widget _buildCell(BuildContext context, int slot, int? todayDay) {
+    final info = monthInfo(monthName);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final day = slot - info.startDay + 1;
+
+    // Web parity (QA CAL-01): leading cells are blank; trailing cells show
+    // the next month's day number grayed out.
+    if (day < 1) return const SizedBox.shrink();
+    if (day > info.daysInMonth) {
+      return Center(
+        child: Text(
+          '${day - info.daysInMonth}',
+          style: TextStyle(fontSize: 14, color: dark ? twSlate600 : twSlate300),
+        ),
+      );
+    }
+
+    final dayEvents = <SportEvent>[for (final e in events) if (e.day == day) e];
+    final isToday = day == todayDay;
+    final isSelected = day == selectedDay;
+    return _DayCell(
+      key: ValueKey('day-cell-$day'),
+      day: day,
+      events: dayEvents,
+      isToday: isToday,
+      isSelected: isSelected,
+      onTap: () => onDaySelected(day),
+    );
+  }
+}
+
+/// Web `getDotColors`: one dot per sport GROUP — red for football, blue for
+/// any volleyball, gray only when a day has nothing but meetings.
+@visibleForTesting
+List<Color> dotColorsFor(List<SportEvent> events) {
+  if (events.isEmpty) return const [];
+  final sports = {for (final e in events) e.sport};
+  final colors = <Color>[
+    if (sports.contains(Sport.footballMen)) accentRed,
+    if (sports.contains(Sport.volleyballMen) || sports.contains(Sport.volleyballWomen)) twBlue500,
+  ];
+  if (colors.isEmpty && sports.contains(Sport.meeting)) colors.add(twSlate400);
+  return colors;
 }
 
 class _DayCell extends StatelessWidget {
@@ -431,66 +512,53 @@ class _DayCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    // Web parity: event days carry no decoration of their own — only the
-    // sport dots mark them. Selected day gets the red fill; today (when not
-    // selected) gets a 2px red ring.
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final dots = dotColorsFor(events);
+    // Web: selected = red 20% fill + bold red number; today (unselected) =
+    // 2px red ring + semibold red number; else medium slate number.
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Container(
-        margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: isSelected ? brandRed.withValues(alpha: 0.2) : null,
+          color: isSelected ? accentRed.withValues(alpha: 0.2) : null,
           border: isToday && !isSelected
-              ? Border.all(color: brandRed.withValues(alpha: 0.5), width: 2)
+              ? Border.all(color: accentRed.withValues(alpha: 0.5), width: 2)
               : null,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
             Text(
               '$day',
-              style: theme.textTheme.bodySmall?.copyWith(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                color: isSelected || isToday ? brandRed : theme.colorScheme.onSurface,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: isSelected
+                    ? FontWeight.bold
+                    : isToday
+                        ? FontWeight.w600
+                        : FontWeight.w500,
+                color: isSelected || isToday ? accentRed : (dark ? const Color(0xFFE2E8F0) : twSlate800),
               ),
             ),
-            if (events.isNotEmpty)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (final e in events.take(3))
-                    Container(
-                      width: 6,
-                      height: 6,
-                      margin: const EdgeInsets.symmetric(horizontal: 1),
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: sportColor(e.sport)),
-                    ),
-                ],
+            if (dots.isNotEmpty)
+              Positioned(
+                bottom: 4,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (final (i, color) in dots.indexed)
+                      Container(
+                        width: 4,
+                        height: 4,
+                        margin: EdgeInsets.only(left: i == 0 ? 0 : 2),
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+                      ),
+                  ],
+                ),
               ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Dimmed, non-interactive number for a leading/trailing adjacent-month day.
-class _OverflowDayCell extends StatelessWidget {
-  const _OverflowDayCell({required this.day});
-
-  final int day;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Center(
-      child: Text(
-        '$day',
-        style: theme.textTheme.bodySmall?.copyWith(
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
         ),
       ),
     );

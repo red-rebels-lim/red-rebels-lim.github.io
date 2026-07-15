@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../pages/calendar_page.dart' show showCalendarFilterSheet;
 import '../state/app_state.dart';
 import '../theme.dart';
 
 /// Fixed top header matching the web `MobileHeader`: red condensed brand
-/// title on the left, circular icon buttons on the right (view switcher +
-/// filters on the calendar tab, then share and theme toggle).
+/// title on the left (behind a circular back button on non-calendar pages),
+/// circular icon buttons on the right — view switcher + filters on the
+/// calendar tab, then the theme toggle.
+///
+/// Deliberate deviations from the web (QA register GLB-02, decided
+/// 2026-07-14): no share button anywhere, and the filter button stays even
+/// though the web has no touch trigger for its FilterPanel.
 class MobileHeader extends StatelessWidget {
-  const MobileHeader({super.key, required this.showCalendarActions});
+  const MobileHeader({super.key, required this.showCalendarActions, this.onBack});
 
   final bool showCalendarActions;
+
+  /// Web `showBack` — set on every non-calendar page; navigates home.
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final colors = AppColors.of(context);
     final dark = Theme.of(context).brightness == Brightness.dark;
+    // Web: view/share buttons `text-slate-600 dark:text-slate-300`.
+    final iconColor = dark ? twSlate300 : twSlate600;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -27,6 +36,16 @@ class MobileHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
+          if (onBack != null) ...[
+            _HeaderButton(
+              icon: Icons.arrow_back,
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              iconColor: accentRed,
+              iconSize: 20,
+              onTap: onBack!,
+            ),
+            const SizedBox(width: 12),
+          ],
           Expanded(
             child: Text(
               '${app.t('common.appName', 'Red Rebels')} ${app.t('common.calendarLabel', 'Calendar')}',
@@ -38,7 +57,7 @@ class MobileHeader extends StatelessWidget {
           if (showCalendarActions) ...[
             _HeaderButton(
               icon: switch (app.calendarView) {
-                'list' => Icons.view_list_rounded,
+                'list' => Icons.format_list_bulleted,
                 'cards' => Icons.view_agenda_outlined,
                 _ => Icons.grid_view_rounded,
               },
@@ -47,6 +66,7 @@ class MobileHeader extends StatelessWidget {
                 'cards' => app.t('calendar.viewCards'),
                 _ => app.t('calendar.viewGrid'),
               },
+              iconColor: iconColor,
               onTap: () {
                 // Cycle grid → list → cards → grid.
                 const views = AppState.calendarViews;
@@ -58,20 +78,18 @@ class MobileHeader extends StatelessWidget {
             _HeaderButton(
               icon: Icons.filter_list_rounded,
               tooltip: app.t('filters.title'),
+              iconColor: iconColor,
               showBadge: app.filters.isActive,
               onTap: () => showCalendarFilterSheet(context),
             ),
             const SizedBox(width: 8),
           ],
+          // Web semantics: the icon shows the CURRENT mode (moon when dark).
           _HeaderButton(
-            icon: Icons.share_outlined,
-            tooltip: app.t('popover.shareMatch', 'Share'),
-            onTap: () => SharePlus.instance.share(ShareParams(uri: Uri.parse('https://red-rebels.com'))),
-          ),
-          const SizedBox(width: 8),
-          _HeaderButton(
-            icon: dark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+            icon: dark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
             tooltip: app.t('settings.darkTheme'),
+            iconColor: accentRed,
+            iconSize: 20,
             onTap: () => app.setThemeMode(dark ? ThemeMode.light : ThemeMode.dark),
           ),
         ],
@@ -85,12 +103,16 @@ class _HeaderButton extends StatelessWidget {
     required this.icon,
     required this.tooltip,
     required this.onTap,
+    required this.iconColor,
+    this.iconSize = 18,
     this.showBadge = false,
   });
 
   final IconData icon;
   final String tooltip;
   final VoidCallback onTap;
+  final Color iconColor;
+  final double iconSize;
   final bool showBadge;
 
   @override
@@ -99,7 +121,8 @@ class _HeaderButton extends StatelessWidget {
     return Tooltip(
       message: tooltip,
       child: Material(
-        color: colors.navBackground,
+        // Web: `bg-slate-100 dark:bg-[#1e293b]`.
+        color: colors.surfaceTile,
         shape: const CircleBorder(),
         child: InkWell(
           customBorder: const CircleBorder(),
@@ -111,7 +134,7 @@ class _HeaderButton extends StatelessWidget {
               isLabelVisible: showBadge,
               alignment: Alignment.topRight,
               offset: const Offset(-8, 8),
-              child: Icon(icon, size: 20, color: colors.foreground),
+              child: Icon(icon, size: iconSize, color: iconColor),
             ),
           ),
         ),

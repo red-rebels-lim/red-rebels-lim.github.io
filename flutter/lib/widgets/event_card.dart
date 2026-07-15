@@ -26,20 +26,21 @@ class EventCard extends StatelessWidget {
     final info = monthInfo(monthName);
     final result = event.isPlayed ? matchResult(event.score, event.location, event.penalties) : null;
 
-    // Played matches are tinted by result; upcoming ones by sport accent
-    // (web: win green / draw amber / loss red, else blue for VB, red for FB).
+    // Web UpcomingEventCard `resultAccent`: green-500 / yellow-500 / #dc2828
+    // for played results; blue-500 (volleyball) or #dc2828 (football) when
+    // upcoming.
+    final isVolleyball = event.sport == Sport.volleyballMen || event.sport == Sport.volleyballWomen;
     final accent = switch (result) {
-      MatchResult.win => winGreen,
-      MatchResult.draw => drawAmber,
-      MatchResult.loss => lossRed,
-      null => sportColor(event.sport),
+      MatchResult.win => twGreen500,
+      MatchResult.draw => twYellow500,
+      MatchResult.loss => accentRed,
+      null => isVolleyball ? twBlue500 : accentRed,
     };
 
     final monthLabel = app.t('months.$monthName');
     final monthAbbrev = monthLabel.substring(0, monthLabel.length < 3 ? monthLabel.length : 3);
     final hasScore = event.isPlayed && event.score != null;
     final hasTime = event.time.contains(':');
-    final isVolleyball = event.sport == Sport.volleyballMen || event.sport == Sport.volleyballWomen;
     final competitionLabel = [
       app.t(_sportKey(event.sport)),
       if (event.isCup) app.t('calendar.cup'),
@@ -54,9 +55,16 @@ class EventCard extends StatelessWidget {
           letterSpacing: 0.5,
         );
 
+    // Web card border: `border-blue-400/30` for volleyball, else
+    // `border-slate-200 dark:border-slate-800` (QA CAL-04).
+    final dark = theme.brightness == Brightness.dark;
+    final borderColor = isVolleyball
+        ? twBlue400.withValues(alpha: 0.3)
+        : (dark ? twSlate800 : twSlate200);
+
     return Material(
       color: colors.surfaceTile,
-      borderRadius: radius,
+      shape: RoundedRectangleBorder(borderRadius: radius, side: BorderSide(color: borderColor)),
       child: InkWell(
         borderRadius: radius,
         onTap: () => showEventDetailsSheet(context, event, monthName),

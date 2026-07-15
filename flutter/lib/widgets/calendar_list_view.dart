@@ -86,10 +86,11 @@ class _ListRow extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = AppColors.of(context);
     final result = event.isPlayed ? matchResult(event.score, event.location, event.penalties) : null;
+    // Web ListItem `resultColors`: text-green-500 / text-yellow-500 / text-red-500.
     final resultColor = switch (result) {
-      MatchResult.win => winGreen,
-      MatchResult.draw => drawAmber,
-      MatchResult.loss => lossRed,
+      MatchResult.win => twGreen500,
+      MatchResult.draw => twYellow500,
+      MatchResult.loss => twRed500,
       null => theme.colorScheme.onSurface,
     };
     final monthAbbrev = app.t('months.$monthName');
@@ -143,9 +144,10 @@ class _ListRow extends StatelessWidget {
                         style: condensed(size: 10, color: sportColor(event.sport), letterSpacing: 1.5),
                       ),
                       if (event.isCup)
+                        // Web: `text-amber-500` cup tag.
                         TextSpan(
                           text: '  ${app.t('calendar.cup').toUpperCase()}',
-                          style: condensed(size: 10, color: drawAmber, letterSpacing: 1.5),
+                          style: condensed(size: 10, color: twAmber500, letterSpacing: 1.5),
                         ),
                     ]),
                     maxLines: 1,
@@ -179,7 +181,8 @@ class _ListRow extends StatelessWidget {
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: resultColor),
               )
             else if (hasTime)
-              Text(event.time, style: condensed(size: 14, color: drawAmber)),
+              // Web: `text-primary` kickoff time.
+              Text(event.time, style: condensed(size: 14, color: colors.primary)),
           ],
         ),
       ),
