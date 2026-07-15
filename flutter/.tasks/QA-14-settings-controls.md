@@ -1,6 +1,6 @@
 # QA-14: Settings controls — language row, version string
 
-**Status:** todo
+**Status:** done (PR #88, merged 2026-07-15)
 **Batch:** settings (`fix/qa-settings`)
 **Register rows:** SET-07 (P2), SET-09 (P3) — SET-08 dropped (decided: keep 3-way control)
 **Depends on:** QA-13

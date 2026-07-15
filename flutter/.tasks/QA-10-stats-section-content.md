@@ -1,6 +1,6 @@
 # QA-10: Stats section content — season summary, set breakdown, performance split, form subtitle
 
-**Status:** todo
+**Status:** done (PR #86, merged 2026-07-15)
 **Batch:** stats (`fix/qa-stats`)
 **Register rows:** STA-03 (P2), STA-04 (P2), STA-05 (P2), STA-09 (P3)
 **Depends on:** QA-09

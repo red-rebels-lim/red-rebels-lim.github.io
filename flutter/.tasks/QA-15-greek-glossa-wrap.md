@@ -1,6 +1,6 @@
 # QA-15: Greek — "Γλώσσα" mid-word wrap + strip tonos on uppercase
 
-**Status:** todo
+**Status:** done (PR #88, merged 2026-07-15)
 **Batch:** settings (`fix/qa-settings`)
 **Register rows:** GRK-02 (P2), GRK-01 (P2 — decided 2026-07-14: strip)
 **Depends on:** QA-14

@@ -1,6 +1,6 @@
 # QA-13: Settings structure — section chips + white cards + icon tiles
 
-**Status:** todo
+**Status:** done (PR #88, merged 2026-07-15)
 **Batch:** settings (`fix/qa-settings`)
 **Register rows:** SET-01 (P1)
 **Depends on:** -
