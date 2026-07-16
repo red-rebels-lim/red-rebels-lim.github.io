@@ -1,6 +1,6 @@
 # QA-16: Brutalism — square corners + 2px borders
 
-**Status:** todo
+**Status:** done (PR #90, merged 2026-07-15)
 **Batch:** themes (`fix/qa-themes`)
 **Register rows:** THM-01 (P2), THM-02 (P3)
 **Depends on:** -

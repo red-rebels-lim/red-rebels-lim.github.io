@@ -30,10 +30,14 @@ Future<void> main() async {
 
   // The app must boot without Firebase (emulator without Play Services,
   // stripped builds) — push just stays unavailable via FcmTokenProvider's
-  // internal guards.
+  // internal guards. The timeout caps the ONLY unbounded await on the
+  // startup path (QA FUN-01): a wedged Play Services must never hold the
+  // first frame hostage — everything else pre-frame is local IO, and the
+  // events/players sync is post-frame with its own 10s timeout.
   var firebaseReady = false;
   try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+        .timeout(const Duration(seconds: 5));
     firebaseReady = true;
   } catch (_) {
     // Boot on: FcmTokenProvider degrades to null/false on every call.
