@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Next-match widget, 4×1 (1c): panel narrows, crest drops, countdown
+     owns the red; teams collapse to "VS OPPONENT · DATE". -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/widget_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:importantForAccessibility="no" />
+
+    <LinearLayout
+        android:id="@+id/widget_left_column"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="120dp">
+
+        <TextView
+            android:id="@+id/widget_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:textSize="9sp"
+            android:letterSpacing="0.14"
+            android:maxLines="1"
+            android:textColor="#E02520" />
+
+        <TextView
+            android:id="@+id/widget_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:textSize="19sp"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="#F8FAFC" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/widget_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="13dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:textColor="#FFFFFF" />
+</FrameLayout>
