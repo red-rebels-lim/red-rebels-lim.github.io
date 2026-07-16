@@ -1,6 +1,6 @@
 # QA-21: Phase 10 gaps — opponent scout, sports filter, notification preview, calendar export
 
-**Status:** todo
+**Status:** done (PR #93, merged 2026-07-16)
 **Batch:** functional-gaps (`fix/qa-functional`) — plan **Phase 10** items surfaced as findings
 **Register rows:** EVT-12 (P2), SET-05 (P2), SET-04 (P2), SET-06 export half (P2) — SET-03 dropped (decided 2026-07-14: native push only, no sync channel)
 **Depends on:** QA-06 (sheet restyle), QA-13 (settings shell)

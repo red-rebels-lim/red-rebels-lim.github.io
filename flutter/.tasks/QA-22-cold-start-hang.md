@@ -1,6 +1,6 @@
 # QA-22: Cold-start hang — verify launch sync is non-blocking
 
-**Status:** todo
+**Status:** done (PR #92, merged 2026-07-16)
 **Batch:** functional-gaps (`fix/qa-functional`)
 **Register rows:** FUN-01 (P2, PLAUSIBLE — not yet reproduced deterministically)
 **Depends on:** -

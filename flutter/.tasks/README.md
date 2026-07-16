@@ -80,9 +80,9 @@ Everything else in the register (~40 rows) is new QA-only work not covered by an
 | QA-17 | Cinema: typography, two-tone brand, plain buttons, animated blobs | themes | done (PR #90) | - |
 | QA-18 | Neon: cyan active nav, panel fill, numerals, today cell, animated scanlines | themes | done (PR #90) | - |
 | QA-19 | Theme fonts: brand title truncation | themes | done (PR #90) | QA-17 |
-| QA-20 | Phase 8: FotMob blocks (standings, rankings, top scorers, next match) | functional | todo | - |
-| QA-21 | Phase 10 gaps: opponent scout, sports filter, notification preview, calendar export | functional | todo | QA-06, QA-13 |
-| QA-22 | Cold-start hang: verify launch sync is non-blocking | functional | todo | - |
+| QA-20 | Phase 8: FotMob blocks (standings, rankings, top scorers, next match) | functional | done (PR #94) | - |
+| QA-21 | Phase 10 gaps: opponent scout, sports filter, notification preview, calendar export | functional | done (PR #93) | QA-06, QA-13 |
+| QA-22 | Cold-start hang: verify launch sync is non-blocking | functional | done (PR #92) | - |
 | QA-23 | Share output comparison | functional | cancelled (sharing removed per GLB-02 decision) | - |
 | QA-26 | First-run anchored tour (7-step, EN+EL, replaces intro dialog) | functional | todo | QA-01, QA-13 |
 | QA-24 | Full re-capture + register close-out (Phase 4 exit) | functional | todo | all |
