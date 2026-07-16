@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_next_match">ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ</string>
+    <string name="widget_description">Αντίστροφη μέτρηση επόμενου αγώνα</string>
+</resources>

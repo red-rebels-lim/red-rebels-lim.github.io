@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,6 +12,7 @@ import 'data/players_repository.dart';
 import 'firebase_options.dart';
 import 'i18n/i18n.dart';
 import 'logic/fcm_token_provider.dart';
+import 'logic/home_widget_updater.dart';
 import 'logic/push_registration.dart';
 import 'pages/calendar_page.dart';
 import 'pages/settings_page.dart';
@@ -66,6 +68,7 @@ Future<void> main() async {
           push: push,
         );
         _wirePushHandlers(app, push, tokenProvider, firebaseReady: firebaseReady);
+        _wireWidgetClicks(app);
         return app;
       },
       child: const RedRebelsApp(),
@@ -102,6 +105,25 @@ void _wirePushHandlers(
     }).catchError((_) {});
   } catch (_) {
     // Messaging unavailable — notification taps just open the app normally.
+  }
+}
+
+/// Routes home-screen-widget taps like notification taps: the calendar tab
+/// opens and, when the widget carried an eventKey, that match's sheet.
+/// Never throws (Phase 9 — the widget must not break app startup).
+void _wireWidgetClicks(AppState app) {
+  void handle(Uri? uri) {
+    if (uri == null) return;
+    final key = uri.queryParameters['eventKey'];
+    if (key != null && key.isNotEmpty) app.pendingEventKey = key;
+    app.goToTab(0);
+  }
+
+  try {
+    HomeWidget.initiallyLaunchedFromHomeWidget().then(handle).catchError((_) {});
+    HomeWidget.widgetClicked.listen(handle, onError: (_) {});
+  } catch (_) {
+    // Plugin unavailable — widget taps just open the app normally.
   }
 }
 
@@ -147,7 +169,10 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     final deepLinkPending = app.pendingEventKey != null;
     // Refresh fixtures from the live feed once the first frame is up
     // (fire-and-forget; failures just flip the stale indicator).
+    // Phase 9: keep the home-screen widget in step with the app's data.
+    app.widgetRefresher = () => updateNextMatchWidget(app);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      updateNextMatchWidget(app); // cached snapshot first; sync refreshes it
       app.syncEvents();
       // First-run welcome tour — once ever (the flag is set on skip/finish).
       if (mounted && !app.introSeen && !deepLinkPending) {

@@ -136,6 +136,11 @@ class AppState extends ChangeNotifier {
   /// Registered by HomeShell so any widget can switch bottom-nav tabs.
   void Function(int index)? tabNavigator;
 
+  /// Registered by HomeShell (Phase 9): re-pushes the home-screen widget
+  /// payload. Fired after language changes and live-data syncs so the
+  /// widget's localized strings and fixture stay current.
+  void Function()? widgetRefresher;
+
   String get language => _language;
   ThemeMode get themeMode => _themeMode;
 
@@ -270,6 +275,7 @@ class AppState extends ChangeNotifier {
       _syncing = false;
     }
     notifyListeners();
+    widgetRefresher?.call();
   }
 
   /// True once the first-run intro has been dismissed (skip or finish).
@@ -287,6 +293,7 @@ class AppState extends ChangeNotifier {
     _language = lang;
     _prefs.setString('language', lang);
     notifyListeners();
+    widgetRefresher?.call();
   }
 
   void setThemeMode(ThemeMode mode) {
@@ -348,12 +355,16 @@ class AppState extends ChangeNotifier {
 
   /// Events for a month after the settings-level sport filter and the active
   /// filter-panel filters (web `buildCalendarData` order).
+  ///
+  /// Always a FRESH growable list: callers sort it in place, and the
+  /// repository's month list must never be mutated (it can also be a
+  /// `const []` for months absent from the feed, which would throw).
   List<SportEvent> filteredEventsFor(String monthName) {
     var list = events.eventsFor(monthName);
     if (!_sportFilters.football || !_sportFilters.volleyball) {
       list = list.where(_passesSportFilter).toList();
     }
-    if (!_filters.isActive) return list;
+    if (!_filters.isActive) return List.of(list);
     return list.where((e) => _filters.matches(e, teamName(e.opponent))).toList();
   }
 }
