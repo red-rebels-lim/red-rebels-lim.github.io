@@ -1,6 +1,6 @@
 # QA-20: Phase 8 — FotMob blocks (standings, rankings, top scorers, next match)
 
-**Status:** todo
+**Status:** done (PR #94, merged 2026-07-16)
 **Batch:** functional-gaps (`fix/qa-functional`) — or its own PR; this is plan **Phase 8**
 **Register rows:** STA-07 (P2), STA-06 football half (P2)
 **Depends on:** QA-09 (layout slots), QA-11 (shared TopScorers widget)
