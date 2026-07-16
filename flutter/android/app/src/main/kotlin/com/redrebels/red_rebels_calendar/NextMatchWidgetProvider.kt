@@ -3,21 +3,39 @@ package com.redrebels.red_rebels_calendar
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
 import android.net.Uri
+import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.view.View
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetPlugin
+import kotlin.math.tan
 
 /**
- * Next-match home-screen widget (Phase 9, PRD N-2).
+ * Next-match home-screen widget (Phase 9, PRD N-2) — visual design: Claude
+ * Design concept "1c ULTRA DIAGONAL" (approved 2026-07-16).
  *
  * Renders the payload written by the Flutter side
- * (lib/logic/home_widget_updater.dart) — all strings arrive pre-localized;
- * only the countdown is computed here so the 30-minute
- * [android.appwidget.AppWidgetProviderInfo.updatePeriodMillis] re-render
- * keeps it ticking without waking the app. Countdown format mirrors the
- * web's useCountdown hook (⏱ 3d 4h / ⏱ 4h 12m / ⏱ 12m).
+ * (lib/logic/home_widget_updater.dart) — all strings arrive pre-localized.
+ * This class owns two things:
+ *  - the card background (dark surface + 17°-raked panel + 2dp seam),
+ *    canvas-rendered per widget size so the diagonal never scales weirdly
+ *    (the design's per-size-asset requirement, minus the assets);
+ *  - the countdown, recomputed at render time in the web useCountdown
+ *    cadence (⏱ 38d 4h / 4h 12m / 12m) with per-language unit letters, so
+ *    the 30-minute updatePeriodMillis re-render keeps it ticking without
+ *    waking the app.
+ *
+ * The panel flips to volleyball blue per the design's "treatment C".
  */
 class NextMatchWidgetProvider : AppWidgetProvider() {
 
@@ -26,12 +44,33 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray,
     ) {
+        for (appWidgetId in appWidgetIds) render(context, appWidgetManager, appWidgetId)
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        render(context, appWidgetManager, appWidgetId)
+    }
+
+    private fun render(context: Context, manager: AppWidgetManager, appWidgetId: Int) {
         val prefs = HomeWidgetPlugin.getData(context)
         val hasMatch = prefs.getBoolean("hasMatch", false)
-        val label = prefs.getString("label", "NEXT MATCH")
-        val title = prefs.getString("title", "")
-        val subtitle = prefs.getString("subtitle", "")
-        val emptyText = prefs.getString("emptyText", "")
+        val label = prefs.getString("label", "NEXT MATCH") ?: "NEXT MATCH"
+        val homeTeam = prefs.getString("homeTeam", "") ?: ""
+        val awayTeam = prefs.getString("awayTeam", "") ?: ""
+        val sportLabel = prefs.getString("sportLabel", "") ?: ""
+        val dateLabel = prefs.getString("dateLabel", "") ?: ""
+        val venue = prefs.getString("venue", "") ?: ""
+        val isCup = prefs.getBoolean("isCup", false)
+        val cupLabel = prefs.getString("cupLabel", "CUP") ?: "CUP"
+        val isVolleyball = prefs.getBoolean("isVolleyball", false)
+        val emptyText = prefs.getString("emptyText", "") ?: ""
+        val caption = prefs.getString("caption", "TO KICKOFF") ?: "TO KICKOFF"
+        val units = prefs.getString("countdownUnits", "dhm") ?: "dhm"
         val eventKey = prefs.getString("eventKey", "") ?: ""
         // saveWidgetData stores Dart ints as Long.
         val kickoffMillis = try {
@@ -46,59 +85,186 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         val remaining = kickoffMillis - System.currentTimeMillis()
         val showMatch = hasMatch && remaining > -2 * 60 * 60 * 1000L
 
-        for (appWidgetId in appWidgetIds) {
-            val views = RemoteViews(context.packageName, R.layout.widget_next_match)
-            views.setTextViewText(R.id.widget_label, label)
+        // Portrait cell size from the host; fall back to the 4×2 minimum.
+        val options = manager.getAppWidgetOptions(appWidgetId)
+        val widthDp = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+            .takeIf { it > 0 } ?: 320
+        val heightDp = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+            .takeIf { it > 0 } ?: 140
+        val compact = heightDp < 100
 
+        val panelColor = if (isVolleyball) 0xFF3B82F6.toInt() else 0xFFE02520.toInt()
+        val seamColor = if (isVolleyball) 0xFF1D4ED8.toInt() else 0xFFB51B17.toInt()
+
+        val views = RemoteViews(
+            context.packageName,
+            if (compact) R.layout.widget_next_match_small else R.layout.widget_next_match,
+        )
+
+        views.setImageViewBitmap(
+            R.id.widget_bg,
+            renderBackground(context, widthDp, heightDp, compact, panelColor, seamColor),
+        )
+        views.setTextViewText(R.id.widget_label, label)
+        views.setTextColor(R.id.widget_label, panelColor)
+
+        // Reserve the panel area: the column may run up to the panel's
+        // bottom-left corner (its leftmost point), whatever the host size.
+        val density = context.resources.displayMetrics.density
+        val paddingEndPx =
+            (widthDp * (if (compact) COMPACT_PANEL_SHARE else PANEL_SHARE) * density).toInt()
+        views.setViewPadding(
+            R.id.widget_left_column,
+            (16 * density).toInt(),
+            if (compact) 0 else (14 * density).toInt(),
+            paddingEndPx,
+            if (compact) 0 else (13 * density).toInt(),
+        )
+
+        val countdown = formatCountdown(remaining, units)
+        val muted = 0xFF94A3B8.toInt()
+
+        if (compact) {
+            // 4×1: teams collapse to "VS AWAY · DATE"; countdown owns the panel.
             if (showMatch) {
-                views.setViewVisibility(R.id.widget_title, View.VISIBLE)
-                views.setViewVisibility(R.id.widget_subtitle, View.VISIBLE)
-                views.setViewVisibility(R.id.widget_empty, View.GONE)
+                val title = SpannableStringBuilder()
+                title.append("VS $awayTeam")
+                val metaStart = title.length
+                title.append("  · $dateLabel")
+                title.setSpan(RelativeSizeSpan(11f / 19f), metaStart, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                title.setSpan(ForegroundColorSpan(muted), metaStart, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 views.setTextViewText(R.id.widget_title, title)
-                views.setTextViewText(R.id.widget_subtitle, subtitle)
-                val countdown = formatCountdown(remaining)
-                views.setViewVisibility(
-                    R.id.widget_countdown,
-                    if (countdown == null) View.GONE else View.VISIBLE,
-                )
                 views.setTextViewText(R.id.widget_countdown, countdown ?: "")
             } else {
-                views.setViewVisibility(R.id.widget_title, View.GONE)
-                views.setViewVisibility(R.id.widget_subtitle, View.GONE)
-                views.setViewVisibility(R.id.widget_countdown, View.GONE)
-                views.setViewVisibility(R.id.widget_empty, View.VISIBLE)
-                views.setTextViewText(R.id.widget_empty, emptyText)
+                views.setTextViewText(R.id.widget_title, emptyText)
+                views.setTextViewText(R.id.widget_countdown, "")
             }
+        } else if (showMatch) {
+            views.setViewVisibility(R.id.widget_team_home, View.VISIBLE)
+            views.setViewVisibility(R.id.widget_team_away, View.VISIBLE)
+            views.setViewVisibility(R.id.widget_empty, View.GONE)
+            views.setViewVisibility(R.id.widget_meta, View.VISIBLE)
+            views.setViewVisibility(R.id.widget_caption, View.VISIBLE)
+            views.setViewVisibility(R.id.widget_cup_chip, if (isCup) View.VISIBLE else View.GONE)
 
-            // Tapping anywhere opens the app; with a fixture the calendar
-            // deep-links into that match's sheet (same eventKey format the
-            // push notifications use).
-            val uri = if (showMatch && eventKey.isNotEmpty()) {
-                Uri.parse("redrebels://widget?eventKey=${Uri.encode(eventKey)}")
-            } else {
-                Uri.parse("redrebels://widget")
-            }
-            views.setOnClickPendingIntent(
-                R.id.widget_root,
-                HomeWidgetLaunchIntent.getActivity(context, MainActivity::class.java, uri),
-            )
+            views.setTextViewText(R.id.widget_team_home, homeTeam)
+            // "VS" runs smaller and muted inside the equal-weight away line.
+            val awayLine = SpannableStringBuilder()
+            awayLine.append("VS ")
+            awayLine.setSpan(RelativeSizeSpan(13f / 23f), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            awayLine.setSpan(ForegroundColorSpan(muted), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            awayLine.append(awayTeam)
+            views.setTextViewText(R.id.widget_team_away, awayLine)
 
-            appWidgetManager.updateAppWidget(appWidgetId, views)
+            views.setTextViewText(R.id.widget_cup_chip, cupLabel)
+            val meta = StringBuilder("$sportLabel\n$dateLabel")
+            if (venue.isNotEmpty()) meta.append("\n").append(venue)
+            views.setTextViewText(R.id.widget_meta, meta)
+            views.setTextViewText(R.id.widget_caption, caption)
+            views.setTextViewText(R.id.widget_countdown, countdown ?: "")
+        } else {
+            views.setViewVisibility(R.id.widget_team_home, View.GONE)
+            views.setViewVisibility(R.id.widget_team_away, View.GONE)
+            views.setViewVisibility(R.id.widget_meta, View.GONE)
+            views.setViewVisibility(R.id.widget_caption, View.GONE)
+            views.setViewVisibility(R.id.widget_cup_chip, View.GONE)
+            views.setViewVisibility(R.id.widget_empty, View.VISIBLE)
+            views.setTextViewText(R.id.widget_empty, emptyText)
+            views.setTextViewText(R.id.widget_countdown, "")
         }
+
+        // Tapping anywhere opens the app; with a fixture the calendar
+        // deep-links into that match's sheet (same eventKey format the
+        // push notifications use).
+        val uri = if (showMatch && eventKey.isNotEmpty()) {
+            Uri.parse("redrebels://widget?eventKey=${Uri.encode(eventKey)}")
+        } else {
+            Uri.parse("redrebels://widget")
+        }
+        views.setOnClickPendingIntent(
+            R.id.widget_root,
+            HomeWidgetLaunchIntent.getActivity(context, MainActivity::class.java, uri),
+        )
+
+        manager.updateAppWidget(appWidgetId, views)
     }
 
     companion object {
-        /** Web useCountdown parity; null once kickoff has passed. */
-        fun formatCountdown(remainingMillis: Long): String? {
+        /** Design spec: panel raked 17° off vertical. */
+        private const val RAKE_DEGREES = 17.0
+
+        /** Panel width share of the card (design: 140/320, 4×1 110/320). */
+        const val PANEL_SHARE = 0.4375f
+        const val COMPACT_PANEL_SHARE = 0.34f
+
+        /**
+         * Card background: #1A0F0F rounded surface, raked solid panel and
+         * the 2dp darker seam along its edge. Drawn at the widget's actual
+         * size so the diagonal stays crisp through launcher resizes.
+         */
+        fun renderBackground(
+            context: Context,
+            widthDp: Int,
+            heightDp: Int,
+            compact: Boolean,
+            panelColor: Int,
+            seamColor: Int,
+        ): Bitmap {
+            val density = context.resources.displayMetrics.density
+            // Cap to keep the RemoteViews bitmap comfortably under the
+            // transaction/memory budget even on absurd resizes.
+            val w = (widthDp.coerceIn(120, 800) * density).toInt()
+            val h = (heightDp.coerceIn(50, 500) * density).toInt()
+            val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+
+            val radius = 16f * density
+            val surface = Path().apply {
+                addRoundRect(RectF(0f, 0f, w.toFloat(), h.toFloat()), radius, radius, Path.Direction.CW)
+            }
+            canvas.clipPath(surface)
+            canvas.drawColor(0xFF1A0F0F.toInt())
+
+            // Panel bottom-left x: 4×2 uses the design's 140/320 share,
+            // 4×1 narrows to 110/320. Top edge leans right by h·tan(17°).
+            val panelShare = if (compact) COMPACT_PANEL_SHARE else PANEL_SHARE
+            val panelLeft = w - w * panelShare
+            val rake = (h * tan(Math.toRadians(RAKE_DEGREES))).toFloat()
+
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            paint.color = panelColor
+            val panel = Path().apply {
+                moveTo(panelLeft + rake, 0f)
+                lineTo(w.toFloat(), 0f)
+                lineTo(w.toFloat(), h.toFloat())
+                lineTo(panelLeft, h.toFloat())
+                close()
+            }
+            canvas.drawPath(panel, paint)
+
+            paint.color = seamColor
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = 2f * density
+            canvas.drawLine(panelLeft + rake, 0f, panelLeft, h.toFloat(), paint)
+
+            return bitmap
+        }
+
+        /**
+         * Web useCountdown cadence with per-language unit letters
+         * ("dhm" / Greek "ηωλ"); null once kickoff has passed.
+         */
+        fun formatCountdown(remainingMillis: Long, units: String): String? {
             if (remainingMillis < 0) return null
+            val u = if (units.length == 3) units else "dhm"
             val minutesTotal = remainingMillis / 60_000
             val days = minutesTotal / (60 * 24)
             val hours = (minutesTotal % (60 * 24)) / 60
             val minutes = minutesTotal % 60
             return when {
-                days > 0 -> "⏱ ${days}d ${hours}h"
-                hours > 0 -> "⏱ ${hours}h ${minutes}m"
-                else -> "⏱ ${minutes}m"
+                days > 0 -> "⏱ ${days}${u[0]} ${hours}${u[1]}"
+                hours > 0 -> "⏱ ${hours}${u[1]} ${minutes}${u[2]}"
+                else -> "⏱ ${minutes}${u[2]}"
             }
         }
     }

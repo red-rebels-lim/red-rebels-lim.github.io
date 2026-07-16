@@ -65,6 +65,7 @@ void main() {
               'time': time,
               'status': 'upcoming',
               'competition': competition,
+              'venue': 'Αμμόχωστος',
             },
           ],
         },
@@ -76,8 +77,10 @@ void main() {
 
     expect(saved[hasMatchKey], false);
     expect(saved[labelKey], 'NEXT MATCH');
-    expect(saved[emptyTextKey], 'No data available');
-    expect(saved[titleKey], '');
+    expect(saved[emptyTextKey], 'NO DATA AVAILABLE'); // design renders uppercase
+    expect(saved[captionKey], 'TO KICKOFF');
+    expect(saved[countdownUnitsKey], 'dhm');
+    expect(saved[homeTeamKey], '');
     expect(saved[eventKeyKey], '');
     expect(updateCalls, 1);
   });
@@ -87,19 +90,26 @@ void main() {
     await updateNextMatchWidget(app);
 
     expect(saved[hasMatchKey], true);
-    expect(saved[titleKey], 'Nea Salamis vs APOEL');
-    expect(saved[subtitleKey], "MEN'S FOOTBALL · Aug 23 • 19:00");
+    expect(saved[homeTeamKey], 'NEA SALAMIS');
+    expect(saved[awayTeamKey], 'APOEL');
+    expect(saved[sportTextKey], "MEN'S FOOTBALL");
+    expect(saved[dateLabelKey], 'AUG 23 • 19:00');
+    expect(saved[venueKey], isNotEmpty);
+    expect(saved[isCupKey], false);
+    expect(saved[isVolleyballKey], false);
     expect(saved[kickoffMillisKey],
         DateTime(2026, 8, 23, 19, 0).millisecondsSinceEpoch);
     expect(saved[eventKeyKey], 'august-23-football-men-ΑΠΟΕΛ');
     expect(updateCalls, 1);
   });
 
-  test('cup fixture appends the Cup label; TBD time drops the clock', () async {
+  test('cup fixture sets the chip flag; TBD time drops the clock', () async {
     final app = await appWith(cachePayload: augustPayload(competition: 'cup', time: ''));
     await updateNextMatchWidget(app);
 
-    expect(saved[subtitleKey], "MEN'S FOOTBALL CUP · Aug 23");
+    expect(saved[isCupKey], true);
+    expect(saved[cupLabelKey], 'CUP');
+    expect(saved[dateLabelKey], 'AUG 23');
   });
 
   test('Greek payload uses the tonos-free uppercase labels', () async {
@@ -107,8 +117,11 @@ void main() {
     await updateNextMatchWidget(app);
 
     expect(saved[labelKey], 'ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ');
-    expect((saved[subtitleKey] as String), startsWith('ΑΝΔΡΙΚΟ ΠΟΔΟΣΦΑΙΡΟ ·'));
-    expect(saved[titleKey], 'Νέα Σαλαμίνα vs ΑΠΟΕΛ');
+    expect(saved[sportTextKey], 'ΑΝΔΡΙΚΟ ΠΟΔΟΣΦΑΙΡΟ');
+    expect(saved[homeTeamKey], 'ΝΕΑ ΣΑΛΑΜΙΝΑ');
+    expect(saved[awayTeamKey], 'ΑΠΟΕΛ');
+    expect(saved[captionKey], 'ΕΝΑΡΞΗ ΣΕ');
+    expect(saved[countdownUnitsKey], 'ηωλ');
   });
 
   test('bridge failures never throw', () async {

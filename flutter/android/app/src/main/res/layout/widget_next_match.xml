@@ -1,65 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Next-match widget (Phase 9). All text arrives pre-localized from the
-     Flutter side; visibilities are switched by NextMatchWidgetProvider.
-     sans-serif-condensed stands in for Barlow Condensed (custom fonts are
-     unreliable in RemoteViews). -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Next-match widget, 4×2 — Claude Design concept "1c ULTRA DIAGONAL".
+     The background (dark card + raked red/blue panel + seam) is a bitmap
+     canvas-rendered by NextMatchWidgetProvider so the 17° diagonal stays
+     crisp at every launcher resize. All text arrives pre-localized;
+     visibilities are switched by the provider. sans-serif-condensed is the
+     design's chosen face (it IS Roboto Condensed). -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/widget_next_match_bg"
-    android:orientation="vertical"
-    android:gravity="center_vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/widget_label"
+    <ImageView
+        android:id="@+id/widget_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:importantForAccessibility="no" />
+
+    <!-- Club crest on the panel (real Nea Salamina badge), 16dp inset. -->
+    <ImageView
+        android:id="@+id/widget_crest"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/widget_crest_club"
+        android:importantForAccessibility="no" />
+
+    <!-- Left column: paddingEnd is set by the provider to the panel's
+         bottom-left edge, so text never touches the seam at any size. -->
+    <LinearLayout
+        android:id="@+id/widget_left_column"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="150dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="13dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/widget_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:textSize="11sp"
+                android:letterSpacing="0.16"
+                android:maxLines="1"
+                android:textColor="#E02520" />
+
+            <TextView
+                android:id="@+id/widget_cup_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:background="@drawable/widget_cup_chip_bg"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:textSize="9sp"
+                android:letterSpacing="0.1"
+                android:maxLines="1"
+                android:textColor="#FDE047"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Teams: both lines equal weight (redline — no opponent bias). -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/widget_team_home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:textSize="23sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="13sp"
+                android:autoSizeMaxTextSize="23sp"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="#F8FAFC" />
+
+            <TextView
+                android:id="@+id/widget_team_away"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:textSize="23sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="13sp"
+                android:autoSizeMaxTextSize="23sp"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="#F8FAFC" />
+
+            <!-- Empty state replaces the team block (panel keeps flying). -->
+            <TextView
+                android:id="@+id/widget_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="18sp"
+                android:maxLines="2"
+                android:textColor="#94A3B8"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Match info must stay fully visible: sport, date and stadium
+             each own a line (stakeholder requests 2026-07-16). -->
+        <TextView
+            android:id="@+id/widget_meta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="11sp"
+            android:letterSpacing="0.04"
+            android:maxLines="3"
+            android:textColor="#94A3B8" />
+    </LinearLayout>
+
+    <!-- Countdown on the panel: white-on-red (yellow fails contrast). -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
-        android:textStyle="bold"
-        android:textSize="11sp"
-        android:letterSpacing="0.15"
-        android:textColor="#DC2828"
-        android:text="@string/widget_next_match" />
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="13dp"
+        android:orientation="vertical"
+        android:gravity="end">
 
-    <TextView
-        android:id="@+id/widget_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="#F8FAFC" />
+        <TextView
+            android:id="@+id/widget_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="8sp"
+            android:letterSpacing="0.18"
+            android:maxLines="1"
+            android:textColor="#BFFFFFFF" />
 
-    <TextView
-        android:id="@+id/widget_subtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textSize="12sp"
-        android:textColor="#94A3B8" />
-
-    <TextView
-        android:id="@+id/widget_countdown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="#FDE047" />
-
-    <TextView
-        android:id="@+id/widget_empty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="13sp"
-        android:textColor="#94A3B8"
-        android:visibility="gone" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/widget_countdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:textSize="23sp"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</FrameLayout>
