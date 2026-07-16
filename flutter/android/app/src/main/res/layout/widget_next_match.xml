@@ -156,6 +156,22 @@
             android:maxLines="1"
             android:textColor="#BFFFFFFF" />
 
+        <!-- Final-24h live countdown: the SYSTEM ticks a Chronometer in
+             countdown mode every second — no app wakeups (stakeholder
+             choice 2026-07-16: chronometer hybrid). Swapped with the
+             text countdown by the provider. -->
+        <Chronometer
+            android:id="@+id/widget_chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:textSize="23sp"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/widget_countdown"
             android:layout_width="wrap_content"

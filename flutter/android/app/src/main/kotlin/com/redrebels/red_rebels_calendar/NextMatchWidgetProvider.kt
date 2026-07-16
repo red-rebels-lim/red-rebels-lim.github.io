@@ -9,7 +9,9 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -121,7 +123,6 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             if (compact) 0 else (13 * density).toInt(),
         )
 
-        val countdown = formatCountdown(remaining, units)
         val muted = 0xFF94A3B8.toInt()
 
         if (compact) {
@@ -134,10 +135,11 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
                 title.setSpan(RelativeSizeSpan(11f / 19f), metaStart, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 title.setSpan(ForegroundColorSpan(muted), metaStart, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 views.setTextViewText(R.id.widget_title, title)
-                views.setTextViewText(R.id.widget_countdown, countdown ?: "")
+                bindCountdown(views, remaining, units, captionId = null)
             } else {
                 views.setTextViewText(R.id.widget_title, emptyText)
-                views.setTextViewText(R.id.widget_countdown, "")
+                views.setViewVisibility(R.id.widget_chronometer, View.GONE)
+                views.setViewVisibility(R.id.widget_countdown, View.GONE)
             }
         } else if (showMatch) {
             views.setViewVisibility(R.id.widget_team_home, View.VISIBLE)
@@ -161,7 +163,7 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             if (venue.isNotEmpty()) meta.append("\n").append(venue)
             views.setTextViewText(R.id.widget_meta, meta)
             views.setTextViewText(R.id.widget_caption, caption)
-            views.setTextViewText(R.id.widget_countdown, countdown ?: "")
+            bindCountdown(views, remaining, units, captionId = R.id.widget_caption)
         } else {
             views.setViewVisibility(R.id.widget_team_home, View.GONE)
             views.setViewVisibility(R.id.widget_team_away, View.GONE)
@@ -170,7 +172,8 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             views.setViewVisibility(R.id.widget_cup_chip, View.GONE)
             views.setViewVisibility(R.id.widget_empty, View.VISIBLE)
             views.setTextViewText(R.id.widget_empty, emptyText)
-            views.setTextViewText(R.id.widget_countdown, "")
+            views.setViewVisibility(R.id.widget_chronometer, View.GONE)
+            views.setViewVisibility(R.id.widget_countdown, View.GONE)
         }
 
         // Tapping anywhere opens the app; with a fixture the calendar
@@ -189,6 +192,37 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         manager.updateAppWidget(appWidgetId, views)
     }
 
+    /**
+     * Countdown display, chronometer-hybrid (stakeholder choice 2026-07-16):
+     * beyond 24h the text form ("⏱ 38d 4h") refreshes on the 30-min cycle;
+     * inside the final 24h a system-ticked [android.widget.Chronometer]
+     * counts down live (per second, no app wakeups). Falls back to text on
+     * pre-N devices, and hides everything once kickoff has passed (the
+     * ≤2h grace window keeps the fixture itself visible).
+     */
+    private fun bindCountdown(views: RemoteViews, remaining: Long, units: String, captionId: Int?) {
+        val liveTick = remaining in 1..DAY_MILLIS && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        val text = if (liveTick) null else formatCountdown(remaining, units)
+
+        views.setViewVisibility(R.id.widget_chronometer, if (liveTick) View.VISIBLE else View.GONE)
+        views.setViewVisibility(R.id.widget_countdown, if (text == null) View.GONE else View.VISIBLE)
+        if (captionId != null) {
+            views.setViewVisibility(captionId, if (liveTick || text != null) View.VISIBLE else View.GONE)
+        }
+
+        if (liveTick) {
+            views.setChronometerCountDown(R.id.widget_chronometer, true)
+            views.setChronometer(
+                R.id.widget_chronometer,
+                SystemClock.elapsedRealtime() + remaining,
+                "⏱ %s",
+                true,
+            )
+        } else {
+            views.setTextViewText(R.id.widget_countdown, text ?: "")
+        }
+    }
+
     companion object {
         /** Design spec: panel raked 17° off vertical. */
         private const val RAKE_DEGREES = 17.0
@@ -196,6 +230,8 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         /** Panel width share of the card (design: 140/320, 4×1 110/320). */
         const val PANEL_SHARE = 0.4375f
         const val COMPACT_PANEL_SHARE = 0.34f
+
+        private const val DAY_MILLIS = 24 * 60 * 60 * 1000L
 
         /**
          * Card background: #1A0F0F rounded surface, raked solid panel and
