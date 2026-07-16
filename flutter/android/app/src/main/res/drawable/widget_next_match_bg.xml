@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget surface: the app's dark card (#1A0F0F) with the brand's
+     red-alpha border and web-panel rounding. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#1A0F0F" />
+    <corners android:radius="16dp" />
+    <stroke android:width="1dp" android:color="#4DE02520" />
+</shape>

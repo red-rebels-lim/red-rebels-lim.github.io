@@ -6,7 +6,7 @@
 | **Basis** | Parity audit of 2026-07-10 (Flutter code vs `app/` mobile view vs [PRD](./PRD.md) §7 matrix) |
 | **Stack decision** | Flutter is the accepted stack for the native apps (supersedes the TRD's KMP recommendation — see TRD §2 addendum) |
 | **Design baseline** | The web app **mobile view** is the visual ground truth. Where this conflicts with PRD UX-1 ("native conventions first"), the web design wins. |
-| **Status** | Phases 1–5 delivered (iOS push pending Apple Developer membership); Phase 6 in progress; Phases 7–10 scheduled 2026-07-13 |
+| **Status** | Phases 1–8 + 10 delivered (incl. the 2026-07-14→16 exact-copy QA sweep, PRs #84–#97, register 100% resolved); Phase 9 Android widget delivered — iOS widget + iOS push (P5 PR 2) blocked on Apple Developer membership |
 
 Audit summary that drives this plan: of the PRD's 44 parity-matrix rows the Flutter app implemented 15, partially covered 7, and missed 22 — including 5 Must-priority rows (all notifications) — and its visual design was generic Material 3 rather than the web app's design language.
 

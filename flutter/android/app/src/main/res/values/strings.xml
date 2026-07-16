@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget-picker strings. Values reuse the web i18n copy verbatim
+     (stats.nextMatch); the in-widget texts themselves arrive pre-localized
+     from the Flutter side. -->
+<resources>
+    <string name="widget_next_match">NEXT MATCH</string>
+    <string name="widget_description">Next match countdown</string>
+</resources>
