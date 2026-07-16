@@ -7805,6 +7805,21 @@ export const eventsData: EventsData = {
   ],
   may: [],
   june: [],
-  july: [],
+  july: [
+    // TEMPORARY widget-testing fixture (2026-07-16) — remove after the
+    // home-screen widget has been verified on a physical device. Kept in
+    // plain JS shape: the reminder cron parses this file (see data/CLAUDE.md).
+    {
+      day: 18,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
+      time: "19:00",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp",
+      status: "upcoming",
+      matchday: 1
+    }
+  ],
   august: []
 };
