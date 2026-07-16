@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../data/constants.dart';
 import '../logic/football_stats.dart';
+import '../logic/scout.dart';
 import '../models/events.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
@@ -228,6 +229,12 @@ class _EventDetails extends StatelessWidget {
             if (event.isCup) const _CupChip(),
           ],
         ),
+
+        // ── Opponent scouting card — upcoming matches only (web EVT-12) ──
+        if (!event.isPlayed && event.sport != Sport.meeting) ...[
+          const SizedBox(height: 16),
+          _OpponentScoutCard(opponent: event.opponent, sport: event.sport),
+        ],
 
         // ── Tabbed match details (played only, like the web) ──
         if (event.isPlayed && tabs.isNotEmpty) ...[
@@ -897,6 +904,174 @@ class _SubsTab extends StatelessWidget {
         group(homeName, teamSubs('home')),
         group(awayName, teamSubs('away')),
       ],
+    );
+  }
+}
+
+/// Web `OpponentScoutCard` — season head-to-head + last meeting against this
+/// opponent, shown on upcoming non-meeting sheets (QA EVT-12). Volleyball
+/// hides the draw column and the goals line, exactly like the web.
+class _OpponentScoutCard extends StatelessWidget {
+  const _OpponentScoutCard({required this.opponent, required this.sport});
+
+  final String opponent;
+  final Sport sport;
+
+  // Tailwind 400-tier accents used by the web card's tiles.
+  static const _green400 = Color(0xFF4ADE80);
+  static const _yellow400 = Color(0xFFFACC15);
+  static const _red400 = Color(0xFFF87171);
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
+    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final isVolleyball = sport == Sport.volleyballMen || sport == Sport.volleyballWomen;
+
+    final h2h = getOpponentH2H(app.events, opponent, sport);
+    final last = getLastMeeting(app.events, opponent, sport);
+
+    final surface = BoxDecoration(
+      color: Colors.white.withValues(alpha: 0.05),
+      border: Border.all(color: colors.primaryBorderSubtle),
+      borderRadius: colors.br(12),
+    );
+
+    Widget heading(String text) => Text(
+          text.upperNoTonos,
+          textAlign: TextAlign.center,
+          style: condensed(size: 12, color: muted, letterSpacing: 1.5),
+        );
+
+    if (h2h == null && last == null) {
+      // Web empty state: "First meeting this season".
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: surface,
+        child: Column(
+          children: [
+            heading(app.t('popover.scouting')),
+            const SizedBox(height: 4),
+            Text(app.t('popover.firstMeeting'),
+                style: TextStyle(fontSize: 14, color: muted)),
+          ],
+        ),
+      );
+    }
+
+    Widget h2hTile(int count, String label, Color accent) => Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: accent.withValues(alpha: 0.1),
+              borderRadius: colors.br(8),
+            ),
+            child: Column(
+              children: [
+                Text('$count',
+                    style: condensed(size: 18, weight: FontWeight.w900, color: accent)),
+                Text(label.upperNoTonos,
+                    style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: accent.withValues(alpha: 0.7))),
+              ],
+            ),
+          ),
+        );
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          heading(app.t('popover.scouting')),
+          if (h2h != null) ...[
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: heading(app.t('popover.h2hRecord')),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                h2hTile(h2h.wins, app.t('stats.w'), _green400),
+                if (!isVolleyball) ...[
+                  const SizedBox(width: 8),
+                  h2hTile(h2h.draws, app.t('stats.d'), _yellow400),
+                ],
+                const SizedBox(width: 8),
+                h2hTile(h2h.losses, app.t('stats.l'), _red400),
+              ],
+            ),
+            if (!isVolleyball) ...[
+              const SizedBox(height: 8),
+              Text(
+                '${app.t('stats.goals')}: ${h2h.goalsFor}-${h2h.goalsAgainst}',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12, color: muted),
+              ),
+            ],
+          ],
+          if (last != null) ...[
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: heading(app.t('popover.lastMeeting')),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: colors.br(8),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      borderRadius: colors.br(999),
+                      color: switch (last.result) {
+                        MatchResult.win => twGreen500,
+                        MatchResult.draw => twYellow500,
+                        MatchResult.loss => twRed500,
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text.rich(TextSpan(children: [
+                      TextSpan(
+                        text: last.score,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.of(context).foreground,
+                        ),
+                      ),
+                      TextSpan(
+                        text:
+                            '  (${app.t(last.location == MatchLocation.home ? 'popover.homeGround' : 'popover.awayGround')})',
+                        style: TextStyle(fontSize: 12, color: muted),
+                      ),
+                    ])),
+                  ),
+                  Text(
+                    '${app.t('months.${last.month}').substring(0, 3)} ${last.day}',
+                    style: TextStyle(fontSize: 12, color: muted),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
