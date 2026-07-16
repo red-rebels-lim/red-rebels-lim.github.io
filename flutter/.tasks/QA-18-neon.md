@@ -1,6 +1,6 @@
 # QA-18: Neon — cyan active nav, grid panel fill, day numerals, today cell
 
-**Status:** todo
+**Status:** done (PR #90, merged 2026-07-15)
 **Batch:** themes (`fix/qa-themes`)
 **Register rows:** THM-05 (P2), THM-06 (P3), THM-07 (P3 — decided 2026-07-14: animate)
 **Depends on:** -

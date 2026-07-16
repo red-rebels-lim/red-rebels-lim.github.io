@@ -1,6 +1,6 @@
 # QA-17: Cinema — typography, two-tone brand, plain header buttons
 
-**Status:** todo
+**Status:** done (PR #90, merged 2026-07-15)
 **Batch:** themes (`fix/qa-themes`)
 **Register rows:** THM-03 (P2), THM-04 (P3 — decided 2026-07-14: port the animation)
 **Depends on:** -
