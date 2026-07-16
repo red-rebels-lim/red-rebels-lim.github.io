@@ -3,6 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../data/constants.dart';
 import '../logic/push_registration.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
@@ -142,6 +143,54 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+        // ── SPORTS FILTER — web parity (QA SET-05): red-tinted icon tiles,
+        //    toggles persisted as `sport_filters`, both never off ──
+        _Section(
+          title: app.t('settings.sportsFilter'),
+          child: Column(
+            children: [
+              _RowTile(
+                iconTile: _IconTile(
+                  icon: Icons.sports_soccer,
+                  background: accentRed.withValues(alpha: 0.1),
+                  color: accentRed,
+                ),
+                label: app.t('settings.football'),
+                trailing: WebToggle(
+                  key: const Key('sport-filter-football'),
+                  checked: app.sportFilters.football,
+                  onChanged: () => app.toggleSportFilter('football'),
+                ),
+              ),
+              _RowTile(
+                iconTile: _IconTile(
+                  icon: Icons.sports_volleyball,
+                  background: accentRed.withValues(alpha: 0.1),
+                  color: accentRed,
+                ),
+                label: app.t('settings.volleyball'),
+                isLast: true,
+                trailing: WebToggle(
+                  key: const Key('sport-filter-volleyball'),
+                  checked: app.sportFilters.volleyball,
+                  onChanged: () => app.toggleSportFilter('volleyball'),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // ── TOOLS — Export Calendar only: Print omitted on phones and the
+        //    web's Install App row is PWA-only (2026-07-14 decisions) ──
+        _Section(
+          title: app.t('settings.tools'),
+          child: _RowTile(
+            iconTile: const _IconTile(icon: Icons.download_outlined),
+            label: app.t('settings.exportCalendar'),
+            isLast: true,
+            onTap: () => openExternalUrl(Uri.parse(
+                '$siteBaseUrl/${app.language == 'el' ? 'calendar-el.ics' : 'calendar.ics'}')),
           ),
         ),
         _Section(
@@ -550,7 +599,126 @@ class _NotificationsCard extends StatelessWidget {
             ),
           ),
         ],
+        // ── Notification preview — always rendered, like the web (SET-04) ──
+        _NotificationPreview(divider: divider),
       ],
+    );
+  }
+}
+
+/// Web `NotificationPreview`: an expandable footer block inside the
+/// notifications card showing sample notification rows (QA SET-04). The
+/// reminder row is always present; score/new-event rows follow the alert-type
+/// toggles.
+class _NotificationPreview extends StatefulWidget {
+  const _NotificationPreview({required this.divider});
+
+  final Border divider;
+
+  @override
+  State<_NotificationPreview> createState() => _NotificationPreviewState();
+}
+
+class _NotificationPreviewState extends State<_NotificationPreview> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final prefs = app.notifPrefs;
+    final colors = AppColors.of(context);
+
+    // Web: `${reminderHours[0]}h`, defaulting to 2h when none are set.
+    final reminderLabel =
+        prefs.reminderHours.isNotEmpty ? '${prefs.reminderHours.first}h' : '2h';
+    final previews = [
+      app.t('settings.previewReminder').replaceAll('{{time}}', reminderLabel),
+      if (prefs.notifyScoreUpdates) app.t('settings.previewScore'),
+      if (prefs.notifyNewEvents) app.t('settings.previewNewEvent'),
+    ];
+
+    Widget previewRow(String text) => Container(
+          margin: const EdgeInsets.only(top: 8),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: dark ? twSlate800.withValues(alpha: 0.6) : const Color(0xFFF8FAFC),
+            border: Border.all(color: dark ? twSlate700 : twSlate200),
+            borderRadius: colors.br(12),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: colors.br(8),
+                child: Image.asset(
+                  'assets/images/clear_logo_192.png',
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.cover,
+                  excludeFromSemantics: true,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      app.t('settings.previewTitle').upperNoTonos,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.8,
+                        color: dark ? twSlate500 : twSlate400,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, height: 1.35)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text('now', style: TextStyle(fontSize: 12, color: dark ? twSlate500 : twSlate400)),
+            ],
+          ),
+        );
+
+    return Container(
+      decoration: BoxDecoration(border: widget.divider),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          InkWell(
+            key: const Key('notification-preview-toggle'),
+            onTap: () => setState(() => _expanded = !_expanded),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  app.t('settings.notificationPreview').upperNoTonos,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.8,
+                    color: dark ? twSlate400 : twSlate500,
+                  ),
+                ),
+                AnimatedRotation(
+                  turns: _expanded ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 200),
+                  child: Icon(Icons.keyboard_arrow_down, size: 18, color: dark ? twSlate500 : twSlate400),
+                ),
+              ],
+            ),
+          ),
+          if (_expanded) ...[
+            const SizedBox(height: 4),
+            for (final text in previews) previewRow(text),
+          ],
+        ],
+      ),
     );
   }
 }
