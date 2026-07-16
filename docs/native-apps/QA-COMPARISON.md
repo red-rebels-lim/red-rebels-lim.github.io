@@ -110,14 +110,14 @@ are **not rendered by the web mobile stats tabs either** — no parity differenc
 
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
-| THM-01 | brutalism | calendar + settings | App keeps rounded corners on cards/buttons/chips; web brutalism is flat and square | P2 | BUG | OPEN |
-| THM-02 | brutalism | header/nav borders | App ported only colors; web uses 2px borders (app ~1px) | P3 | BUG (known deviation, reopened) | OPEN |
-| THM-03 | cinema | all pages | Cinema typography not applied in app (web: Inter body, two-tone brand title, plain non-circular header buttons); app looks identical to default theme. Inter is already bundled — port is trivial | P2 | BUG (known deviation, reopened) | OPEN |
-| THM-04 | cinema | background | Web animated ambient gradient blobs; app static | P3 | BUG — DECIDED 2026-07-14: port the animation (QA-17) | OPEN |
-| THM-05 | neon | bottom nav | Web active tab is cyan with glow; app active tab stays red | P2 | BUG | OPEN |
-| THM-06 | neon | calendar grid | Web keeps a white panel behind the HUD brackets; app draws the grid straight on the page background. Day numerals also use a techno/mono face in app vs plain sans on web; today-cell is filled pink on web vs red outline in app | P3 | BUG | OPEN |
-| THM-07 | neon | scanlines | Static in app vs animated-feel CSS on web | P3 | BUG — DECIDED 2026-07-14: animate (QA-18) | OPEN |
-| THM-08 | brutalism/cinema/neon | header brand | App brand title truncates (`Red Rebels Cal…`) under the wide-tracking theme fonts; web fits the full title | P2 | BUG | OPEN |
+| THM-01 | brutalism | calendar + settings | App keeps rounded corners on cards/buttons/chips; web brutalism is flat and square | P2 | BUG | FIXED (PR #90) |
+| THM-02 | brutalism | header/nav borders | App ported only colors; web uses 2px borders (app ~1px) | P3 | BUG (known deviation, reopened) | FIXED (PR #90) |
+| THM-03 | cinema | all pages | Cinema typography not applied in app (web: Inter body, two-tone brand title, plain non-circular header buttons); app looks identical to default theme. Inter is already bundled — port is trivial | P2 | BUG (known deviation, reopened) | FIXED (PR #90) |
+| THM-04 | cinema | background | Web animated ambient gradient blobs; app static | P3 | BUG — DECIDED 2026-07-14: port the animation (QA-17) | FIXED (PR #90) |
+| THM-05 | neon | bottom nav | Web active tab is cyan with glow; app active tab stays red | P2 | BUG | FIXED (PR #90) |
+| THM-06 | neon | calendar grid | Web keeps a white panel behind the HUD brackets; app draws the grid straight on the page background. Day numerals also use a techno/mono face in app vs plain sans on web; today-cell is filled pink on web vs red outline in app | P3 | BUG | FIXED (PR #90) |
+| THM-07 | neon | scanlines | Static in app vs animated-feel CSS on web | P3 | BUG — DECIDED 2026-07-14: animate (QA-18) | FIXED (PR #90) |
+| THM-08 | brutalism/cinema/neon | header brand | App brand title truncates (`Red Rebels Cal…`) under the wide-tracking theme fonts; web fits the full title | P2 | BUG | FIXED (PR #90) |
 
 ## Functional / behavior
 
