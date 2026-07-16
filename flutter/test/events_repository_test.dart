@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -77,6 +79,25 @@ void main() {
 
       expect(await repo.refresh(client: failingClient()), isFalse);
       expect(repo.allEvents().length, before);
+    });
+
+    test('never-responding server hits the 10s timeout and returns false (QA FUN-01)', () async {
+      // TCP-blackhole shape: the request connects but no byte ever arrives.
+      final repo = await EventsRepository.load(cacheFile: cacheFile);
+      final before = repo.allEvents().length;
+
+      fakeAsync((async) {
+        final hanging = MockClient((_) => Completer<http.Response>().future);
+        bool? result;
+        repo.refresh(client: hanging).then((v) => result = v);
+
+        async.elapse(const Duration(seconds: 9));
+        expect(result, isNull); // still inside the timeout window
+
+        async.elapse(const Duration(seconds: 2)); // crosses the 10s cap
+        expect(result, isFalse);
+        expect(repo.allEvents().length, before);
+      });
     });
   });
 
