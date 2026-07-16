@@ -1,6 +1,6 @@
 # QA-19: Theme fonts — brand title truncation
 
-**Status:** todo
+**Status:** done (PR #90, merged 2026-07-15)
 **Batch:** themes (`fix/qa-themes`)
 **Register rows:** THM-08 (P2)
 **Depends on:** QA-17 (cinema font churn), ideally after QA-18
