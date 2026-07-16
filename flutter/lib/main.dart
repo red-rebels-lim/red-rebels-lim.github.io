@@ -21,7 +21,7 @@ import 'theme.dart';
 import 'widgets/app_background.dart';
 import 'widgets/bottom_nav.dart';
 import 'widgets/hud_frame.dart';
-import 'widgets/intro_dialog.dart';
+import 'widgets/onboarding_tour.dart';
 import 'widgets/marquee.dart';
 import 'widgets/mobile_header.dart';
 
@@ -141,7 +141,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     app.tabNavigator = (i) {
       if (mounted) setState(() => _index = i);
     };
-    // A notification deep link suppresses the intro for this launch — the
+    // A notification deep link suppresses the tour for this launch — the
     // calendar is about to open that match's sheet. Captured here because
     // CalendarPage consumes the key during the first build.
     final deepLinkPending = app.pendingEventKey != null;
@@ -149,9 +149,9 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     // (fire-and-forget; failures just flip the stale indicator).
     WidgetsBinding.instance.addPostFrameCallback((_) {
       app.syncEvents();
-      // First-run intro — once ever (the flag is set on skip/finish).
+      // First-run welcome tour — once ever (the flag is set on skip/finish).
       if (mounted && !app.introSeen && !deepLinkPending) {
-        showIntroDialog(context);
+        showOnboardingTour(context);
       }
     });
   }

@@ -69,14 +69,18 @@ void main() {
     competition: Competition.league,
   );
 
-  group('First-run intro', () {
-    Future<AppState> boot(WidgetTester tester, {String? pendingEventKey}) async {
+  group('First-run tour (QA-26)', () {
+    Future<AppState> boot(WidgetTester tester,
+        {String? pendingEventKey, String? language}) async {
+      if (language != null) {
+        await freshPrefs({'language': language});
+      }
       final app = appState();
       if (pendingEventKey != null) app.pendingEventKey = pendingEventKey;
       await tester.pumpWidget(
         ChangeNotifierProvider.value(value: app, child: const RedRebelsApp()),
       );
-      // First frame triggers the post-frame intro check; second pump runs the
+      // First frame triggers the post-frame tour check; second pump runs the
       // dialog route animation (no pumpAndSettle — countdown timers).
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
@@ -86,40 +90,70 @@ void main() {
     testWidgets('appears on fresh prefs and Skip flags it as seen', (tester) async {
       final app = await boot(tester);
 
-      expect(find.text('SWIPE TO NAVIGATE'), findsOneWidget); // page 1 title
+      expect(find.text('1 / 7'), findsOneWidget);
+      expect(find.text('Swipe to Navigate'), findsOneWidget); // web step 1
       expect(find.text('Skip'), findsOneWidget);
+      expect(find.text('Back'), findsNothing); // hidden on the first step
 
       await tester.tap(find.text('Skip'));
-      // Extra pumps: async markIntroSeen, then the dialog's pop animation.
+      // Extra pumps: the dialog's pop animation, then async markIntroSeen.
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
 
-      expect(find.text('SWIPE TO NAVIGATE'), findsNothing);
+      expect(find.text('Swipe to Navigate'), findsNothing);
       expect(app.introSeen, isTrue);
       expect(prefs.getBool(AppState.introSeenKey), isTrue);
 
       await tester.pumpWidget(const SizedBox());
     });
 
-    testWidgets('Next walks the three pages and Got it! finishes', (tester) async {
+    testWidgets('Next walks all 7 web steps, Back returns, Got it! finishes', (tester) async {
       final app = await boot(tester);
 
-      await tester.tap(find.text('NEXT'));
-      await tester.pump();
-      expect(find.text('VIEW STATISTICS'), findsOneWidget); // page 2
+      const titles = [
+        'Swipe to Navigate',
+        'Filter Events',
+        'Switch Layout',
+        'View Statistics',
+        'Enable Notifications',
+        'Change Visual Theme',
+        'Export Calendar',
+      ];
+      for (var i = 0; i < titles.length; i++) {
+        expect(find.text('${i + 1} / 7'), findsOneWidget);
+        expect(find.text(titles[i]), findsOneWidget);
+        if (i < titles.length - 1) {
+          await tester.tap(find.text('Next'));
+          await tester.pump();
+        }
+      }
 
-      await tester.tap(find.text('NEXT'));
+      // Back steps backwards from the last step.
+      await tester.tap(find.text('Back'));
       await tester.pump();
-      expect(find.text('ENABLE NOTIFICATIONS'), findsOneWidget); // page 3
+      expect(find.text('Change Visual Theme'), findsOneWidget);
+      await tester.tap(find.text('Next'));
+      await tester.pump();
 
-      await tester.tap(find.text('GOT IT!'));
+      await tester.tap(find.text('Got it!'));
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
 
-      expect(find.text('ENABLE NOTIFICATIONS'), findsNothing);
+      expect(find.text('Export Calendar'), findsNothing);
       expect(app.introSeen, isTrue);
+
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('renders the Greek copy verbatim', (tester) async {
+      await boot(tester, language: 'el');
+
+      expect(find.text('1 / 7'), findsOneWidget);
+      expect(find.text('Σύρετε για Πλοήγηση'), findsOneWidget);
+      expect(find.text('Παράλειψη'), findsOneWidget);
+      expect(find.text('Επόμενο'), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox());
     });
@@ -128,7 +162,7 @@ void main() {
       await freshPrefs({AppState.introSeenKey: true});
       await boot(tester);
 
-      expect(find.text('SWIPE TO NAVIGATE'), findsNothing);
+      expect(find.text('Swipe to Navigate'), findsNothing);
       expect(find.text('Skip'), findsNothing);
 
       await tester.pumpWidget(const SizedBox());
@@ -140,7 +174,7 @@ void main() {
         pendingEventKey: 'september-12-football-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ',
       );
 
-      expect(find.text('SWIPE TO NAVIGATE'), findsNothing);
+      expect(find.text('Swipe to Navigate'), findsNothing);
       expect(find.text('MATCH RESULT'), findsOneWidget); // deep-link sheet won
       expect(app.introSeen, isFalse); // not flagged — may show next launch
 
