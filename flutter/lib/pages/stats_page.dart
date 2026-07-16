@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../data/fotmob_client.dart';
 import '../logic/football_stats.dart';
 import '../logic/volleyball_stats.dart';
 import '../models/events.dart';
@@ -23,6 +24,31 @@ class StatsPage extends StatefulWidget {
 
 class _StatsPageState extends State<StatsPage> {
   String _activeTab = 'football';
+
+  // FotMob live blocks (Phase 8 / QA-20) — web StatsPage state trio.
+  FotMobParsed? _fotmob;
+  bool _fotmobLoading = true;
+  bool _fotmobError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFotmob();
+  }
+
+  Future<void> _loadFotmob() async {
+    setState(() {
+      _fotmobLoading = true;
+      _fotmobError = false;
+    });
+    final parsed = await fotMobClient.fetch();
+    if (!mounted) return;
+    setState(() {
+      _fotmob = parsed;
+      _fotmobError = parsed == null;
+      _fotmobLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +83,47 @@ class _StatsPageState extends State<StatsPage> {
             ),
           ),
           const SizedBox(height: 8),
+          // Web error banner: shown when the FotMob fetch failed, any tab.
+          if (_fotmobError && !_fotmobLoading)
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: twRed500.withValues(alpha: 0.1),
+                border: Border.all(color: twRed500.withValues(alpha: 0.3), width: 2),
+                borderRadius: colors.br(16),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      app.t('errors.fetchFailed'),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: dark ? const Color(0xFFFCA5A5) : const Color(0xFFDC2626),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Material(
+                    color: colors.primary,
+                    borderRadius: colors.br(8),
+                    child: InkWell(
+                      onTap: _loadFotmob,
+                      borderRadius: colors.br(8),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Text(
+                          app.t('errors.retry'),
+                          style: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           // Sport selector: wrapping pills (never truncates — QA STA-01).
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -74,7 +141,7 @@ class _StatsPageState extends State<StatsPage> {
             ),
           ),
           if (_activeTab == 'football')
-            const _FootballSections()
+            _FootballSections(fotmob: _fotmob, fotmobLoading: _fotmobLoading)
           else
             _VolleyballSections(
               sport: _activeTab == 'volleyball-men' ? Sport.volleyballMen : Sport.volleyballWomen,
@@ -124,24 +191,45 @@ class _SportPill extends StatelessWidget {
 // ── Tab compositions (web FootballStatsTab / VolleyballStatsTab order) ──────
 
 class _FootballSections extends StatelessWidget {
-  const _FootballSections();
+  const _FootballSections({required this.fotmob, required this.fotmobLoading});
+
+  final FotMobParsed? fotmob;
+  final bool fotmobLoading;
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final stats = calculateFootballStats(app.events);
+    final fotmob = this.fotmob;
+
+    // Web FootballStatsTab per slot: skeleton while loading, block when its
+    // parse produced rows, nothing otherwise.
+    Widget fotmobSlot(Widget? block) => fotmobLoading
+        ? const _FotMobSkeleton()
+        : (block ?? const SizedBox.shrink());
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _SeasonSummarySection(stats: stats),
         _RecentFormSection(results: [for (final m in stats.recentForm) (m.result, app.teamName(m.opponent), m.score)]),
-        // FotMob League Table slot (Phase 8 / QA-20)
+        fotmobSlot(fotmob != null && fotmob.tables.isNotEmpty
+            ? _LeagueTableSection(tables: fotmob.tables)
+            : null),
         _PerformanceSplitSection(
           home: (stats.home.played, stats.home.wins, stats.home.draws, stats.home.losses),
           away: (stats.away.played, stats.away.wins, stats.away.draws, stats.away.losses),
           showDraws: true,
         ),
-        // FotMob Top Scorers + League Rankings slots (Phase 8 / QA-20)
+        fotmobSlot(fotmob != null && fotmob.topScorers.isNotEmpty
+            ? _TopScorersSection(scorers: [
+                // Football names go through the fotmob.players i18n table.
+                for (final s in fotmob.topScorers) (tApi(app, 'players', s.name), s.goals),
+              ])
+            : null),
+        fotmobSlot(fotmob != null && fotmob.rankings.isNotEmpty
+            ? _LeagueRankingsSection(rankings: fotmob.rankings)
+            : null),
         _HeadToHeadSection(
           rows: [
             for (final h in stats.headToHead.take(10))
@@ -149,6 +237,385 @@ class _FootballSections extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// Web `getOrdinalSuffix` / the Greek `{rank}ος` (LeagueRankings.tsx).
+@visibleForTesting
+String formatOrdinalRank(int rank, String language) {
+  // Greek ordinals are masculine-form: 2ος. The braces are load-bearing —
+  // 'ος' would otherwise merge into the identifier.
+  // ignore: unnecessary_brace_in_string_interps
+  if (language == 'el') return '${rank}ος';
+  final v = rank % 100;
+  if (v >= 11 && v <= 13) return '${rank}th';
+  return switch (rank % 10) {
+    1 => '${rank}st',
+    2 => '${rank}nd',
+    3 => '${rank}rd',
+    _ => '${rank}th',
+  };
+}
+
+/// Web `tApi`: `fotmob.{category}.{apiString}` lookup, raw string fallback.
+String tApi(AppState app, String category, String apiString) {
+  final translated = app.t('fotmob.$category.$apiString', '');
+  return translated.isEmpty ? apiString : translated;
+}
+
+/// Web LoadingSkeleton: pulsing muted bars while a FotMob block loads.
+class _FotMobSkeleton extends StatefulWidget {
+  const _FotMobSkeleton();
+
+  @override
+  State<_FotMobSkeleton> createState() => _FotMobSkeletonState();
+}
+
+class _FotMobSkeletonState extends State<_FotMobSkeleton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 1),
+    lowerBound: 0.5,
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _pulse.stop();
+    } else {
+      _pulse.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    Widget bar(double height, double widthFactor, double opacity) => FractionallySizedBox(
+          alignment: Alignment.centerLeft,
+          widthFactor: widthFactor,
+          child: Container(
+            height: height,
+            decoration: BoxDecoration(
+              color: colors.muted.withValues(alpha: opacity),
+              borderRadius: colors.br(6),
+            ),
+          ),
+        );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: FadeTransition(
+        opacity: _pulse,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            bar(24, 0.33, 1),
+            const SizedBox(height: 16),
+            bar(40, 1, 1),
+            const SizedBox(height: 8),
+            bar(40, 1, 0.6),
+            const SizedBox(height: 8),
+            bar(40, 1, 0.4),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Web `LeagueTable`: compact 3-row window around Nea Salamis, VIEW FULL
+/// expands to all rows + legend. Columns `# TEAM DIFFERENCE POINTS`; our row
+/// gets the red left bar, tinted background and red bold text.
+class _LeagueTableSection extends StatefulWidget {
+  const _LeagueTableSection({required this.tables});
+
+  final List<LeagueTableData> tables;
+
+  @override
+  State<_LeagueTableSection> createState() => _LeagueTableSectionState();
+}
+
+class _LeagueTableSectionState extends State<_LeagueTableSection> {
+  bool _expanded = false;
+
+  /// Web `getCompactRows`: the row above us, us, the row below.
+  static List<LeagueTableRow> compactRows(List<LeagueTableRow> rows, int nsIndex) {
+    if (rows.length <= 3) return rows;
+    final start = nsIndex - 1 < 0 ? 0 : nsIndex - 1;
+    final end = (start + 3) > rows.length ? rows.length : start + 3;
+    final adjustedStart = end - start < 3 ? (end - 3 < 0 ? 0 : end - 3) : start;
+    return rows.sublist(adjustedStart, adjustedStart + 3);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+
+    final relevant = [
+      for (final t in widget.tables)
+        if (t.rows.any((r) => r.id == neaSalaminaFotMobId)) t,
+    ];
+    if (relevant.isEmpty) return const SizedBox.shrink();
+
+    final headerBg = dark ? twSlate800.withValues(alpha: 0.5) : const Color(0xFFF1F5F9);
+    final rowBorder = BorderSide(color: dark ? twSlate800 : twSlate200);
+
+    Widget headerCell(String text, {TextAlign align = TextAlign.center}) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          child: Text(
+            text.upperNoTonos,
+            textAlign: align,
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: dark ? twSlate400 : twSlate500),
+          ),
+        );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                app.t('stats.leagueStanding').upperNoTonos,
+                style: condensed(size: 18, color: colors.foreground, letterSpacing: 0.9),
+              ),
+              InkWell(
+                key: const Key('league-table-view-full'),
+                onTap: () => setState(() => _expanded = !_expanded),
+                child: Text(
+                  app.t('stats.viewFull').upperNoTonos,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: brandRed,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          for (final (ti, table) in relevant.indexed) ...[
+            if (ti > 0) const SizedBox(height: 32),
+            if (relevant.length > 1) ...[
+              Text(
+                tApi(app, 'leagues', table.leagueName).upperNoTonos,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                  color: dark ? twSlate300 : twSlate600,
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+            Builder(builder: (context) {
+              final nsIndex = table.rows.indexWhere((r) => r.id == neaSalaminaFotMobId);
+              final rows = _expanded ? table.rows : compactRows(table.rows, nsIndex);
+              return Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(color: headerBg, border: Border(bottom: rowBorder)),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 52, child: headerCell('#', align: TextAlign.left)),
+                        Expanded(child: headerCell(app.t('stats.team'), align: TextAlign.left)),
+                        SizedBox(width: 68, child: headerCell(app.t('stats.goalDifference'))),
+                        SizedBox(width: 60, child: headerCell(app.t('stats.points'))),
+                      ],
+                    ),
+                  ),
+                  for (final row in rows) _tableRow(app, row, rowBorder, dark),
+                ],
+              );
+            }),
+            if (_expanded && table.legend.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 16,
+                runSpacing: 8,
+                children: [
+                  for (final entry in table.legend)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _qualDot(entry.color),
+                        const SizedBox(width: 6),
+                        Text(
+                          tApi(app, 'legendEntries', entry.title),
+                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _qualDot(String cssColor) {
+    final color = _parseCssColor(cssColor);
+    return Container(
+      width: 8,
+      height: 8,
+      decoration: BoxDecoration(
+        borderRadius: AppColors.of(context).br(999),
+        color: color ?? Colors.transparent,
+      ),
+    );
+  }
+
+  Widget _tableRow(AppState app, LeagueTableRow row, BorderSide rowBorder, bool dark) {
+    final isUs = row.id == neaSalaminaFotMobId;
+    final muted = dark ? twSlate400 : twSlate500;
+    final textColor = isUs ? brandRed : AppColors.of(context).foreground;
+    final weight = isUs ? FontWeight.bold : FontWeight.normal;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isUs ? brandRed.withValues(alpha: 0.1) : null,
+        border: Border(
+          bottom: rowBorder,
+          left: isUs ? const BorderSide(color: brandRed, width: 2) : BorderSide.none,
+        ),
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 52,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              child: Row(
+                children: [
+                  if (row.qualColor != null) ...[
+                    _qualDot(row.qualColor!),
+                    const SizedBox(width: 6),
+                  ],
+                  Text('${row.position}',
+                      style: TextStyle(fontSize: 14, fontWeight: weight, color: isUs ? brandRed : muted)),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              child: Text(
+                // Mobile viewport → the web shows the shortName variant.
+                tApi(app, 'teams', row.shortName),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 14, fontWeight: weight, color: textColor),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 68,
+            child: Text(
+              '${row.goalDifference > 0 ? '+' : ''}${row.goalDifference}',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, fontWeight: weight, color: muted),
+            ),
+          ),
+          SizedBox(
+            width: 60,
+            child: Text(
+              '${row.pts}',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: textColor),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Best-effort `#rrggbb` / `#rgb` parser for FotMob's qualification colors.
+Color? _parseCssColor(String css) {
+  var hex = css.trim();
+  if (!hex.startsWith('#')) return null;
+  hex = hex.substring(1);
+  if (hex.length == 3) hex = hex.split('').map((c) => '$c$c').join();
+  if (hex.length != 6) return null;
+  final value = int.tryParse(hex, radix: 16);
+  return value == null ? null : Color(0xFF000000 | value);
+}
+
+/// Web `LeagueRankings`: 2-column grid of bordered tiles — red ordinal,
+/// value, uppercase label, `out of N teams` footnote.
+class _LeagueRankingsSection extends StatelessWidget {
+  const _LeagueRankingsSection({required this.rankings});
+
+  final List<LeagueRanking> rankings;
+
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final colors = AppColors.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    if (rankings.isEmpty) return const SizedBox.shrink();
+
+    return _Section(
+      title: app.t('stats.leagueRankings'),
+      child: _TileGrid(
+        columns: 2,
+        children: [
+          for (final ranking in rankings)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: _tileDecoration(context),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    formatOrdinalRank(ranking.rank, app.language),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: colors.primary),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    ranking.value,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: colors.foreground),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    tApi(app, 'statHeaders', ranking.label).upperNoTonos,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.5,
+                      color: dark ? twSlate400 : twSlate500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    app.t('stats.outOf').replaceAll('{{total}}', '${ranking.totalTeams}'),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 11, color: dark ? twSlate500 : twSlate400),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
