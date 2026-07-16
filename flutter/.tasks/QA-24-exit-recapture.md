@@ -1,6 +1,6 @@
 # QA-24: Full re-capture + register close-out (Phase 4 exit)
 
-**Status:** todo
+**Status:** done (2026-07-16 — final re-capture clean; register 100% resolved)
 **Batch:** functional-gaps (last PR) — handoff **Phase 4**
 **Register rows:** all
 **Depends on:** QA-01…QA-23 merged; QA-25 decisions resolved

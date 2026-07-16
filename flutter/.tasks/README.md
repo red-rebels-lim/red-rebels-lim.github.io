@@ -84,6 +84,6 @@ Everything else in the register (~40 rows) is new QA-only work not covered by an
 | QA-21 | Phase 10 gaps: opponent scout, sports filter, notification preview, calendar export | functional | done (PR #93) | QA-06, QA-13 |
 | QA-22 | Cold-start hang: verify launch sync is non-blocking | functional | done (PR #92) | - |
 | QA-23 | Share output comparison | functional | cancelled (sharing removed per GLB-02 decision) | - |
-| QA-26 | First-run anchored tour (7-step, EN+EL, replaces intro dialog) | functional | todo | QA-01, QA-13 |
-| QA-24 | Full re-capture + register close-out (Phase 4 exit) | functional | todo | all |
+| QA-26 | First-run anchored tour (7-step, EN+EL, replaces intro dialog) | functional | done (PR #95) | QA-01, QA-13 |
+| QA-24 | Full re-capture + register close-out (Phase 4 exit) | functional | done (PR #97 — Phase 4 exit) | all |
 | QA-25 | Stakeholder decision log (10 rows) | - | done (answered 2026-07-14) | - |

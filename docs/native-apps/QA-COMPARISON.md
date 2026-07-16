@@ -13,6 +13,16 @@
 | **Classification** | BUG (fix app to match web) · NEEDS-STAKEHOLDER-DECISION (copying impossible or arguably wrong) · WEB-BUG (web is wrong; needs sign-off before touching `app/`) |
 | **Status** | OPEN → FIXED (commit/PR) or ACCEPTED (stakeholder) |
 
+> **Phase 4 exit (2026-07-16):** register 100% resolved — every row FIXED or ACCEPTED.
+> Final side-by-side re-capture run on the pixel_7 emulator against the live PWA
+> (fresh credentialed APK from `main`, EN/light baseline, April 2026 + July 2026,
+> event sheets incl. tabs and cup/penalties, filters, list/cards, stats with live
+> FotMob blocks, squad + player sheets, settings incl. sports filter/tools/preview,
+> Greek pass, dark pass, all four visual themes, first-run tour walkthrough).
+> Remaining visible differences are exactly the recorded stakeholder decisions
+> (share removal, filter button, print omitted, 3-way theme control, month
+> persistence, disabled season-bound chevrons).
+
 Fix batches (Phase 3, one branch/PR each): **calendar** (GLB/CAL/EVT), **stats** (STA),
 **squad** (SQD), **settings** (SET), **themes** (THM), **functional-gaps** (FUN + rows
 marked *Phase 8/10*). Greek rows (GRK) ride with the batch that owns the affected surface.
@@ -124,7 +134,7 @@ are **not rendered by the web mobile stats tabs either** — no parity differenc
 | ID | Area | State | Difference (web → app) | Severity | Classification | Status |
 |---|---|---|---|---|---|---|
 | FUN-01 | cold start | force-stop + flaky network | App hung ~90 s on the splash screen once after force-stop with degraded emulator network — suspected blocking launch sync. Web shell paints immediately from SW cache | P2 | BUG (PLAUSIBLE — reproduce & verify against the HTTP layer's cache fallback) | FIXED (PR #92 — not reproducible under 4 degraded-network shapes, 1.4-1.5s cold starts; Firebase init capped at 5s as the only unbounded pre-frame await) |
-| FUN-02 | first-run intro | fresh install | App: 3-page dialog; web: 7-step anchored tour | P2 | BUG — DECIDED 2026-07-14: build the anchored tour, "as detailed as possible in both languages" (QA-26) | OPEN |
+| FUN-02 | first-run intro | fresh install | App: 3-page dialog; web: 7-step anchored tour | P2 | BUG — DECIDED 2026-07-14: build the anchored tour, "as detailed as possible in both languages" (QA-26) | FIXED (PR #95 — 7-step tour, EN+EL verbatim; centered dialog like the web actually renders, the anchor selectors are vestigial in OnboardingTour.tsx) |
 | FUN-03 | share output | header/sheet share | Not yet compared (native share sheet intercepts) | P3 | DECIDED 2026-07-14: all sharing removed from the app (see GLB-02) — nothing left to compare | ACCEPTED (moot) |
 
 ## Verified equal (no finding)

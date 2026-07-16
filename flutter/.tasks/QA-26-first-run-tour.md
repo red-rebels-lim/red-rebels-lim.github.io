@@ -1,6 +1,6 @@
 # QA-26: First-run anchored tour (replaces the 3-page intro dialog)
 
-**Status:** todo
+**Status:** done (PR #95, merged 2026-07-16)
 **Batch:** functional-gaps (`fix/qa-functional`)
 **Register rows:** FUN-02 (P2)
 **Depends on:** QA-01 (final header button set — tour anchors to header buttons), QA-13 (settings shell, if a tour step anchors there)
