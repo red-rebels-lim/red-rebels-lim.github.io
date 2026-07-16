@@ -42,11 +42,34 @@ class AppState extends ChangeNotifier {
       _calendarView = (prefs.getBool('listView') ?? false) ? 'list' : 'grid';
     }
     _notifPrefs = _loadNotifPrefs(prefs);
+    _sportFilters = _loadSportFilters(prefs);
   }
 
   /// Local storage key for the NotifPrefs JSON snapshot (renders the saved
   /// notification preferences on restart without a network round-trip).
   static const notifPrefsKey = 'notif_prefs';
+
+  /// Settings-level sport filter, web parity: `localStorage['sport_filters']`
+  /// = `{"football":bool,"volleyball":bool}` (QA SET-05). Applied to the
+  /// calendar surfaces only — the web's stats/squad pages ignore it.
+  static const sportFiltersKey = 'sport_filters';
+
+  static ({bool football, bool volleyball}) _loadSportFilters(SharedPreferences prefs) {
+    try {
+      final raw = prefs.getString(sportFiltersKey);
+      if (raw != null) {
+        final decoded = json.decode(raw);
+        if (decoded is Map &&
+            decoded['football'] is bool &&
+            decoded['volleyball'] is bool) {
+          return (football: decoded['football'] as bool, volleyball: decoded['volleyball'] as bool);
+        }
+      }
+    } catch (_) {
+      // Corrupt value — fall through to defaults, like the web.
+    }
+    return (football: true, volleyball: true);
+  }
 
   static NotifPrefs _loadNotifPrefs(SharedPreferences prefs) {
     final raw = prefs.getString(notifPrefsKey);
@@ -298,9 +321,38 @@ class AppState extends ChangeNotifier {
 
   void clearFilters() => setFilters(const FilterState());
 
-  /// Events for a month after applying the active filters.
+  late ({bool football, bool volleyball}) _sportFilters;
+
+  /// Settings-level sport toggles (SPORTS FILTER section).
+  ({bool football, bool volleyball}) get sportFilters => _sportFilters;
+
+  /// Flips one sport toggle. Web rule: both may never be off — a toggle that
+  /// would disable the last sport is silently ignored.
+  void toggleSportFilter(String sport) {
+    final next = (
+      football: sport == 'football' ? !_sportFilters.football : _sportFilters.football,
+      volleyball: sport == 'volleyball' ? !_sportFilters.volleyball : _sportFilters.volleyball,
+    );
+    if (!next.football && !next.volleyball) return;
+    _sportFilters = next;
+    _prefs.setString(sportFiltersKey,
+        json.encode({'football': next.football, 'volleyball': next.volleyball}));
+    notifyListeners();
+  }
+
+  bool _passesSportFilter(SportEvent e) => switch (e.sport) {
+        Sport.footballMen => _sportFilters.football,
+        Sport.volleyballMen || Sport.volleyballWomen => _sportFilters.volleyball,
+        Sport.meeting => true,
+      };
+
+  /// Events for a month after the settings-level sport filter and the active
+  /// filter-panel filters (web `buildCalendarData` order).
   List<SportEvent> filteredEventsFor(String monthName) {
-    final list = events.eventsFor(monthName);
+    var list = events.eventsFor(monthName);
+    if (!_sportFilters.football || !_sportFilters.volleyball) {
+      list = list.where(_passesSportFilter).toList();
+    }
     if (!_filters.isActive) return list;
     return list.where((e) => _filters.matches(e, teamName(e.opponent))).toList();
   }
