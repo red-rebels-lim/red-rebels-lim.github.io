@@ -17,14 +17,15 @@
         android:scaleType="fitXY"
         android:importantForAccessibility="no" />
 
-    <!-- Club crest on the panel (real Nea Salamina badge), 16dp inset. -->
+    <!-- Club crest on the panel (real Nea Salamina badge), 16dp inset.
+         56dp per stakeholder request 2026-07-17 (was 40dp). -->
     <ImageView
         android:id="@+id/widget_crest"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_gravity="top|end"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="14dp"
         android:scaleType="fitCenter"
         android:src="@drawable/widget_crest_club"
         android:importantForAccessibility="no" />
