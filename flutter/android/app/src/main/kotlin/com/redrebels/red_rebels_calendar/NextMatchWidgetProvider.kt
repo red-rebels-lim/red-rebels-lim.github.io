@@ -4,12 +4,15 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -62,6 +65,8 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         val label = prefs.getString("label", "NEXT MATCH") ?: "NEXT MATCH"
         val homeTeam = prefs.getString("homeTeam", "") ?: ""
         val awayTeam = prefs.getString("awayTeam", "") ?: ""
+        val homeLogo = prefs.getString("homeLogo", "") ?: ""
+        val awayLogo = prefs.getString("awayLogo", "") ?: ""
         val sportLabel = prefs.getString("sportLabel", "") ?: ""
         val dateLabel = prefs.getString("dateLabel", "") ?: ""
         val venue = prefs.getString("venue", "") ?: ""
@@ -121,12 +126,26 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             if (compact) 0 else (13 * density).toInt(),
         )
 
-        val countdown = formatCountdown(remaining, units)
         val muted = 0xFF94A3B8.toInt()
 
         if (compact) {
-            // 4×1: teams collapse to "VS AWAY · DATE"; countdown owns the panel.
-            if (showMatch) {
+            // 4×1: crest VS crest · date (stakeholder request 2026-07-16);
+            // "VS AWAY · DATE" text stands in when a crest asset is missing.
+            val homeCrest = if (showMatch) loadCrest(context, homeLogo) else null
+            val awayCrest = if (showMatch) loadCrest(context, awayLogo) else null
+            if (showMatch && homeCrest != null && awayCrest != null) {
+                views.setViewVisibility(R.id.widget_compact_row, View.VISIBLE)
+                views.setViewVisibility(R.id.widget_title, View.GONE)
+                views.setImageViewBitmap(R.id.widget_home_crest, homeCrest)
+                views.setImageViewBitmap(R.id.widget_away_crest, awayCrest)
+                views.setTextViewText(
+                    R.id.widget_compact_date,
+                    if (venue.isEmpty()) dateLabel else "$dateLabel\n$venue",
+                )
+                bindCountdown(views, remaining, units, captionId = null)
+            } else if (showMatch) {
+                views.setViewVisibility(R.id.widget_compact_row, View.GONE)
+                views.setViewVisibility(R.id.widget_title, View.VISIBLE)
                 val title = SpannableStringBuilder()
                 title.append("VS $awayTeam")
                 val metaStart = title.length
@@ -134,10 +153,13 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
                 title.setSpan(RelativeSizeSpan(11f / 19f), metaStart, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 title.setSpan(ForegroundColorSpan(muted), metaStart, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 views.setTextViewText(R.id.widget_title, title)
-                views.setTextViewText(R.id.widget_countdown, countdown ?: "")
+                bindCountdown(views, remaining, units, captionId = null)
             } else {
+                views.setViewVisibility(R.id.widget_compact_row, View.GONE)
+                views.setViewVisibility(R.id.widget_title, View.VISIBLE)
                 views.setTextViewText(R.id.widget_title, emptyText)
-                views.setTextViewText(R.id.widget_countdown, "")
+                views.setViewVisibility(R.id.widget_chronometer, View.GONE)
+                views.setViewVisibility(R.id.widget_countdown, View.GONE)
             }
         } else if (showMatch) {
             views.setViewVisibility(R.id.widget_team_home, View.VISIBLE)
@@ -161,7 +183,7 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             if (venue.isNotEmpty()) meta.append("\n").append(venue)
             views.setTextViewText(R.id.widget_meta, meta)
             views.setTextViewText(R.id.widget_caption, caption)
-            views.setTextViewText(R.id.widget_countdown, countdown ?: "")
+            bindCountdown(views, remaining, units, captionId = R.id.widget_caption)
         } else {
             views.setViewVisibility(R.id.widget_team_home, View.GONE)
             views.setViewVisibility(R.id.widget_team_away, View.GONE)
@@ -170,7 +192,8 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             views.setViewVisibility(R.id.widget_cup_chip, View.GONE)
             views.setViewVisibility(R.id.widget_empty, View.VISIBLE)
             views.setTextViewText(R.id.widget_empty, emptyText)
-            views.setTextViewText(R.id.widget_countdown, "")
+            views.setViewVisibility(R.id.widget_chronometer, View.GONE)
+            views.setViewVisibility(R.id.widget_countdown, View.GONE)
         }
 
         // Tapping anywhere opens the app; with a fixture the calendar
@@ -189,13 +212,69 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         manager.updateAppWidget(appWidgetId, views)
     }
 
+    /**
+     * Countdown display, chronometer-hybrid (stakeholder choice 2026-07-16):
+     * beyond 24h the text form ("⏱ 38d 4h") refreshes on the 30-min cycle;
+     * inside the final 24h a system-ticked [android.widget.Chronometer]
+     * counts down live (per second, no app wakeups). Falls back to text on
+     * pre-N devices, and hides everything once kickoff has passed (the
+     * ≤2h grace window keeps the fixture itself visible).
+     */
+    private fun bindCountdown(views: RemoteViews, remaining: Long, units: String, captionId: Int?) {
+        val liveTick = remaining in 1..DAY_MILLIS && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        val text = if (liveTick) null else formatCountdown(remaining, units)
+
+        views.setViewVisibility(R.id.widget_chronometer, if (liveTick) View.VISIBLE else View.GONE)
+        views.setViewVisibility(R.id.widget_countdown, if (text == null) View.GONE else View.VISIBLE)
+        if (captionId != null) {
+            views.setViewVisibility(captionId, if (liveTick || text != null) View.VISIBLE else View.GONE)
+        }
+
+        if (liveTick) {
+            views.setChronometerCountDown(R.id.widget_chronometer, true)
+            views.setChronometer(
+                R.id.widget_chronometer,
+                SystemClock.elapsedRealtime() + remaining,
+                "⏱ %s",
+                true,
+            )
+        } else {
+            views.setTextViewText(R.id.widget_countdown, text ?: "")
+        }
+    }
+
     companion object {
+        /**
+         * Loads a team crest from the Flutter asset pack (payload paths like
+         * `assets/images/team_logos/ΑΠΟΕΛ.webp`), downscaled for the 30dp
+         * slot. Null on any failure — callers fall back to text.
+         */
+        fun loadCrest(context: Context, assetPath: String): Bitmap? {
+            if (assetPath.isEmpty()) return null
+            // Flutter percent-encodes non-ASCII asset names inside the APK
+            // (ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp → %CE%9D...), so encode each segment.
+            val encoded = assetPath.split('/').joinToString("/") { Uri.encode(it) }
+            return try {
+                context.assets.open("flutter_assets/$encoded").use { stream ->
+                    val raw = BitmapFactory.decodeStream(stream) ?: return null
+                    val target = (34 * context.resources.displayMetrics.density).toInt()
+                    if (raw.width <= target) raw
+                    else Bitmap.createScaledBitmap(
+                        raw, target, target * raw.height / raw.width, true)
+                }
+            } catch (_: Exception) {
+                null
+            }
+        }
+
         /** Design spec: panel raked 17° off vertical. */
         private const val RAKE_DEGREES = 17.0
 
         /** Panel width share of the card (design: 140/320, 4×1 110/320). */
         const val PANEL_SHARE = 0.4375f
         const val COMPACT_PANEL_SHARE = 0.34f
+
+        private const val DAY_MILLIS = 24 * 60 * 60 * 1000L
 
         /**
          * Card background: #1A0F0F rounded surface, raked solid panel and

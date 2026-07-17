@@ -33,19 +33,90 @@
             android:maxLines="1"
             android:textColor="#E02520" />
 
+        <!-- Crest row: HOME crest vs AWAY crest · date (stakeholder request
+             2026-07-16); widget_title below is the text fallback when a
+             crest asset is missing. -->
+        <LinearLayout
+            android:id="@+id/widget_compact_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/widget_home_crest"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:textSize="11sp"
+                android:textColor="#94A3B8"
+                android:text="@string/widget_vs" />
+
+            <ImageView
+                android:id="@+id/widget_away_crest"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:importantForAccessibility="no" />
+
+            <!-- Date on top, stadium below; autosizes into the space left
+                 of the panel so the match info stays fully visible
+                 (stakeholder requests 2026-07-16). -->
+            <TextView
+                android:id="@+id/widget_compact_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="11sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="11sp"
+                android:maxLines="2"
+                android:textColor="#94A3B8" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/widget_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:fontFamily="sans-serif-condensed"
             android:textStyle="bold"
             android:textSize="19sp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="19sp"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:ellipsize="end"
             android:textColor="#F8FAFC" />
     </LinearLayout>
+
+    <!-- Final-24h live countdown (see widget_next_match.xml). -->
+    <Chronometer
+        android:id="@+id/widget_chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="13dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:textColor="#FFFFFF"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/widget_countdown"

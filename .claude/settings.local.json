@@ -91,25 +91,12 @@
       "Bash(flutter build *)",
       "Bash(flutter analyze *)",
       "Bash(flutter test *)",
-      "Bash(flutter pub *)"
+      "Bash(flutter pub *)",
+      "Read(//opt/homebrew/Caskroom/claude-code/**)",
+      "Read(//opt/homebrew/Caskroom/claude-code@latest/**)",
+      "Read(//Library/Application Support/ClaudeCode/**)"
     ]
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "playwright"
-  ],
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash(git commit*)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cd /Users/ageorgiou/projects/camsfinder-mono && pnpm type-check && pnpm lint",
-            "statusMessage": "Running type-check and lint before commit..."
-          }
-        ]
-      }
-    ]
-  }
+  "enabledMcpjsonServers": []
 }

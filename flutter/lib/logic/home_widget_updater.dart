@@ -25,6 +25,8 @@ const hasMatchKey = 'hasMatch';
 const labelKey = 'label';
 const homeTeamKey = 'homeTeam';
 const awayTeamKey = 'awayTeam';
+const homeLogoKey = 'homeLogo';
+const awayLogoKey = 'awayLogo';
 const sportTextKey = 'sportLabel';
 const dateLabelKey = 'dateLabel';
 const venueKey = 'venue';
@@ -70,6 +72,8 @@ Future<void> updateNextMatchWidget(AppState app) async {
       await saveWidgetData(hasMatchKey, false);
       await saveWidgetData(homeTeamKey, '');
       await saveWidgetData(awayTeamKey, '');
+      await saveWidgetData(homeLogoKey, '');
+      await saveWidgetData(awayLogoKey, '');
       await saveWidgetData(sportTextKey, '');
       await saveWidgetData(dateLabelKey, '');
       await saveWidgetData(venueKey, '');
@@ -86,9 +90,19 @@ Future<void> updateNextMatchWidget(AppState app) async {
       final monthAbbrev = app.t('months.${next.monthName}').substring(0, 3);
       final time = e.time.contains(':') ? ' • ${e.time}' : '';
 
+      // Crest asset paths for the compact layout (Kotlin loads them from
+      // the flutter_assets pack; empty string → text fallback).
+      final ownLogo =
+          e.sport == Sport.volleyballMen || e.sport == Sport.volleyballWomen
+              ? 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ_ΒΟΛΛΕΥ.webp'
+              : 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp';
+      final opponentLogo = e.logo == null ? '' : 'assets/${e.logo}';
+
       await saveWidgetData(hasMatchKey, true);
       await saveWidgetData(homeTeamKey, isHome ? own : opponent);
       await saveWidgetData(awayTeamKey, isHome ? opponent : own);
+      await saveWidgetData(homeLogoKey, isHome ? ownLogo : opponentLogo);
+      await saveWidgetData(awayLogoKey, isHome ? opponentLogo : ownLogo);
       await saveWidgetData(sportTextKey, app.t(_sportKey(e.sport)).upperNoTonos);
       await saveWidgetData(dateLabelKey, '$monthAbbrev ${e.day}$time'.upperNoTonos);
       final venue = e.venue;

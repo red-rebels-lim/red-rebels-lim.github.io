@@ -4,6 +4,41 @@
 
 A Progressive Web App for Nea Salamina FC (Cyprus), covering football and volleyball fixtures, statistics, and match details throughout the season.
 
+## Project Status
+
+> **Last Updated:** 2026-07-17 | Use `/project-status` to regenerate
+
+| Metric | Value |
+|--------|-------|
+| **Web PWA** | ✅ Live at [red-rebels.com](https://red-rebels.com) |
+| **Web sprint** (volleyball stats + mobile/settings redesign) | 11 of 11 tasks done |
+| **Flutter native app** | QA register fully resolved (25 done, 1 cancelled of 26) |
+| **In progress** | Android home-screen widget — live countdown (PR #101) |
+
+### Progress
+
+```
+Web PWA          [████████████████████] 100%  ✅ Live in production
+Web sprint       [████████████████████] 100%  ✅ 11/11 tasks (app/.tasks/)
+Flutter QA       [████████████████████] 100%  ✅ 26/26 resolved (flutter/.tasks/)
+Android widget   [███████████████░░░░░]  75%  🔄 Next-match widget + countdown
+```
+
+### Completed
+
+- ✅ **Web PWA** — calendar, stats (football + volleyball), 4 visual themes, push/Telegram reminders, PWA install
+- ✅ **Volleyball stats sprint** — stat types, engine, components, StatsPage tabs, Stitch design alignment (TASK-01–08)
+- ✅ **Mobile & settings redesign** — bottom nav, mobile calendar, settings page (TASK-09–11)
+- ✅ **Flutter app parity QA** — 26-item register closed 2026-07-16: theming, stats, settings, FotMob, first-run tour, cold-start fix (QA-01–26; QA-23 sharing cancelled by stakeholder decision)
+
+### In Progress
+
+- 🔄 **Android home-screen widget** — next-match widget shipped (PR #99); live per-second countdown inside the final 24h open in PR #101
+
+### Remaining
+
+- ⏳ iOS widget equivalent and store release preparation — see `flutter/.tasks/` and `app/.tasks/` for task-level detail
+
 ## Features
 
 ### Calendar & Match Data

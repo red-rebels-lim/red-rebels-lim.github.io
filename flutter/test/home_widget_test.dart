@@ -95,6 +95,8 @@ void main() {
     expect(saved[sportTextKey], "MEN'S FOOTBALL");
     expect(saved[dateLabelKey], 'AUG 23 • 19:00');
     expect(saved[venueKey], isNotEmpty);
+    expect(saved[homeLogoKey], 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp');
+    expect(saved[awayLogoKey], ''); // synthetic fixture carries no logo
     expect(saved[isCupKey], false);
     expect(saved[isVolleyballKey], false);
     expect(saved[kickoffMillisKey],

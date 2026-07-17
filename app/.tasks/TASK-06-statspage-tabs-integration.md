@@ -1,6 +1,6 @@
 # TASK-06: StatsPage Sport Selector Tabs & Integration
 
-**Status:** todo
+**Status:** done
 **Depends on:** TASK-03, TASK-04, TASK-05
 **Estimated scope:** Medium
 
