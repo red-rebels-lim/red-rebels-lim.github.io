@@ -5,4 +5,5 @@
 <resources>
     <string name="widget_next_match">NEXT MATCH</string>
     <string name="widget_description">Next match countdown</string>
+    <string name="widget_vs">VS</string>
 </resources>

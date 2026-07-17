@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- Android widget: team crests in the compact 4×1 layout (VS row with date/venue, text fallback when a crest asset is missing); widget now resizable down to 1-cell height
+- `## Project Status` section in root README, regenerable via `/project-status`
 - Lean root `CLAUDE.md` plus nested context files for `app/src/data/`, `app/scripts/scraper/`, `.github/scripts/`
 - Skills: `add-team`, `bump-season-year`, `run-scraper-locally` (under `.claude/skills/`)
 

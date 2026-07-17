@@ -2,4 +2,5 @@
 <resources>
     <string name="widget_next_match">ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ</string>
     <string name="widget_description">Αντίστροφη μέτρηση επόμενου αγώνα</string>
+    <string name="widget_vs">VS</string>
 </resources>

@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
@@ -64,6 +65,8 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         val label = prefs.getString("label", "NEXT MATCH") ?: "NEXT MATCH"
         val homeTeam = prefs.getString("homeTeam", "") ?: ""
         val awayTeam = prefs.getString("awayTeam", "") ?: ""
+        val homeLogo = prefs.getString("homeLogo", "") ?: ""
+        val awayLogo = prefs.getString("awayLogo", "") ?: ""
         val sportLabel = prefs.getString("sportLabel", "") ?: ""
         val dateLabel = prefs.getString("dateLabel", "") ?: ""
         val venue = prefs.getString("venue", "") ?: ""
@@ -126,8 +129,23 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         val muted = 0xFF94A3B8.toInt()
 
         if (compact) {
-            // 4×1: teams collapse to "VS AWAY · DATE"; countdown owns the panel.
-            if (showMatch) {
+            // 4×1: crest VS crest · date (stakeholder request 2026-07-16);
+            // "VS AWAY · DATE" text stands in when a crest asset is missing.
+            val homeCrest = if (showMatch) loadCrest(context, homeLogo) else null
+            val awayCrest = if (showMatch) loadCrest(context, awayLogo) else null
+            if (showMatch && homeCrest != null && awayCrest != null) {
+                views.setViewVisibility(R.id.widget_compact_row, View.VISIBLE)
+                views.setViewVisibility(R.id.widget_title, View.GONE)
+                views.setImageViewBitmap(R.id.widget_home_crest, homeCrest)
+                views.setImageViewBitmap(R.id.widget_away_crest, awayCrest)
+                views.setTextViewText(
+                    R.id.widget_compact_date,
+                    if (venue.isEmpty()) dateLabel else "$dateLabel\n$venue",
+                )
+                bindCountdown(views, remaining, units, captionId = null)
+            } else if (showMatch) {
+                views.setViewVisibility(R.id.widget_compact_row, View.GONE)
+                views.setViewVisibility(R.id.widget_title, View.VISIBLE)
                 val title = SpannableStringBuilder()
                 title.append("VS $awayTeam")
                 val metaStart = title.length
@@ -137,6 +155,8 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
                 views.setTextViewText(R.id.widget_title, title)
                 bindCountdown(views, remaining, units, captionId = null)
             } else {
+                views.setViewVisibility(R.id.widget_compact_row, View.GONE)
+                views.setViewVisibility(R.id.widget_title, View.VISIBLE)
                 views.setTextViewText(R.id.widget_title, emptyText)
                 views.setViewVisibility(R.id.widget_chronometer, View.GONE)
                 views.setViewVisibility(R.id.widget_countdown, View.GONE)
@@ -224,6 +244,29 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
+        /**
+         * Loads a team crest from the Flutter asset pack (payload paths like
+         * `assets/images/team_logos/ΑΠΟΕΛ.webp`), downscaled for the 30dp
+         * slot. Null on any failure — callers fall back to text.
+         */
+        fun loadCrest(context: Context, assetPath: String): Bitmap? {
+            if (assetPath.isEmpty()) return null
+            // Flutter percent-encodes non-ASCII asset names inside the APK
+            // (ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp → %CE%9D...), so encode each segment.
+            val encoded = assetPath.split('/').joinToString("/") { Uri.encode(it) }
+            return try {
+                context.assets.open("flutter_assets/$encoded").use { stream ->
+                    val raw = BitmapFactory.decodeStream(stream) ?: return null
+                    val target = (34 * context.resources.displayMetrics.density).toInt()
+                    if (raw.width <= target) raw
+                    else Bitmap.createScaledBitmap(
+                        raw, target, target * raw.height / raw.width, true)
+                }
+            } catch (_: Exception) {
+                null
+            }
+        }
+
         /** Design spec: panel raked 17° off vertical. */
         private const val RAKE_DEGREES = 17.0
 
