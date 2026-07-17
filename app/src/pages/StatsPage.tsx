@@ -1,42 +1,16 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MobileHeader } from '@/components/layout/MobileHeader';
 import { cn } from '@/lib/utils';
 import { calculateStatistics } from '@/lib/stats';
 import { calculateVolleyballStatistics } from '@/lib/volleyball-stats';
-import {
-  fetchTeamData,
-  parseLeagueTables,
-  parseTopScorers,
-  parseNextMatch,
-  parseLeagueRankings,
-} from '@/lib/fotmob';
-import type {
-  FotMobTeamData,
-  LeagueTableData,
-  TopScorer,
-  NextMatchInfo,
-  LeagueRanking,
-} from '@/lib/fotmob';
 import { FootballStatsTab } from '@/components/stats/FootballStatsTab';
 import { VolleyballStatsTab } from '@/components/stats/VolleyballStatsTab';
 
-export interface FotMobParsed {
-  tables: LeagueTableData[];
-  topScorers: TopScorer[];
-  nextMatch: NextMatchInfo | null;
-  rankings: LeagueRanking[];
-}
-
-function parseFotMobData(data: FotMobTeamData): FotMobParsed {
-  return {
-    tables: parseLeagueTables(data),
-    topScorers: parseTopScorers(data),
-    nextMatch: parseNextMatch(data),
-    rankings: parseLeagueRankings(data),
-  };
-}
-
+// The FotMob feed (League Standing / Top Scorers / League Rankings) was
+// dropped 2026-07-17: after promotion it kept serving last season. Those
+// sections show an empty state until they are generated from our own saved
+// match results (planned).
 export default function StatsPage() {
   const { t } = useTranslation();
   const stats = useMemo(() => calculateStatistics(), []);
@@ -44,27 +18,6 @@ export default function StatsPage() {
   const womensVolleyball = useMemo(() => calculateVolleyballStatistics('volleyball-women'), []);
 
   const [activeTab, setActiveTab] = useState('football');
-  const [fotmob, setFotmob] = useState<FotMobParsed | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState(false);
-
-  const loadFotmob = useCallback(() => {
-    setLoading(true);
-    setFetchError(false);
-    fetchTeamData()
-      .then((data) => {
-        if (data) {
-          setFotmob(parseFotMobData(data));
-        } else {
-          setFetchError(true);
-        }
-      })
-      .catch(() => setFetchError(true))
-      .finally(() => setLoading(false));
-  }, []);
-
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { loadFotmob(); }, [loadFotmob]);
 
   return (
     <div className="w-full mx-auto pb-24">
@@ -74,19 +27,6 @@ export default function StatsPage() {
 
       <div className="bg-white/70 dark:bg-transparent backdrop-blur-sm dark:backdrop-blur-none rounded-2xl mx-2 p-3 mt-2">
         <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">{t('nav.stats')}</h2>
-
-        {/* Error banner */}
-        {fetchError && !loading && (
-          <section role="alert" className="bg-red-500/10 rounded-2xl p-4 mb-2 border-2 border-red-500/30 flex items-center justify-between gap-4">
-            <p className="text-sm text-red-600 dark:text-red-300">{t('errors.fetchFailed')}</p>
-            <button
-              onClick={loadFotmob}
-              className="text-sm font-bold text-white bg-primary hover:bg-red-700 px-4 py-2 rounded-lg transition-colors shrink-0"
-            >
-              {t('errors.retry')}
-            </button>
-          </section>
-        )}
 
         <div role="tablist" className="flex flex-wrap gap-2 py-2">
           {[
@@ -115,7 +55,7 @@ export default function StatsPage() {
 
         <div id="stats-tabpanel" role="tabpanel" aria-labelledby={`tab-${activeTab}`}>
           {activeTab === 'football' && (
-            <FootballStatsTab stats={stats} fotmob={fotmob} loading={loading} />
+            <FootballStatsTab stats={stats} />
           )}
           {activeTab === 'volleyball-men' && (
             <VolleyballStatsTab stats={mensVolleyball} variant="men" />

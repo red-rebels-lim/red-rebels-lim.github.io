@@ -51,5 +51,5 @@ app/test-results
 
 /scripts
 tests
-.envrc.playwright-mcp/
 .envrc
+.playwright-mcp/

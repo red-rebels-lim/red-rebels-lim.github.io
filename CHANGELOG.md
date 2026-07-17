@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Removed
+- FotMob feed on the stats page (League Standing, Top Scorers, League Rankings) — it kept serving last season after promotion; the sections show the standard empty state until they are generated from our own saved match results (planned)
+
 ### Changed
 - Season rolled to 26/27: season window is now July→June (pre-season friendlies open the season), constants/labels bumped across web + Flutter, last season's events reset (25/26 preserved in git history), competition label now "Cyprus 1st Division" / "Κύπρος Α' Κατηγορία"
 - Stats render FotMob-style zeroed tables at season start; all-day (TBD-time) calendar events now carry STATUS:TENTATIVE in the .ics feed

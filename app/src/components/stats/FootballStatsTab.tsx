@@ -1,36 +1,32 @@
+import { useTranslation } from 'react-i18next';
 import type { FormattedStats } from '@/types/events';
-import type { FotMobParsed } from '@/pages/StatsPage';
-import { LeagueTable } from '@/components/stats/LeagueTable';
-import { LeagueRankings } from '@/components/stats/LeagueRankings';
-import { TopScorers } from '@/components/stats/TopScorers';
 import { SeasonSummary } from '@/components/stats/SeasonSummary';
 import { PerformanceSplit } from '@/components/stats/PerformanceSplit';
 import { RecentForm } from '@/components/stats/RecentForm';
 import { HeadToHead } from '@/components/stats/HeadToHead';
 
-function LoadingSkeleton() {
+/**
+ * Placeholder for the sections that used to render FotMob feed data
+ * (League Standing, Top Scorers, League Rankings). The feed still served
+ * last season after promotion, so these show the standard empty state until
+ * they are regenerated from our own saved match results (planned;
+ * stakeholder decision 2026-07-17).
+ */
+function EmptyStatSection({ titleKey }: { titleKey: string }) {
+  const { t } = useTranslation();
   return (
-    <section className="stat-section min-h-[180px]" role="status">
-      <div className="animate-pulse space-y-4">
-        <div className="h-6 bg-muted rounded w-1/3" />
-        <div className="space-y-2">
-          <div className="h-10 bg-muted rounded" />
-          <div className="h-10 bg-muted/60 rounded" />
-          <div className="h-10 bg-muted/40 rounded" />
-        </div>
-      </div>
-      <span className="sr-only">Loading statistics...</span>
+    <section className="stat-section">
+      <h2 className="stat-section-title">{t(titleKey)}</h2>
+      <p className="text-muted-foreground text-center">{t('stats.noData')}</p>
     </section>
   );
 }
 
 interface FootballStatsTabProps {
   stats: FormattedStats;
-  fotmob: FotMobParsed | null;
-  loading: boolean;
 }
 
-export function FootballStatsTab({ stats, fotmob, loading }: FootballStatsTabProps) {
+export function FootballStatsTab({ stats }: FootballStatsTabProps) {
   return (
     <>
       {/* 1. Season Summary */}
@@ -50,23 +46,17 @@ export function FootballStatsTab({ stats, fotmob, loading }: FootballStatsTabPro
         hasPlayed={stats.overall.played > 0}
       />
 
-      {/* 3. League Table (FotMob) */}
-      {loading ? <LoadingSkeleton /> : fotmob && fotmob.tables.length > 0 ? (
-        <LeagueTable tables={fotmob.tables} />
-      ) : null}
+      {/* 3. League Table — empty until generated from local results */}
+      <EmptyStatSection titleKey="stats.leagueStanding" />
 
       {/* 5. Performance Split */}
       <PerformanceSplit home={stats.home} away={stats.away} />
 
-      {/* 6. Top Scorers (FotMob) */}
-      {loading ? <LoadingSkeleton /> : fotmob && fotmob.topScorers.length > 0 ? (
-        <TopScorers scorers={fotmob.topScorers} />
-      ) : null}
+      {/* 6. Top Scorers — empty until generated from local results */}
+      <EmptyStatSection titleKey="stats.topScorers" />
 
-      {/* 7. League Rankings (FotMob) */}
-      {loading ? <LoadingSkeleton /> : fotmob && fotmob.rankings.length > 0 ? (
-        <LeagueRankings rankings={fotmob.rankings} />
-      ) : null}
+      {/* 7. League Rankings — empty until generated from local results */}
+      <EmptyStatSection titleKey="stats.leagueRankings" />
 
       {/* 8. Head to Head */}
       <HeadToHead headToHead={stats.headToHead} />
