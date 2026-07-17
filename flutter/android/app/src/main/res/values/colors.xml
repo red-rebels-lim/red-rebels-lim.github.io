@@ -4,4 +4,9 @@
     <color name="ic_launcher_background">#C82E04</color>
     <!-- Brand red, accent for FCM notifications (web primary #E02520). -->
     <color name="notification_color">#E02520</color>
+    <!-- Widget surface palette (light mode); values-night overrides.
+         Text mirrors the app themes: slate-900 on light, slate-50 on dark. -->
+    <color name="widget_text_primary">#0F172A</color>
+    <color name="widget_text_muted">#64748B</color>
+    <color name="widget_cup_chip_text">#A16207</color>
 </resources>

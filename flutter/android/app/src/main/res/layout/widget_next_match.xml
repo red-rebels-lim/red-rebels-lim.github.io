@@ -72,7 +72,7 @@
                 android:textSize="9sp"
                 android:letterSpacing="0.1"
                 android:maxLines="1"
-                android:textColor="#FDE047"
+                android:textColor="@color/widget_cup_chip_text"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -96,7 +96,7 @@
                 android:autoSizeMaxTextSize="23sp"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:textColor="#F8FAFC" />
+                android:textColor="@color/widget_text_primary" />
 
             <TextView
                 android:id="@+id/widget_team_away"
@@ -110,7 +110,7 @@
                 android:autoSizeMaxTextSize="23sp"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:textColor="#F8FAFC" />
+                android:textColor="@color/widget_text_primary" />
 
             <!-- Empty state replaces the team block (panel keeps flying). -->
             <TextView
@@ -120,7 +120,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="18sp"
                 android:maxLines="2"
-                android:textColor="#94A3B8"
+                android:textColor="@color/widget_text_muted"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -134,7 +134,7 @@
             android:textSize="11sp"
             android:letterSpacing="0.04"
             android:maxLines="3"
-            android:textColor="#94A3B8" />
+            android:textColor="@color/widget_text_muted" />
     </LinearLayout>
 
     <!-- Countdown on the panel: white-on-red (yellow fails contrast). -->

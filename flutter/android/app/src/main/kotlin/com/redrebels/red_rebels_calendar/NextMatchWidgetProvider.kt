@@ -3,9 +3,11 @@ package com.redrebels.red_rebels_calendar
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.drawable.Icon
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
@@ -106,10 +108,29 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             if (compact) R.layout.widget_next_match_small else R.layout.widget_next_match,
         )
 
-        views.setImageViewBitmap(
-            R.id.widget_bg,
-            renderBackground(context, widthDp, heightDp, compact, panelColor, seamColor),
-        )
+        // Follow the system dark/light mode (stakeholder request 2026-07-17).
+        // API 31+ registers a day/night bitmap pair so the launcher swaps the
+        // surface instantly on theme change; older devices render the current
+        // mode and refresh on the next update cycle.
+        val night = (context.resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            views.setIcon(
+                R.id.widget_bg,
+                "setImageIcon",
+                Icon.createWithBitmap(renderBackground(
+                    context, widthDp, heightDp, compact, panelColor, seamColor, SURFACE_LIGHT)),
+                Icon.createWithBitmap(renderBackground(
+                    context, widthDp, heightDp, compact, panelColor, seamColor, SURFACE_DARK)),
+            )
+        } else {
+            views.setImageViewBitmap(
+                R.id.widget_bg,
+                renderBackground(
+                    context, widthDp, heightDp, compact, panelColor, seamColor,
+                    if (night) SURFACE_DARK else SURFACE_LIGHT),
+            )
+        }
         views.setTextViewText(R.id.widget_label, label)
         views.setTextColor(R.id.widget_label, panelColor)
 
@@ -126,7 +147,7 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             if (compact) 0 else (13 * density).toInt(),
         )
 
-        val muted = 0xFF94A3B8.toInt()
+        val muted = if (night) MUTED_DARK else MUTED_LIGHT
 
         if (compact) {
             // 4×1: crest VS crest · date (stakeholder request 2026-07-16);
@@ -267,6 +288,13 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             }
         }
 
+        // Surface palette: dark = original design, light mirrors the app's
+        // light theme (slate-50 card).
+        private val SURFACE_DARK = 0xFF1A0F0F.toInt()
+        private val SURFACE_LIGHT = 0xFFF1F5F9.toInt()
+        private val MUTED_DARK = 0xFF94A3B8.toInt()
+        private val MUTED_LIGHT = 0xFF64748B.toInt()
+
         /** Design spec: panel raked 17° off vertical. */
         private const val RAKE_DEGREES = 17.0
 
@@ -288,6 +316,7 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             compact: Boolean,
             panelColor: Int,
             seamColor: Int,
+            surfaceColor: Int,
         ): Bitmap {
             val density = context.resources.displayMetrics.density
             // Cap to keep the RemoteViews bitmap comfortably under the
@@ -302,7 +331,7 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
                 addRoundRect(RectF(0f, 0f, w.toFloat(), h.toFloat()), radius, radius, Path.Direction.CW)
             }
             canvas.clipPath(surface)
-            canvas.drawColor(0xFF1A0F0F.toInt())
+            canvas.drawColor(surfaceColor)
 
             // Panel bottom-left x: 4×2 uses the design's 140/320 share,
             // 4×1 narrows to 110/320. Top edge leans right by h·tan(17°).

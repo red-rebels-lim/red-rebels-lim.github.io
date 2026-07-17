@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Widget dark-mode palette (original design colors). -->
+    <color name="widget_text_primary">#F8FAFC</color>
+    <color name="widget_text_muted">#94A3B8</color>
+    <color name="widget_cup_chip_text">#FDE047</color>
+</resources>
