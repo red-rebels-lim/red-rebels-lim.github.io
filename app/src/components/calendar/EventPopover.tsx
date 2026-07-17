@@ -604,7 +604,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           {isFootballPlayed && (
             <div className="text-center">
               <span className="text-xs font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">
-                {t('popover.competition')}
+                {event.competition === 'friendly' ? t('calendar.friendly') : t('popover.competition')}
                 {event.matchday !== undefined && (
                   <> · {t('popover.matchday')} {event.matchday}</>
                 )}
@@ -621,6 +621,11 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
             {event.competition === 'cup' && (
               <span className="flex items-center gap-1.5 bg-amber-500/20 border border-amber-500/30 rounded-full px-3 py-1.5 text-xs font-semibold text-amber-400">
                 🏆 {t('calendar.cup')}
+              </span>
+            )}
+            {event.competition === 'friendly' && (
+              <span className="flex items-center gap-1.5 bg-sky-500/20 border border-sky-500/30 rounded-full px-3 py-1.5 text-xs font-semibold text-sky-400">
+                🤝 {t('calendar.friendly')}
               </span>
             )}
             <button

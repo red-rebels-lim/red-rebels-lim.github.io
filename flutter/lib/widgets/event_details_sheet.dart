@@ -227,6 +227,7 @@ class _EventDetails extends StatelessWidget {
             if (event.venue != null) _InfoChip(icon: '📍', label: app.venueName(event.venue!)),
             if (!_isFootballPlayed && hasTime) _InfoChip(icon: '⏰', label: event.time),
             if (event.isCup) const _CupChip(),
+            if (event.isFriendly) const _FriendlyChip(),
           ],
         ),
 
@@ -354,7 +355,7 @@ class _EventDetails extends StatelessWidget {
       endDate: start.add(const Duration(hours: 2)),
       location: event.venue != null ? app.venueName(event.venue!) : null,
       description: '${app.t(sportLabelKey(event.sport))} · '
-          '${event.isCup ? app.t('calendar.cup') : app.t('popover.competition')}',
+          '${event.isCup ? app.t('calendar.cup') : event.isFriendly ? app.t('calendar.friendly') : app.t('popover.competition')}',
     );
     try {
       final ok = await addEventToDeviceCalendar(calEvent);
@@ -495,6 +496,27 @@ class _CupChip extends StatelessWidget {
       child: Text(
         '🏆 ${app.t('calendar.cup')}',
         style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: twAmber400),
+      ),
+    );
+  }
+}
+
+class _FriendlyChip extends StatelessWidget {
+  const _FriendlyChip();
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: twSky500.withValues(alpha: 0.2),
+        border: Border.all(color: twSky500.withValues(alpha: 0.3)),
+        borderRadius: AppColors.of(context).br(999),
+      ),
+      child: Text(
+        '🤝 ${app.t('calendar.friendly')}',
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: twSky400),
       ),
     );
   }

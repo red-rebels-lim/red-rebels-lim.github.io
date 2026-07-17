@@ -109,6 +109,7 @@ function MatchCard({ event, currentMonth, year, onClick, t }: {
         <span>
           {event.location === 'home' ? t('locations.home') : t('locations.away')}
           {event.competition === 'cup' && <span className="ml-1.5 text-amber-500 font-bold">{t('calendar.cup')}</span>}
+          {event.competition === 'friendly' && <span className="ml-1.5 text-sky-500 font-bold">{t('calendar.friendly')}</span>}
         </span>
         {result ? (
           <span className={`font-bold uppercase text-[10px] tracking-wider px-2 py-0.5 rounded-full ${rs?.badge ?? ''}`}>

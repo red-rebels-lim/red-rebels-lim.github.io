@@ -1,7 +1,7 @@
 export type Sport = 'football-men' | 'volleyball-men' | 'volleyball-women' | 'meeting';
 export type Location = 'home' | 'away';
 export type MatchStatus = 'played' | 'upcoming';
-export type Competition = 'league' | 'cup';
+export type Competition = 'league' | 'cup' | 'friendly';
 
 export interface Scorer {
   name: string;

@@ -44,6 +44,7 @@ class EventCard extends StatelessWidget {
     final competitionLabel = [
       app.t(_sportKey(event.sport)),
       if (event.isCup) app.t('calendar.cup'),
+      if (event.isFriendly) app.t('calendar.friendly'),
     ].join(' ');
     final target = eventDateTime(monthName, event);
     final radius = BorderRadius.circular(colors.cardRadius);

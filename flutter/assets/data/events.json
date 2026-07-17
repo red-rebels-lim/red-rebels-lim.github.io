@@ -7801,6 +7801,90 @@
   ],
   "may": [],
   "june": [],
-  "july": [],
-  "august": []
+  "july": [
+    {
+      "day": 21,
+      "sport": "football-men",
+      "location": "away",
+      "opponent": "AKS 1947 BUSKO-ZDROJ",
+      "time": "",
+      "logo": "images/team_logos/AKS_1947_BUSKO-ZDROJ.webp",
+      "status": "upcoming",
+      "competition": "friendly"
+    },
+    {
+      "day": 23,
+      "sport": "football-men",
+      "location": "away",
+      "opponent": "KORONA KIELCE",
+      "time": "",
+      "logo": "images/team_logos/KORONA_KIELCE.webp",
+      "status": "upcoming",
+      "competition": "friendly"
+    },
+    {
+      "day": 25,
+      "sport": "football-men",
+      "location": "away",
+      "opponent": "RADOMIAK RADOM",
+      "time": "",
+      "logo": "images/team_logos/RADOMIAK_RADOM.webp",
+      "status": "upcoming",
+      "competition": "friendly"
+    },
+    {
+      "day": 27,
+      "sport": "football-men",
+      "location": "away",
+      "opponent": "TERMALICA",
+      "time": "",
+      "logo": "images/team_logos/TERMALICA.webp",
+      "status": "upcoming",
+      "competition": "friendly"
+    }
+  ],
+  "august": [
+    {
+      "day": 5,
+      "sport": "football-men",
+      "location": "away",
+      "opponent": "ΟΜΟΝΟΙΑ 29ΗΣ ΜΑΪΟΥ",
+      "time": "",
+      "logo": "images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp",
+      "status": "upcoming",
+      "competition": "friendly"
+    },
+    {
+      "day": 8,
+      "sport": "football-men",
+      "location": "away",
+      "opponent": "ΕΝΠ",
+      "time": "",
+      "logo": "images/team_logos/ΕΝΠ.webp",
+      "status": "upcoming",
+      "competition": "friendly"
+    },
+    {
+      "day": 12,
+      "sport": "football-men",
+      "location": "home",
+      "opponent": "ΑΝΟΡΘΩΣΙΣ",
+      "time": "",
+      "venue": "Stadio Vitex Ammochostos Epistrofi",
+      "logo": "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp",
+      "status": "upcoming",
+      "competition": "friendly"
+    },
+    {
+      "day": 15,
+      "sport": "football-men",
+      "location": "home",
+      "opponent": "ΚΡΑΣΑΒΑ ΥΨΩΝΑ",
+      "time": "",
+      "venue": "Stadio Vitex Ammochostos Epistrofi",
+      "logo": "images/team_logos/ΚΡΑΣΑΒΑ_ΥΨΩΝΑ.webp",
+      "status": "upcoming",
+      "competition": "friendly"
+    }
+  ]
 }

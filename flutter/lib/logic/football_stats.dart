@@ -126,7 +126,7 @@ FootballStats calculateFootballStats(EventsRepository repo) {
   for (final month in monthOrder) {
     for (final ev in repo.eventsFor(month)) {
       // League matches only — cup games are excluded from the season stats.
-      if (ev.sport != Sport.footballMen || !ev.isPlayed || ev.score == null || ev.isCup) continue;
+      if (ev.sport != Sport.footballMen || !ev.isPlayed || ev.score == null || ev.isCup || ev.isFriendly) continue;
       final parsed = parseScore(ev.score, ev.location);
       if (parsed == null) continue;
       final (gf, ga) = parsed;
