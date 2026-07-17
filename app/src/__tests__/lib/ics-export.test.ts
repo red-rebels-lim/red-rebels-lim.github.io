@@ -35,7 +35,7 @@ describe('exportToCalendar', () => {
 
   it('sets the download filename with season years', () => {
     exportToCalendar();
-    expect(mockLink.download).toBe('red-rebels-calendar-2025-26.ics');
+    expect(mockLink.download).toBe('red-rebels-calendar-2026-27.ics');
   });
 
   it('creates a blob URL', () => {
@@ -81,19 +81,20 @@ describe('exportToCalendar', () => {
     const blob = createObjectURLSpy.mock.calls[0][0] as Blob;
     const text = await blob.text();
 
-    // Find a timed VEVENT (has DESCRIPTION) rather than an all-day event
+    // Prefer a timed VEVENT (has DESCRIPTION); at season start all fixtures
+    // may be TBD-time all-day events, so fall back to any VEVENT.
     const eventMatches = [...text.matchAll(/BEGIN:VEVENT\r\n([\s\S]*?)END:VEVENT/g)];
+    expect(eventMatches.length).toBeGreaterThan(0);
     const timedEvent = eventMatches.find(m => m[1].includes('DESCRIPTION:'));
-    expect(timedEvent).toBeDefined();
 
-    const eventContent = timedEvent![1];
+    const eventContent = (timedEvent ?? eventMatches[0])[1];
     expect(eventContent).toContain('UID:');
     expect(eventContent).toContain('DTSTAMP:');
     expect(eventContent).toMatch(/DTSTART[;:]/);
     expect(eventContent).toMatch(/DTEND[;:]/);
     expect(eventContent).toContain('SUMMARY:');
-    expect(eventContent).toContain('DESCRIPTION:');
     expect(eventContent).toContain('CATEGORIES:');
+    if (timedEvent) expect(eventContent).toContain('DESCRIPTION:');
   });
 
   it('home matches show translated team name vs Opponent', async () => {

@@ -167,7 +167,7 @@ function getCurrentMonthName(): MonthName {
     'july', 'august', 'september', 'october', 'november', 'december',
   ];
   const name = monthNames[now.getMonth()];
-  return MONTH_ORDER.includes(name) ? name : 'september';
+  return MONTH_ORDER.includes(name) ? name : 'july';
 }
 
 export function useCalendar() {

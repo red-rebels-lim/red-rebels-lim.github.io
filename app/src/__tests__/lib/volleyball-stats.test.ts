@@ -201,7 +201,8 @@ describe('TASK-03: Volleyball Stats Engine', () => {
       it('currentStreak has type W or L (no D or unbeaten)', () => {
         const stats = calculateVolleyballStatistics('volleyball-men');
         expect(['W', 'L']).toContain(stats.streaks.currentStreak.type);
-        expect(stats.streaks.currentStreak.count).toBeGreaterThanOrEqual(1);
+        // Season start: no matches played yet → zero-state streak of count 0.
+        expect(stats.streaks.currentStreak.count).toBeGreaterThanOrEqual(0);
       });
 
       it('longestWinStreak is non-negative', () => {

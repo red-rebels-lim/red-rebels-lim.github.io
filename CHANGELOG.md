@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Changed
+- Season rolled to 26/27: season window is now July→June (pre-season friendlies open the season), constants/labels bumped across web + Flutter, last season's events reset (25/26 preserved in git history), competition label now "Cyprus 1st Division" / "Κύπρος Α' Κατηγορία"
+- Stats render FotMob-style zeroed tables at season start; all-day (TBD-time) calendar events now carry STATUS:TENTATIVE in the .ics feed
 - `bump-season-year` skill split in two: a mechanical rollover skill (July→June season window, zero-state stats, no external IDs needed) and a new `gather-season-schedule` skill for wiring the scraper once CFA/volleyball/DataProject publish the season's IDs
 - Squad updated to the 2026/27 First Division roster (source: Transfermarkt, 2026-07-17): 18 departures marked inactive (historical 25/26 stats keep resolving), 11 signings/promotions added with position, DOB, nationality, and join date
 

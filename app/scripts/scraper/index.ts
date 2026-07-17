@@ -167,10 +167,10 @@ export function isEventInPast(monthName: string, day: number, now: Date = new Da
   // If we're in Sep-Dec, the season ends next year. Otherwise it ends this year.
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
-  const seasonEndYear = currentMonth >= 9 ? currentYear + 1 : currentYear;
+  const seasonEndYear = currentMonth >= 7 ? currentYear + 1 : currentYear;
 
-  // Sep-Dec belong to seasonEndYear - 1, Jan-Aug belong to seasonEndYear
-  const eventYear = monthNum >= 9 ? seasonEndYear - 1 : seasonEndYear;
+  // Jul-Dec belong to seasonEndYear - 1, Jan-Jun belong to seasonEndYear
+  const eventYear = monthNum >= 7 ? seasonEndYear - 1 : seasonEndYear;
   const eventDate = new Date(eventYear, monthNum - 1, day);
 
   // Compare date only (ignore time)
@@ -831,9 +831,8 @@ function updateCalendarData(fixtures: Fixture[]): Record<string, SportEvent[]> {
   }
 
   const allMonths = [
-    'september', 'october', 'november', 'december',
-    'january', 'february', 'march', 'april',
-    'may', 'june', 'july', 'august',
+    'july', 'august', 'september', 'october', 'november', 'december',
+    'january', 'february', 'march', 'april', 'may', 'june',
   ];
 
   for (const monthName of allMonths) {

@@ -2,7 +2,7 @@
   "common": {
     "appName": "Red Rebels",
     "rebels": "RED REBELS",
-    "brandText": "Red Rebels 25/26"
+    "brandText": "Red Rebels 26/27"
   },
   "nav": {
     "calendar": "Calendar",
@@ -420,7 +420,7 @@
     "matchResult": "MATCH RESULT",
     "goalscorers": "GOALSCORERS",
     "bookings": "BOOKINGS",
-    "competition": "Cyprus 2nd Division",
+    "competition": "Cyprus 1st Division",
     "matchday": "MATCHDAY",
     "pen": "pen",
     "og": "og",

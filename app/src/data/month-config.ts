@@ -1,10 +1,11 @@
 import type { MonthName, MonthInfo } from '@/types/events';
 import { SEASON_START_YEAR, SEASON_END_YEAR } from './constants';
 
+// Season window is July -> June: pre-season friendlies (July/Aug) belong to
+// the season they precede (stakeholder decision 2026-07-17).
 export const MONTH_ORDER: MonthName[] = [
-  'september', 'october', 'november', 'december',
-  'january', 'february', 'march', 'april',
-  'may', 'june', 'july', 'august',
+  'july', 'august', 'september', 'october', 'november', 'december',
+  'january', 'february', 'march', 'april', 'may', 'june',
 ];
 
 function getMonthInfo(monthName: MonthName): MonthInfo {
@@ -19,8 +20,8 @@ function getMonthInfo(monthName: MonthName): MonthInfo {
     april: { monthIndex: 3, year: SEASON_END_YEAR },
     may: { monthIndex: 4, year: SEASON_END_YEAR },
     june: { monthIndex: 5, year: SEASON_END_YEAR },
-    july: { monthIndex: 6, year: SEASON_END_YEAR },
-    august: { monthIndex: 7, year: SEASON_END_YEAR },
+    july: { monthIndex: 6, year: SEASON_START_YEAR },
+    august: { monthIndex: 7, year: SEASON_START_YEAR },
   };
 
   const { monthIndex, year } = map[monthName];

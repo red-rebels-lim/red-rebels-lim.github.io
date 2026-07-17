@@ -2,7 +2,7 @@
   "common": {
     "appName": "Red Rebels",
     "rebels": "RED REBELS",
-    "brandText": "Red Rebels 25/26"
+    "brandText": "Red Rebels 26/27"
   },
   "nav": {
     "calendar": "Ημερολόγιο",
@@ -420,7 +420,7 @@
     "matchResult": "ΑΠΟΤΕΛΕΣΜΑ ΑΓΩΝΑ",
     "goalscorers": "ΣΚΟΡΕΡ",
     "bookings": "ΚΑΡΤΕΣ",
-    "competition": "Κύπρος 2η Κατηγορία",
+    "competition": "Κύπρος Α' Κατηγορία",
     "matchday": "ΑΓΩΝΙΣΤΙΚΗ",
     "pen": "πεν",
     "og": "αγ",

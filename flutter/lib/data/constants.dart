@@ -8,16 +8,17 @@ const teamName = 'Νέα Σαλαμίνα';
 /// Deployed web app origin — serves the live data feeds (events.json,
 /// players.json) and player portraits.
 const siteBaseUrl = 'https://red-rebels.com';
-const seasonStartYear = 2025;
-const seasonEndYear = 2026;
-const seasonLabel = '25/26';
+const seasonStartYear = 2026;
+const seasonEndYear = 2027;
+const seasonLabel = '26/27';
 
 const ownLogoAsset = 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp';
 
+// Season window is July -> June: pre-season friendlies (July/Aug) belong to
+// the season they precede (stakeholder decision 2026-07-17).
 const monthOrder = <String>[
-  'september', 'october', 'november', 'december',
-  'january', 'february', 'march', 'april',
-  'may', 'june', 'july', 'august',
+  'july', 'august', 'september', 'october', 'november', 'december',
+  'january', 'february', 'march', 'april', 'may', 'june',
 ];
 
 class MonthInfo {
@@ -40,7 +41,7 @@ MonthInfo monthInfo(String monthName) {
     'may': 5, 'june': 6, 'july': 7, 'august': 8,
   };
   final month = monthNumbers[monthName]!;
-  final year = month >= 9 ? seasonStartYear : seasonEndYear;
+  final year = month >= 7 ? seasonStartYear : seasonEndYear;
   final daysInMonth = DateTime(year, month + 1, 0).day;
   final startDay = DateTime(year, month, 1).weekday - 1;
   return MonthInfo(year: year, month: month, daysInMonth: daysInMonth, startDay: startDay);

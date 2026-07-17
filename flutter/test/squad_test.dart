@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +23,8 @@ void main() {
 
   // Asset loading must happen outside testWidgets' fake-async zone or the
   // rootBundle futures never complete and the test times out.
+  late EventsRepository seededEvents;
+
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues({});
@@ -27,6 +32,33 @@ void main() {
     players = await PlayersRepository.load();
     i18n = await I18n.load();
     prefs = await SharedPreferences.getInstance();
+
+    // A feed with one played match, for the player-sheet stats grid test.
+    // Built here because file IO deadlocks inside testWidgets' fake-async zone.
+    final dir = await Directory.systemTemp.createTemp('squad-sheet-test');
+    final file = File('${dir.path}/events-cache.json');
+    await file.writeAsString(json.encode({
+      'events': {
+        'september': [
+          {
+            'day': 12,
+            'sport': 'football-men',
+            'location': 'home',
+            'opponent': 'ΑΠΟΕΛ',
+            'time': '19:00',
+            'status': 'played',
+            'score': '1-0',
+            'lineup': {
+              'home': [
+                {'name': 'ALBERTO VARO LARA', 'number': 1},
+              ],
+              'away': <Object?>[],
+            },
+          },
+        ],
+      },
+    }));
+    seededEvents = await EventsRepository.load(cacheFile: () async => file);
   });
 
   Widget wrap(Widget child) => ChangeNotifierProvider(
@@ -43,14 +75,25 @@ void main() {
 
     setUpAll(() {
       // Full roster, not just active: the reference numbers come from the
-      // 2025/26 events data, and departed players (active: false) must keep
-      // resolving their historical stats.
+      // archived 2025/26 events fixture, and departed players (active: false)
+      // must keep resolving their historical stats. The live bundle now holds
+      // the new season (zero played matches), so the parity data is pinned to
+      // test/fixtures/events_2526.json.
+      final raw = json.decode(
+        File('test/fixtures/events_2526.json').readAsStringSync(),
+      ) as Map<String, dynamic>;
+      final byMonth = <String, List<SportEvent>>{
+        for (final e in raw.entries)
+          e.key: (e.value as List)
+              .map((j) => SportEvent.fromJson(j as Map<String, dynamic>))
+              .toList(),
+      };
       final roster = players.all
           .where((p) => p.sport == Sport.footballMen)
           .toList();
       stats = aggregateSquadStats(
         roster: roster,
-        eventsByMonth: events.byMonth,
+        eventsByMonth: byMonth,
       );
     });
 
@@ -115,7 +158,17 @@ void main() {
   testWidgets('Tapping a player row opens the sheet with the stats grid', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const SquadPage()));
+    // The 26/27 bundle has no played matches yet, so the sheet's stats grid
+    // is exercised with the seeded feed prepared in setUpAll (one played
+    // match with Alberto Varo Lara in the starting lineup).
+    await tester.pumpWidget(ChangeNotifierProvider(
+      create: (_) =>
+          AppState(events: seededEvents, players: players, i18n: i18n, prefs: prefs),
+      child: MaterialApp(
+        theme: buildTheme('default', Brightness.light),
+        home: const Scaffold(body: SquadPage()),
+      ),
+    ));
     await tester.pump();
 
     await tester.tap(find.text('ALBERTO VARO LARA'));
@@ -127,13 +180,28 @@ void main() {
     expect(find.text('PLAYED'), findsOneWidget);
     expect(find.text('GOALS'), findsOneWidget);
     expect(find.text('CARDS'), findsOneWidget);
-    // Appearances value renders both in the row behind the sheet and in the tile.
-    expect(find.text('30'), findsWidgets);
-    expect(find.text('30 start · 0 sub'), findsOneWidget);
+    // One seeded start.
+    expect(find.text('1 start · 0 sub'), findsOneWidget);
     expect(find.text('0/0'), findsOneWidget); // yellow/red cards
-    // Match log section with the expander (30 entries > 5).
+    // Match log section; only 1 entry, so no SHOW ALL expander.
     expect(find.text('MATCH LOG'), findsOneWidget);
-    expect(find.text('SHOW ALL'), findsOneWidget);
+    expect(find.text('SHOW ALL'), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('Player with no appearances shows the empty-sheet panel', (
+    tester,
+  ) async {
+    // Season start against the live bundle: zero played matches.
+    await tester.pumpWidget(wrap(const SquadPage()));
+    await tester.pump();
+
+    await tester.tap(find.text('ALBERTO VARO LARA'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('#1 ALBERTO VARO LARA'), findsOneWidget);
+    expect(find.text('PLAYED'), findsNothing);
 
     await tester.pumpWidget(const SizedBox());
   });

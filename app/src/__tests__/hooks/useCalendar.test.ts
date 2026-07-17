@@ -77,7 +77,7 @@ describe('useCalendar', () => {
     }
   });
 
-  it('navigatePrevious does not go before september', () => {
+  it('navigatePrevious does not go before july', () => {
     const { result } = renderHook(() => useCalendar());
 
     // Navigate backwards one step at a time
@@ -87,10 +87,10 @@ describe('useCalendar', () => {
       });
     }
 
-    expect(result.current.currentMonth).toBe('september');
+    expect(result.current.currentMonth).toBe('july');
   });
 
-  it('navigateNext does not go past august', () => {
+  it('navigateNext does not go past june', () => {
     const { result } = renderHook(() => useCalendar());
 
     // Navigate forward one step at a time
@@ -100,7 +100,7 @@ describe('useCalendar', () => {
       });
     }
 
-    expect(result.current.currentMonth).toBe('august');
+    expect(result.current.currentMonth).toBe('june');
   });
 
   it('applyFilters updates filter state', () => {
@@ -253,7 +253,7 @@ describe('useCalendar', () => {
 
     // Navigate away from today's month first
     act(() => {
-      // Go to september (first month)
+      // Go to july (first month)
       for (let i = 0; i < 15; i++) {
         result.current.navigatePrevious();
       }
@@ -271,10 +271,14 @@ describe('useCalendar', () => {
     )
       ? (['january', 'february', 'march', 'april', 'may', 'june',
           'july', 'august', 'september', 'october', 'november', 'december'] as const)[new Date().getMonth()]
-      : 'september';
+      : 'july';
 
-    if (todayMonth !== 'september') {
+    // The loop above lands on july (first month); jumping to today only
+    // changes the month when today is NOT july.
+    if (todayMonth !== 'july') {
       expect(changed).toBe(true);
+    } else {
+      expect(changed).toBe(false);
     }
   });
 });

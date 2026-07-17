@@ -171,11 +171,13 @@ void main() {
     testWidgets('skipped this launch when a deep-link eventKey is pending', (tester) async {
       final app = await boot(
         tester,
-        pendingEventKey: 'september-12-football-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ',
+        pendingEventKey: 'july-21-football-men-AKS 1947 BUSKO-ZDROJ',
       );
 
       expect(find.text('Swipe to Navigate'), findsNothing);
-      expect(find.text('MATCH RESULT'), findsOneWidget); // deep-link sheet won
+      // Deep-link sheet won — upcoming friendly, so the header is the
+      // fixture title rather than MATCH RESULT.
+      expect(find.textContaining('BUSKO-ZDRÓJ'), findsWidgets);
       expect(app.introSeen, isFalse); // not flagged — may show next launch
 
       await tester.pumpWidget(const SizedBox());
@@ -256,8 +258,8 @@ void main() {
 
       final event = added.single;
       expect(event.title, 'Nea Salamis vs Ayia Napa');
-      expect(event.startDate, DateTime(2026, 4, 20, 19, 0));
-      expect(event.endDate, DateTime(2026, 4, 20, 21, 0));
+      expect(event.startDate, DateTime(2027, 4, 20, 19, 0));
+      expect(event.endDate, DateTime(2027, 4, 20, 21, 0));
       expect(event.location, 'Agiou Athanasiou');
       expect(event.description, contains("Men's Football"));
     });

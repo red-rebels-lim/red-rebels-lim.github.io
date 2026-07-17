@@ -6,9 +6,9 @@ describe('MONTH_ORDER', () => {
     expect(MONTH_ORDER).toHaveLength(12);
   });
 
-  it('starts with september and ends with august', () => {
-    expect(MONTH_ORDER[0]).toBe('september');
-    expect(MONTH_ORDER[11]).toBe('august');
+  it('starts with july and ends with june (season window since 26/27)', () => {
+    expect(MONTH_ORDER[0]).toBe('july');
+    expect(MONTH_ORDER[11]).toBe('june');
   });
 
   it('has no duplicates', () => {
@@ -25,14 +25,14 @@ describe('monthMap', () => {
     }
   });
 
-  it('September 2025 has correct monthIndex and year', () => {
+  it('September has correct monthIndex and start-year', () => {
     expect(monthMap.september.monthIndex).toBe(8);
-    expect(monthMap.september.year).toBe(2025);
+    expect(monthMap.september.year).toBe(2026);
   });
 
-  it('January 2026 has correct monthIndex and year', () => {
+  it('January has correct monthIndex and end-year', () => {
     expect(monthMap.january.monthIndex).toBe(0);
-    expect(monthMap.january.year).toBe(2026);
+    expect(monthMap.january.year).toBe(2027);
   });
 
   it('all months have valid daysInMonth (28-31)', () => {
@@ -53,8 +53,8 @@ describe('monthMap', () => {
     expect(monthMap.february.daysInMonth).toBe(28);
   });
 
-  it('September 2025 starts on Monday (startDay=0)', () => {
-    // September 1, 2025 is a Monday → 0 in Mon-based indexing
-    expect(monthMap.september.startDay).toBe(0);
+  it('July 2026 starts on Wednesday (startDay=2)', () => {
+    // July 1, 2026 is a Wednesday → 2 in Mon-based indexing
+    expect(monthMap.july.startDay).toBe(2);
   });
 });
