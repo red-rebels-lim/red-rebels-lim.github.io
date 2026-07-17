@@ -18,14 +18,14 @@ SportEvent eventOn(int day, String time) => SportEvent(
 
 void main() {
   group('monthInfo year assignment', () {
-    test('september–december belong to the season start year', () {
-      for (final m in ['september', 'october', 'november', 'december']) {
+    test('july–december belong to the season start year', () {
+      for (final m in ['july', 'august', 'september', 'october', 'november', 'december']) {
         expect(monthInfo(m).year, seasonStartYear, reason: m);
       }
     });
 
-    test('january–august belong to the season end year', () {
-      for (final m in ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august']) {
+    test('january–june belong to the season end year', () {
+      for (final m in ['january', 'february', 'march', 'april', 'may', 'june']) {
         expect(monthInfo(m).year, seasonEndYear, reason: m);
       }
     });
@@ -39,11 +39,12 @@ void main() {
   });
 
   group('monthInfo daysInMonth', () {
-    test('all twelve months of the 25/26 season', () {
+    test('all twelve months of the 26/27 season', () {
       const expected = {
+        'july': 31, 'august': 31,
         'september': 30, 'october': 31, 'november': 30, 'december': 31,
-        'january': 31, 'february': 28, // 2026 is not a leap year
-        'march': 31, 'april': 30, 'may': 31, 'june': 30, 'july': 31, 'august': 31,
+        'january': 31, 'february': 28, // 2027 is not a leap year
+        'march': 31, 'april': 30, 'may': 31, 'june': 30,
       };
       for (final entry in expected.entries) {
         expect(monthInfo(entry.key).daysInMonth, entry.value, reason: entry.key);
@@ -59,12 +60,12 @@ void main() {
   });
 
   group('monthInfo startDay (Monday-based weekday of day 1)', () {
-    test('september 2025 starts on a Monday → 0', () {
-      expect(monthInfo('september').startDay, 0);
+    test('july 2026 starts on a Wednesday → 2', () {
+      expect(monthInfo('july').startDay, 2);
     });
 
-    test('february 2026 starts on a Sunday → 6', () {
-      expect(monthInfo('february').startDay, 6);
+    test('february 2027 starts on a Monday → 0', () {
+      expect(monthInfo('february').startDay, 0);
     });
 
     test('always within 0–6', () {
@@ -78,31 +79,31 @@ void main() {
   group('eventDateTime', () {
     test('parses HH:mm kickoff times in the start-year months', () {
       final dt = eventDateTime('september', eventOn(21, '19:00'));
-      expect(dt, DateTime(2025, 9, 21, 19, 0));
+      expect(dt, DateTime(2026, 9, 21, 19, 0));
     });
 
     test('january events resolve to the season end year', () {
       final dt = eventDateTime('january', eventOn(10, '15:30'));
-      expect(dt, DateTime(2026, 1, 10, 15, 30));
+      expect(dt, DateTime(2027, 1, 10, 15, 30));
     });
 
     test('empty time string → midnight', () {
-      expect(eventDateTime('october', eventOn(5, '')), DateTime(2025, 10, 5));
+      expect(eventDateTime('october', eventOn(5, '')), DateTime(2026, 10, 5));
     });
 
     test('TBD (no colon) → midnight', () {
-      expect(eventDateTime('october', eventOn(5, 'TBD')), DateTime(2025, 10, 5));
+      expect(eventDateTime('october', eventOn(5, 'TBD')), DateTime(2026, 10, 5));
     });
 
     test('unparsable pieces around the colon fall back to 0', () {
       // Pinned behavior: a colon triggers parsing, each side defaults to 0.
-      expect(eventDateTime('october', eventOn(5, '19:xx')), DateTime(2025, 10, 5, 19, 0));
-      expect(eventDateTime('october', eventOn(5, 'xx:30')), DateTime(2025, 10, 5, 0, 30));
-      expect(eventDateTime('october', eventOn(5, ':')), DateTime(2025, 10, 5));
+      expect(eventDateTime('october', eventOn(5, '19:xx')), DateTime(2026, 10, 5, 19, 0));
+      expect(eventDateTime('october', eventOn(5, 'xx:30')), DateTime(2026, 10, 5, 0, 30));
+      expect(eventDateTime('october', eventOn(5, ':')), DateTime(2026, 10, 5));
     });
 
     test('single-digit hour and minute parse', () {
-      expect(eventDateTime('october', eventOn(5, '9:5')), DateTime(2025, 10, 5, 9, 5));
+      expect(eventDateTime('october', eventOn(5, '9:5')), DateTime(2026, 10, 5, 9, 5));
     });
   });
 }

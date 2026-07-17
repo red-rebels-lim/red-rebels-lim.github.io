@@ -24,6 +24,13 @@ const GREEK_TO_TEAM_KEY: Record<string, string> = {
   'ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ': 'PAEEK',
   'ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ': 'Karmiotissa Pano Polemidion',
   'ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ': 'Omonia 29 Maiou',
+  'ΟΜΟΝΟΙΑ 29ΗΣ ΜΑΪΟΥ': 'Omonia 29 Maiou',
+  'ΕΝΠ': 'Enosis Neon Paralimni',
+  // Friendlies (foreign clubs stored Latin, as in the club's announcement)
+  'AKS 1947 BUSKO-ZDROJ': 'AKS 1947 Busko-Zdroj',
+  'KORONA KIELCE': 'Korona Kielce',
+  'RADOMIAK RADOM': 'Radomiak Radom',
+  'TERMALICA': 'Termalica',
   'ΑΟΑΝ ΑΓΙΑΣ ΝΑΠΑΣ': 'Ayia Napa',
   'ΑΠΕΑ ΑΚΡΩΤΗΡΙΟΥ': 'APEA Akrotiri',
   // Volleyball (men)

@@ -2,7 +2,7 @@
   "common": {
     "appName": "Red Rebels",
     "rebels": "RED REBELS",
-    "brandText": "Red Rebels 25/26"
+    "brandText": "Red Rebels 26/27"
   },
   "nav": {
     "calendar": "Calendar",
@@ -226,7 +226,12 @@
       "Krasava Ypsona": "Krasava Ypsona",
       "AE Karava": "AE Karava",
       "Anagennisi": "Anagennisi",
-      "APOEL": "APOEL"
+      "APOEL": "APOEL",
+      "AKS 1947 Busko-Zdroj": "AKS 1947 Busko-Zdrój",
+      "Korona Kielce": "Korona Kielce",
+      "Radomiak Radom": "Radomiak Radom",
+      "Termalica": "Termalica Bruk-Bet",
+      "Enosis Neon Paralimni": "Enosis Neon Paralimni"
     },
     "players": {},
     "leagues": {
@@ -286,9 +291,9 @@
     "pauseAll": "Notifications Active",
     "pauseAllDesc": "Turn off to pause all notifications without unsubscribing",
     "eventTypes": "Event Types",
-    "newEvents": "New Matches",
-    "timeChanges": "Time Changes",
-    "scoreUpdates": "Score Updates",
+    "newEvents": "New events added",
+    "timeChanges": "Time/venue changes",
+    "scoreUpdates": "Score updates",
     "sports": "Sports",
     "reminders": "Match Reminders",
     "matchReminders": "Match Reminders",
@@ -310,9 +315,6 @@
     "volleyball": "Volleyball",
     "reminderTimes": "Reminder Times",
     "alertTypes": "Alert Types",
-    "newEvents": "New events added",
-    "timeChanges": "Time/venue changes",
-    "scoreUpdates": "Score updates",
     "prefsSaved": "Preferences saved",
     "visualTheme": "Visual Theme",
     "themeDefault": "Default",
@@ -353,6 +355,7 @@
     "eventsCount_other": "{{count}} events",
     "viewDetails": "View details",
     "cup": "Cup",
+    "friendly": "Friendly",
     "viewGrid": "Grid",
     "viewList": "List",
     "viewCards": "Cards",
@@ -417,7 +420,7 @@
     "matchResult": "MATCH RESULT",
     "goalscorers": "GOALSCORERS",
     "bookings": "BOOKINGS",
-    "competition": "Cyprus 2nd Division",
+    "competition": "Cyprus 1st Division",
     "matchday": "MATCHDAY",
     "pen": "pen",
     "og": "og",

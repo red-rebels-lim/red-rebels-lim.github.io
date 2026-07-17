@@ -121,6 +121,7 @@ export function generateIcsString(
         ics += `DTSTART;VALUE=DATE:${dateStr}\r\n`;
         ics += `DTEND;VALUE=DATE:${dateStr}\r\n`;
         ics += `SUMMARY:${escapeIcs(title)}\r\n`;
+        ics += ev.status === 'played' ? 'STATUS:CONFIRMED\r\n' : 'STATUS:TENTATIVE\r\n';
         ics += `CATEGORIES:${tLookup(lang, sportI18nKeys[ev.sport] ?? 'ics.sportEvent', 'Event')}\r\n`;
         ics += 'END:VEVENT\r\n';
         continue;

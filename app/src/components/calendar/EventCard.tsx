@@ -86,6 +86,9 @@ export const EventCard = memo(function EventCard({ event, dayNumber, monthName, 
         {event.competition === 'cup' && (
           <span className="text-xs shrink-0" title={t('calendar.cup')}>🏆</span>
         )}
+        {event.competition === 'friendly' && (
+          <span className="text-xs shrink-0" title={t('calendar.friendly')}>🤝</span>
+        )}
       </div>
       {countdownTimestamp && <CountdownTimer timestamp={countdownTimestamp} />}
     </div>

@@ -71,8 +71,11 @@ void main() {
         },
       });
 
-  test('season over (bundled data): empty-state payload', () async {
-    final app = await appWith();
+  test('no upcoming fixtures (empty feed): empty-state payload', () async {
+    // The bundled asset now carries upcoming friendlies, so the empty state
+    // needs a cached feed with no events (one empty month keeps the payload
+    // valid — a bare {} is rejected and would fall back to the bundle).
+    final app = await appWith(cachePayload: json.encode({'events': {'august': <Object?>[]}}));
     await updateNextMatchWidget(app);
 
     expect(saved[hasMatchKey], false);

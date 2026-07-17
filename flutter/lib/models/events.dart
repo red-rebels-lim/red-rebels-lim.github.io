@@ -20,7 +20,7 @@ enum MatchLocation { home, away }
 
 enum MatchStatus { played, upcoming }
 
-enum Competition { league, cup }
+enum Competition { league, cup, friendly }
 
 class Scorer {
   const Scorer({required this.name, required this.minute, required this.team, this.type});
@@ -162,6 +162,7 @@ class SportEvent {
   bool get isMeeting => sport == Sport.meeting;
   bool get isPlayed => status == MatchStatus.played;
   bool get isCup => competition == Competition.cup;
+  bool get isFriendly => competition == Competition.friendly;
 
   factory SportEvent.fromJson(Map<String, dynamic> j) {
     final lineup = j['lineup'] as Map<String, dynamic>?;
@@ -182,6 +183,7 @@ class SportEvent {
       competition: switch (j['competition']) {
         'cup' => Competition.cup,
         'league' => Competition.league,
+        'friendly' => Competition.friendly,
         _ => null,
       },
       penalties: j['penalties'] as String?,

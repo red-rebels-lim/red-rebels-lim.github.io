@@ -2,7 +2,18 @@
 
 ## [Unreleased]
 
+### Changed
+- Season rolled to 26/27: season window is now July→June (pre-season friendlies open the season), constants/labels bumped across web + Flutter, last season's events reset (25/26 preserved in git history), competition label now "Cyprus 1st Division" / "Κύπρος Α' Κατηγορία"
+- Stats render FotMob-style zeroed tables at season start; all-day (TBD-time) calendar events now carry STATUS:TENTATIVE in the .ics feed
+- `bump-season-year` skill split in two: a mechanical rollover skill (July→June season window, zero-state stats, no external IDs needed) and a new `gather-season-schedule` skill for wiring the scraper once CFA/volleyball/DataProject publish the season's IDs
+- Squad updated to the 2026/27 First Division roster (source: Transfermarkt, 2026-07-17): 18 departures marked inactive (historical 25/26 stats keep resolving), 11 signings/promotions added with position, DOB, nationality, and join date
+
 ### Added
+- Pre-season friendlies (club announcement 2026-07-17): 4 away games in Poland (Jul 21–27) and 4 vs Cypriot sides (Aug 5–15), with a new `friendly` competition type — sky badge in web and Flutter calendars, excluded from season stats, skipped by the reminder cron until kick-off times are announced
+- Team assets for the friendly opponents (AKS 1947 Busko-Zdrój, Korona Kielce, Radomiak Radom, Termalica, ENP, Krasava ENY) and for the newly promoted first-division opponents (Aris Lemesou, Ethnikos Achnas, Omonoia Aradippou, Pafos FC)
+
+### Removed
+- TEMPORARY July 18 widget-testing fixture vs Karmiotissa (#100) — superseded by the real friendlies as widget verification data
 - Android widget: team crests in the compact 4×1 layout (VS row with date/venue, text fallback when a crest asset is missing); widget now resizable down to 1-cell height
 - `## Project Status` section in root README, regenerable via `/project-status`
 - Lean root `CLAUDE.md` plus nested context files for `app/src/data/`, `app/scripts/scraper/`, `.github/scripts/`

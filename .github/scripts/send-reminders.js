@@ -63,9 +63,10 @@ function seasonYearByMonth() {
   const startYear = Number(start[1]);
   const endYear = Number(end[1]);
   return {
-    september: startYear, october: startYear, november: startYear, december: startYear,
+    july: startYear, august: startYear, september: startYear, october: startYear,
+    november: startYear, december: startYear,
     january: endYear, february: endYear, march: endYear, april: endYear,
-    may: endYear, june: endYear, july: endYear, august: endYear,
+    may: endYear, june: endYear,
   };
 }
 

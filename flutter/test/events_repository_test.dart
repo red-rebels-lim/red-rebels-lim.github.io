@@ -133,16 +133,32 @@ void main() {
     test('resolves a football key with spaces in the opponent', () async {
       final repo = await EventsRepository.load(cacheFile: cacheFile);
 
-      final de = repo.findByEventKey('september-12-football-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ');
+      final de = repo.findByEventKey('july-21-football-men-AKS 1947 BUSKO-ZDROJ');
 
       expect(de, isNotNull);
-      expect(de!.monthName, 'september');
-      expect(de.event.day, 12);
+      expect(de!.monthName, 'july');
+      expect(de.event.day, 21);
       expect(de.event.sport, Sport.footballMen);
-      expect(de.event.opponent, 'ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ');
+      expect(de.event.opponent, 'AKS 1947 BUSKO-ZDROJ');
     });
 
+    // The 26/27 bundle starts with football friendlies only, so the
+    // volleyball key shapes are covered with synthetic cached feeds.
     test('resolves a volleyball-women key (sport ids contain dashes)', () async {
+      await (await cacheFile())!.writeAsString(json.encode({
+        'events': {
+          'november': [
+            {
+              'day': 1,
+              'sport': 'volleyball-women',
+              'location': 'home',
+              'opponent': 'ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)',
+              'time': '18:00',
+              'status': 'upcoming',
+            },
+          ],
+        },
+      }));
       final repo = await EventsRepository.load(cacheFile: cacheFile);
 
       final de = repo.findByEventKey('november-1-volleyball-women-ΑΕΚ ΛΑΡΝΑΚΑΣ (Γ)');
@@ -153,6 +169,20 @@ void main() {
     });
 
     test('resolves a volleyball-men key', () async {
+      await (await cacheFile())!.writeAsString(json.encode({
+        'events': {
+          'october': [
+            {
+              'day': 17,
+              'sport': 'volleyball-men',
+              'location': 'away',
+              'opponent': 'ΠΑΦΙΑΚΟΣ',
+              'time': '19:00',
+              'status': 'upcoming',
+            },
+          ],
+        },
+      }));
       final repo = await EventsRepository.load(cacheFile: cacheFile);
 
       final de = repo.findByEventKey('october-17-volleyball-men-ΠΑΦΙΑΚΟΣ');

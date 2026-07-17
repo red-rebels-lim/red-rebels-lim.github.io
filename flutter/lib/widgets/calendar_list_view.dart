@@ -149,6 +149,12 @@ class _ListRow extends StatelessWidget {
                           text: '  ${app.t('calendar.cup').upperNoTonos}',
                           style: condensed(size: 10, color: twAmber500, letterSpacing: 1.5),
                         ),
+                      if (event.isFriendly)
+                        // Web: `text-sky-500` friendly tag.
+                        TextSpan(
+                          text: '  ${app.t('calendar.friendly').upperNoTonos}',
+                          style: condensed(size: 10, color: twSky500, letterSpacing: 1.5),
+                        ),
                     ]),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

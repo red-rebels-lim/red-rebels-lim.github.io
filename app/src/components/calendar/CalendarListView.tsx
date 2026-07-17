@@ -109,6 +109,7 @@ function ListItem({ event, currentMonth, onClick, t }: { event: CalendarEvent; c
         <div className={`text-[10px] font-bold uppercase tracking-wider ${isVB ? 'text-blue-500' : 'text-primary'}`}>
           {sportLabel}
           {event.competition === 'cup' && <span className="ml-1.5 text-amber-500">{t('calendar.cup')}</span>}
+          {event.competition === 'friendly' && <span className="ml-1.5 text-sky-500">{t('calendar.friendly')}</span>}
         </div>
         <div className="text-sm font-semibold truncate mt-0.5">{event.title}</div>
         <div className="text-xs text-muted-foreground mt-0.5">

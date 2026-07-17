@@ -2,7 +2,7 @@
   "common": {
     "appName": "Red Rebels",
     "rebels": "RED REBELS",
-    "brandText": "Red Rebels 25/26"
+    "brandText": "Red Rebels 26/27"
   },
   "nav": {
     "calendar": "Ημερολόγιο",
@@ -226,7 +226,12 @@
       "Krasava Ypsona": "Κρασάβα Ύψωνα",
       "AE Karava": "ΑΕ Καράβα",
       "Anagennisi": "Αναγέννηση",
-      "APOEL": "ΑΠΟΕΛ"
+      "APOEL": "ΑΠΟΕΛ",
+      "AKS 1947 Busko-Zdroj": "AKS 1947 Busko-Zdrój",
+      "Korona Kielce": "Korona Kielce",
+      "Radomiak Radom": "Radomiak Radom",
+      "Termalica": "Termalica Bruk-Bet",
+      "Enosis Neon Paralimni": "Ένωση Νέων Παραλιμνίου"
     },
     "players": {},
     "leagues": {
@@ -286,9 +291,9 @@
     "pauseAll": "Ειδοποιήσεις Ενεργές",
     "pauseAllDesc": "Απενεργοποιήστε για παύση όλων των ειδοποιήσεων χωρίς κατάργηση εγγραφής",
     "eventTypes": "Τύποι Εκδηλώσεων",
-    "newEvents": "Νέοι Αγώνες",
-    "timeChanges": "Αλλαγές Ώρας",
-    "scoreUpdates": "Ενημερώσεις Σκορ",
+    "newEvents": "Νέα γεγονότα",
+    "timeChanges": "Αλλαγές ώρας/γηπέδου",
+    "scoreUpdates": "Ενημερώσεις σκορ",
     "sports": "Αθλήματα",
     "reminders": "Υπενθυμίσεις Αγώνων",
     "matchReminders": "Υπενθυμίσεις Αγώνων",
@@ -310,9 +315,6 @@
     "volleyball": "Βόλεϊ",
     "reminderTimes": "Χρόνοι Υπενθύμισης",
     "alertTypes": "Τύποι Ειδοποιήσεων",
-    "newEvents": "Νέα γεγονότα",
-    "timeChanges": "Αλλαγές ώρας/γηπέδου",
-    "scoreUpdates": "Ενημερώσεις σκορ",
     "prefsSaved": "Αποθηκεύτηκαν",
     "visualTheme": "Θέμα Εμφάνισης",
     "themeDefault": "Προεπιλογή",
@@ -353,6 +355,7 @@
     "eventsCount_other": "{{count}} εκδηλώσεις",
     "viewDetails": "Προβολή λεπτομερειών",
     "cup": "Κύπελλο",
+    "friendly": "Φιλικό",
     "viewGrid": "Πλέγμα",
     "viewList": "Λίστα",
     "viewCards": "Κάρτες",
@@ -417,7 +420,7 @@
     "matchResult": "ΑΠΟΤΕΛΕΣΜΑ ΑΓΩΝΑ",
     "goalscorers": "ΣΚΟΡΕΡ",
     "bookings": "ΚΑΡΤΕΣ",
-    "competition": "Κύπρος 2η Κατηγορία",
+    "competition": "Κύπρος Α' Κατηγορία",
     "matchday": "ΑΓΩΝΙΣΤΙΚΗ",
     "pen": "πεν",
     "og": "αγ",

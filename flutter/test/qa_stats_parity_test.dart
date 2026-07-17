@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +22,12 @@ void main() {
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
-    events = await EventsRepository.load();
+    // QA parity premises (played matches, volleyball scorers, player apps)
+    // are pinned to the archived 25/26 season fixture — the live 26/27 bundle
+    // starts with no played matches.
+    events = await EventsRepository.load(
+      cacheFile: () async => File('test/fixtures/events_2526.json'),
+    );
     players = await PlayersRepository.load();
     i18n = await I18n.load();
   });

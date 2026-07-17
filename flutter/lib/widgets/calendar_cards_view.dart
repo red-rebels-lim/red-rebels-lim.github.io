@@ -142,6 +142,12 @@ class _MatchCard extends StatelessWidget {
                           text: '  ${app.t('calendar.cup')}',
                           style: theme.textTheme.bodySmall?.copyWith(color: twAmber500, fontWeight: FontWeight.bold),
                         ),
+                      if (event.isFriendly)
+                        // Web: `text-sky-500` friendly tag.
+                        TextSpan(
+                          text: '  ${app.t('calendar.friendly')}',
+                          style: theme.textTheme.bodySmall?.copyWith(color: twSky500, fontWeight: FontWeight.bold),
+                        ),
                     ]),
                   ),
                   if (result != null)

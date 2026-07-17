@@ -130,11 +130,13 @@ void main() {
     await tester.pump();
     expect(find.text('MATCH RESULT'), findsNothing);
 
-    // Simulate a notification tap deep-linking to a real bundled event.
-    app.pendingEventKey = 'september-12-football-men-ΔΟΞΑ ΚΑΤΩΚΟΠΙΑΣ';
+    // Simulate a notification tap deep-linking to a real bundled event
+    // (26/27 bundle starts with the July friendlies — upcoming, so the sheet
+    // header is the fixture title rather than MATCH RESULT).
+    app.pendingEventKey = 'july-21-football-men-AKS 1947 BUSKO-ZDROJ';
     await tester.pumpAndSettle();
 
-    expect(find.text('MATCH RESULT'), findsOneWidget); // played-event sheet header
+    expect(find.textContaining('BUSKO-ZDRÓJ'), findsWidgets); // sheet title
     expect(app.pendingEventKey, isNull); // consumed once
 
     await tester.pumpWidget(const SizedBox());
@@ -166,9 +168,9 @@ void main() {
     expect(events.byMonth.keys, contains('september'));
   });
 
-  /// Pumps the CalendarPage in grid view and navigates back to September
-  /// (bundled data always has September fixtures, e.g. day 12).
-  Future<void> pumpGridAtSeptember(WidgetTester tester) async {
+  /// Pumps the CalendarPage in grid view and navigates back to July
+  /// (the 26/27 bundle opens with the July friendlies, e.g. day 21).
+  Future<void> pumpGridAtJuly(WidgetTester tester) async {
     await tester.pumpWidget(
       ChangeNotifierProvider(
         create: (_) => AppState(events: events, players: players, i18n: i18n, prefs: prefs),
@@ -188,7 +190,7 @@ void main() {
   }
 
   testWidgets('Grid view shows no event list until a day is selected', (tester) async {
-    await pumpGridAtSeptember(tester);
+    await pumpGridAtJuly(tester);
 
     // Web parity: nothing below the grid before a selection — no full-month
     // list, no SELECTED DAY chip, no grid-mode empty state.
@@ -197,7 +199,7 @@ void main() {
     expect(find.text(i18n.t('en', 'calendar.noEvents')), findsNothing);
 
     // Selecting an event day reveals the chip and its cards.
-    await tester.tap(find.byKey(const ValueKey('day-cell-12')));
+    await tester.tap(find.byKey(const ValueKey('day-cell-21')));
     await tester.pumpAndSettle();
     expect(find.text('SELECTED DAY'), findsOneWidget);
     expect(find.byType(EventCard), findsWidgets);
@@ -206,13 +208,13 @@ void main() {
   });
 
   testWidgets('Day cells with events carry no fill decoration', (tester) async {
-    await pumpGridAtSeptember(tester);
+    await pumpGridAtJuly(tester);
 
-    // September 12 has a bundled fixture; web renders event days exactly like
+    // July 21 has a bundled fixture; web renders event days exactly like
     // plain days (dots aside) — no background fill, no border.
     final cell = tester.widget<Container>(
       find
-          .descendant(of: find.byKey(const ValueKey('day-cell-12')), matching: find.byType(Container))
+          .descendant(of: find.byKey(const ValueKey('day-cell-21')), matching: find.byType(Container))
           .first,
     );
     final decoration = cell.decoration! as BoxDecoration;

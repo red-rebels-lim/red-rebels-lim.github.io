@@ -40,6 +40,7 @@ function getCompetitionLabel(event: CalendarEvent, t: (key: string) => string): 
   };
   const sportLabel = sportLabels[event.sport] || event.sport;
   if (event.competition === 'cup') return `${sportLabel} ${t('calendar.cup')}`;
+  if (event.competition === 'friendly') return `${sportLabel} ${t('calendar.friendly')}`;
   return sportLabel;
 }
 

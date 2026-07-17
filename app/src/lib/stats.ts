@@ -116,8 +116,8 @@ export function calculateStatistics(): FormattedStats {
   for (const monthName of MONTH_ORDER) {
     const events = eventsData[monthName] || [];
     for (const ev of events) {
-      // Only include league matches (exclude cup games from stats)
-      if (ev.sport === 'football-men' && ev.status === 'played' && ev.score && ev.competition !== 'cup') {
+      // Only include league matches (exclude cup and friendly games from stats)
+      if (ev.sport === 'football-men' && ev.status === 'played' && ev.score && ev.competition !== 'cup' && ev.competition !== 'friendly') {
         matches.push({
           month: monthName,
           day: ev.day,
