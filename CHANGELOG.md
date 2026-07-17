@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- Squad updated to the 2026/27 First Division roster (source: Transfermarkt, 2026-07-17): 18 departures marked inactive (historical 25/26 stats keep resolving), 11 signings/promotions added with position, DOB, nationality, and join date
+
 ### Added
 - Pre-season friendlies (club announcement 2026-07-17): 4 away games in Poland (Jul 21–27) and 4 vs Cypriot sides (Aug 5–15), with a new `friendly` competition type — sky badge in web and Flutter calendars, excluded from season stats, skipped by the reminder cron until kick-off times are announced
 - Team assets for the friendly opponents (AKS 1947 Busko-Zdrój, Korona Kielce, Radomiak Radom, Termalica, ENP, Krasava ENY) and for the newly promoted first-division opponents (Aris Lemesou, Ethnikos Achnas, Omonoia Aradippou, Pafos FC)

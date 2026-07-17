@@ -1,8 +1,9 @@
 import type { Player } from '@/types/players';
 
 /**
- * Official Nea Salamina 2025/26 squad.
- * Source: https://neasalamina.com/ρόστερ/ cross-referenced with events.ts appearances.
+ * Official Nea Salamina 2026/27 squad (first season back in First Division).
+ * Source: transfermarkt.com/nea-salamina-famagusta (squad + transfers, 2026-07-17);
+ * 2025/26 entries kept with active:false so historical stats keep resolving.
  *
  * `aliases` cover every name form encountered in events.ts (different scraper sources
  * use Greek-uppercase, Latin transliteration, abbreviated, or Spanish-formal variants).
@@ -27,7 +28,7 @@ export const players: Player[] = [
   {
     key: 'daniel_stefanov',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Stefanov Daniel Milenov',
     nameEn: 'Daniel Stefanov',
     position: 'GK',
@@ -36,7 +37,7 @@ export const players: Player[] = [
   {
     key: 'denys_vakulyk',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Denys Vakulyk',
     nameEn: 'Denys Vakulyk',
     position: 'GK',
@@ -46,7 +47,7 @@ export const players: Player[] = [
   {
     key: 'giannis_kalanidis',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Γιάννης Καλανίδης',
     nameEn: 'Giannis Kalanidis',
     position: 'GK',
@@ -54,11 +55,24 @@ export const players: Player[] = [
     photoUrl: '/images/players/giannis_kalanidis.webp',
   },
 
+  {
+    key: 'daniel_kovacs',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Dániel Kovács',
+    nameEn: 'Dániel Kovács',
+    position: 'GK',
+    subPosition: 'Central',
+    dateOfBirth: '1994-01-16',
+    nationality: 'Hungary',
+    photoUrl: '/images/players/daniel_kovacs.webp',
+    joinedDate: '2026-07-01',
+  },
   // Defenders
   {
     key: 'alexandros_theocharous',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Αλέξανδρος Θεοχάρους',
     nameEn: 'Alexandros Theocharous',
     position: 'DEF',
@@ -108,7 +122,7 @@ export const players: Player[] = [
   {
     key: 'konstantinos_kastanas',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Κωνσταντίνος Κάστανας',
     nameEn: 'Konstantinos Kastanas',
     position: 'DEF',
@@ -120,7 +134,7 @@ export const players: Player[] = [
   {
     key: 'thomas_nikolaou',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Θωμάς Νικολάου',
     nameEn: 'Thomas Nikolaou',
     position: 'DEF',
@@ -132,7 +146,7 @@ export const players: Player[] = [
   {
     key: 'dimitris_kyprianou',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Δημήτρης Κυπριανού',
     nameEn: 'Dimitris Kyprianou',
     position: 'DEF',
@@ -166,6 +180,43 @@ export const players: Player[] = [
     aliases: ['ΓΙΩΡΓΟΣ ΒΙΚΤΩΡΟΣ'],
   },
 
+  {
+    key: 'vasilios_lampropoulos',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Βασίλειος Λαμπρόπουλος',
+    nameEn: 'Vasilios Lampropoulos',
+    position: 'DEF',
+    subPosition: 'Central',
+    dateOfBirth: '1990-03-31',
+    nationality: 'Greece',
+    photoUrl: '/images/players/vasilios_lampropoulos.webp',
+    joinedDate: '2026-07-11',
+  },
+  {
+    key: 'florent_hanin',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Florent Hanin',
+    nameEn: 'Florent Hanin',
+    position: 'DEF',
+    subPosition: 'Wing',
+    dateOfBirth: '1990-02-04',
+    nationality: 'France',
+    photoUrl: '/images/players/florent_hanin.webp',
+    joinedDate: '2026-07-16',
+  },
+  {
+    key: 'kyriakos_egomitis',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Κυριάκος Εγωμίτης',
+    nameEn: 'Kyriakos Egomitis',
+    position: 'DEF',
+    subPosition: 'Central',
+    dateOfBirth: '2008-08-09',
+    nationality: 'Cyprus',
+  },
   // Midfielders
   {
     key: 'giorgos_christodoulou',
@@ -194,7 +245,7 @@ export const players: Player[] = [
   {
     key: 'antreas_frangkos',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Άντρεας Φράγκος',
     nameEn: 'Andreas Frangkos',
     position: 'MID',
@@ -206,7 +257,7 @@ export const players: Player[] = [
   {
     key: 'giorgos_pavlidis',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Γιώργος Παυλίδης',
     nameEn: 'Giorgos Pavlidis',
     position: 'MID',
@@ -230,7 +281,7 @@ export const players: Player[] = [
   {
     key: 'konstantinos_koumparis',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Κωνσταντίνος Κουμπαρής',
     nameEn: 'Konstantinos Koumparis',
     position: 'MID',
@@ -240,11 +291,60 @@ export const players: Player[] = [
     aliases: ['ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΥΜΠΑΡΗ', 'Konstantinos Koumbari'],
   },
 
+  {
+    key: 'alois_confais',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Aloïs Confais',
+    nameEn: 'Aloïs Confais',
+    position: 'MID',
+    subPosition: 'Defensive',
+    dateOfBirth: '1996-09-07',
+    nationality: 'France',
+    photoUrl: '/images/players/alois_confais.webp',
+    joinedDate: '2026-07-02',
+  },
+  {
+    key: 'jordi_quintilla',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Jordi Quintillà',
+    nameEn: 'Jordi Quintillà',
+    position: 'MID',
+    subPosition: 'Defensive',
+    dateOfBirth: '1993-10-25',
+    nationality: 'Spain',
+    photoUrl: '/images/players/jordi_quintilla.webp',
+  },
+  {
+    key: 'giannis_gerolemou',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Γιάννης Γερολέμου',
+    nameEn: 'Giannis Gerolemou',
+    position: 'MID',
+    subPosition: 'Central',
+    dateOfBirth: '2000-01-27',
+    nationality: 'Cyprus',
+    photoUrl: '/images/players/giannis_gerolemou.webp',
+    joinedDate: '2026-07-01',
+  },
+  {
+    key: 'andreas_mavroudis',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Άντρεας Μαυρουδής',
+    nameEn: 'Andreas Mavroudis',
+    position: 'MID',
+    subPosition: 'Attacking',
+    dateOfBirth: '2008-06-28',
+    nationality: 'Cyprus',
+  },
   // Forwards
   {
     key: 'giorgos_pontikou',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Γιώργος Ποντικού',
     nameEn: 'Giorgos Pontikou',
     position: 'FWD',
@@ -256,7 +356,7 @@ export const players: Player[] = [
   {
     key: 'daniel_perez',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Daniel Perez',
     nameEn: 'Daniel Perez',
     position: 'FWD',
@@ -268,7 +368,7 @@ export const players: Player[] = [
   {
     key: 'mika_borges',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Mika Borges',
     nameEn: 'Mika Borges',
     position: 'FWD',
@@ -282,7 +382,7 @@ export const players: Player[] = [
   {
     key: 'alex_guti',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Alex Guti',
     nameEn: 'Alex Guti',
     position: 'FWD',
@@ -294,7 +394,7 @@ export const players: Player[] = [
   {
     key: 'aldair_djalo_balde',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Aldair Djalo Balde',
     nameEn: 'Aldair Djalo Balde',
     position: 'FWD',
@@ -308,7 +408,7 @@ export const players: Player[] = [
   {
     key: 'konstantinos_anthimou',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Κωνσταντίνος Άνθιμου',
     nameEn: 'Konstantinos Anthimou',
     position: 'FWD',
@@ -320,7 +420,7 @@ export const players: Player[] = [
   {
     key: 'savvas_kontopoulos',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Σάββας Κοντόπουλος',
     nameEn: 'Savvas Kontopoulos',
     position: 'FWD',
@@ -344,12 +444,51 @@ export const players: Player[] = [
   {
     key: 'kyriakos_epifaniou',
     sport: 'football-men',
-    active: true,
+    active: false,
     nameEl: 'Κυριάκος Επιφανίου',
     nameEn: 'Kyriakos Epifaniou',
     position: 'FWD',
     subPosition: 'Wing',
     shirtNumber: 99,
     aliases: ['ΚΥΡΙΑΚΟΣ ΕΠΙΦΑΝΙΟΥ'],
+  },
+  {
+    key: 'christos_giousis',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Χρήστος Γιούσης',
+    nameEn: 'Christos Giousis',
+    position: 'FWD',
+    subPosition: 'Wing',
+    dateOfBirth: '1999-02-08',
+    nationality: 'Greece',
+    photoUrl: '/images/players/christos_giousis.webp',
+    joinedDate: '2026-07-10',
+  },
+  {
+    key: 'samuel_grandsir',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Samuel Grandsir',
+    nameEn: 'Samuel Grandsir',
+    position: 'FWD',
+    subPosition: 'Wing',
+    dateOfBirth: '1996-08-14',
+    nationality: 'France',
+    photoUrl: '/images/players/samuel_grandsir.webp',
+    joinedDate: '2026-07-01',
+  },
+  {
+    key: 'dario_poveda',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Darío Poveda',
+    nameEn: 'Darío Poveda',
+    position: 'FWD',
+    subPosition: 'Central',
+    dateOfBirth: '1997-03-13',
+    nationality: 'Spain',
+    photoUrl: '/images/players/dario_poveda.webp',
+    joinedDate: '2026-07-13',
   },
 ];

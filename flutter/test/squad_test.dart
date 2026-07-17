@@ -42,8 +42,11 @@ void main() {
     late Map<String, PlayerSeasonStats> stats;
 
     setUpAll(() {
+      // Full roster, not just active: the reference numbers come from the
+      // 2025/26 events data, and departed players (active: false) must keep
+      // resolving their historical stats.
       final roster = players.all
-          .where((p) => p.active && p.sport == Sport.footballMen)
+          .where((p) => p.sport == Sport.footballMen)
           .toList();
       stats = aggregateSquadStats(
         roster: roster,
