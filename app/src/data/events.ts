@@ -7877,7 +7877,7 @@ export const eventsData: EventsData = {
       opponent: "ΑΝΟΡΘΩΣΙΣ",
       time: "",
       venue: "Stadio Vitex Ammochostos Epistrofi",
-      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ.webp",
+      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ_FC.webp",
       status: "upcoming",
       competition: "friendly"
     },

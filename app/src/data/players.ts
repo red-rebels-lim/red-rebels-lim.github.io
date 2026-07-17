@@ -210,7 +210,7 @@ export const players: Player[] = [
     key: 'kyriakos_egomitis',
     sport: 'football-men',
     active: true,
-    nameEl: 'Κυριάκος Εγωμίτης',
+    nameEl: 'Κυριάκος Εγκωμίτης',
     nameEn: 'Kyriakos Egomitis',
     position: 'DEF',
     subPosition: 'Central',
@@ -394,7 +394,7 @@ export const players: Player[] = [
   {
     key: 'aldair_djalo_balde',
     sport: 'football-men',
-    active: false,
+    active: true,
     nameEl: 'Aldair Djalo Balde',
     nameEn: 'Aldair Djalo Balde',
     position: 'FWD',
@@ -444,7 +444,7 @@ export const players: Player[] = [
   {
     key: 'kyriakos_epifaniou',
     sport: 'football-men',
-    active: false,
+    active: true,
     nameEl: 'Κυριάκος Επιφανίου',
     nameEn: 'Kyriakos Epifaniou',
     position: 'FWD',
