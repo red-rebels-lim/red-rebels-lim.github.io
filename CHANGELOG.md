@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Changed
+- `bump-season-year` skill split in two: a mechanical rollover skill (July→June season window, zero-state stats, no external IDs needed) and a new `gather-season-schedule` skill for wiring the scraper once CFA/volleyball/DataProject publish the season's IDs
 - Squad updated to the 2026/27 First Division roster (source: Transfermarkt, 2026-07-17): 18 departures marked inactive (historical 25/26 stats keep resolving), 11 signings/promotions added with position, DOB, nationality, and join date
 
 ### Added
