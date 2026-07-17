@@ -216,6 +216,62 @@ void main() {
     });
   });
 
+  group('Info chips adapt to narrow screens', () {
+    testWidgets('long venue chip ellipsizes instead of cramming edge-to-edge', (tester) async {
+      // Nothing Phone 3a regression (2026-07-17): narrow width + large font
+      // scale made the venue pill span the full screen. The chip must
+      // ellipsize within the available width on any device.
+      tester.view.physicalSize = const Size(640, 1400); // 320dp @ 2.0 DPR
+      tester.view.devicePixelRatio = 2.0;
+      tester.platformDispatcher.textScaleFactorTestValue = 1.3;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearAllTestValues);
+
+      const homeWithLongVenue = SportEvent(
+        day: 15,
+        sport: Sport.footballMen,
+        location: MatchLocation.home,
+        opponent: 'ΚΡΑΣΑΒΑ ΥΨΩΝΑ',
+        time: '',
+        status: MatchStatus.upcoming,
+        competition: Competition.friendly,
+        venue: 'Stadio Vitex Ammochostos Epistrofi',
+      );
+
+      await tester.pumpWidget(ChangeNotifierProvider(
+        create: (_) => appState(),
+        child: MaterialApp(
+          theme: buildTheme('default', Brightness.light),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => Center(
+                child: ElevatedButton(
+                  onPressed: () =>
+                      showEventDetailsSheet(context, homeWithLongVenue, 'august'),
+                  child: const Text('open'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      // No RenderFlex overflow was thrown, and the venue chip is on screen
+      // ellipsized to the viewport width.
+      expect(tester.takeException(), isNull);
+      final venueText = tester.widget<Text>(find.textContaining('Stadio Vitex'));
+      expect(venueText.overflow, TextOverflow.ellipsis);
+      expect(venueText.maxLines, 1);
+      final chipWidth =
+          tester.getSize(find.textContaining('Stadio Vitex')).width;
+      expect(chipWidth, lessThanOrEqualTo(320));
+
+      await tester.pumpWidget(const SizedBox());
+    });
+  });
+
   group('Add to calendar', () {
     late List<a2c.Event> added;
 

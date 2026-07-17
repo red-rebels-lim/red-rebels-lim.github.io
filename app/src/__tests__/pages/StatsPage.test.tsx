@@ -26,21 +26,10 @@ vi.mock('@/hooks/useTheme', () => ({
 vi.mock('@/lib/analytics', () => ({ trackEvent: vi.fn() }));
 vi.mock('@/lib/ics-export', () => ({ exportToCalendar: vi.fn() }));
 
-vi.mock('@/lib/fotmob', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@/lib/fotmob')>();
-  return {
-    ...actual,
-    fetchTeamData: vi.fn().mockResolvedValue(null),
-    tApi: (_t: unknown, _ns: string, val: string) => val,
-  };
-});
-
 import StatsPage from '@/pages/StatsPage';
-import { fetchTeamData } from '@/lib/fotmob';
 
 describe('StatsPage', () => {
   beforeEach(() => {
-    vi.mocked(fetchTeamData).mockResolvedValue(null);
     vi.restoreAllMocks();
   });
 
@@ -75,20 +64,11 @@ describe('StatsPage', () => {
     screen.getByText('stats.headToHead');
   });
 
-  it('calls parseFotMobData when fetchTeamData returns data', async () => {
-    const mockTeamData = {
-      details: { id: '123', name: 'Test FC' },
-      history: { historicalTopscorers: [] },
-      recentResults: { recentResults: [] },
-      nextMatch: null,
-      tabs: { overview: { leagueTable: null, rankings: null } },
-      squad: {},
-    };
-    vi.mocked(fetchTeamData).mockResolvedValue(mockTeamData as Awaited<ReturnType<typeof fetchTeamData>>);
-    await act(async () => {
-      render(<StatsPage />);
-    });
-    expect(fetchTeamData).toHaveBeenCalled();
+  it('renders the former FotMob sections as empty states (no feed fetch)', async () => {
+    await act(async () => { render(<StatsPage />); });
+    screen.getByText('stats.leagueStanding');
+    screen.getByText('stats.topScorers');
+    screen.getByText('stats.leagueRankings');
   });
 
   describe('section layout', () => {
@@ -114,7 +94,7 @@ describe('StatsPage', () => {
       expect(screen.queryByText('stats.goalDistribution')).toBeNull();
       expect(screen.queryByText('stats.records')).toBeNull();
       expect(screen.queryByText('stats.seasonProgress')).toBeNull();
-      expect(screen.queryByText('stats.leagueRankings')).toBeNull();
+      // leagueRankings now renders as a titled empty state (feed removed).
       expect(screen.queryByText('stats.venueInfo')).toBeNull();
     });
 
@@ -213,16 +193,12 @@ describe('StatsPage', () => {
       });
     });
 
-    describe('FotMob loading/error states for football tab', () => {
-      it('fetches FotMob data on mount', async () => {
-        await act(async () => { render(<StatsPage />); });
-        expect(fetchTeamData).toHaveBeenCalled();
-      });
-
-      it('shows error banner when FotMob fetch fails', async () => {
-        vi.mocked(fetchTeamData).mockResolvedValue(null);
-        await act(async () => { render(<StatsPage />); });
-        screen.getByText('errors.fetchFailed');
+    describe('former FotMob sections (feed removed 2026-07-17)', () => {
+      it('shows the shared empty state, no error banner, no skeletons', async () => {
+        const { container } = render(<StatsPage />);
+        expect(screen.getAllByText('stats.noData').length).toBeGreaterThanOrEqual(3);
+        expect(screen.queryByText('errors.fetchFailed')).toBeNull();
+        expect(container.querySelectorAll('.animate-pulse')).toHaveLength(0);
       });
     });
 

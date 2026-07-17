@@ -172,53 +172,22 @@ void main() {
       return app;
     }
 
-    testWidgets('renders standings, top scorers and rankings from the feed', (tester) async {
-      fotMobClient = FotMobClient(httpClientFactory: fixtureClient);
+    testWidgets('former feed blocks render the shared empty state', (tester) async {
+      // Feed removed 2026-07-17 (kept serving last season after promotion);
+      // these sections stay as titled empty states until they are generated
+      // from our own saved results.
       await pump(tester);
 
-      // League standing: compact window contains our tinted row.
       expect(find.text('LEAGUE STANDING'), findsOneWidget);
-      expect(find.text('VIEW FULL'), findsOneWidget);
-      expect(find.text('Nea Salamis'), findsWidgets);
-      expect(find.text('21'), findsOneWidget); // our points
-
-      // Compact = 3 rows around us (1st–3rd): the 4th team is hidden.
-      expect(find.text('Ethnikos'), findsOneWidget);
-      expect(find.text('Othellos'), findsNothing);
-      await tester.tap(find.byKey(const Key('league-table-view-full')));
-      await tester.pump();
-      expect(find.text('Othellos'), findsOneWidget); // full table
-      expect(find.text('Promotion'), findsOneWidget); // legend appears
-
-      // Top scorers (FotMob) + rankings.
-      expect(find.text('TOP SCORERS'), findsOneWidget);
-      expect(find.text('Andreas Georgiou'), findsOneWidget);
+      expect(find.text('TOP SCORERS'), findsWidgets);
       expect(find.text('LEAGUE RANKINGS'), findsOneWidget);
-      expect(find.text('2nd'), findsOneWidget);
-      expect(find.text('out of 3 teams'), findsOneWidget);
-
-      await tester.pumpWidget(const SizedBox());
-    });
-
-    testWidgets('failed fetch shows the error banner; local stats intact', (tester) async {
-      fotMobClient = FotMobClient(
-          httpClientFactory: () =>
-              MockClient((_) async => throw const SocketException('offline')));
-      await pump(tester);
-
-      expect(find.text('Failed to load live data'), findsOneWidget);
-      expect(find.text('Retry'), findsOneWidget);
-      // FotMob blocks hidden; local sections still render.
-      expect(find.text('LEAGUE STANDING'), findsNothing);
-      expect(find.text('SEASON SUMMARY'), findsOneWidget);
-
-      // Retry with a healthy feed clears the banner and shows the blocks.
-      fotMobClient = FotMobClient(httpClientFactory: fixtureClient);
-      await tester.tap(find.text('Retry'));
-      await tester.pump();
-      await tester.pump();
+      expect(find.text('No data available'), findsWidgets);
+      // No feed UI: no expand control, no error banner, no skeletons.
+      expect(find.text('VIEW FULL'), findsNothing);
       expect(find.text('Failed to load live data'), findsNothing);
-      expect(find.text('LEAGUE STANDING'), findsOneWidget);
+
+      // Local sections intact.
+      expect(find.text('SEASON SUMMARY'), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox());
     });

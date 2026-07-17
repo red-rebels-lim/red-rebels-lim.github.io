@@ -8,15 +8,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@/lib/fotmob', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@/lib/fotmob')>();
-  return {
-    ...actual,
-    fetchTeamData: vi.fn().mockResolvedValue(null),
-    tApi: (_t: unknown, _ns: string, val: string) => val,
-  };
-});
-
 import { FootballStatsTab } from '@/components/stats/FootballStatsTab';
 import type { FormattedStats } from '@/types/events';
 
@@ -42,30 +33,33 @@ const mockStats: FormattedStats = {
 
 describe('TASK-06: FootballStatsTab', () => {
   it('renders season summary', () => {
-    render(<FootballStatsTab stats={mockStats} fotmob={null} loading={false} />);
+    render(<FootballStatsTab stats={mockStats} />);
     screen.getByText('stats.seasonSummary');
   });
 
   it('renders recent form', () => {
-    render(<FootballStatsTab stats={mockStats} fotmob={null} loading={false} />);
+    render(<FootballStatsTab stats={mockStats} />);
     screen.getByText('stats.recentForm');
   });
 
   it('renders performance split with draws', () => {
-    const { container } = render(<FootballStatsTab stats={mockStats} fotmob={null} loading={false} />);
+    const { container } = render(<FootballStatsTab stats={mockStats} />);
     screen.getByText('stats.performanceSplit');
     // Should include draws
     expect(container.textContent).toContain('stats.d');
   });
 
   it('renders head to head', () => {
-    render(<FootballStatsTab stats={mockStats} fotmob={null} loading={false} />);
+    render(<FootballStatsTab stats={mockStats} />);
     screen.getByText('stats.headToHead');
   });
 
-  it('shows loading skeleton when loading', () => {
-    const { container } = render(<FootballStatsTab stats={mockStats} fotmob={null} loading={true} />);
-    const skeletons = container.querySelectorAll('.animate-pulse');
-    expect(skeletons.length).toBeGreaterThan(0);
+  it('renders empty-state placeholders for the former FotMob sections', () => {
+    render(<FootballStatsTab stats={mockStats} />);
+    screen.getByText('stats.leagueStanding');
+    screen.getByText('stats.topScorers');
+    screen.getByText('stats.leagueRankings');
+    // Three sections, all in the shared empty state.
+    expect(screen.getAllByText('stats.noData')).toHaveLength(3);
   });
 });

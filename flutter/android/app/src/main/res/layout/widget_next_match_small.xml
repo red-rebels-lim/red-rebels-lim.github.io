@@ -60,7 +60,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:textStyle="bold"
                 android:textSize="11sp"
-                android:textColor="#94A3B8"
+                android:textColor="@color/widget_text_muted"
                 android:text="@string/widget_vs" />
 
             <ImageView
@@ -85,7 +85,7 @@
                 android:autoSizeMinTextSize="8sp"
                 android:autoSizeMaxTextSize="11sp"
                 android:maxLines="2"
-                android:textColor="#94A3B8" />
+                android:textColor="@color/widget_text_muted" />
         </LinearLayout>
 
         <TextView
@@ -101,7 +101,7 @@
             android:autoSizeMaxTextSize="19sp"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:textColor="#F8FAFC" />
+            android:textColor="@color/widget_text_primary" />
     </LinearLayout>
 
     <!-- Final-24h live countdown (see widget_next_match.xml). -->
