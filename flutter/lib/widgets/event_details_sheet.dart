@@ -471,8 +471,13 @@ class _InfoChip extends StatelessWidget {
         border: Border.all(color: dark ? Colors.white.withValues(alpha: 0.1) : twSlate200),
         borderRadius: AppColors.of(context).br(999),
       ),
+      // Long labels (venue names) ellipsize within the screen width instead
+      // of cramming the pill edge-to-edge on narrow devices / large font
+      // scales (seen on a Nothing Phone 3a, 2026-07-17).
       child: Text(
         '$icon $label',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: theme.colorScheme.onSurface),
       ),
     );
