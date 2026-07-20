@@ -95,7 +95,8 @@
       "Read(//opt/homebrew/Caskroom/claude-code/**)",
       "Read(//opt/homebrew/Caskroom/claude-code@latest/**)",
       "Read(//Library/Application Support/ClaudeCode/**)",
-      "WebFetch(domain:www.transfermarkt.com)"
+      "WebFetch(domain:www.transfermarkt.com)",
+      "WebFetch(domain:neasalamina.com)"
     ]
   },
   "enableAllProjectMcpServers": true,
