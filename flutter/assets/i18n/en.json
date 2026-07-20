@@ -22,7 +22,12 @@
       "GK": "Goalkeepers",
       "DEF": "Defenders",
       "MID": "Midfielders",
-      "FWD": "Forwards"
+      "FWD": "Forwards",
+      "SETTER": "Setters",
+      "OUTSIDE": "Outside Hitters",
+      "OPPOSITE": "Opposites",
+      "MIDDLE": "Middle Blockers",
+      "LIBERO": "Liberos"
     },
     "subPositions": {
       "Central": "Central",

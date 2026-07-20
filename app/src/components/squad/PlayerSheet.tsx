@@ -36,13 +36,13 @@ export function PlayerSheet({ player, stats, open, onOpenChange }: PlayerSheetPr
     setMatchLogExpanded(false);
   }
 
-  if (!player || !stats) return null;
+  if (!player) return null;
 
   const displayName = i18n.language === 'el' ? player.nameEl : player.nameEn;
   const positionLabel = t(`squad.positions.${player.position}`);
   const subPositionLabel = player.subPosition ? t(`squad.subPositions.${player.subPosition}`) : null;
   const age = computeAge(player.dateOfBirth);
-  const reversedLog = [...stats.matchLog].reverse();
+  const reversedLog = stats ? [...stats.matchLog].reverse() : [];
   const visibleLog = matchLogExpanded ? reversedLog : reversedLog.slice(0, 5);
 
   return (
@@ -82,7 +82,8 @@ export function PlayerSheet({ player, stats, open, onOpenChange }: PlayerSheetPr
         </SheetHeader>
 
         <div className="px-4 pb-6 space-y-6">
-          {stats.apps === 0 ? (
+          {/* Volleyball rosters have no per-player season stats yet — bio header only. */}
+          {stats === null ? null : stats.apps === 0 ? (
             <div className="rounded-lg border border-dashed border-slate-300 dark:border-slate-700 p-6 text-center text-slate-500 dark:text-slate-400">
               {t('squad.modal.noApps', 'No appearances yet this season')}
             </div>

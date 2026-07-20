@@ -6,6 +6,7 @@ import '../logic/volleyball_stats.dart';
 import '../models/events.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
+import '../widgets/sport_pill.dart';
 
 /// Stats page ported from the web `StatsPage.tsx` + `components/stats/*`:
 /// one frosted panel holding the heading, the wrapping pill sport selector
@@ -66,7 +67,7 @@ class _StatsPageState extends State<StatsPage> {
               runSpacing: 8,
               children: [
                 for (final (value, label) in tabs)
-                  _SportPill(
+                  SportPill(
                     label: label,
                     selected: _activeTab == value,
                     onTap: () => setState(() => _activeTab = value),
@@ -81,42 +82,6 @@ class _StatsPageState extends State<StatsPage> {
               sport: _activeTab == 'volleyball-men' ? Sport.volleyballMen : Sport.volleyballWomen,
             ),
         ],
-      ),
-    );
-  }
-}
-
-/// Web pill: `px-4 py-2 rounded-full text-xs font-bold tracking-wide`;
-/// active `bg-primary text-white`, inactive slate-200 / #1a1a1a.
-class _SportPill extends StatelessWidget {
-  const _SportPill({required this.label, required this.selected, required this.onTap});
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-    final dark = Theme.of(context).brightness == Brightness.dark;
-    return Material(
-      color: selected ? colors.primary : (dark ? const Color(0xFF1A1A1A) : twSlate200),
-      borderRadius: colors.br(999),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: colors.br(999),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.3,
-              color: selected ? Colors.white : (dark ? twSlate400 : twSlate600),
-            ),
-          ),
-        ),
       ),
     );
   }

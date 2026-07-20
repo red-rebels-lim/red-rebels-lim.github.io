@@ -1,6 +1,8 @@
 import type { Sport } from './events';
 
-export type Position = 'GK' | 'DEF' | 'MID' | 'FWD';
+export type FootballPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
+export type VolleyballPosition = 'SETTER' | 'OUTSIDE' | 'OPPOSITE' | 'MIDDLE' | 'LIBERO';
+export type Position = FootballPosition | VolleyballPosition;
 
 export interface Player {
   key: string;
