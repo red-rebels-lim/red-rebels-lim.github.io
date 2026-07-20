@@ -537,5 +537,285 @@
     "nationality": "Ghana",
     "photoUrl": "/images/players/braydon_manu.webp",
     "joinedDate": "2026-07-20"
+  },
+  {
+    "key": "carly_anderson",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Carly Anderson",
+    "nameEn": "Carly Anderson",
+    "position": "SETTER",
+    "shirtNumber": 4,
+    "photoUrl": "/images/players/carly_anderson.webp"
+  },
+  {
+    "key": "alexandra_christou",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Αλεξάνδρα Χριστού",
+    "nameEn": "Alexandra Christou",
+    "position": "SETTER",
+    "shirtNumber": 14,
+    "photoUrl": "/images/players/alexandra_christou.webp"
+  },
+  {
+    "key": "olivia_bell",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Olivia Bell",
+    "nameEn": "Olivia Bell",
+    "position": "OUTSIDE",
+    "shirtNumber": 3,
+    "photoUrl": "/images/players/olivia_bell.webp"
+  },
+  {
+    "key": "konstantina_siapani",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Κωνσταντίνα Σιαπάνη",
+    "nameEn": "Konstantina Siapani",
+    "position": "OUTSIDE",
+    "shirtNumber": 8,
+    "photoUrl": "/images/players/konstantina_siapani.webp"
+  },
+  {
+    "key": "maria_achilleos",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Μαρία Αχιλλέως",
+    "nameEn": "Maria Achilleos",
+    "position": "OUTSIDE",
+    "shirtNumber": 12,
+    "photoUrl": "/images/players/maria_achilleos.webp"
+  },
+  {
+    "key": "savanna_shiaelis",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Σαβάννα Σιαήλη",
+    "nameEn": "Savanna Shiaelis",
+    "position": "OUTSIDE",
+    "shirtNumber": 25,
+    "photoUrl": "/images/players/savanna_shiaelis.webp"
+  },
+  {
+    "key": "anni_siaga",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Άννη Σιαγά",
+    "nameEn": "Anni Siaga",
+    "position": "OPPOSITE",
+    "shirtNumber": 9,
+    "photoUrl": "/images/players/anni_siaga.webp"
+  },
+  {
+    "key": "julie_oliveira_sousa",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Julie Oliveira Sousa",
+    "nameEn": "Julie Oliveira Sousa",
+    "position": "OPPOSITE",
+    "shirtNumber": 16,
+    "photoUrl": "/images/players/julie_oliveira_sousa.webp"
+  },
+  {
+    "key": "katerina_saveriadou",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Κατερίνα Σαβεριάδου",
+    "nameEn": "Katerina Saveriadou",
+    "position": "OPPOSITE",
+    "shirtNumber": 17,
+    "photoUrl": "/images/players/katerina_saveriadou.webp"
+  },
+  {
+    "key": "ekaterina_ripnaya",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Ekaterina Ripnaya",
+    "nameEn": "Ekaterina Ripnaya",
+    "position": "MIDDLE",
+    "shirtNumber": 7,
+    "photoUrl": "/images/players/ekaterina_ripnaya.webp"
+  },
+  {
+    "key": "eirini_tzioni",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Ειρήνη Τζιώνη",
+    "nameEn": "Eirini Tzioni",
+    "position": "MIDDLE",
+    "shirtNumber": 10,
+    "photoUrl": "/images/players/eirini_tzioni.webp"
+  },
+  {
+    "key": "chrysovalanto_siali",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Χρυσοβαλάντω Σιαλή",
+    "nameEn": "Chrysovalanto Siali",
+    "position": "MIDDLE",
+    "shirtNumber": 18,
+    "photoUrl": "/images/players/chrysovalanto_siali.webp"
+  },
+  {
+    "key": "nikoletta_stylianou",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Νικολέττα Στυλιανού",
+    "nameEn": "Nikoletta Stylianou",
+    "position": "MIDDLE",
+    "shirtNumber": 44,
+    "photoUrl": "/images/players/nikoletta_stylianou.webp"
+  },
+  {
+    "key": "nefeli_christou",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Νεφέλη Χριστού",
+    "nameEn": "Nefeli Christou",
+    "position": "LIBERO",
+    "shirtNumber": 1,
+    "photoUrl": "/images/players/nefeli_christou.webp"
+  },
+  {
+    "key": "maria_chitziou",
+    "sport": "volleyball-women",
+    "active": true,
+    "nameEl": "Μαρία Χιτζιού",
+    "nameEn": "Maria Chitziou",
+    "position": "LIBERO",
+    "shirtNumber": 2,
+    "photoUrl": "/images/players/maria_chitziou.webp"
+  },
+  {
+    "key": "ivan_pliasetskyi",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Ivan Pliasetskyi",
+    "nameEn": "Ivan Pliasetskyi",
+    "position": "SETTER",
+    "shirtNumber": 4,
+    "photoUrl": "/images/players/ivan_pliasetskyi.webp"
+  },
+  {
+    "key": "petr_lebedev",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Petr Lebedev",
+    "nameEn": "Petr Lebedev",
+    "position": "SETTER",
+    "shirtNumber": 5,
+    "photoUrl": "/images/players/petr_lebedev.webp"
+  },
+  {
+    "key": "juan_pablo_montoya",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Juan Pablo Montoya",
+    "nameEn": "Juan Pablo Montoya",
+    "position": "OUTSIDE",
+    "shirtNumber": 2,
+    "photoUrl": "/images/players/juan_pablo_montoya.webp"
+  },
+  {
+    "key": "anninos_chrysostomou",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Άννινος Χρυσοστόμου",
+    "nameEn": "Anninos Chrysostomou",
+    "position": "OUTSIDE",
+    "shirtNumber": 7,
+    "photoUrl": "/images/players/anninos_chrysostomou.webp"
+  },
+  {
+    "key": "giorgos_gurdis",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Γιώργος Γκούρτης",
+    "nameEn": "Giorgos Gurdis",
+    "position": "OUTSIDE",
+    "shirtNumber": 16,
+    "photoUrl": "/images/players/giorgos_gurdis.webp"
+  },
+  {
+    "key": "symeon_topuzliev",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Symeon Topuzliev",
+    "nameEn": "Symeon Topuzliev",
+    "position": "OUTSIDE",
+    "shirtNumber": 17,
+    "photoUrl": "/images/players/symeon_topuzliev.webp"
+  },
+  {
+    "key": "richard_peemuller",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Richard Peemuller",
+    "nameEn": "Richard Peemuller",
+    "position": "OPPOSITE",
+    "shirtNumber": 10,
+    "photoUrl": "/images/players/richard_peemuller.webp"
+  },
+  {
+    "key": "marios_nikolaou",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Μάριος Νικολάου",
+    "nameEn": "Marios Nikolaou",
+    "position": "MIDDLE",
+    "shirtNumber": 9,
+    "photoUrl": "/images/players/marios_nikolaou.webp"
+  },
+  {
+    "key": "konstantinos_pafitis",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Κωνσταντίνος Παφίτης",
+    "nameEn": "Konstantinos Pafitis",
+    "position": "MIDDLE",
+    "shirtNumber": 12,
+    "photoUrl": "/images/players/konstantinos_pafitis.webp"
+  },
+  {
+    "key": "volodymyr_tarasenko",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Volodymyr Tarasenko",
+    "nameEn": "Volodymyr Tarasenko",
+    "position": "MIDDLE",
+    "shirtNumber": 15,
+    "photoUrl": "/images/players/volodymyr_tarasenko.webp"
+  },
+  {
+    "key": "chrysostomos_efstathiou",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Χρυσόστομος Ευσταθίου",
+    "nameEn": "Chrysostomos Efstathiou",
+    "position": "MIDDLE",
+    "shirtNumber": 19,
+    "photoUrl": "/images/players/chrysostomos_efstathiou.webp"
+  },
+  {
+    "key": "lefteris_ioannou",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Ελευθέριος Ιωάννου",
+    "nameEn": "Lefteris Ioannou",
+    "position": "LIBERO",
+    "shirtNumber": 3,
+    "photoUrl": "/images/players/lefteris_ioannou.webp"
+  },
+  {
+    "key": "alexey_durunda",
+    "sport": "volleyball-men",
+    "active": true,
+    "nameEl": "Alexey Durunda",
+    "nameEn": "Alexey Durunda",
+    "position": "LIBERO",
+    "shirtNumber": 8,
+    "photoUrl": "/images/players/alexey_durunda.webp"
   }
 ]

@@ -12,7 +12,9 @@ import 'player_avatar.dart';
 void showPlayerSheet(
   BuildContext context,
   Player player,
-  PlayerSeasonStats stats,
+  // null for rosters without per-player season stats (volleyball) — the
+  // sheet shows the bio header only.
+  PlayerSeasonStats? stats,
 ) {
   // Web sheet chrome: no drag handle, close X inside the content (QA SQD-03).
   showModalBottomSheet<void>(
@@ -49,7 +51,7 @@ class _PlayerDetails extends StatefulWidget {
   const _PlayerDetails({required this.player, required this.stats});
 
   final Player player;
-  final PlayerSeasonStats stats;
+  final PlayerSeasonStats? stats;
 
   @override
   State<_PlayerDetails> createState() => _PlayerDetailsState();
@@ -66,7 +68,7 @@ class _PlayerDetailsState extends State<_PlayerDetails> {
     final player = widget.player;
     final stats = widget.stats;
     final age = _computeAge(player.dateOfBirth);
-    final reversedLog = stats.matchLog.reversed.toList();
+    final reversedLog = stats?.matchLog.reversed.toList() ?? [];
     final visibleLog = _matchLogExpanded
         ? reversedLog
         : reversedLog.take(5).toList();
@@ -174,7 +176,10 @@ class _PlayerDetailsState extends State<_PlayerDetails> {
         ),
         const SizedBox(height: 20),
 
-        if (stats.apps == 0)
+        // Volleyball rosters have no per-player season stats yet — bio only.
+        if (stats == null)
+          const SizedBox.shrink()
+        else if (stats.apps == 0)
           // ── No appearances yet ──
           Container(
             padding: const EdgeInsets.all(24),

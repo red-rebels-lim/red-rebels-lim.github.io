@@ -8,32 +8,58 @@ import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/player_avatar.dart';
 import '../widgets/player_sheet.dart';
+import '../widgets/sport_pill.dart';
 
-const _positionOrder = [Position.gk, Position.def, Position.mid, Position.fwd];
+const _footballOrder = [Position.gk, Position.def, Position.mid, Position.fwd];
+const _volleyballOrder = [
+  Position.setter,
+  Position.outside,
+  Position.opposite,
+  Position.middle,
+  Position.libero,
+];
 
-/// Squad roster page, ported from the web SquadPage: position sections with
-/// M/G/C column captions, tappable player rows opening the detail sheet.
-class SquadPage extends StatelessWidget {
+/// Squad roster page, ported from the web SquadPage: sport selector pills,
+/// position sections with M/G/C column captions (football only — volleyball
+/// has no per-player season stats yet), tappable player rows opening the
+/// detail sheet.
+class SquadPage extends StatefulWidget {
   const SquadPage({super.key});
+
+  @override
+  State<SquadPage> createState() => _SquadPageState();
+}
+
+class _SquadPageState extends State<SquadPage> {
+  Sport _activeSport = Sport.footballMen;
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final colors = AppColors.of(context);
 
+    final tabs = [
+      (Sport.footballMen, app.t('stats.mensFootball')),
+      (Sport.volleyballMen, app.t('stats.mensVolleyball')),
+      (Sport.volleyballWomen, app.t('stats.womensVolleyball')),
+    ];
+
+    final isFootball = _activeSport == Sport.footballMen;
+    final positionOrder = isFootball ? _footballOrder : _volleyballOrder;
+
     final roster = app.players.all
-        .where((p) => p.active && p.sport == Sport.footballMen)
+        .where((p) => p.active && p.sport == _activeSport)
         .toList();
-    final stats = aggregateSquadStats(
-      roster: roster,
-      eventsByMonth: app.events.byMonth,
-    );
+    // Per-player season stats only exist for football (aggregated from events).
+    final stats = isFootball
+        ? aggregateSquadStats(roster: roster, eventsByMonth: app.events.byMonth)
+        : null;
 
     final grouped = <Position, List<Player>>{
-      for (final pos in _positionOrder) pos: [],
+      for (final pos in positionOrder) pos: [],
     };
     for (final p in roster) {
-      grouped[p.position]!.add(p);
+      grouped[p.position]?.add(p);
     }
     for (final list in grouped.values) {
       list.sort(
@@ -52,7 +78,7 @@ class SquadPage extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 4, bottom: 16),
+            padding: const EdgeInsets.only(left: 4, bottom: 8),
             child: Text(
               app.t('nav.squad'),
               style: TextStyle(
@@ -62,7 +88,23 @@ class SquadPage extends StatelessWidget {
               ),
             ),
           ),
-          for (final pos in _positionOrder)
+          // Sport selector: wrapping pills, same chrome as the stats page.
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final (sport, label) in tabs)
+                  SportPill(
+                    label: label,
+                    selected: _activeSport == sport,
+                    onTap: () => setState(() => _activeSport = sport),
+                  ),
+              ],
+            ),
+          ),
+          for (final pos in positionOrder)
             if (grouped[pos]!.isNotEmpty)
               _PositionSection(
                 position: pos,
@@ -84,7 +126,10 @@ class _PositionSection extends StatelessWidget {
 
   final Position position;
   final List<Player> players;
-  final Map<String, PlayerSeasonStats> stats;
+
+  /// null for rosters without per-player season stats (volleyball) — the
+  /// M/G/C captions and row columns are hidden.
+  final Map<String, PlayerSeasonStats>? stats;
 
   @override
   Widget build(BuildContext context) {
@@ -137,39 +182,40 @@ class _PositionSection extends StatelessWidget {
                   ),
                 ),
                 // Right padding mirrors the row's trailing chevron area (16 + 12).
-                Padding(
-                  padding: const EdgeInsets.only(right: 28),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 28,
-                        child: Text(
-                          app.t('squad.colApps').upperNoTonos,
-                          textAlign: TextAlign.right,
-                          style: captionStyle,
+                if (stats != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 28),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 28,
+                          child: Text(
+                            app.t('squad.colApps').upperNoTonos,
+                            textAlign: TextAlign.right,
+                            style: captionStyle,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      SizedBox(
-                        width: 20,
-                        child: Text(
-                          app.t('squad.colGoals').upperNoTonos,
-                          textAlign: TextAlign.right,
-                          style: captionStyle,
+                        const SizedBox(width: 12),
+                        SizedBox(
+                          width: 20,
+                          child: Text(
+                            app.t('squad.colGoals').upperNoTonos,
+                            textAlign: TextAlign.right,
+                            style: captionStyle,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      SizedBox(
-                        width: 20,
-                        child: Text(
-                          app.t('squad.colCards').upperNoTonos,
-                          textAlign: TextAlign.right,
-                          style: captionStyle,
+                        const SizedBox(width: 12),
+                        SizedBox(
+                          width: 20,
+                          child: Text(
+                            app.t('squad.colCards').upperNoTonos,
+                            textAlign: TextAlign.right,
+                            style: captionStyle,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -195,7 +241,9 @@ class _PositionSection extends StatelessWidget {
                     ),
                   _PlayerRow(
                     player: player,
-                    stats: stats[player.key] ?? PlayerSeasonStats(player.key),
+                    stats: stats == null
+                        ? null
+                        : stats![player.key] ?? PlayerSeasonStats(player.key),
                   ),
                 ],
               ],
@@ -211,13 +259,16 @@ class _PlayerRow extends StatelessWidget {
   const _PlayerRow({required this.player, required this.stats});
 
   final Player player;
-  final PlayerSeasonStats stats;
+
+  /// null for rosters without per-player season stats (volleyball).
+  final PlayerSeasonStats? stats;
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final colors = AppColors.of(context);
-    final cardsTotal = stats.yellowCards + stats.redCards;
+    final stats = this.stats;
+    final cardsTotal = stats == null ? 0 : stats.yellowCards + stats.redCards;
     final tabular = const [FontFeature.tabularFigures()];
 
     return InkWell(
@@ -254,45 +305,47 @@ class _PlayerRow extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              width: 28,
-              child: Text(
-                '${stats.apps}',
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: colors.foreground,
-                  fontFeatures: tabular,
+            if (stats != null) ...[
+              SizedBox(
+                width: 28,
+                child: Text(
+                  '${stats.apps}',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: colors.foreground,
+                    fontFeatures: tabular,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            SizedBox(
-              width: 20,
-              child: Text(
-                '${stats.goals}',
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: brandRed,
-                  fontFeatures: tabular,
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 20,
+                child: Text(
+                  '${stats.goals}',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: brandRed,
+                    fontFeatures: tabular,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            SizedBox(
-              width: 20,
-              child: Text(
-                '$cardsTotal',
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: colors.mutedForeground,
-                  fontFeatures: tabular,
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 20,
+                child: Text(
+                  '$cardsTotal',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: colors.mutedForeground,
+                    fontFeatures: tabular,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
+              const SizedBox(width: 12),
+            ],
             Icon(Icons.chevron_right, size: 16, color: colors.mutedForeground),
           ],
         ),

@@ -5,21 +5,24 @@ import { PlayerAvatar } from './PlayerAvatar';
 
 interface PlayerRowProps {
   player: Player;
-  stats: PlayerSeasonStats;
+  /** null for rosters without per-player season stats (volleyball). */
+  stats: PlayerSeasonStats | null;
   onSelect: (player: Player) => void;
 }
 
 export function PlayerRow({ player, stats, onSelect }: PlayerRowProps) {
   const { i18n, t } = useTranslation();
   const displayName = i18n.language === 'el' ? player.nameEl : player.nameEn;
-  const cardsTotal = stats.yellowCards + stats.redCards;
-  const ariaLabel = t('squad.row.ariaLabel', {
-    name: displayName,
-    apps: stats.apps,
-    goals: stats.goals,
-    cards: cardsTotal,
-    defaultValue: `{{name}}: {{apps}} appearances, {{goals}} goals, {{cards}} cards`,
-  });
+  const cardsTotal = stats ? stats.yellowCards + stats.redCards : 0;
+  const ariaLabel = stats
+    ? t('squad.row.ariaLabel', {
+        name: displayName,
+        apps: stats.apps,
+        goals: stats.goals,
+        cards: cardsTotal,
+        defaultValue: `{{name}}: {{apps}} appearances, {{goals}} goals, {{cards}} cards`,
+      })
+    : displayName;
 
   return (
     <button
@@ -43,11 +46,13 @@ export function PlayerRow({ player, stats, onSelect }: PlayerRowProps) {
       <span className="flex-1 min-w-0 font-condensed font-bold uppercase tracking-wide truncate text-slate-900 dark:text-slate-100">
         {displayName}
       </span>
-      <span className="flex items-baseline gap-3 tabular-nums shrink-0" aria-hidden="true">
-        <span className="w-7 text-right font-bold text-slate-900 dark:text-slate-100">{stats.apps}</span>
-        <span className="w-5 text-right font-bold text-primary">{stats.goals}</span>
-        <span className="w-5 text-right font-bold text-slate-500 dark:text-slate-400">{cardsTotal}</span>
-      </span>
+      {stats && (
+        <span className="flex items-baseline gap-3 tabular-nums shrink-0" aria-hidden="true">
+          <span className="w-7 text-right font-bold text-slate-900 dark:text-slate-100">{stats.apps}</span>
+          <span className="w-5 text-right font-bold text-primary">{stats.goals}</span>
+          <span className="w-5 text-right font-bold text-slate-500 dark:text-slate-400">{cardsTotal}</span>
+        </span>
+      )}
       <ChevronRight
         size={16}
         strokeWidth={2}

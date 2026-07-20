@@ -3,12 +3,18 @@ library;
 
 import 'events.dart';
 
-/// Roster positions in web display order (GK, DEF, MID, FWD).
+/// Roster positions in web display order — football (GK, DEF, MID, FWD) and
+/// volleyball (SETTER, OUTSIDE, OPPOSITE, MIDDLE, LIBERO).
 enum Position {
   gk('GK'),
   def('DEF'),
   mid('MID'),
-  fwd('FWD');
+  fwd('FWD'),
+  setter('SETTER'),
+  outside('OUTSIDE'),
+  opposite('OPPOSITE'),
+  middle('MIDDLE'),
+  libero('LIBERO');
 
   const Position(this.id);
   final String id;

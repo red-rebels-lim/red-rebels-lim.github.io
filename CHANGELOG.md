@@ -16,6 +16,7 @@
 - Team assets for the friendly opponents (AKS 1947 Busko-Zdrój, Korona Kielce, Radomiak Radom, Termalica, ENP, Krasava ENY) and for the newly promoted first-division opponents (Aris Lemesou, Ethnikos Achnas, Omonoia Aradippou, Pafos FC)
 - Braydon Manu to the squad (club announcement 2026-07-20): Ghanaian winger, ex-Darmstadt 98 / Hallescher FC, from Akritas Chlorakas — with Transfermarkt portrait, Flutter players.json regenerated
 - First official training of 2026/27 as a calendar event (club announcement 2026-07-10): Friday 31 July, 19:00, Ammochostos stadium, open to fans — `meeting` event, preserved across scraper runs
+- Volleyball squads on the Squad page (source: neasalamina.com/volley-roster, 2026-07-20): 15 women + 13 men with photos, shirt numbers, and volleyball positions (Setters / Outside Hitters / Opposites / Middle Blockers / Liberos); a sport selector (same pills as the stats page) switches between the three teams in both web and Flutter — volleyball rows and sheets are bio-only until per-player volleyball stats exist
 
 ### Removed
 - TEMPORARY July 18 widget-testing fixture vs Karmiotissa (#100) — superseded by the real friendlies as widget verification data
