@@ -491,4 +491,17 @@ export const players: Player[] = [
     photoUrl: '/images/players/dario_poveda.webp',
     joinedDate: '2026-07-13',
   },
+  {
+    key: 'braydon_manu',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Braydon Manu',
+    nameEn: 'Braydon Manu',
+    position: 'FWD',
+    subPosition: 'Wing',
+    dateOfBirth: '1997-03-28',
+    nationality: 'Ghana',
+    photoUrl: '/images/players/braydon_manu.webp',
+    joinedDate: '2026-07-20',
+  },
 ];

@@ -39,6 +39,14 @@
       "logo": "images/team_logos/TERMALICA.webp",
       "status": "upcoming",
       "competition": "friendly"
+    },
+    {
+      "day": 31,
+      "sport": "meeting",
+      "location": "home",
+      "opponent": "First Official Training 2026/27",
+      "time": "19:00",
+      "venue": "Stadio Vitex Ammochostos Epistrofi"
     }
   ],
   "august": [
