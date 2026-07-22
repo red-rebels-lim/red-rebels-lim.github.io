@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:home_widget/home_widget.dart';
 
 import '../data/constants.dart';
@@ -38,6 +40,11 @@ const eventKeyKey = 'eventKey';
 const emptyTextKey = 'emptyText';
 const captionKey = 'caption';
 const countdownUnitsKey = 'countdownUnits';
+// JSON array of the next few upcoming fixtures. The provider selects the first
+// one still within its post-kickoff grace at render time, so its 30-min
+// re-render advances to the next match without the app running. The flat keys
+// above mirror the first entry and remain a fallback for older payloads.
+const matchesJsonKey = 'matchesJson';
 
 /// Bridges to the home_widget plugin — injectable so tests can capture the
 /// payload without a platform channel behind them.
@@ -58,69 +65,74 @@ String _sportKey(Sport sport) => switch (sport) {
 Future<void> updateNextMatchWidget(AppState app) async {
   try {
     final greek = app.language == 'el';
-    final next = app.events.nextUpcoming(DateTime.now());
+    final upcoming = app.events.upcomingFrom(DateTime.now());
+    final entries = [for (final de in upcoming) _matchEntry(app, de)];
 
     // Header + empty-state copy reuse existing web i18n keys verbatim; the
     // design renders everything uppercase (tonos-free in Greek).
     await saveWidgetData(labelKey, app.t('stats.nextMatch').upperNoTonos);
     await saveWidgetData(emptyTextKey, app.t('stats.noData').upperNoTonos);
+    await saveWidgetData(cupLabelKey, app.t('calendar.cup').upperNoTonos);
     // Design-approved copy with no web counterpart (see header comment).
     await saveWidgetData(captionKey, greek ? 'ΕΝΑΡΞΗ ΣΕ' : 'TO KICKOFF');
     await saveWidgetData(countdownUnitsKey, greek ? 'ηωλ' : 'dhm');
 
-    if (next == null) {
-      await saveWidgetData(hasMatchKey, false);
-      await saveWidgetData(homeTeamKey, '');
-      await saveWidgetData(awayTeamKey, '');
-      await saveWidgetData(homeLogoKey, '');
-      await saveWidgetData(awayLogoKey, '');
-      await saveWidgetData(sportTextKey, '');
-      await saveWidgetData(dateLabelKey, '');
-      await saveWidgetData(venueKey, '');
-      await saveWidgetData(isCupKey, false);
-      await saveWidgetData(cupLabelKey, '');
-      await saveWidgetData(isVolleyballKey, false);
-      await saveWidgetData(kickoffMillisKey, 0);
-      await saveWidgetData(eventKeyKey, '');
-    } else {
-      final e = next.event;
-      final isHome = e.location == MatchLocation.home;
-      final own = app.teamName(teamName).upperNoTonos;
-      final opponent = app.teamName(e.opponent).upperNoTonos;
-      final monthAbbrev = app.t('months.${next.monthName}').substring(0, 3);
-      final time = e.time.contains(':') ? ' • ${e.time}' : '';
+    // The provider picks the first not-yet-finished entry from this list, so it
+    // advances match-to-match on its own 30-min re-render.
+    await saveWidgetData(matchesJsonKey, jsonEncode(entries));
 
-      // Crest asset paths for the compact layout (Kotlin loads them from
-      // the flutter_assets pack; empty string → text fallback).
-      final ownLogo =
-          e.sport == Sport.volleyballMen || e.sport == Sport.volleyballWomen
-              ? 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ_ΒΟΛΛΕΥ.webp'
-              : 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp';
-      final opponentLogo = e.logo == null ? '' : 'assets/${e.logo}';
-
-      await saveWidgetData(hasMatchKey, true);
-      await saveWidgetData(homeTeamKey, isHome ? own : opponent);
-      await saveWidgetData(awayTeamKey, isHome ? opponent : own);
-      await saveWidgetData(homeLogoKey, isHome ? ownLogo : opponentLogo);
-      await saveWidgetData(awayLogoKey, isHome ? opponentLogo : ownLogo);
-      await saveWidgetData(sportTextKey, app.t(_sportKey(e.sport)).upperNoTonos);
-      await saveWidgetData(dateLabelKey, '$monthAbbrev ${e.day}$time'.upperNoTonos);
-      final venue = e.venue;
-      await saveWidgetData(
-          venueKey, venue == null ? '' : app.venueName(venue).upperNoTonos);
-      await saveWidgetData(isCupKey, e.isCup);
-      await saveWidgetData(cupLabelKey, app.t('calendar.cup').upperNoTonos);
-      await saveWidgetData(
-          isVolleyballKey,
-          e.sport == Sport.volleyballMen || e.sport == Sport.volleyballWomen);
-      await saveWidgetData(kickoffMillisKey, next.date.millisecondsSinceEpoch);
-      // Same key format the push deep links use (EventsRepository.findByEventKey).
-      await saveWidgetData(
-          eventKeyKey, '${next.monthName}-${e.day}-${e.sport.id}-${e.opponent}');
-    }
+    // Flat keys mirror the first upcoming fixture — a fallback the provider
+    // uses only if the JSON list is missing/unreadable.
+    final first = entries.isEmpty ? null : entries.first;
+    await saveWidgetData(hasMatchKey, first != null);
+    await saveWidgetData(homeTeamKey, first?[homeTeamKey] ?? '');
+    await saveWidgetData(awayTeamKey, first?[awayTeamKey] ?? '');
+    await saveWidgetData(homeLogoKey, first?[homeLogoKey] ?? '');
+    await saveWidgetData(awayLogoKey, first?[awayLogoKey] ?? '');
+    await saveWidgetData(sportTextKey, first?[sportTextKey] ?? '');
+    await saveWidgetData(dateLabelKey, first?[dateLabelKey] ?? '');
+    await saveWidgetData(venueKey, first?[venueKey] ?? '');
+    await saveWidgetData(isCupKey, first?[isCupKey] ?? false);
+    await saveWidgetData(isVolleyballKey, first?[isVolleyballKey] ?? false);
+    await saveWidgetData(kickoffMillisKey, first?[kickoffMillisKey] ?? 0);
+    await saveWidgetData(eventKeyKey, first?[eventKeyKey] ?? '');
 
     await requestWidgetUpdate();
   } catch (_) {
     // Plugin unavailable (tests, unsupported platform) — widget stays stale.
   }
+}
+
+/// One fixture's fully-localized payload, keyed exactly as the flat prefs so a
+/// single map serves both the JSON list and the fallback keys. Crest paths feed
+/// the compact layout (Kotlin loads them from the flutter_assets pack; an empty
+/// string means "text fallback").
+Map<String, Object?> _matchEntry(AppState app, DatedEvent de) {
+  final e = de.event;
+  final isHome = e.location == MatchLocation.home;
+  final isVolleyball =
+      e.sport == Sport.volleyballMen || e.sport == Sport.volleyballWomen;
+  final own = app.teamName(teamName).upperNoTonos;
+  final opponent = app.teamName(e.opponent).upperNoTonos;
+  final monthAbbrev = app.t('months.${de.monthName}').substring(0, 3);
+  final time = e.time.contains(':') ? ' • ${e.time}' : '';
+  final ownLogo = isVolleyball
+      ? 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ_ΒΟΛΛΕΥ.webp'
+      : 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp';
+  final opponentLogo = e.logo == null ? '' : 'assets/${e.logo}';
+  final venue = e.venue;
+  return {
+    homeTeamKey: isHome ? own : opponent,
+    awayTeamKey: isHome ? opponent : own,
+    homeLogoKey: isHome ? ownLogo : opponentLogo,
+    awayLogoKey: isHome ? opponentLogo : ownLogo,
+    sportTextKey: app.t(_sportKey(e.sport)).upperNoTonos,
+    dateLabelKey: '$monthAbbrev ${e.day}$time'.upperNoTonos,
+    venueKey: venue == null ? '' : app.venueName(venue).upperNoTonos,
+    isCupKey: e.isCup,
+    isVolleyballKey: isVolleyball,
+    kickoffMillisKey: de.date.millisecondsSinceEpoch,
+    // Same key format the push deep links use (EventsRepository.findByEventKey).
+    eventKeyKey: '${de.monthName}-${e.day}-${e.sport.id}-${e.opponent}',
+  };
 }

@@ -68,7 +68,7 @@ function ScorersSection({ scorers, penLabel, ogLabel, isHome }: {
                 </>
               ) : null}
             </div>
-            <div className="text-center text-xs text-muted-foreground shrink-0 w-10">{s.minute}'</div>
+            <div className="text-center text-xs text-muted-foreground shrink-0 w-10">{s.minute ? `${s.minute}'` : ''}</div>
             <div className="flex items-center gap-1 min-w-0">
               {!onLeft ? (
                 <>

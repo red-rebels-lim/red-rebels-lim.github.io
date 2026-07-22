@@ -197,14 +197,26 @@ class EventsRepository {
     return null;
   }
 
-  /// The next event that hasn't kicked off yet (falls back to status when no time).
-  DatedEvent? nextUpcoming(DateTime now) {
+  /// Upcoming events still within the 2h post-kickoff grace, chronological,
+  /// capped at [limit]. The home-screen widget stores this short list so its
+  /// 30-min re-render can advance to the next fixture on its own — without the
+  /// app running to recompute a single "next match".
+  List<DatedEvent> upcomingFrom(DateTime now, {int limit = 6}) {
+    final result = <DatedEvent>[];
     for (final de in allEvents()) {
-      if (de.event.status == MatchStatus.upcoming && de.date.add(const Duration(hours: 2)).isAfter(now)) {
-        return de;
+      if (de.event.status == MatchStatus.upcoming &&
+          de.date.add(const Duration(hours: 2)).isAfter(now)) {
+        result.add(de);
+        if (result.length >= limit) break;
       }
     }
-    return null;
+    return result;
+  }
+
+  /// The next event that hasn't kicked off yet (falls back to status when no time).
+  DatedEvent? nextUpcoming(DateTime now) {
+    final upcoming = upcomingFrom(now, limit: 1);
+    return upcoming.isEmpty ? null : upcoming.first;
   }
 
   /// Month containing today if within the season, otherwise the first month
