@@ -13,15 +13,38 @@ export const eventsData: EventsData = {
       opponent: "AKS 1947 BUSKO-ZDROJ",
       time: "",
       logo: "images/team_logos/AKS_1947_BUSKO-ZDROJ.webp",
-      status: "upcoming",
-      competition: "friendly"
+      status: "played",
+      score: "0-4",
+      competition: "friendly",
+      scorers: [
+        {
+          name: "ΠΑΝΑΓΙΩΤΗΣ ΛΟΥΚΑ",
+          minute: "",
+          team: "away"
+        },
+        {
+          name: "JORDI QUINTILLÀ",
+          minute: "",
+          team: "away"
+        },
+        {
+          name: "ΓΙΑΝΝΗΣ ΓΕΡΟΛΕΜΟΥ",
+          minute: "",
+          team: "away"
+        },
+        {
+          name: "DARÍO POVEDA",
+          minute: "",
+          team: "away"
+        }
+      ]
     },
     {
       day: 23,
       sport: "football-men",
       location: "away",
       opponent: "KORONA KIELCE",
-      time: "",
+      time: "19:00",
       logo: "images/team_logos/KORONA_KIELCE.webp",
       status: "upcoming",
       competition: "friendly"
