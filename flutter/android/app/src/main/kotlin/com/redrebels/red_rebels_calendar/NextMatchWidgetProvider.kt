@@ -3,6 +3,7 @@ package com.redrebels.red_rebels_calendar
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -23,6 +24,7 @@ import android.view.View
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetPlugin
+import org.json.JSONArray
 import kotlin.math.tan
 
 /**
@@ -61,36 +63,111 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         render(context, appWidgetManager, appWidgetId)
     }
 
-    private fun render(context: Context, manager: AppWidgetManager, appWidgetId: Int) {
-        val prefs = HomeWidgetPlugin.getData(context)
-        val hasMatch = prefs.getBoolean("hasMatch", false)
-        val label = prefs.getString("label", "NEXT MATCH") ?: "NEXT MATCH"
-        val homeTeam = prefs.getString("homeTeam", "") ?: ""
-        val awayTeam = prefs.getString("awayTeam", "") ?: ""
-        val homeLogo = prefs.getString("homeLogo", "") ?: ""
-        val awayLogo = prefs.getString("awayLogo", "") ?: ""
-        val sportLabel = prefs.getString("sportLabel", "") ?: ""
-        val dateLabel = prefs.getString("dateLabel", "") ?: ""
-        val venue = prefs.getString("venue", "") ?: ""
-        val isCup = prefs.getBoolean("isCup", false)
-        val cupLabel = prefs.getString("cupLabel", "CUP") ?: "CUP"
-        val isVolleyball = prefs.getBoolean("isVolleyball", false)
-        val emptyText = prefs.getString("emptyText", "") ?: ""
-        val caption = prefs.getString("caption", "TO KICKOFF") ?: "TO KICKOFF"
-        val units = prefs.getString("countdownUnits", "dhm") ?: "dhm"
-        val eventKey = prefs.getString("eventKey", "") ?: ""
+    /** One fixture as read back from the payload. */
+    private data class Match(
+        val homeTeam: String,
+        val awayTeam: String,
+        val homeLogo: String,
+        val awayLogo: String,
+        val sportLabel: String,
+        val dateLabel: String,
+        val venue: String,
+        val isCup: Boolean,
+        val isVolleyball: Boolean,
+        val kickoffMillis: Long,
+        val eventKey: String,
+    )
+
+    /**
+     * Chooses which fixture to render: the first entry in the stored
+     * `matchesJson` list whose kickoff hasn't passed the 2h grace. Because this
+     * runs on every render (incl. the 30-min tick), the widget advances to the
+     * next match by itself as each one finishes. Returns null when the list is
+     * empty / all matches are over → empty state. Falls back to the legacy
+     * single-match flat keys if the list is absent or unparseable.
+     */
+    private fun selectMatch(prefs: SharedPreferences): Match? {
+        val now = System.currentTimeMillis()
+        val json = prefs.getString("matchesJson", null)
+        if (!json.isNullOrEmpty()) {
+            try {
+                val arr = JSONArray(json)
+                for (i in 0 until arr.length()) {
+                    val o = arr.getJSONObject(i)
+                    val kickoff = o.optLong("kickoffMillis", 0L)
+                    if (kickoff - now > -GRACE_MILLIS) {
+                        return Match(
+                            homeTeam = o.optString("homeTeam"),
+                            awayTeam = o.optString("awayTeam"),
+                            homeLogo = o.optString("homeLogo"),
+                            awayLogo = o.optString("awayLogo"),
+                            sportLabel = o.optString("sportLabel"),
+                            dateLabel = o.optString("dateLabel"),
+                            venue = o.optString("venue"),
+                            isCup = o.optBoolean("isCup"),
+                            isVolleyball = o.optBoolean("isVolleyball"),
+                            kickoffMillis = kickoff,
+                            eventKey = o.optString("eventKey"),
+                        )
+                    }
+                }
+                return null // list present but every fixture is over
+            } catch (_: Exception) {
+                // Malformed list — drop through to the flat-key fallback.
+            }
+        }
+
+        // Legacy single-match payload (pre-list writer).
+        if (!prefs.getBoolean("hasMatch", false)) return null
         // saveWidgetData stores Dart ints as Long.
-        val kickoffMillis = try {
+        val kickoff = try {
             prefs.getLong("kickoffMillis", 0L)
         } catch (_: ClassCastException) {
             prefs.getInt("kickoffMillis", 0).toLong()
         }
+        if (kickoff - now <= -GRACE_MILLIS) return null
+        return Match(
+            homeTeam = prefs.getString("homeTeam", "") ?: "",
+            awayTeam = prefs.getString("awayTeam", "") ?: "",
+            homeLogo = prefs.getString("homeLogo", "") ?: "",
+            awayLogo = prefs.getString("awayLogo", "") ?: "",
+            sportLabel = prefs.getString("sportLabel", "") ?: "",
+            dateLabel = prefs.getString("dateLabel", "") ?: "",
+            venue = prefs.getString("venue", "") ?: "",
+            isCup = prefs.getBoolean("isCup", false),
+            isVolleyball = prefs.getBoolean("isVolleyball", false),
+            kickoffMillis = kickoff,
+            eventKey = prefs.getString("eventKey", "") ?: "",
+        )
+    }
 
-        // A fixture whose kickoff passed more than two hours ago is stale
-        // (the app hasn't run since) — fall back to the empty state rather
-        // than advertising a match that is over.
-        val remaining = kickoffMillis - System.currentTimeMillis()
-        val showMatch = hasMatch && remaining > -2 * 60 * 60 * 1000L
+    private fun render(context: Context, manager: AppWidgetManager, appWidgetId: Int) {
+        val prefs = HomeWidgetPlugin.getData(context)
+        // Global (not per-match) copy — localized by the Flutter side.
+        val label = prefs.getString("label", "NEXT MATCH") ?: "NEXT MATCH"
+        val cupLabel = prefs.getString("cupLabel", "CUP") ?: "CUP"
+        val emptyText = prefs.getString("emptyText", "") ?: ""
+        val caption = prefs.getString("caption", "TO KICKOFF") ?: "TO KICKOFF"
+        val units = prefs.getString("countdownUnits", "dhm") ?: "dhm"
+
+        // Pick the fixture to show from the stored upcoming list. On the 30-min
+        // re-render this advances to the next match on its own — once a fixture
+        // passes its grace window the list yields the following one, with no app
+        // launch needed. The empty state shows only when the whole list is over.
+        val match = selectMatch(prefs)
+        val showMatch = match != null
+        val remaining = (match?.kickoffMillis ?: 0L) - System.currentTimeMillis()
+
+        val homeTeam = match?.homeTeam ?: ""
+        val awayTeam = match?.awayTeam ?: ""
+        val homeLogo = match?.homeLogo ?: ""
+        val awayLogo = match?.awayLogo ?: ""
+        val sportLabel = match?.sportLabel ?: ""
+        val dateLabel = match?.dateLabel ?: ""
+        val venue = match?.venue ?: ""
+        val isCup = match?.isCup ?: false
+        val isVolleyball = match?.isVolleyball ?: false
+        val eventKey = match?.eventKey ?: ""
 
         // Portrait cell size from the host; fall back to the 4×2 minimum.
         val options = manager.getAppWidgetOptions(appWidgetId)
@@ -303,6 +380,9 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         const val COMPACT_PANEL_SHARE = 0.34f
 
         private const val DAY_MILLIS = 24 * 60 * 60 * 1000L
+
+        /** Keep a fixture visible for 2h past kickoff before advancing. */
+        private const val GRACE_MILLIS = 2 * 60 * 60 * 1000L
 
         /**
          * Card background: #1A0F0F rounded surface, raked solid panel and

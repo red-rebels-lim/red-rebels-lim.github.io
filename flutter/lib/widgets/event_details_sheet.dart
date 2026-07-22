@@ -686,7 +686,9 @@ class _ScorersTab extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-            center: Text("${s.minute}'",
+            // Empty when the source lists scorers without minutes (e.g. some
+            // friendlies) — mirrors the web ScorersSection.
+            center: Text(s.minute.isEmpty ? '' : "${s.minute}'",
                 style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
             right: onLeft(s)
                 ? const SizedBox.shrink()

@@ -108,6 +108,49 @@ void main() {
     expect(updateCalls, 1);
   });
 
+  test('matchesJson lists upcoming fixtures in order so the widget self-advances', () async {
+    // Two upcoming August fixtures: the provider stores both and advances from
+    // the first to the second on its own once the first passes its grace.
+    final payload = json.encode({
+      'events': {
+        'august': [
+          {
+            'day': 23,
+            'sport': 'football-men',
+            'location': 'home',
+            'opponent': 'ΑΠΟΕΛ',
+            'time': '19:00',
+            'status': 'upcoming',
+            'competition': 'league',
+          },
+          {
+            'day': 30,
+            'sport': 'football-men',
+            'location': 'away',
+            'opponent': 'ΟΜΟΝΟΙΑ',
+            'time': '18:00',
+            'status': 'upcoming',
+            'competition': 'league',
+          },
+        ],
+      },
+    });
+    final app = await appWith(cachePayload: payload);
+    await updateNextMatchWidget(app);
+
+    final list = json.decode(saved[matchesJsonKey] as String) as List;
+    expect(list.length, 2);
+    expect(list[0][eventKeyKey], 'august-23-football-men-ΑΠΟΕΛ');
+    expect(list[1][eventKeyKey], 'august-30-football-men-ΟΜΟΝΟΙΑ');
+    expect(list[0][kickoffMillisKey],
+        DateTime(2026, 8, 23, 19, 0).millisecondsSinceEpoch);
+    expect(list[1][kickoffMillisKey],
+        DateTime(2026, 8, 30, 18, 0).millisecondsSinceEpoch);
+    // Flat keys still mirror the first upcoming fixture (provider fallback).
+    expect(saved[hasMatchKey], true);
+    expect(saved[eventKeyKey], 'august-23-football-men-ΑΠΟΕΛ');
+  });
+
   test('cup fixture sets the chip flag; TBD time drops the clock', () async {
     final app = await appWith(cachePayload: augustPayload(competition: 'cup', time: ''));
     await updateNextMatchWidget(app);
