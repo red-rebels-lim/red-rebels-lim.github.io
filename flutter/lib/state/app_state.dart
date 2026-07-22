@@ -287,6 +287,7 @@ class AppState extends ChangeNotifier {
   String t(String key, [String? fallback]) => i18n.t(_language, key, fallback);
   String teamName(String greekName) => i18n.teamName(_language, greekName);
   String venueName(String greekVenue) => i18n.venueName(_language, greekVenue);
+  String meetingTitle(String raw) => i18n.meetingTitle(_language, raw);
 
   void setLanguage(String lang) {
     if (lang == _language) return;

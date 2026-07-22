@@ -108,7 +108,10 @@
     "footballMen": "Men's Football",
     "volleyballMen": "Men's Volleyball",
     "volleyballWomen": "Women's Volleyball",
-    "meeting": "Meetings"
+    "meeting": "Events"
+  },
+  "meetings": {
+    "firstTraining2627": "First Official Training 2026/27"
   },
   "locations": {
     "home": "Home",

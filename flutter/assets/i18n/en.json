@@ -108,7 +108,10 @@
     "footballMen": "Men's Football",
     "volleyballMen": "Men's Volleyball",
     "volleyballWomen": "Women's Volleyball",
-    "meeting": "Meetings"
+    "meeting": "Events"
+  },
+  "meetings": {
+    "firstTraining2627": "First Official Training 2026/27"
   },
   "locations": {
     "home": "Home",
@@ -425,7 +428,7 @@
     "matchResult": "MATCH RESULT",
     "goalscorers": "GOALSCORERS",
     "bookings": "BOOKINGS",
-    "competition": "Cyprus 2nd Division",
+    "competition": "Cyprus 1st Division",
     "matchday": "MATCHDAY",
     "pen": "pen",
     "og": "og",

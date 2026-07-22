@@ -28,7 +28,7 @@ function tLookup(lang: Lang, key: string, fallback?: string): string {
 }
 
 // Greek-to-key mapping for team names (reuse the same map from translate.ts)
-import { translateTeamName, translateVenue } from '@/lib/translate';
+import { translateTeamName, translateVenue, translateMeetingTitle } from '@/lib/translate';
 import type { TFunction } from 'i18next';
 
 function makeTFunction(lang: Lang): TFunction {
@@ -101,7 +101,7 @@ export function generateIcsString(
       const translatedOpponent = isMeeting ? ev.opponent : translateTeamName(ev.opponent, t);
 
       let title: string;
-      if (isMeeting) title = ev.opponent;
+      if (isMeeting) title = translateMeetingTitle(ev.opponent, t);
       else if (ev.location === 'home') title = `${teamName} vs ${translatedOpponent}`;
       else title = `${translatedOpponent} vs ${teamName}`;
 

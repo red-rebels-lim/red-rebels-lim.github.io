@@ -49,6 +49,14 @@ class I18n {
     return _fotmob(lang, 'venue', key);
   }
 
+  /// Translate a meeting title from events data to the current language
+  /// (web translateMeetingTitle parity). Falls back to the raw title.
+  String meetingTitle(String lang, String raw) {
+    final key = meetingTitleToKey[raw];
+    if (key == null) return raw;
+    return t(lang, 'meetings.$key', raw);
+  }
+
   /// Direct lookup inside fotmob.<section>. Team keys can contain dots
   /// (e.g. 'Olympiada N. (W)'), so the dotted-path [t] would mis-split them.
   String _fotmob(String lang, String section, String key) {

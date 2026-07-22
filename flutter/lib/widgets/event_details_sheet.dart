@@ -204,7 +204,8 @@ class _EventDetails extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             [
-              app.t('popover.competition'),
+              // Friendlies are not competition matches (web EventPopover parity).
+              event.isFriendly ? app.t('calendar.friendly') : app.t('popover.competition'),
               if (event.matchday != null) '${app.t('popover.matchday')} ${event.matchday}',
             ].join(' · ').upperNoTonos,
             textAlign: TextAlign.center,
@@ -675,27 +676,46 @@ class _ScorersTab extends StatelessWidget {
             ? ' (${app.t('popover.og')})'
             : '';
 
+    // Name may truncate, but the suffix and ball must survive — the web keeps
+    // them as separate non-shrinking spans next to the truncating name.
+    const nameStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500);
+    Widget name(Scorer s, {required TextAlign align}) => Flexible(
+          child: Text(app.i18n.playerName(s.name),
+              textAlign: align,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: nameStyle),
+        );
+
     return Column(
       children: [
         for (final s in sorted)
           _ThreeColRow(
             left: !onLeft(s)
                 ? const SizedBox.shrink()
-                : Text('${app.i18n.playerName(s.name)}${suffix(s)} ⚽',
-                    textAlign: TextAlign.right,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      name(s, align: TextAlign.right),
+                      if (suffix(s).isNotEmpty) Text(suffix(s), style: nameStyle),
+                      const Text(' ⚽', style: nameStyle),
+                    ],
+                  ),
             // Empty when the source lists scorers without minutes (e.g. some
             // friendlies) — mirrors the web ScorersSection.
             center: Text(s.minute.isEmpty ? '' : "${s.minute}'",
                 style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
             right: onLeft(s)
                 ? const SizedBox.shrink()
-                : Text('⚽ ${app.i18n.playerName(s.name)}${suffix(s)}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('⚽ ', style: nameStyle),
+                      name(s, align: TextAlign.left),
+                      if (suffix(s).isNotEmpty) Text(suffix(s), style: nameStyle),
+                    ],
+                  ),
           ),
       ],
     );
