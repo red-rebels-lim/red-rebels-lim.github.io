@@ -108,7 +108,10 @@
     "footballMen": "Ανδρικό Ποδόσφαιρο",
     "volleyballMen": "Ανδρικό Βόλεϊ",
     "volleyballWomen": "Γυναικείο Βόλεϊ",
-    "meeting": "Συνεδρίες"
+    "meeting": "Εκδηλώσεις"
+  },
+  "meetings": {
+    "firstTraining2627": "Πρώτη Επίσημη Προπόνηση 2026/27"
   },
   "locations": {
     "home": "Εντός Έδρας",
@@ -425,7 +428,7 @@
     "matchResult": "ΑΠΟΤΕΛΕΣΜΑ ΑΓΩΝΑ",
     "goalscorers": "ΣΚΟΡΕΡ",
     "bookings": "ΚΑΡΤΕΣ",
-    "competition": "Κύπρος 2η Κατηγορία",
+    "competition": "Κύπρος Α' Κατηγορία",
     "matchday": "ΑΓΩΝΙΣΤΙΚΗ",
     "pen": "πεν",
     "og": "αγ",

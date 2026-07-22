@@ -131,6 +131,12 @@ const greekToVenueKey = <String, String>{
   'ΚΟΙΝΟΤΙΚΟ ΓΗΠΕΔΟ ΠΑΝΩ ΠΟΛΕΜΙΔΙΩΝ': 'Pano Polemidion Community Stadium',
 };
 
+/// Meeting titles (events data `opponent` free text) → i18n keys under
+/// meetings.* (web translate.ts MEETING_TITLE_TO_KEY parity).
+const meetingTitleToKey = <String, String>{
+  'First Official Training 2026/27': 'firstTraining2627',
+};
+
 const sportEmoji = <String, String>{
   'football-men': '⚽',
   'volleyball-men': '🏐',

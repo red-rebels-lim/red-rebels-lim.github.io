@@ -5,7 +5,7 @@ import type { MonthName, CalendarData, CalendarEvent, FilterState } from '@/type
 import { eventsData } from '@/data/events';
 import { sportConfig } from '@/data/sport-config';
 import { monthMap, MONTH_ORDER } from '@/data/month-config';
-import { translateTeamName } from '@/lib/translate';
+import { translateTeamName, translateMeetingTitle } from '@/lib/translate';
 
 function getDayName(year: number, monthIndex: number, day: number): string {
   const dayKeys = ['days.sunday', 'days.monday', 'days.tuesday', 'days.wednesday', 'days.thursday', 'days.friday', 'days.saturday'];
@@ -43,7 +43,7 @@ function parseEvent(eventData: {
 
   let title: string;
   if (isMeeting) {
-    title = eventData.opponent;
+    title = translateMeetingTitle(eventData.opponent, t);
   } else if (eventData.location === 'home') {
     title = `${teamName} vs ${translatedOpponent}`;
   } else {

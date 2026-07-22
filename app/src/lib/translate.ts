@@ -79,6 +79,15 @@ const GREEK_TO_VENUE_KEY: Record<string, string> = {
 };
 
 /**
+ * Maps meeting titles (as stored in events.ts `opponent`) to their i18n keys
+ * under `meetings.*`. Meeting titles are free text, so unlike teams/venues the
+ * source string is whatever the scraper-preserved manual entry says.
+ */
+const MEETING_TITLE_TO_KEY: Record<string, string> = {
+  'First Official Training 2026/27': 'firstTraining2627',
+};
+
+/**
  * Maps non-roster player names (volleyball scorers, opponent players) to English i18n keys.
  * Football roster names are resolved via players.ts; see `resolveRosterPlayer` below.
  */
@@ -144,6 +153,17 @@ export function translateVenue(venueName: string, t: TFunction): string {
   const i18nKey = `fotmob.venue.${key}`;
   const translated = t(i18nKey, key);
   return typeof translated === 'string' ? translated : key;
+}
+
+/**
+ * Translate a meeting title from the events data to the current language.
+ * Falls back to the raw title if no mapping exists.
+ */
+export function translateMeetingTitle(title: string, t: TFunction): string {
+  const key = MEETING_TITLE_TO_KEY[title];
+  if (!key) return title;
+  const translated = t(`meetings.${key}`, title);
+  return typeof translated === 'string' ? translated : title;
 }
 
 /**

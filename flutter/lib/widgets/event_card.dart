@@ -173,8 +173,10 @@ String sportLabelKey(Sport sport) => _sportKey(sport);
 /// web CalendarListView/CardsView titles. The own team goes through the
 /// translation table via its canonical uppercase key ('ΝΕΑ ΣΑΛΑΜΙΝΑ' — see
 /// greekToTeamKey) so English mode renders 'Nea Salamis'; unmapped names
-/// fall back to the Greek string.
+/// fall back to the Greek string. Meetings are bare translated titles, no
+/// "vs" (web useCalendar parity).
 String matchTitle(AppState app, SportEvent event) {
+  if (event.isMeeting) return app.meetingTitle(event.opponent);
   final own = app.teamName('ΝΕΑ ΣΑΛΑΜΙΝΑ');
   final opponent = app.teamName(event.opponent);
   return event.location == MatchLocation.home ? '$own vs $opponent' : '$opponent vs $own';
