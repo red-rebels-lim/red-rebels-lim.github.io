@@ -328,6 +328,7 @@ export const players: Player[] = [
     nationality: 'Cyprus',
     photoUrl: '/images/players/giannis_gerolemou.webp',
     joinedDate: '2026-07-01',
+    aliases: ['ΓΙΑΝΝΗΣ ΓΕΡΟΛΕΜΟΥ'],
   },
   {
     key: 'andreas_mavroudis',
