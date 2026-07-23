@@ -46,8 +46,128 @@ export const eventsData: EventsData = {
       opponent: "KORONA KIELCE",
       time: "19:00",
       logo: "images/team_logos/KORONA_KIELCE.webp",
-      status: "upcoming",
-      competition: "friendly"
+      status: "played",
+      score: "2-2",
+      competition: "friendly",
+      scorers: [
+        {
+          name: "ΠΑΝΑΓΙΩΤΗΣ ΛΟΥΚΑ",
+          minute: "",
+          team: "away"
+        }
+      ],
+      lineup: {
+        home: [],
+        away: [
+          {
+            name: "Dániel Kovács"
+          },
+          {
+            name: "Κώστας Χαραλάμπους"
+          },
+          {
+            name: "Βασίλειος Λαμπρόπουλος"
+          },
+          {
+            name: "Αλέξαντρος Μιχαήλ"
+          },
+          {
+            name: "Άντρεας Δημητρίου"
+          },
+          {
+            name: "Κωνσταντίνος Ηλία"
+          },
+          {
+            name: "Jordi Quintillà"
+          },
+          {
+            name: "Jose Artiles"
+          },
+          {
+            name: "Χρήστος Γιούσης"
+          },
+          {
+            name: "Aldair Djalo Balde"
+          },
+          {
+            name: "Παναγιώτης Λούκα"
+          }
+        ]
+      },
+      subs: [
+        {
+          playerOn: "Denys Vakulyk",
+          playerOff: "Dániel Kovács",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Παναγιώτης Αρτύματας",
+          playerOff: "Βασίλειος Λαμπρόπουλος",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Γιώργος Βικτώρος",
+          playerOff: "Αλέξαντρος Μιχαήλ",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Florent Hanin",
+          playerOff: "Άντρεας Δημητρίου",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Aloïs Confais",
+          playerOff: "Κωνσταντίνος Ηλία",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Γιάννης Γερολέμου",
+          playerOff: "Jordi Quintillà",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Samuel Grandsir",
+          playerOff: "Jose Artiles",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Alex Guti",
+          playerOff: "Aldair Djalo Balde",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Darío Poveda",
+          playerOff: "Παναγιώτης Λούκα",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Β. Βασιλάκκας",
+          playerOff: "Χρήστος Γιούσης",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Alberto Varo Lara",
+          playerOff: "Denys Vakulyk",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Λ. Αντωνίου",
+          playerOff: "Κώστας Χαραλάμπους",
+          minute: "",
+          team: "away"
+        }
+      ]
     },
     {
       day: 25,
