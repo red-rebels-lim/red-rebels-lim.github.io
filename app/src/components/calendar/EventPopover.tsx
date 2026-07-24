@@ -601,7 +601,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           )}
 
           {/* ── Competition / matchday line ── */}
-          {isFootballPlayed && (
+          {(isFootballPlayed || event.competition === 'league') && (
             <div className="text-center">
               <span className="text-xs font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">
                 {event.competition === 'friendly' ? t('calendar.friendly') : t('popover.competition')}
@@ -618,6 +618,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
             <InfoChip icon={isHome ? '🏠' : '✈️'} label={isHome ? t('popover.homeGround') : t('popover.awayGround')} />
             {event.venue && <InfoChip icon="📍" label={translateVenue(event.venue, t)} />}
             {!isFootballPlayed && hasValidTime && <InfoChip icon="⏰" label={time} />}
+            {event.status !== 'played' && event.dateTbd && <InfoChip icon="📅" label={t('popover.tbd')} />}
             {event.competition === 'cup' && (
               <span className="flex items-center gap-1.5 bg-amber-500/20 border border-amber-500/30 rounded-full px-3 py-1.5 text-xs font-semibold text-amber-400">
                 🏆 {t('calendar.cup')}

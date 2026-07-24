@@ -4,8 +4,6 @@ import type { EventsData } from '@/types/events';
 
 export const eventsData: EventsData = {
   july: [
-    // Pre-season friendlies (club announcement 2026-07-17, neasalamina.com).
-    // Kick-off times TBA — the reminder cron skips events with no time.
     {
       day: 21,
       sport: "football-men",
@@ -240,15 +238,347 @@ export const eventsData: EventsData = {
       logo: "images/team_logos/ΚΡΑΣΑΒΑ_ΥΨΩΝΑ.webp",
       status: "upcoming",
       competition: "friendly"
+    },
+    {
+      day: 28,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΟΛΥΜΠΙΑΚΟΣ ΛΕΥΚΩΣΙΑΣ",
+      time: "",
+      logo: "images/team_logos/ΟΛΥΜΠΙΑΚΟΣ_ΛΕΥΚΩΣΙΑΣ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 1,
+      dateTbd: true
     }
   ],
-  september: [],
-  october: [],
-  november: [],
-  december: [],
-  january: [],
-  february: [],
-  march: [],
+  september: [
+    {
+      day: 4,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΑΕΚ_ΛΑΡΝΑΚΑΣ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 2,
+      dateTbd: true
+    },
+    {
+      day: 11,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΑΕΛ ΛΕΜΕΣΟΥ",
+      time: "",
+      logo: "images/team_logos/ΑΕΛ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 3,
+      dateTbd: true
+    },
+    {
+      day: 18,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΑΝΟΡΘΩΣΗ ΑΜΜΟΧΩΣΤΟΥ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 4,
+      dateTbd: true
+    }
+  ],
+  october: [
+    {
+      day: 9,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΑΠΟΕΛ ΛΕΥΚΩΣΙΑΣ",
+      time: "",
+      logo: "images/team_logos/ΑΠΟΕΛ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 5,
+      dateTbd: true
+    },
+    {
+      day: 16,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΑΠΟΛΛΩΝΑΣ ΛΕΜΕΣΟΥ",
+      time: "",
+      logo: "images/team_logos/ΑΠΟΛΛΩΝ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 6,
+      dateTbd: true
+    },
+    {
+      day: 23,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΠΑΦΟΣ FC",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΠΑΦΟΣ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 7,
+      dateTbd: true
+    },
+    {
+      day: 30,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ",
+      time: "",
+      logo: "images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 8,
+      dateTbd: true
+    }
+  ],
+  november: [
+    {
+      day: 6,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΟΜΟΝΟΙΑ ΑΡΑΔΙΠΠΟΥ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΟΜΟΝΟΙΑ_ΑΡΑΔΙΠΠΟΥ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 9,
+      dateTbd: true
+    },
+    {
+      day: 20,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΑΡΗΣ ΛΕΜΕΣΟΥ",
+      time: "",
+      logo: "images/team_logos/ΑΡΗΣ_ΛΕΜΕΣΟΥ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 10,
+      dateTbd: true
+    },
+    {
+      day: 27,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΟΜΟΝΟΙΑ ΛΕΥΚΩΣΙΑΣ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΟΜΟΝΟΙΑ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 11,
+      dateTbd: true
+    }
+  ],
+  december: [
+    {
+      day: 1,
+      sport: "football-men",
+      location: "away",
+      opponent: "KRASAVA Ε.Ν. Y",
+      time: "",
+      logo: "images/team_logos/ΚΡΑΣΑΒΑ_ΥΨΩΝΑ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 12,
+      dateTbd: true
+    },
+    {
+      day: 4,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 13,
+      dateTbd: true
+    },
+    {
+      day: 11,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΟΛΥΜΠΙΑΚΟΣ ΛΕΥΚΩΣΙΑΣ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΟΛΥΜΠΙΑΚΟΣ_ΛΕΥΚΩΣΙΑΣ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 14,
+      dateTbd: true
+    },
+    {
+      day: 18,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΑΕΚ ΛΑΡΝΑΚΑΣ",
+      time: "",
+      logo: "images/team_logos/ΑΕΚ_ΛΑΡΝΑΚΑΣ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 15,
+      dateTbd: true
+    }
+  ],
+  january: [
+    {
+      day: 2,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΑΕΛ ΛΕΜΕΣΟΥ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΑΕΛ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 16,
+      dateTbd: true
+    },
+    {
+      day: 8,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΑΝΟΡΘΩΣΗ ΑΜΜΟΧΩΣΤΟΥ",
+      time: "",
+      logo: "images/team_logos/ΑΝΟΡΘΩΣΙΣ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 17,
+      dateTbd: true
+    },
+    {
+      day: 12,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΑΠΟΕΛ ΛΕΥΚΩΣΙΑΣ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΑΠΟΕΛ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 18,
+      dateTbd: true
+    },
+    {
+      day: 15,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΑΠΟΛΛΩΝΑΣ ΛΕΜΕΣΟΥ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΑΠΟΛΛΩΝ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 19,
+      dateTbd: true
+    },
+    {
+      day: 22,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΠΑΦΟΣ FC",
+      time: "",
+      logo: "images/team_logos/ΠΑΦΟΣ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 20,
+      dateTbd: true
+    },
+    {
+      day: 29,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 21,
+      dateTbd: true
+    }
+  ],
+  february: [
+    {
+      day: 5,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΟΜΟΝΟΙΑ ΑΡΑΔΙΠΠΟΥ",
+      time: "",
+      logo: "images/team_logos/ΟΜΟΝΟΙΑ_ΑΡΑΔΙΠΠΟΥ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 22,
+      dateTbd: true
+    },
+    {
+      day: 12,
+      sport: "football-men",
+      location: "home",
+      opponent: "ΑΡΗΣ ΛΕΜΕΣΟΥ",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΑΡΗΣ_ΛΕΜΕΣΟΥ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 23,
+      dateTbd: true
+    },
+    {
+      day: 19,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΟΜΟΝΟΙΑ ΛΕΥΚΩΣΙΑΣ",
+      time: "",
+      logo: "images/team_logos/ΟΜΟΝΟΙΑ_FC.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 24,
+      dateTbd: true
+    },
+    {
+      day: 26,
+      sport: "football-men",
+      location: "home",
+      opponent: "KRASAVA Ε.Ν. Y",
+      time: "",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
+      logo: "images/team_logos/ΚΡΑΣΑΒΑ_ΥΨΩΝΑ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 25,
+      dateTbd: true
+    }
+  ],
+  march: [
+    {
+      day: 5,
+      sport: "football-men",
+      location: "away",
+      opponent: "ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ",
+      time: "",
+      logo: "images/team_logos/ΚΑΡΜΙΩΤΙΣΣΑ_ΠΟΛΕΜΙΔΙΩΝ.webp",
+      status: "upcoming",
+      competition: "league",
+      matchday: 26,
+      dateTbd: true
+    }
+  ],
   april: [],
   may: [],
   june: []

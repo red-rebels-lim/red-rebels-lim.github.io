@@ -4,10 +4,14 @@ import {
   parseFixtureDate,
   deduplicateCfaFixtures,
   normalizeOpponent,
+  normalizeOpponentFuzzy,
+  monthDayToSeasonDate,
+  confirmTbdDates,
   fixtureToEvent,
   mergeVolleyballFixtures,
   findExistingLogo,
   type Fixture,
+  type SportEvent,
 } from './index.js';
 
 // Suppress console.log from mergeVolleyballFixtures
@@ -197,5 +201,135 @@ describe('mergeVolleyballFixtures', () => {
 describe('findExistingLogo', () => {
   it('returns null when no logo file exists', () => {
     expect(findExistingLogo('NONEXISTENT TEAM')).toBeNull();
+  });
+});
+
+describe('normalizeOpponentFuzzy', () => {
+  it('bridges CFA punctuation variants of the same club', () => {
+    expect(normalizeOpponentFuzzy('KRASAVA Ε.Ν. Y')).toBe(normalizeOpponentFuzzy('KRASAVA Ε.Ν.Y.'));
+    expect(normalizeOpponentFuzzy('ΠΑΦΟΣ FC')).toBe(normalizeOpponentFuzzy('ΠΑΦΟΣ F.C.'));
+  });
+
+  it('does not conflate different clubs', () => {
+    expect(normalizeOpponentFuzzy('ΟΜΟΝΟΙΑ ΛΕΥΚΩΣΙΑΣ')).not.toBe(normalizeOpponentFuzzy('ΟΜΟΝΟΙΑ ΑΡΑΔΙΠΠΟΥ'));
+  });
+});
+
+describe('monthDayToSeasonDate', () => {
+  const now = new Date(2026, 6, 24); // 2026-07-24 → season 26/27
+
+  it('maps July–December to the season start year', () => {
+    expect(monthDayToSeasonDate('august', 28, now)).toEqual(new Date(2026, 7, 28));
+  });
+
+  it('maps January–June to the season end year', () => {
+    expect(monthDayToSeasonDate('february', 5, now)).toEqual(new Date(2027, 1, 5));
+  });
+
+  it('returns null for an unknown month', () => {
+    expect(monthDayToSeasonDate('smarch', 1, now)).toBeNull();
+  });
+});
+
+describe('confirmTbdDates', () => {
+  const now = new Date(2026, 6, 24); // 2026-07-24 → season 26/27
+
+  function tbdEntry(overrides: Partial<SportEvent> = {}): SportEvent {
+    return {
+      day: 28,
+      sport: 'football-men',
+      location: 'away',
+      opponent: 'ΟΛΥΜΠΙΑΚΟΣ ΛΕΥΚΩΣΙΑΣ',
+      time: '',
+      status: 'upcoming',
+      competition: 'league',
+      matchday: 1,
+      dateTbd: true,
+      ...overrides,
+    };
+  }
+
+  function scrapedEvent(overrides: Partial<SportEvent> = {}): SportEvent {
+    return {
+      day: 29,
+      sport: 'football-men',
+      location: 'away',
+      opponent: 'ΟΛΥΜΠΙΑΚΟΣ ΛΕΥΚΩΣΙΑΣ',
+      time: '19:00',
+      ...overrides,
+    };
+  }
+
+  function emptyChanges() {
+    return { added: [], scoreUpdated: [], timeUpdated: [], venueUpdated: [], dateConfirmed: [], unchanged: 0 };
+  }
+
+  it('moves a TBD entry onto the scraped date within the window', () => {
+    const existing: Record<string, SportEvent[]> = { august: [tbdEntry()] };
+    const changes = emptyChanges();
+    confirmTbdDates(existing, { august: [scrapedEvent()] }, changes, now);
+
+    expect(existing.august).toHaveLength(1);
+    expect(existing.august[0].day).toBe(29);
+    expect(existing.august[0].dateTbd).toBeUndefined();
+    expect(existing.august[0].matchday).toBe(1);
+    expect(changes.dateConfirmed).toHaveLength(1);
+  });
+
+  it('moves a TBD entry across a month boundary', () => {
+    // MD8 window 30 Oct – 2 Nov: anchor Oct 30, real date Nov 2
+    const existing: Record<string, SportEvent[]> = {
+      october: [tbdEntry({ day: 30, opponent: 'ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ', matchday: 8 })],
+    };
+    const changes = emptyChanges();
+    confirmTbdDates(existing, { november: [scrapedEvent({ day: 2, opponent: 'ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ' })] }, changes, now);
+
+    expect(existing.october).toHaveLength(0);
+    expect(existing.november).toHaveLength(1);
+    expect(existing.november[0].day).toBe(2);
+    expect(existing.november[0].matchday).toBe(8);
+    expect(existing.november[0].dateTbd).toBeUndefined();
+  });
+
+  it('matches across CFA punctuation variants and adopts the scraped name form', () => {
+    const existing: Record<string, SportEvent[]> = {
+      december: [tbdEntry({ day: 1, opponent: 'KRASAVA Ε.Ν. Y', matchday: 12 })],
+    };
+    const changes = emptyChanges();
+    confirmTbdDates(existing, { december: [scrapedEvent({ day: 3, opponent: 'KRASAVA Ε.Ν.Y.' })] }, changes, now);
+
+    expect(existing.december[0].day).toBe(3);
+    expect(existing.december[0].opponent).toBe('KRASAVA Ε.Ν.Y.');
+    expect(existing.december[0].dateTbd).toBeUndefined();
+  });
+
+  it('does not adopt the reverse fixture (different location)', () => {
+    const existing: Record<string, SportEvent[]> = { august: [tbdEntry()] };
+    const changes = emptyChanges();
+    confirmTbdDates(existing, { august: [scrapedEvent({ location: 'home' })] }, changes, now);
+
+    expect(existing.august[0].dateTbd).toBe(true);
+    expect(existing.august[0].day).toBe(28);
+    expect(changes.dateConfirmed).toHaveLength(0);
+  });
+
+  it('does not adopt a fixture more than 10 days from the anchor', () => {
+    const existing: Record<string, SportEvent[]> = { august: [tbdEntry()] };
+    const changes = emptyChanges();
+    confirmTbdDates(existing, { september: [scrapedEvent({ day: 20 })] }, changes, now);
+
+    expect(existing.august[0].dateTbd).toBe(true);
+    expect(changes.dateConfirmed).toHaveLength(0);
+  });
+
+  it('leaves everything alone when the scraped event already matches an exact key', () => {
+    const confirmed = tbdEntry({ day: 29 });
+    delete confirmed.dateTbd;
+    const existing: Record<string, SportEvent[]> = { august: [confirmed, tbdEntry({ day: 28, opponent: 'ΑΕΚ ΛΑΡΝΑΚΑΣ', location: 'home', matchday: 2 })] };
+    const changes = emptyChanges();
+    confirmTbdDates(existing, { august: [scrapedEvent()] }, changes, now);
+
+    expect(existing.august).toHaveLength(2);
+    expect(changes.dateConfirmed).toHaveLength(0);
   });
 });

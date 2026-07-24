@@ -131,12 +131,12 @@ void main() {
     expect(find.text('MATCH RESULT'), findsNothing);
 
     // Simulate a notification tap deep-linking to a real bundled event
-    // (26/27 bundle starts with the July friendlies — upcoming, so the sheet
-    // header is the fixture title rather than MATCH RESULT).
-    app.pendingEventKey = 'july-21-football-men-AKS 1947 BUSKO-ZDROJ';
+    // (a draw fixture — upcoming all season, so the sheet header is the
+    // fixture title rather than MATCH RESULT).
+    app.pendingEventKey = 'march-5-football-men-ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ';
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('BUSKO-ZDRÓJ'), findsWidgets); // sheet title
+    expect(find.textContaining('KARMIOTISSA'), findsWidgets); // sheet title
     expect(app.pendingEventKey, isNull); // consumed once
 
     await tester.pumpWidget(const SizedBox());

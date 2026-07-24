@@ -59,6 +59,10 @@ export interface SportEvent {
   bookings?: Booking[];
   duration?: string;
   matchday?: number;
+  /** Fixture from the CFA draw whose exact date/time is not announced yet.
+   *  `day` holds the matchday window's start date; the scraper clears this
+   *  flag (and corrects `day`) once the real date is published. */
+  dateTbd?: boolean;
   lineup?: { home: LineupPlayer[]; away: LineupPlayer[] };
   subs?: Substitution[];
   sets?: VolleyballSet[];
@@ -86,6 +90,7 @@ export interface CalendarEvent {
   bookings?: Booking[];
   duration?: string;
   matchday?: number;
+  dateTbd?: boolean;
   lineup?: { home: LineupPlayer[]; away: LineupPlayer[] };
   subs?: Substitution[];
   sets?: VolleyballSet[];
