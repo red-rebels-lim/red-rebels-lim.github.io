@@ -129,6 +129,7 @@ class SportEvent {
     this.bookings,
     this.duration,
     this.matchday,
+    this.dateTbd = false,
     this.lineupHome,
     this.lineupAway,
     this.subs,
@@ -153,6 +154,10 @@ class SportEvent {
   final List<Booking>? bookings;
   final String? duration;
   final int? matchday;
+
+  /// Draw fixture whose exact date/time is not announced yet; [day] holds the
+  /// matchday window's start date until the scraper confirms the real one.
+  final bool dateTbd;
   final List<LineupPlayer>? lineupHome;
   final List<LineupPlayer>? lineupAway;
   final List<Substitution>? subs;
@@ -193,6 +198,7 @@ class SportEvent {
       bookings: (j['bookings'] as List?)?.map((e) => Booking.fromJson(e as Map<String, dynamic>)).toList(),
       duration: j['duration'] as String?,
       matchday: (j['matchday'] as num?)?.toInt(),
+      dateTbd: j['dateTbd'] as bool? ?? false,
       lineupHome: (lineup?['home'] as List?)?.map((e) => LineupPlayer.fromJson(e as Map<String, dynamic>)).toList(),
       lineupAway: (lineup?['away'] as List?)?.map((e) => LineupPlayer.fromJson(e as Map<String, dynamic>)).toList(),
       subs: (j['subs'] as List?)?.map((e) => Substitution.fromJson(e as Map<String, dynamic>)).toList(),

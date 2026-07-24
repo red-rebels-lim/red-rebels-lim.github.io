@@ -132,12 +132,15 @@ class EventCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '$monthAbbrev ${event.day}, ${info.year}${hasTime ? ' • ${event.time}' : ''}',
+                      event.dateTbd
+                          ? app.t('popover.tbd')
+                          : '$monthAbbrev ${event.day}, ${info.year}${hasTime ? ' • ${event.time}' : ''}',
                       style: TextStyle(fontSize: 12, color: colors.mutedForeground),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (!event.isPlayed && target.isAfter(DateTime.now())) ...[
+                    // No countdown to an unconfirmed date.
+                    if (!event.isPlayed && !event.dateTbd && target.isAfter(DateTime.now())) ...[
                       const SizedBox(height: 4),
                       CountdownText(target: target),
                     ],

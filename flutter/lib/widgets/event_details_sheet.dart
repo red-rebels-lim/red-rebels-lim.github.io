@@ -199,8 +199,8 @@ class _EventDetails extends StatelessWidget {
             ),
         ],
 
-        // ── Competition / matchday — played football only ──
-        if (_isFootballPlayed) ...[
+        // ── Competition / matchday — played football + upcoming league (web parity) ──
+        if (_isFootballPlayed || event.competition == Competition.league) ...[
           const SizedBox(height: 4),
           Text(
             [
@@ -227,6 +227,7 @@ class _EventDetails extends StatelessWidget {
             ),
             if (event.venue != null) _InfoChip(icon: '📍', label: app.venueName(event.venue!)),
             if (!_isFootballPlayed && hasTime) _InfoChip(icon: '⏰', label: event.time),
+            if (!event.isPlayed && event.dateTbd) _InfoChip(icon: '📅', label: app.t('popover.tbd')),
             if (event.isCup) const _CupChip(),
             if (event.isFriendly) const _FriendlyChip(),
           ],

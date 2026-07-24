@@ -94,6 +94,9 @@ export function generateIcsString(
 
     for (const ev of events) {
       if (!ev.sport) continue;
+      // Draw fixtures without a confirmed date stay out of subscribed calendars
+      // until the CFA publishes the real date (the scraper clears the flag).
+      if (ev.dateTbd) continue;
       const cfg = sportConfig[ev.sport as keyof typeof sportConfig];
       const isMeeting = ev.sport === 'meeting';
 

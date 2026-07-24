@@ -26,13 +26,29 @@ const FOTMOB_TEAM_NAME_MAP: Record<string, string> = {
   'iraklis gerolakkou': 'ΗΡΑΚΛΗΣ ΓΕΡΟΛΑΚΚΟΥ',
   'karmiotissa pano polemidion': 'ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ',
   'karmiotissa': 'ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ',
-  'krasava ypsonas fc': 'ΚΡΑΣΑΒΑ ΥΨΩΝΑ',
-  'krasava ypsonas': 'ΚΡΑΣΑΒΑ ΥΨΩΝΑ',
+  // 26/27 First Division: values are the CFA draw name forms (news/53562) so
+  // fallback fixtures line up with the CFA-form entries in events.ts.
+  'krasava ypsonas fc': 'KRASAVA Ε.Ν. Y',
+  'krasava ypsonas': 'KRASAVA Ε.Ν. Y',
   'meap nisou': 'ΜΕΑΠ ΠΕΡΑ ΧΩΡΙΟΥ ΝΗΣΟΥ',
   'omonia 29 maiou': 'ΑΛΣ ΟΜΟΝΟΙΑ 29 Μ',
   'paeek': 'ΠΑΕΕΚ ΚΕΡΥΝΕΙΑΣ',
   'po achyronas-onisilos': 'Π.Ο. ΑΧΥΡΩΝΑΣ ΟΝΗΣΙΛΟΣ',
   'spartakos kitiou': 'ΣΠΑΡΤΑΚΟΣ ΚΙΤΙΟΥ',
+  'olympiakos nicosia': 'ΟΛΥΜΠΙΑΚΟΣ ΛΕΥΚΩΣΙΑΣ',
+  'aek larnaca': 'ΑΕΚ ΛΑΡΝΑΚΑΣ',
+  'ael limassol': 'ΑΕΛ ΛΕΜΕΣΟΥ',
+  'ael': 'ΑΕΛ ΛΕΜΕΣΟΥ',
+  'anorthosis famagusta': 'ΑΝΟΡΘΩΣΗ ΑΜΜΟΧΩΣΤΟΥ',
+  'anorthosis': 'ΑΝΟΡΘΩΣΗ ΑΜΜΟΧΩΣΤΟΥ',
+  'apoel nicosia': 'ΑΠΟΕΛ ΛΕΥΚΩΣΙΑΣ',
+  'apoel': 'ΑΠΟΕΛ ΛΕΥΚΩΣΙΑΣ',
+  'apollon limassol': 'ΑΠΟΛΛΩΝΑΣ ΛΕΜΕΣΟΥ',
+  'pafos fc': 'ΠΑΦΟΣ FC',
+  'pafos': 'ΠΑΦΟΣ FC',
+  'omonia nicosia': 'ΟΜΟΝΟΙΑ ΛΕΥΚΩΣΙΑΣ',
+  'omonia aradippou': 'ΟΜΟΝΟΙΑ ΑΡΑΔΙΠΠΟΥ',
+  'aris limassol': 'ΑΡΗΣ ΛΕΜΕΣΟΥ',
 };
 
 // Raw fixture shape from FotMob team page.

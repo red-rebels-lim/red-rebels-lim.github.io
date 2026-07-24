@@ -171,13 +171,13 @@ void main() {
     testWidgets('skipped this launch when a deep-link eventKey is pending', (tester) async {
       final app = await boot(
         tester,
-        pendingEventKey: 'july-21-football-men-AKS 1947 BUSKO-ZDROJ',
+        pendingEventKey: 'march-5-football-men-ΚΑΡΜΙΩΤΙΣΣΑ ΠΟΛΕΜΙΔΙΩΝ',
       );
 
       expect(find.text('Swipe to Navigate'), findsNothing);
-      // Deep-link sheet won — upcoming friendly, so the header is the
+      // Deep-link sheet won — upcoming draw fixture, so the header is the
       // fixture title rather than MATCH RESULT.
-      expect(find.textContaining('BUSKO-ZDRÓJ'), findsWidgets);
+      expect(find.textContaining('KARMIOTISSA'), findsWidgets);
       expect(app.introSeen, isFalse); // not flagged — may show next launch
 
       await tester.pumpWidget(const SizedBox());

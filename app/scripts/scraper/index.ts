@@ -110,6 +110,7 @@ export interface SportEvent {
   reportEN?: string;
   reportEL?: string;
   matchday?: number;
+  dateTbd?: boolean;
   duration?: string;
   scorers?: Array<{ name: string; minute: string; team: 'home' | 'away'; type?: 'pen' | 'og' }>;
   bookings?: Array<{ name: string; minute: string; team: 'home' | 'away'; card: 'yellow' | 'red' }>;
@@ -712,6 +713,28 @@ export function normalizeOpponent(opponent: string): string {
   return opponent.toUpperCase().replace(/\s*\(Γ\)\s*$/, '').trim();
 }
 
+/**
+ * Aggressive normalisation for matching draw-announcement name forms against
+ * fixtures-page forms — CFA punctuates inconsistently across its own pages
+ * (e.g. "ΠΑΦΟΣ FC" vs "ΠΑΦΟΣ F.C.", "KRASAVA Ε.Ν. Y" vs "KRASAVA Ε.Ν.Y.").
+ */
+export function normalizeOpponentFuzzy(opponent: string): string {
+  return normalizeOpponent(opponent).replace(/[\s.]+/g, '');
+}
+
+/**
+ * Resolve a season-relative month bucket + day to a concrete date, using the
+ * same July–June season convention as isEventInPast().
+ */
+export function monthDayToSeasonDate(monthName: string, day: number, now: Date = new Date()): Date | null {
+  const monthNum = MONTH_NAME_TO_NUM[monthName];
+  if (!monthNum) return null;
+  const currentMonth = now.getMonth() + 1;
+  const seasonEndYear = currentMonth >= 7 ? now.getFullYear() + 1 : now.getFullYear();
+  const eventYear = monthNum >= 7 ? seasonEndYear - 1 : seasonEndYear;
+  return new Date(eventYear, monthNum - 1, day);
+}
+
 export function fixtureToEvent(fixture: Fixture): { monthName: string; event: SportEvent } | null {
   const parsed = parseFixtureDate(fixture.date);
   if (!parsed) return null;
@@ -757,6 +780,7 @@ interface ChangeLog {
   scoreUpdated: string[];
   timeUpdated: string[];
   venueUpdated: string[];
+  dateConfirmed: string[];
   unchanged: number;
 }
 
@@ -809,6 +833,70 @@ function mergeExistingWithScraped(
   return existingEvent;
 }
 
+/**
+ * Re-date draw fixtures once the real date is published.
+ *
+ * Entries added from the CFA draw announcement carry `dateTbd: true` and sit on
+ * their matchday window's start date. They can't match a scraped fixture by the
+ * exact `month|day|sport|opponent` key, so before the per-month merge runs this
+ * pre-pass moves each of them onto the scraped fixture's real day/month, letting
+ * the normal merge then update time/venue/score in place instead of duplicating.
+ *
+ * A scraped fixture adopts a TBD entry when sport, home/away and (fuzzily
+ * normalised) opponent match and the real date falls within ±10 days of the
+ * anchor — real dates land inside their matchday window, and the reverse
+ * fixture is months away, so this is unambiguous.
+ */
+export const DATE_TBD_TOLERANCE_MS = 10 * 24 * 3600 * 1000;
+
+export function confirmTbdDates(
+  existingEvents: Record<string, SportEvent[]>,
+  scrapedByMonth: Record<string, SportEvent[]>,
+  changes: ChangeLog,
+  now: Date = new Date(),
+): void {
+  const existingKeys = new Set<string>();
+  for (const [monthName, events] of Object.entries(existingEvents)) {
+    for (const e of events) {
+      existingKeys.add(`${monthName}|${e.day}|${e.sport}|${normalizeOpponent(e.opponent)}`);
+    }
+  }
+
+  for (const [monthName, scrapedList] of Object.entries(scrapedByMonth)) {
+    for (const scraped of scrapedList) {
+      const exactKey = `${monthName}|${scraped.day}|${scraped.sport}|${normalizeOpponent(scraped.opponent)}`;
+      if (existingKeys.has(exactKey)) continue;
+
+      const scrapedDate = monthDayToSeasonDate(monthName, scraped.day, now);
+      if (!scrapedDate) continue;
+
+      for (const [tbdMonth, events] of Object.entries(existingEvents)) {
+        const idx = events.findIndex(e => {
+          if (!e.dateTbd || e.sport !== scraped.sport || e.location !== scraped.location) return false;
+          if (normalizeOpponentFuzzy(e.opponent) !== normalizeOpponentFuzzy(scraped.opponent)) return false;
+          const anchorDate = monthDayToSeasonDate(tbdMonth, e.day, now);
+          return anchorDate !== null &&
+            Math.abs(anchorDate.getTime() - scrapedDate.getTime()) <= DATE_TBD_TOLERANCE_MS;
+        });
+        if (idx === -1) continue;
+
+        const [entry] = events.splice(idx, 1);
+        entry.day = scraped.day;
+        // Adopt the fixtures page's exact name form so future exact keys line up
+        entry.opponent = scraped.opponent;
+        delete entry.dateTbd;
+        if (!existingEvents[monthName]) existingEvents[monthName] = [];
+        existingEvents[monthName].push(entry);
+        existingKeys.add(exactKey);
+        changes.dateConfirmed.push(
+          `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${scraped.day}: ${scraped.sport} vs ${scraped.opponent} (matchday ${entry.matchday ?? '?'})`
+        );
+        break;
+      }
+    }
+  }
+}
+
 function updateCalendarData(fixtures: Fixture[]): Record<string, SportEvent[]> {
   const existingEvents = loadExistingEvents();
   const hadScrapedEvents = Object.values(existingEvents)
@@ -818,6 +906,7 @@ function updateCalendarData(fixtures: Fixture[]): Record<string, SportEvent[]> {
     scoreUpdated: [],
     timeUpdated: [],
     venueUpdated: [],
+    dateConfirmed: [],
     unchanged: 0,
   };
 
@@ -829,6 +918,8 @@ function updateCalendarData(fixtures: Fixture[]): Record<string, SportEvent[]> {
     if (!scrapedByMonth[result.monthName]) scrapedByMonth[result.monthName] = [];
     scrapedByMonth[result.monthName].push(result.event);
   }
+
+  confirmTbdDates(existingEvents, scrapedByMonth, changes);
 
   const allMonths = [
     'july', 'august', 'september', 'october', 'november', 'december',
@@ -928,8 +1019,17 @@ function updateCalendarData(fixtures: Fixture[]): Record<string, SportEvent[]> {
     }
   }
 
+  if (changes.dateConfirmed.length > 0) {
+    console.log();
+    console.log(`📅 DRAW DATES CONFIRMED (${changes.dateConfirmed.length}):`);
+    for (const event of changes.dateConfirmed) {
+      console.log(`   ↻ ${event}`);
+    }
+  }
+
   const totalChanges = changes.added.length + changes.scoreUpdated.length +
-                       changes.timeUpdated.length + changes.venueUpdated.length;
+                       changes.timeUpdated.length + changes.venueUpdated.length +
+                       changes.dateConfirmed.length;
 
   console.log();
   if (totalChanges === 0) {

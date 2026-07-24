@@ -239,7 +239,12 @@
       "Korona Kielce": "Korona Kielce",
       "Radomiak Radom": "Radomiak Radom",
       "Termalica": "Termalica Bruk-Bet",
-      "Enosis Neon Paralimni": "Ένωση Νέων Παραλιμνίου"
+      "Enosis Neon Paralimni": "Ένωση Νέων Παραλιμνίου",
+      "Olympiakos Nicosia": "Ολυμπιακός Λευκωσίας",
+      "Apollon Limassol": "Απόλλων Λεμεσού",
+      "Pafos FC": "Πάφος FC",
+      "Omonia Aradippou": "Ομόνοια Αραδίππου",
+      "Aris Limassol": "Άρης Λεμεσού"
     },
     "players": {},
     "leagues": {
@@ -424,7 +429,7 @@
     "loss": "Ήττα",
     "completed": "Ολοκληρωμένο",
     "upcoming": "Επερχόμενο",
-    "tbd": "ΑΚ",
+    "tbd": "Θα ανακοινωθεί",
     "matchResult": "ΑΠΟΤΕΛΕΣΜΑ ΑΓΩΝΑ",
     "goalscorers": "ΣΚΟΡΕΡ",
     "bookings": "ΚΑΡΤΕΣ",

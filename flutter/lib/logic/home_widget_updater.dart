@@ -65,7 +65,12 @@ String _sportKey(Sport sport) => switch (sport) {
 Future<void> updateNextMatchWidget(AppState app) async {
   try {
     final greek = app.language == 'el';
-    final upcoming = app.events.upcomingFrom(DateTime.now());
+    // Draw fixtures without a confirmed date carry no kickoff to count down
+    // to — the widget shows the next *confirmed* fixture instead.
+    final upcoming = app.events
+        .upcomingFrom(DateTime.now())
+        .where((de) => !de.event.dateTbd)
+        .toList();
     final entries = [for (final de in upcoming) _matchEntry(app, de)];
 
     // Header + empty-state copy reuse existing web i18n keys verbatim; the

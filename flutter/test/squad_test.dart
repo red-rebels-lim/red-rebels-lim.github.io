@@ -193,14 +193,20 @@ void main() {
   testWidgets('Player with no appearances shows the empty-sheet panel', (
     tester,
   ) async {
-    // Season start against the live bundle: zero played matches.
+    // Giorgos Christodoulou has no lineup/sub/scorer entry in the bundle
+    // (the July friendlies gave most of the squad an appearance already).
     await tester.pumpWidget(wrap(const SquadPage()));
     await tester.pump();
 
-    await tester.tap(find.text('ALBERTO VARO LARA'));
+    await tester.scrollUntilVisible(
+      find.text('GIORGOS CHRISTODOULOU'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('GIORGOS CHRISTODOULOU'));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('#1 ALBERTO VARO LARA'), findsOneWidget);
+    expect(find.textContaining('#6 GIORGOS CHRISTODOULOU'), findsOneWidget);
     expect(find.text('PLAYED'), findsNothing);
 
     await tester.pumpWidget(const SizedBox());

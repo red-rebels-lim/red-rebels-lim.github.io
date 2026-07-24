@@ -104,7 +104,9 @@ export function UpcomingEventCard({ event, monthName, onClick }: UpcomingEventCa
           {event.title}
         </h4>
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          {t(`months.${monthName}`).slice(0, 3)} {event.day}, {monthMap[monthName].year} {time ? `\u2022 ${time}` : ''}
+          {event.dateTbd
+            ? t('popover.tbd')
+            : <>{t(`months.${monthName}`).slice(0, 3)} {event.day}, {monthMap[monthName].year} {time ? `\u2022 ${time}` : ''}</>}
         </p>
       </div>
 

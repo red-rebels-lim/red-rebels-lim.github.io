@@ -30,6 +30,7 @@ function parseEvent(eventData: {
   bookings?: CalendarEvent['bookings'];
   duration?: string;
   matchday?: number;
+  dateTbd?: boolean;
   lineup?: CalendarEvent['lineup'];
   subs?: CalendarEvent['subs'];
   sets?: CalendarEvent['sets'];
@@ -74,6 +75,7 @@ function parseEvent(eventData: {
     bookings: eventData.bookings,
     duration: eventData.duration,
     matchday: eventData.matchday,
+    dateTbd: eventData.dateTbd,
     lineup: eventData.lineup,
     subs: eventData.subs,
     sets: eventData.sets,
