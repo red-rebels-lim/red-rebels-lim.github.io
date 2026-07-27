@@ -322,10 +322,18 @@ export const eventsData: EventsData = {
       sport: "football-men",
       location: "away",
       opponent: "TERMALICA",
-      time: "15:00",
+      time: "13:00",
       logo: "images/team_logos/TERMALICA.webp",
-      status: "upcoming",
+      status: "played",
+      score: "1-1",
       competition: "friendly",
+      scorers: [
+        {
+          name: "Β. Βασιλάκκας",
+          minute: "",
+          team: "away"
+        }
+      ],
       lineup: {
         home: [],
         away: [
@@ -368,6 +376,54 @@ export const eventsData: EventsData = {
         {
           playerOn: "Denys Vakulyk",
           playerOff: "Dániel Kovács",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Παναγιώτης Αρτύματας",
+          playerOff: "Αλέξαντρος Μιχαήλ",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Jordi Quintillà",
+          playerOff: "Γιώργος Χριστοδούλου",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Γιάννης Γερολέμου",
+          playerOff: "Χρήστος Γιούσης",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Alberto Varo Lara",
+          playerOff: "Denys Vakulyk",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Κώστας Χαραλάμπους",
+          playerOff: "Κωνσταντίνος Ηλία",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Samuel Grandsir",
+          playerOff: "Παναγιώτης Λούκα",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Florent Hanin",
+          playerOff: "Jose Artiles",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Β. Βασιλάκκας",
+          playerOff: "Άντρεας Δημητρίου",
           minute: "",
           team: "away"
         }
