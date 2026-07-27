@@ -217,6 +217,19 @@ export const players: Player[] = [
     dateOfBirth: '2008-08-09',
     nationality: 'Cyprus',
   },
+  {
+    key: 'andreas_panagiotou_filiotis',
+    sport: 'football-men',
+    active: true,
+    nameEl: 'Αντρέας Παναγιώτου Φιλιώτης',
+    nameEn: 'Andreas Panagiotou Filiotis',
+    position: 'DEF',
+    subPosition: 'Wing',
+    dateOfBirth: '1995-05-31',
+    nationality: 'Cyprus',
+    photoUrl: '/images/players/andreas_panagiotou_filiotis.webp',
+    joinedDate: '2026-07-24',
+  },
   // Midfielders
   {
     key: 'giorgos_christodoulou',
@@ -465,6 +478,7 @@ export const players: Player[] = [
     nationality: 'Greece',
     photoUrl: '/images/players/christos_giousis.webp',
     joinedDate: '2026-07-10',
+    aliases: ['ΧΡΗΣΤΟΣ ΓΙΟΥΣΗΣ'],
   },
   {
     key: 'samuel_grandsir',

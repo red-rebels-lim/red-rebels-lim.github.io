@@ -15,6 +15,7 @@
 - Pre-season friendlies (club announcement 2026-07-17): 4 away games in Poland (Jul 21–27) and 4 vs Cypriot sides (Aug 5–15), with a new `friendly` competition type — sky badge in web and Flutter calendars, excluded from season stats, skipped by the reminder cron until kick-off times are announced
 - Team assets for the friendly opponents (AKS 1947 Busko-Zdrój, Korona Kielce, Radomiak Radom, Termalica, ENP, Krasava ENY) and for the newly promoted first-division opponents (Aris Lemesou, Ethnikos Achnas, Omonoia Aradippou, Pafos FC)
 - Braydon Manu to the squad (club announcement 2026-07-20): Ghanaian winger, ex-Darmstadt 98 / Hallescher FC, from Akritas Chlorakas — with Transfermarkt portrait, Flutter players.json regenerated
+- Andreas Panagiotou Filiotis to the squad (club announcement 2026-07-24): Cypriot right-back, ex-Omonia / Pafos / Apollon, from AEL Limassol on a 1+1 deal — with Transfermarkt portrait, Flutter players.json regenerated
 - First official training of 2026/27 as a calendar event (club announcement 2026-07-10): Friday 31 July, 19:00, Ammochostos stadium, open to fans — `meeting` event, preserved across scraper runs
 - Volleyball squads on the Squad page (source: neasalamina.com/volley-roster, 2026-07-20): 15 women + 13 men with photos, shirt numbers, and volleyball positions (Setters / Outside Hitters / Opposites / Middle Blockers / Liberos); a sport selector (same pills as the stats page) switches between the three teams in both web and Flutter — volleyball rows and sheets are bio-only until per-player volleyball stats exist
 

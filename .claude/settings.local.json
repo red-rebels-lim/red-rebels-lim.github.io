@@ -96,7 +96,12 @@
       "Read(//opt/homebrew/Caskroom/claude-code@latest/**)",
       "Read(//Library/Application Support/ClaudeCode/**)",
       "WebFetch(domain:www.transfermarkt.com)",
-      "WebFetch(domain:neasalamina.com)"
+      "WebFetch(domain:neasalamina.com)",
+      "Bash(git -C /Users/ageorgiou/projects/red-rebels-lim.github.io diff --stat app/src/data/events.ts)",
+      "Bash(git -C /Users/ageorgiou/projects/red-rebels-lim.github.io show HEAD:app/src/i18n/en.json)",
+      "Bash(git -C /Users/ageorgiou/projects/red-rebels-lim.github.io show HEAD:app/src/i18n/el.json)",
+      "Bash(git -C /Users/ageorgiou/projects/red-rebels-lim.github.io log --oneline -2 -- flutter/assets/data/events.json)",
+      "Bash(git -C /Users/ageorgiou/projects/red-rebels-lim.github.io show HEAD:flutter/assets/data/events.json)"
     ]
   },
   "enableAllProjectMcpServers": true,
