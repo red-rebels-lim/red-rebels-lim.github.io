@@ -172,20 +172,206 @@ export const eventsData: EventsData = {
       sport: "football-men",
       location: "away",
       opponent: "RADOMIAK RADOM",
-      time: "",
+      time: "13:30",
       logo: "images/team_logos/RADOMIAK_RADOM.webp",
-      status: "upcoming",
-      competition: "friendly"
+      status: "played",
+      score: "2-3",
+      competition: "friendly",
+      scorers: [
+        {
+          name: "JORDI QUINTILLÀ",
+          minute: "48",
+          team: "away"
+        },
+        {
+          name: "ΧΡΗΣΤΟΣ ΓΙΟΥΣΗΣ",
+          minute: "64",
+          team: "away"
+        },
+        {
+          name: "MANU",
+          minute: "66",
+          team: "home"
+        },
+        {
+          name: "MANU",
+          minute: "77",
+          team: "home"
+        },
+        {
+          name: "ΠΑΝΑΓΙΩΤΗΣ ΛΟΥΚΑ",
+          minute: "90",
+          team: "away"
+        }
+      ],
+      lineup: {
+        home: [],
+        away: [
+          {
+            name: "Alberto Varo Lara"
+          },
+          {
+            name: "Γιώργος Βικτώρος"
+          },
+          {
+            name: "Παναγιώτης Αρτύματας"
+          },
+          {
+            name: "Βασίλειος Λαμπρόπουλος"
+          },
+          {
+            name: "Florent Hanin"
+          },
+          {
+            name: "Γιώργος Χριστοδούλου"
+          },
+          {
+            name: "Aloïs Confais"
+          },
+          {
+            name: "Γιάννης Γερολέμου"
+          },
+          {
+            name: "Samuel Grandsir"
+          },
+          {
+            name: "Alex Guti"
+          },
+          {
+            name: "Darío Poveda"
+          }
+        ]
+      },
+      subs: [
+        {
+          playerOn: "Κώστας Χαραλάμπους",
+          playerOff: "Γιώργος Βικτώρος",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Aldair Djalo Balde",
+          playerOff: "Alex Guti",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Dániel Kovács",
+          playerOff: "Alberto Varo Lara",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Αλέξαντρος Μιχαήλ",
+          playerOff: "Βασίλειος Λαμπρόπουλος",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Άντρεας Δημητρίου",
+          playerOff: "Florent Hanin",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Κωνσταντίνος Ηλία",
+          playerOff: "Γιώργος Χριστοδούλου",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Jordi Quintillà",
+          playerOff: "Aloïs Confais",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Jose Artiles",
+          playerOff: "Γιάννης Γερολέμου",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Χρήστος Γιούσης",
+          playerOff: "Samuel Grandsir",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Παναγιώτης Λούκα",
+          playerOff: "Darío Poveda",
+          minute: "46",
+          team: "away"
+        },
+        {
+          playerOn: "Λ. Αντωνίου",
+          playerOff: "Παναγιώτης Αρτύματας",
+          minute: "",
+          team: "away"
+        },
+        {
+          playerOn: "Β. Βασιλάκκας",
+          playerOff: "Χρήστος Γιούσης",
+          minute: "",
+          team: "away"
+        }
+      ]
     },
     {
       day: 27,
       sport: "football-men",
       location: "away",
       opponent: "TERMALICA",
-      time: "",
+      time: "15:00",
       logo: "images/team_logos/TERMALICA.webp",
       status: "upcoming",
-      competition: "friendly"
+      competition: "friendly",
+      lineup: {
+        home: [],
+        away: [
+          {
+            name: "Dániel Kovács"
+          },
+          {
+            name: "Άντρεας Δημητρίου"
+          },
+          {
+            name: "Αλέξαντρος Μιχαήλ"
+          },
+          {
+            name: "Λ. Αντωνίου"
+          },
+          {
+            name: "Κωνσταντίνος Ηλία"
+          },
+          {
+            name: "Γιώργος Χριστοδούλου"
+          },
+          {
+            name: "Aloïs Confais"
+          },
+          {
+            name: "Jose Artiles"
+          },
+          {
+            name: "Aldair Djalo Balde"
+          },
+          {
+            name: "Χρήστος Γιούσης"
+          },
+          {
+            name: "Παναγιώτης Λούκα"
+          }
+        ]
+      },
+      subs: [
+        {
+          playerOn: "Denys Vakulyk",
+          playerOff: "Dániel Kovács",
+          minute: "",
+          team: "away"
+        }
+      ]
     },
     {
       day: 31,
