@@ -42,6 +42,13 @@ void main() {
       expect('Βόλεϊ'.upperNoTonos, 'ΒΟΛΕΪ');
       expect('Statistics'.upperNoTonos, 'STATISTICS');
     });
+
+    test('drops the tonos from dialytika+tonos combos (QA #18)', () {
+      // ΐ (U+0390) has no simple uppercase mapping, so a bare toUpperCase()
+      // keeps the accent — the widget rendered ΜΑΪ́ΟΥ for Ομόνοια 29ης Μαΐου.
+      expect('Ομόνοια 29ης Μαΐου'.upperNoTonos, 'ΟΜΟΝΟΙΑ 29ΗΣ ΜΑΪΟΥ');
+      expect('πρωΐ'.upperNoTonos, 'ΠΡΩΪ');
+    });
   });
 
   testWidgets('settings shell: language row toggles EN↔EL, version has v prefix (SET-01/07/09)', (tester) async {

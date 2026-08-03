@@ -26,7 +26,9 @@ void showPlayerSheet(
       maxChildSize: 0.95,
       builder: (context, controller) => SingleChildScrollView(
         controller: controller,
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+        // Edge-to-edge: keep the last content above the gesture bar.
+        padding: EdgeInsets.fromLTRB(
+            20, 12, 20, 32 + MediaQuery.viewPaddingOf(context).bottom),
         child: _PlayerDetails(player: player, stats: stats),
       ),
     ),

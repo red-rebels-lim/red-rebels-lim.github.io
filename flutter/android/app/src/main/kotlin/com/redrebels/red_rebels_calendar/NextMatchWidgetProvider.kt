@@ -245,7 +245,8 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
                 views.setViewVisibility(R.id.widget_compact_row, View.GONE)
                 views.setViewVisibility(R.id.widget_title, View.VISIBLE)
                 val title = SpannableStringBuilder()
-                title.append("VS $awayTeam")
+                // Meetings carry no opponent — show their title instead of "VS …".
+                title.append(if (awayTeam.isEmpty()) homeTeam else "VS $awayTeam")
                 val metaStart = title.length
                 title.append("  · $dateLabel")
                 title.setSpan(RelativeSizeSpan(11f / 19f), metaStart, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -268,13 +269,18 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
             views.setViewVisibility(R.id.widget_cup_chip, if (isCup) View.VISIBLE else View.GONE)
 
             views.setTextViewText(R.id.widget_team_home, homeTeam)
-            // "VS" runs smaller and muted inside the equal-weight away line.
-            val awayLine = SpannableStringBuilder()
-            awayLine.append("VS ")
-            awayLine.setSpan(RelativeSizeSpan(13f / 23f), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            awayLine.setSpan(ForegroundColorSpan(muted), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            awayLine.append(awayTeam)
-            views.setTextViewText(R.id.widget_team_away, awayLine)
+            if (awayTeam.isEmpty()) {
+                // Meeting entry (training, presentation): no opponent line.
+                views.setViewVisibility(R.id.widget_team_away, View.GONE)
+            } else {
+                // "VS" runs smaller and muted inside the equal-weight away line.
+                val awayLine = SpannableStringBuilder()
+                awayLine.append("VS ")
+                awayLine.setSpan(RelativeSizeSpan(13f / 23f), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                awayLine.setSpan(ForegroundColorSpan(muted), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                awayLine.append(awayTeam)
+                views.setTextViewText(R.id.widget_team_away, awayLine)
+            }
 
             views.setTextViewText(R.id.widget_cup_chip, cupLabel)
             val meta = StringBuilder("$sportLabel\n$dateLabel")

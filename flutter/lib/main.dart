@@ -30,6 +30,16 @@ import 'widgets/mobile_header.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Phone-first product (PRD NG5): portrait only, like the PWA is used.
+  // Android additionally pins it in the manifest, iOS in Info.plist — this
+  // covers hot-restart and any codepath that resets the bindings.
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // Full immersive: hide status AND navigation bars on launch. An edge swipe
+  // reveals them translucently and they auto-hide again (sticky). The red
+  // status-bar strip in HomeShell sizes from the top inset, so it collapses
+  // on its own while the bars are hidden.
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   // The app must boot without Firebase (emulator without Play Services,
   // stripped builds) — push just stays unavailable via FcmTokenProvider's
   // internal guards. The timeout caps the ONLY unbounded await on the
@@ -192,6 +202,9 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       // Refresh on foreground, at most once per AppState.minSyncInterval.
       context.read<AppState>().syncEvents(throttle: true);
+      // The system may restore the bars while backgrounded — re-enter
+      // immersive mode (see main()).
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     }
   }
 
@@ -199,11 +212,24 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // Web parity (QA GLB-01): the PWA keeps a red status bar with light icons
     // in every mode/theme — its `theme-color` meta is a hardcoded #E02520.
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return PopScope(
+      // Material bottom-nav convention (QA #14): system back returns to the
+      // start destination (Calendar) first; only a second back exits.
+      canPop: _index == 0,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) setState(() => _index = 0);
+      },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
+        // Edge-to-edge: the gesture bar floats over the app's own bottom
+        // nav — keep it transparent and match its icons to the theme.
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarContrastEnforced: false,
+        systemNavigationBarIconBrightness: dark ? Brightness.light : Brightness.dark,
       ),
       child: Stack(
       fit: StackFit.expand,
@@ -213,7 +239,12 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
           backgroundColor: Colors.transparent,
           body: Column(
               children: [
-                Container(height: MediaQuery.paddingOf(context).top, color: brandRed),
+                // With the system bars hidden (fullscreen design) the only
+                // top inset left is the camera cutout — let the stadium
+                // photo show through it and keep the header content just
+                // below, clear of the punch-hole. (The red strip existed to
+                // color the status bar, QA GLB-01; there is no bar anymore.)
+                SizedBox(height: MediaQuery.paddingOf(context).top),
                 MobileHeader(
                   showCalendarActions: _index == 0,
                   onBack: _index == 0 ? null : () => setState(() => _index = 0),
@@ -242,6 +273,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
           ),
         ),
       ],
+      ),
       ),
     );
   }

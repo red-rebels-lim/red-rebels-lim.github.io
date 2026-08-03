@@ -193,9 +193,17 @@ void main() {
   testWidgets('Player with no appearances shows the empty-sheet panel', (
     tester,
   ) async {
-    // Giorgos Christodoulou has no lineup/sub/scorer entry in the bundle
-    // (the July friendlies gave most of the squad an appearance already).
-    await tester.pumpWidget(wrap(const SquadPage()));
+    // The seeded feed credits only Alberto Varo Lara with an appearance, so
+    // Giorgos Christodoulou deterministically has none — independent of
+    // whatever the live bundle's fixtures look like on the day the test runs.
+    await tester.pumpWidget(ChangeNotifierProvider(
+      create: (_) =>
+          AppState(events: seededEvents, players: players, i18n: i18n, prefs: prefs),
+      child: MaterialApp(
+        theme: buildTheme('default', Brightness.light),
+        home: const Scaffold(body: SquadPage()),
+      ),
+    ));
     await tester.pump();
 
     await tester.scrollUntilVisible(

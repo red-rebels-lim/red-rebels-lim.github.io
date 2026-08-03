@@ -414,7 +414,28 @@ class _NotificationsCard extends StatelessWidget {
       final ok = await app.enablePush();
       if (!ok && context.mounted) _showError(context, app);
     } else {
-      await app.disablePush();
+      // Web parity (QA #17): SettingsPage.tsx window.confirm()s before
+      // unsubscribing — "Turn Off" / "Keep On".
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(app.t('settings.confirmUnsubscribe')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(app.t('settings.cancel')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                app.t('settings.confirm'),
+                style: const TextStyle(color: accentRed, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+      );
+      if (confirmed == true) await app.disablePush();
     }
   }
 

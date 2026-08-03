@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +25,8 @@ void main() {
   late PlayersRepository players;
   late I18n i18n;
   late SharedPreferences prefs;
+  late EventsRepository gridEvents;
+  late String gridMonth;
 
   // Asset loading must happen outside testWidgets' fake-async zone or the
   // rootBundle futures never complete and the test times out.
@@ -32,6 +37,31 @@ void main() {
     players = await PlayersRepository.load();
     i18n = await I18n.load();
     prefs = await SharedPreferences.getInstance();
+
+    // Seeded feed for the grid tests: a day-21 fixture in two months far
+    // apart, so whichever ISN'T the current month drives the assertions.
+    // Using the live bundle made these tests calendar-dependent — on the
+    // current month the grid pre-selects today (CAL-07), and a matchday
+    // today would legitimately render the selected-day list.
+    const day21Fixture = {
+      'day': 21,
+      'sport': 'football-men',
+      'location': 'home',
+      'opponent': 'ΑΠΟΕΛ',
+      'time': '19:00',
+      'status': 'played',
+      'score': '1-0',
+      'competition': 'league',
+    };
+    final dir = await Directory.systemTemp.createTemp('grid-test');
+    final file = File('${dir.path}/events-cache.json');
+    await file.writeAsString(json.encode({
+      'november': [day21Fixture],
+      'april': [day21Fixture],
+    }));
+    gridEvents = await EventsRepository.load(cacheFile: () async => file);
+    gridMonth =
+        gridEvents.initialMonth(DateTime.now()) == 'november' ? 'april' : 'november';
   });
 
   Widget wrap(Widget child) => ChangeNotifierProvider(
@@ -170,10 +200,13 @@ void main() {
 
   /// Pumps the CalendarPage in grid view and navigates back to July
   /// (the 26/27 bundle opens with the July friendlies, e.g. day 21).
-  Future<void> pumpGridAtJuly(WidgetTester tester) async {
+  // Pumps the grid on the seeded month (guaranteed not the current month, so
+  // today-preselection can never interfere with the assertions below).
+  Future<void> pumpGridAtSeededMonth(WidgetTester tester) async {
     await tester.pumpWidget(
       ChangeNotifierProvider(
-        create: (_) => AppState(events: events, players: players, i18n: i18n, prefs: prefs),
+        create: (_) =>
+            AppState(events: gridEvents, players: players, i18n: i18n, prefs: prefs),
         child: MaterialApp(
           theme: buildTheme('default', Brightness.light),
           home: const Scaffold(body: CalendarPage()),
@@ -182,15 +215,18 @@ void main() {
     );
     await tester.pump();
 
-    final initialIndex = monthOrder.indexOf(events.initialMonth(DateTime.now()));
-    for (var i = 0; i < initialIndex; i++) {
-      await tester.tap(find.byTooltip(i18n.t('en', 'monthNav.previous')));
+    final from = monthOrder.indexOf(gridEvents.initialMonth(DateTime.now()));
+    final to = monthOrder.indexOf(gridMonth);
+    final tooltip =
+        i18n.t('en', to >= from ? 'monthNav.next' : 'monthNav.previous');
+    for (var i = 0; i < (to - from).abs(); i++) {
+      await tester.tap(find.byTooltip(tooltip));
       await tester.pumpAndSettle();
     }
   }
 
   testWidgets('Grid view shows no event list until a day is selected', (tester) async {
-    await pumpGridAtJuly(tester);
+    await pumpGridAtSeededMonth(tester);
 
     // Web parity: nothing below the grid before a selection — no full-month
     // list, no SELECTED DAY chip, no grid-mode empty state.
@@ -208,9 +244,9 @@ void main() {
   });
 
   testWidgets('Day cells with events carry no fill decoration', (tester) async {
-    await pumpGridAtJuly(tester);
+    await pumpGridAtSeededMonth(tester);
 
-    // July 21 has a bundled fixture; web renders event days exactly like
+    // Day 21 carries a seeded fixture; web renders event days exactly like
     // plain days (dots aside) — no background fill, no border.
     final cell = tester.widget<Container>(
       find
