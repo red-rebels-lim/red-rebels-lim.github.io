@@ -172,6 +172,29 @@ class AppState extends ChangeNotifier {
     return key;
   }
 
+  String? _pendingStatsTab;
+
+  /// Stats tab requested by the event sheet's "View All Statistics" CTA, so
+  /// a football sheet always lands on the football tab even when the stats
+  /// page (kept alive in the IndexedStack) last showed another sport
+  /// (QA task #12). Consumed once by the stats page.
+  ///
+  /// Must notify: the IndexedStack's children are const, so switching tabs
+  /// alone never rebuilds the stats page — only an AppState notification
+  /// reaches its context.watch (same reason pendingEventKey notifies).
+  set pendingStatsTab(String? tab) {
+    _pendingStatsTab = tab;
+    notifyListeners();
+  }
+
+  /// Clears and returns the pending stats tab. No notify — the consumer is
+  /// already mid-build when it takes the value.
+  String? consumePendingStatsTab() {
+    final tab = _pendingStatsTab;
+    _pendingStatsTab = null;
+    return tab;
+  }
+
   // ── Push notifications ────────────────────────────────────────────────
 
   late NotifPrefs _notifPrefs;

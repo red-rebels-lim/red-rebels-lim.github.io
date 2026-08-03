@@ -151,6 +151,33 @@ void main() {
     expect(saved[eventKeyKey], 'august-23-football-men-ΑΠΟΕΛ');
   });
 
+  test('meeting events ride the widget: title on the home line, no away side', () async {
+    final app = await appWith(cachePayload: json.encode({
+      'events': {
+        'august': [
+          {
+            'day': 10,
+            'sport': 'meeting',
+            'location': 'home',
+            'opponent': 'First Official Training 2026/27',
+            'time': '19:00',
+          },
+        ],
+      },
+    }));
+    await updateNextMatchWidget(app);
+
+    expect(saved[hasMatchKey], true);
+    expect(saved[homeTeamKey], 'FIRST OFFICIAL TRAINING 2026/27');
+    expect(saved[awayTeamKey], '', reason: 'meetings have no opponent line');
+    expect(saved[awayLogoKey], '');
+    expect(saved[homeLogoKey], 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp');
+    expect(saved[sportTextKey], 'EVENTS');
+    expect(saved[kickoffMillisKey],
+        DateTime(2026, 8, 10, 19, 0).millisecondsSinceEpoch);
+    expect(updateCalls, 1);
+  });
+
   test('cup fixture sets the chip flag; TBD time drops the clock', () async {
     final app = await appWith(cachePayload: augustPayload(competition: 'cup', time: ''));
     await updateNextMatchWidget(app);

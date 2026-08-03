@@ -58,7 +58,9 @@ class _EventSheetSurface extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+        // Edge-to-edge: keep the last content above the gesture bar.
+        padding: EdgeInsets.fromLTRB(
+            20, 0, 20, 32 + MediaQuery.viewPaddingOf(context).bottom),
         child: _EventDetails(event: event, monthName: monthName, resultStyle: style),
       ),
     );
@@ -304,6 +306,14 @@ class _EventDetails extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   final app = context.read<AppState>();
+                  // Land on the sport of THIS match (QA #12) — the stats
+                  // page otherwise keeps whatever tab it last showed.
+                  app.pendingStatsTab = switch (event.sport) {
+                    Sport.footballMen => 'football',
+                    Sport.volleyballMen => 'volleyball-men',
+                    Sport.volleyballWomen => 'volleyball-women',
+                    Sport.meeting => null,
+                  };
                   app.goToTab(1);
                   Navigator.of(context).pop();
                 },
@@ -382,14 +392,14 @@ class _EventDetails extends StatelessWidget {
         tabs.add((label: app.t('popover.sets'), content: _SetsTab(event: event)));
       }
       if (event.vbScorers?.isNotEmpty ?? false) {
-        tabs.add((label: app.t('popover.vbScorers'), content: _VbScorersTab(event: event, isHome: isHome)));
+        tabs.add((label: app.t('popover.vbScorers'), content: _VbScorersTab(event: event)));
       }
     } else {
       if (event.scorers?.isNotEmpty ?? false) {
-        tabs.add((label: app.t('popover.goalscorers'), content: _ScorersTab(event: event, isHome: isHome)));
+        tabs.add((label: app.t('popover.goalscorers'), content: _ScorersTab(event: event)));
       }
       if (event.bookings?.isNotEmpty ?? false) {
-        tabs.add((label: app.t('popover.bookings'), content: _BookingsTab(event: event, isHome: isHome)));
+        tabs.add((label: app.t('popover.bookings'), content: _BookingsTab(event: event)));
       }
     }
     if ((event.lineupHome?.isNotEmpty ?? false) || (event.lineupAway?.isNotEmpty ?? false)) {
@@ -420,7 +430,24 @@ class _MeetingDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text('📅', textAlign: TextAlign.center, style: TextStyle(fontSize: 56)),
+          // Same close X as the match sheets — the meeting layout skipped
+          // the shared top bar and shipped without one (web shows it on
+          // every popover).
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              const Text('📅', textAlign: TextAlign.center, style: TextStyle(fontSize: 56)),
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: const Icon(Icons.close, size: 20),
+                  color: theme.colorScheme.onSurfaceVariant,
+                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 16),
           Text(
             matchTitle(app, event),
@@ -621,17 +648,16 @@ class _SetsTab extends StatelessWidget {
 }
 
 class _VbScorersTab extends StatelessWidget {
-  const _VbScorersTab({required this.event, required this.isHome});
+  const _VbScorersTab({required this.event});
 
   final SportEvent event;
-  final bool isHome;
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final theme = Theme.of(context);
     final sorted = [...event.vbScorers!]..sort((a, b) => b.points.compareTo(a.points));
-    bool onLeft(VolleyballScorer s) => isHome ? s.team == 'home' : s.team == 'away';
+    bool onLeft(VolleyballScorer s) => s.team == 'home';
     return Column(
       children: [
         for (final s in sorted)
@@ -658,10 +684,9 @@ class _VbScorersTab extends StatelessWidget {
 }
 
 class _ScorersTab extends StatelessWidget {
-  const _ScorersTab({required this.event, required this.isHome});
+  const _ScorersTab({required this.event});
 
   final SportEvent event;
-  final bool isHome;
 
   @override
   Widget build(BuildContext context) {
@@ -669,7 +694,7 @@ class _ScorersTab extends StatelessWidget {
     final theme = Theme.of(context);
     final sorted = [...event.scorers!]
       ..sort((a, b) => (int.tryParse(a.minute) ?? 0).compareTo(int.tryParse(b.minute) ?? 0));
-    bool onLeft(Scorer s) => isHome ? s.team == 'home' : s.team == 'away';
+    bool onLeft(Scorer s) => s.team == 'home';
 
     String suffix(Scorer s) => s.type == 'pen'
         ? ' (${app.t('popover.pen')})'
@@ -724,10 +749,9 @@ class _ScorersTab extends StatelessWidget {
 }
 
 class _BookingsTab extends StatelessWidget {
-  const _BookingsTab({required this.event, required this.isHome});
+  const _BookingsTab({required this.event});
 
   final SportEvent event;
-  final bool isHome;
 
   @override
   Widget build(BuildContext context) {
@@ -735,7 +759,7 @@ class _BookingsTab extends StatelessWidget {
     final theme = Theme.of(context);
     final sorted = [...event.bookings!]
       ..sort((a, b) => (int.tryParse(a.minute) ?? 0).compareTo(int.tryParse(b.minute) ?? 0));
-    bool onLeft(Booking b) => isHome ? b.team == 'home' : b.team == 'away';
+    bool onLeft(Booking b) => b.team == 'home';
 
     Widget card(Booking b) => Container(
           width: 12,
@@ -794,10 +818,12 @@ class _LineupsTab extends StatelessWidget {
     final own = app.teamName(teamName);
     final homeName = isHome ? own : opponent;
     final awayName = isHome ? opponent : own;
-    // Left column = match home team (same mapping as the web LineupsSection);
-    // the away column mirrors: position first, then name, then number.
-    final left = (isHome ? event.lineupHome : event.lineupAway) ?? const <LineupPlayer>[];
-    final right = (isHome ? event.lineupAway : event.lineupHome) ?? const <LineupPlayer>[];
+    // Left column = match home team, matching the header row above it
+    // (QA task #11 — the old ours-left mapping put our XI under the
+    // opponent's name on away matches). The away column mirrors: position
+    // first, then name, then number.
+    final left = event.lineupHome ?? const <LineupPlayer>[];
+    final right = event.lineupAway ?? const <LineupPlayer>[];
 
     Widget column(String header, List<LineupPlayer> players, {required bool alignEnd}) => Expanded(
           child: Column(

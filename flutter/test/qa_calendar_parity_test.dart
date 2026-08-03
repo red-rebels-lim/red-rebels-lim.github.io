@@ -222,16 +222,16 @@ void main() {
       await tester.tap(find.text('open'));
       await tester.pumpAndSettle();
 
-      // Web formula: `isLeft = isHome ? team==='home' : team==='away'`.
-      // This is an away match, so team='away' scorers sit LEFT and
-      // team='home' scorers sit RIGHT.
+      // Columns follow the header row: match home team LEFT, away RIGHT —
+      // regardless of which side we are (QA task #11; the old ours-left
+      // formula put our players under the opponent's header on away games).
       final homeScorer = find.textContaining('Home Striker');
       final awayScorer = find.textContaining('Away Striker');
       expect(homeScorer, findsOneWidget);
       expect(awayScorer, findsOneWidget);
       final width = tester.getSize(find.byType(MaterialApp)).width;
-      expect(tester.getCenter(awayScorer).dx, lessThan(width / 2));
-      expect(tester.getCenter(homeScorer).dx, greaterThan(width / 2));
+      expect(tester.getCenter(homeScorer).dx, lessThan(width / 2));
+      expect(tester.getCenter(awayScorer).dx, greaterThan(width / 2));
 
       await tester.pumpWidget(const SizedBox());
     });

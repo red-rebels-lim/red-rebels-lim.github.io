@@ -66,10 +66,17 @@ Future<void> updateNextMatchWidget(AppState app) async {
   try {
     final greek = app.language == 'el';
     // Draw fixtures without a confirmed date carry no kickoff to count down
-    // to — the widget shows the next *confirmed* fixture instead.
+    // to — the widget shows the next *confirmed* fixture instead. Meetings
+    // (trainings, presentations) count too: they carry no match status, so
+    // they are picked straight from the season list (user request 2026-07-30).
+    final now = DateTime.now();
     final upcoming = app.events
-        .upcomingFrom(DateTime.now())
-        .where((de) => !de.event.dateTbd)
+        .allEvents()
+        .where((de) =>
+            (de.event.status == MatchStatus.upcoming || de.event.isMeeting) &&
+            !de.event.dateTbd &&
+            de.date.add(const Duration(hours: 2)).isAfter(now))
+        .take(6)
         .toList();
     final entries = [for (final de in upcoming) _matchEntry(app, de)];
 
@@ -126,11 +133,14 @@ Map<String, Object?> _matchEntry(AppState app, DatedEvent de) {
       : 'assets/images/team_logos/ΝΕΑ_ΣΑΛΑΜΙΝΑ.webp';
   final opponentLogo = e.logo == null ? '' : 'assets/${e.logo}';
   final venue = e.venue;
+  // Meetings have no opponent: the title rides the home line, the away line
+  // stays empty and the provider hides its "VS …" row and away crest.
+  final isMeeting = e.isMeeting;
   return {
-    homeTeamKey: isHome ? own : opponent,
-    awayTeamKey: isHome ? opponent : own,
-    homeLogoKey: isHome ? ownLogo : opponentLogo,
-    awayLogoKey: isHome ? opponentLogo : ownLogo,
+    homeTeamKey: isMeeting ? app.meetingTitle(e.opponent).upperNoTonos : (isHome ? own : opponent),
+    awayTeamKey: isMeeting ? '' : (isHome ? opponent : own),
+    homeLogoKey: isMeeting ? ownLogo : (isHome ? ownLogo : opponentLogo),
+    awayLogoKey: isMeeting ? '' : (isHome ? opponentLogo : ownLogo),
     sportTextKey: app.t(_sportKey(e.sport)).upperNoTonos,
     dateLabelKey: '$monthAbbrev ${e.day}$time'.upperNoTonos,
     venueKey: venue == null ? '' : app.venueName(venue).upperNoTonos,

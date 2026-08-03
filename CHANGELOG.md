@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Added
+- Re-runnable Flutter QA suite: 34 scenario-tagged integration tests + 7 synthetic datasets (`flutter/integration_test/`), `tool/qa/` orchestration scripts (run-suite, dataset injection, device pass, artifact collection), native-apps TEST-PLAN, and the 2026-07-27 test-run report (findings #11–#20; binary evidence kept local)
+- Flutter app: portrait-only lock and full-immersive fullscreen (Android + iOS), with gesture-bar insets on event/player/filter sheets
+
+### Fixed
+- Away matches showed our lineup/scorers/bookings under the opponent's column header — columns now follow the header row (match home team left) on **both** web `EventPopover` and Flutter event sheet (QA #11)
+- Flutter: event-sheet "View All Statistics" now opens the stats page on the match's sport instead of the last-selected tab (QA #12)
+- Flutter: calendar grid no longer swallows vertical drags — grid view is one page-level scrollable, so the selected-day list is reachable on short screens (QA #19)
+- Flutter: system back on Stats/Squad/Settings pops to Calendar first instead of exiting the app (QA #14)
+- Flutter: Greek uppercase tonos-stripping now handles ΐ/ΰ (widget showed "ΜΑΪ́ΟΥ") (QA #18)
+- Flutter: confirm dialog before disabling push notifications, matching web (QA #17)
+- Flutter: 2 stale unit tests now run on seeded fixtures instead of live-data assumptions (QA #13)
+
 ### Removed
 - FotMob feed on the stats page (League Standing, Top Scorers, League Rankings) — it kept serving last season after promotion; the sections show the standard empty state until they are generated from our own saved match results (planned)
 

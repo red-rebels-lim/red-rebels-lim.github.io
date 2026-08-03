@@ -125,6 +125,10 @@ const visualThemes = ['default', 'brutalism', 'cinema', 'neon'];
 extension DisplayUpper on String {
   static const _tonosMap = {
     'Ά': 'Α', 'Έ': 'Ε', 'Ή': 'Η', 'Ί': 'Ι', 'Ό': 'Ο', 'Ύ': 'Υ', 'Ώ': 'Ω',
+    // ΐ/ΰ (dialytika+tonos) have no simple uppercase mapping — Dart's
+    // toUpperCase() leaves them as-is (Μαΐου → ΜΑΐΟΥ). Map them to the
+    // dialytika-only capitals (QA task #18: the widget showed ΜΑΪ́ΟΥ).
+    'ΐ': 'Ϊ', 'ΰ': 'Ϋ',
   };
 
   String get upperNoTonos {

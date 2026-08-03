@@ -1,6 +1,10 @@
 # Logs
 logs
 *.log
+
+# QA test-run binary artifacts (reports are committed, evidence stays local)
+docs/native-apps/test-runs/**/shots/
+docs/native-apps/test-runs/**/*.mp4
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

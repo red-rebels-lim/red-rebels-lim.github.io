@@ -42,14 +42,15 @@ function InfoChip({ icon, label }: { icon: string; label: string }) {
 
 // ── Goalscorers two-column layout ─────────────────────────────────────────────
 
-function ScorersSection({ scorers, penLabel, ogLabel, isHome }: {
+function ScorersSection({ scorers, penLabel, ogLabel }: {
   scorers: Scorer[];
   penLabel: string;
   ogLabel: string;
-  isHome: boolean;
 }) {
-  // isLeft: whether a scorer appears in the left column (match home team side)
-  const isLeft = (s: Scorer) => isHome ? s.team === 'home' : s.team === 'away';
+  // Columns follow the header row: match home team left, away right — for
+  // away games the old ours-left mapping filed our scorers under the
+  // opponent's name (QA 2026-07 task #11).
+  const isLeft = (s: Scorer) => s.team === 'home';
   const sorted = [...scorers].sort((a, b) => parseInt(a.minute) - parseInt(b.minute));
 
   return (
@@ -88,8 +89,8 @@ function ScorersSection({ scorers, penLabel, ogLabel, isHome }: {
 
 // ── Bookings two-column layout ────────────────────────────────────────────────
 
-function BookingsSection({ bookings, isHome }: { bookings: Booking[]; isHome: boolean }) {
-  const isLeft = (b: Booking) => isHome ? b.team === 'home' : b.team === 'away';
+function BookingsSection({ bookings }: { bookings: Booking[] }) {
+  const isLeft = (b: Booking) => b.team === 'home';
   const sorted = [...bookings].sort((a, b) => parseInt(a.minute) - parseInt(b.minute));
 
   return (
@@ -128,16 +129,15 @@ function LineupsSection({
   lineup,
   homeTeam,
   awayTeam,
-  isHome,
 }: {
   lineup: { home: LineupPlayer[]; away: LineupPlayer[] };
   homeTeam: string;
   awayTeam: string;
-  isHome: boolean;
 }) {
-  // left = match home team players, right = match away team players
-  const left  = isHome ? lineup.home : lineup.away;
-  const right = isHome ? lineup.away : lineup.home;
+  // left = match home team players, right = match away team players —
+  // matching the header row above (QA 2026-07 task #11)
+  const left  = lineup.home;
+  const right = lineup.away;
   const rows = Math.max(left.length, right.length);
   return (
     <div>
@@ -249,8 +249,8 @@ function SetsSection({ sets, setLabel }: { sets: VolleyballSet[]; setLabel: stri
 
 // ── Volleyball top scorers layout ─────────────────────────────────────────────
 
-function VbScorersSection({ scorers, isHome }: { scorers: VolleyballScorer[]; isHome: boolean }) {
-  const isLeft = (s: VolleyballScorer) => isHome ? s.team === 'home' : s.team === 'away';
+function VbScorersSection({ scorers }: { scorers: VolleyballScorer[] }) {
+  const isLeft = (s: VolleyballScorer) => s.team === 'home';
   const sorted = [...scorers].sort((a, b) => b.points - a.points);
   return (
     <div className="space-y-1">
@@ -337,12 +337,10 @@ function SwipeTabs({
 
 function MatchDetailTabs({
   event,
-  isHome,
   homeTeam,
   awayTeam,
 }: {
   event: CalendarEvent;
-  isHome: boolean;
   homeTeam: string;
   awayTeam: string;
 }) {
@@ -385,7 +383,6 @@ function MatchDetailTabs({
             scorers={event.scorers}
             penLabel={t('popover.pen')}
             ogLabel={t('popover.og')}
-            isHome={isHome}
           />
         </TabsContent>
       )}
@@ -393,7 +390,7 @@ function MatchDetailTabs({
       {/* Football: Bookings */}
       {event.bookings && event.bookings.length > 0 && !isVolleyball && (
         <TabsContent value="bookings">
-          <BookingsSection bookings={event.bookings} isHome={isHome} />
+          <BookingsSection bookings={event.bookings} />
         </TabsContent>
       )}
 
@@ -407,7 +404,7 @@ function MatchDetailTabs({
       {/* Volleyball: Top Scorers */}
       {event.vbScorers && event.vbScorers.length > 0 && isVolleyball && (
         <TabsContent value="vbScorers">
-          <VbScorersSection scorers={event.vbScorers} isHome={isHome} />
+          <VbScorersSection scorers={event.vbScorers} />
         </TabsContent>
       )}
 
@@ -418,7 +415,6 @@ function MatchDetailTabs({
             lineup={event.lineup}
             homeTeam={homeTeam}
             awayTeam={awayTeam}
-            isHome={isHome}
           />
         </TabsContent>
       )}
@@ -644,7 +640,7 @@ export function EventPopover({ event, open, onClose }: EventPopoverProps) {
           )}
 
           {/* ── Tabbed match details ── */}
-          {event.status === 'played' && <MatchDetailTabs event={event} isHome={isHome} homeTeam={homeTeam} awayTeam={awayTeam} />}
+          {event.status === 'played' && <MatchDetailTabs event={event} homeTeam={homeTeam} awayTeam={awayTeam} />}
 
           {/* ── Match report ── */}
           {event.status === 'played' && (

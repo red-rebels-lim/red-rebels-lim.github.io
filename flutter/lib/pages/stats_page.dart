@@ -29,6 +29,10 @@ class _StatsPageState extends State<StatsPage> {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
+    // The event sheet's CTA routes here with the match's sport (QA #12);
+    // mid-build take like the calendar's consumePendingEventKey.
+    final requestedTab = app.consumePendingStatsTab();
+    if (requestedTab != null) _activeTab = requestedTab;
     final colors = AppColors.of(context);
     final dark = Theme.of(context).brightness == Brightness.dark;
 

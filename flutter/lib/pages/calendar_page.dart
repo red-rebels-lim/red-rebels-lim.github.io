@@ -145,29 +145,32 @@ class _CalendarPageState extends State<CalendarPage> {
       final events = app.filteredEventsFor(monthName)..sort((a, b) => a.day.compareTo(b.day));
       final dayEvents =
           selectedDay == null ? const <SportEvent>[] : events.where((e) => e.day == selectedDay).toList();
-      return Column(
+      // One page-level scrollable (web parity: the document scrolls). The
+      // previous fixed Column collapsed the selected-day list to zero height
+      // on short screens (~533dp), leaving grid selections unreachable; a
+      // vertical drag on the grid now scrolls the page while horizontal
+      // month swipes stay with the PageView (QA task #19).
+      return ListView(
+        padding: EdgeInsets.zero,
         children: [
           panel,
           // Web UpcomingEventsList: hidden entirely when the selected day has
           // no events; label chip + cards on the bare background.
-          Expanded(
-            child: dayEvents.isEmpty
-                ? const SizedBox.shrink()
-                : ListView(
-                    padding: const EdgeInsets.fromLTRB(8, 24, 8, 16),
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: _SelectedDayChip(label: app.t('calendar.selectedDay')),
-                      ),
-                      const SizedBox(height: 12),
-                      for (final (i, e) in dayEvents.indexed) ...[
-                        if (i > 0) const SizedBox(height: 12),
-                        EventCard(event: e, monthName: monthName),
-                      ],
-                    ],
-                  ),
-          ),
+          if (dayEvents.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 24, 8, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _SelectedDayChip(label: app.t('calendar.selectedDay')),
+                  const SizedBox(height: 12),
+                  for (final (i, e) in dayEvents.indexed) ...[
+                    if (i > 0) const SizedBox(height: 12),
+                    EventCard(event: e, monthName: monthName),
+                  ],
+                ],
+              ),
+            ),
         ],
       );
     }
@@ -209,7 +212,11 @@ void showCalendarFilterSheet(BuildContext context) {
     isScrollControlled: true,
     constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
     builder: (_) => SingleChildScrollView(
-      child: _FilterSheet(initial: app.filters, onApply: app.setFilters),
+      // Edge-to-edge: keep the Apply row above the gesture bar.
+      child: SafeArea(
+        top: false,
+        child: _FilterSheet(initial: app.filters, onApply: app.setFilters),
+      ),
     ),
   );
 }
