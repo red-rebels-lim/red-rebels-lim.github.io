@@ -1,6 +1,6 @@
 # SOLO-10: Article reader + share
 
-**Status:** todo
+**Status:** done (PR #114, merged 2026-08-04)
 **Batch:** news (`feat/news-feed`)
 **Depends on:** SOLO-09
 **Estimated scope:** Medium

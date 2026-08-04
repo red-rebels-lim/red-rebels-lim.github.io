@@ -1,6 +1,6 @@
 # SOLO-05: Rebrand straggler sweep
 
-**Status:** todo
+**Status:** done (PR #113, merged 2026-08-04)
 **Batch:** rebrand (`feat/solosalamina-rebrand`)
 **Depends on:** SOLO-02, SOLO-03, SOLO-04
 **Estimated scope:** Small

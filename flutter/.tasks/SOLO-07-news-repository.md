@@ -1,6 +1,6 @@
 # SOLO-07: NewsRepository
 
-**Status:** todo
+**Status:** done (PR #114, merged 2026-08-04)
 **Batch:** news (`feat/news-feed`)
 **Depends on:** SOLO-06
 **Estimated scope:** Small/Medium

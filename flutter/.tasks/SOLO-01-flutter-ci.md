@@ -1,6 +1,6 @@
 # SOLO-01: Flutter CI workflow
 
-**Status:** todo
+**Status:** done (PR #112, merged 2026-08-04)
 **Batch:** ci (`chore/flutter-ci`)
 **Depends on:** -
 **Estimated scope:** Small

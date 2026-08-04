@@ -1,6 +1,6 @@
 # SOLO-15: Icon regeneration + logo art
 
-**Status:** blocked (needs user-supplied SoloSalamina logos)
+**Status:** done with site-sourced assets (PR #115) — user-provided originals can swap in later
 **Batch:** icons (`feat/solosalamina-icons`)
 **Depends on:** user logo delivery
 **Estimated scope:** Small/Medium
