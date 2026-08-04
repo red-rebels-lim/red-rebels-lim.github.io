@@ -21,8 +21,8 @@ class BottomNav extends StatelessWidget {
     final items = [
       (Icons.calendar_month_outlined, Icons.calendar_month, app.t('nav.calendar')),
       (Icons.bar_chart_outlined, Icons.bar_chart, app.t('nav.stats')),
-      (Icons.people_alt_outlined, Icons.people_alt, app.t('nav.squad', 'Squad')),
       (Icons.newspaper_outlined, Icons.newspaper, app.t('nav.news', 'News')),
+      (Icons.people_alt_outlined, Icons.people_alt, app.t('nav.squad', 'Squad')),
       (Icons.settings_outlined, Icons.settings, app.t('nav.settings')),
     ];
 
@@ -37,17 +37,26 @@ class BottomNav extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 10, 24, 10),
+          padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // Equal fifths with each item centered in its slot — labels of
+              // different widths keep the icon centers evenly distributed.
+              // heightFactor pins the bar to the item's intrinsic height: a
+              // bare Center would expand into the Scaffold's loose bounded
+              // constraints and swallow the whole screen.
               for (var i = 0; i < items.length; i++)
-                _NavItem(
-                  icon: i == index ? items[i].$2 : items[i].$1,
-                  label: items[i].$3,
-                  active: i == index,
-                  colors: colors,
-                  onTap: () => onSelect(i),
+                Expanded(
+                  child: Align(
+                    heightFactor: 1.0,
+                    child: _NavItem(
+                      icon: i == index ? items[i].$2 : items[i].$1,
+                      label: items[i].$3,
+                      active: i == index,
+                      colors: colors,
+                      onTap: () => onSelect(i),
+                    ),
+                  ),
                 ),
             ],
           ),
@@ -99,9 +108,16 @@ class _NavItem extends StatelessWidget {
                     : null,
               ),
               const SizedBox(height: 3),
-              Text(
-                label.upperNoTonos,
-                style: condensed(size: 10, color: color, letterSpacing: 1.2),
+              // Long labels (STATISTICS, ΗΜΕΡΟΛΟΓΙΟ) shrink to fit their
+              // fifth of the bar instead of wrapping.
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label.upperNoTonos,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: condensed(size: 10, color: color, letterSpacing: 1.2),
+                ),
               ),
             ],
           ),

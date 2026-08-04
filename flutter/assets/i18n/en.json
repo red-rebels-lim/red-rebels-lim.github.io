@@ -18,6 +18,7 @@
   "news": {
     "title": "News",
     "empty": "No news yet — pull down to refresh.",
+    "emptyFiltered": "No news in this category.",
     "openOriginal": "Read on solosalamina.com",
     "share": "Share article"
   },
@@ -96,6 +97,7 @@
   },
   "filters": {
     "title": "Event Filters",
+    "category": "Category",
     "addFilter": "+ Filter",
     "column": "Column",
     "value": "Value",

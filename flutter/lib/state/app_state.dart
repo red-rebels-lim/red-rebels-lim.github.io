@@ -25,9 +25,7 @@ class AppState extends ChangeNotifier {
     this.httpClientFactory,
     this.push,
   }) : _prefs = prefs {
-    // Default to the device locale (Greek device → Greek), like the web app.
-    _language = prefs.getString('language') ??
-        (PlatformDispatcher.instance.locale.languageCode == 'el' ? 'el' : 'en');
+    _language = resolveLanguage(prefs);
     _themeMode = switch (prefs.getString('themeMode')) {
       'light' => ThemeMode.light,
       'dark' => ThemeMode.dark,
@@ -46,6 +44,13 @@ class AppState extends ChangeNotifier {
     _notifPrefs = _loadNotifPrefs(prefs);
     _sportFilters = _loadSportFilters(prefs);
   }
+
+  /// Stored language, defaulting to the device locale (Greek device → Greek),
+  /// like the web app. Shared with main.dart so pre-AppState loads (news
+  /// cache) resolve the same language.
+  static String resolveLanguage(SharedPreferences prefs) =>
+      prefs.getString('language') ??
+      (PlatformDispatcher.instance.locale.languageCode == 'el' ? 'el' : 'en');
 
   /// Local storage key for the NotifPrefs JSON snapshot (renders the saved
   /// notification preferences on restart without a network round-trip).
@@ -300,7 +305,8 @@ class AppState extends ChangeNotifier {
       final results = await Future.wait([
         events.refresh(client: httpClientFactory?.call()),
         players.refresh(client: httpClientFactory?.call()),
-        if (news case final news?) news.refresh(client: httpClientFactory?.call()),
+        if (news case final news?)
+          news.refresh(client: httpClientFactory?.call(), language: _language),
       ]);
       final ok = results.every((r) => r);
       _lastSyncFailed = !ok;
@@ -329,6 +335,16 @@ class AppState extends ChangeNotifier {
     _prefs.setString('language', lang);
     notifyListeners();
     widgetRefresher?.call();
+    // Re-fetch the news feed in the new language (fire-and-forget; the list
+    // just re-renders when translated content arrives). Gated like syncEvents
+    // so tests never hit the network.
+    if (syncEnabled) {
+      news
+          ?.refresh(client: httpClientFactory?.call(), language: lang)
+          .then((changed) {
+        if (changed) notifyListeners();
+      });
+    }
   }
 
   void setThemeMode(ThemeMode mode) {
@@ -362,6 +378,17 @@ class AppState extends ChangeNotifier {
   }
 
   void clearFilters() => setFilters(const FilterState());
+
+  String? _newsCategory;
+
+  /// Selected news category (WordPress category name, Greek as-is) or null
+  /// for all. Session-only, like the calendar [filters].
+  String? get newsCategory => _newsCategory;
+
+  void setNewsCategory(String? category) {
+    _newsCategory = category;
+    notifyListeners();
+  }
 
   late ({bool football, bool volleyball}) _sportFilters;
 
