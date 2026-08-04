@@ -6,9 +6,9 @@ library;
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:red_rebels_calendar/logic/squad_stats.dart';
-import 'package:red_rebels_calendar/models/events.dart';
-import 'package:red_rebels_calendar/models/players.dart';
+import 'package:solo_salamina/logic/squad_stats.dart';
+import 'package:solo_salamina/models/events.dart';
+import 'package:solo_salamina/models/players.dart';
 
 const roster = <Player>[
   Player(

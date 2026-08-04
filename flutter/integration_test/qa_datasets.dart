@@ -11,7 +11,7 @@
 /// season window cannot be represented and are skipped by the builders.
 library;
 
-import 'package:red_rebels_calendar/data/constants.dart';
+import 'package:solo_salamina/data/constants.dart';
 
 const _monthNames = <int, String>{
   1: 'january', 2: 'february', 3: 'march', 4: 'april', 5: 'may', 6: 'june',

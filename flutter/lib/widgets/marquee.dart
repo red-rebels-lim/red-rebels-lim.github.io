@@ -39,11 +39,11 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
 
     // (label, accent) pairs — web Marquee items.
     final items = [
-      (app.t('common.appName', 'Red Rebels'), true),
+      (app.t('common.appName', 'SoloSalamina'), true),
       (app.t('sports.footballMen'), false),
       (app.t('sports.volleyballMen'), false),
       (app.t('sports.volleyballWomen'), false),
-      (app.t('common.rebels', 'RED REBELS'), true),
+      (app.t('common.rebels', 'SOLOSALAMINA'), true),
     ];
 
     // CSS .marquee-inner span: 11px bold uppercase, 3px tracking, 48px gaps.

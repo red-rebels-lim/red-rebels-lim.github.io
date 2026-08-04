@@ -8,7 +8,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart' show addTearDown;
 
-import 'package:red_rebels_calendar/data/events_repository.dart';
+import 'package:solo_salamina/data/events_repository.dart';
 
 /// Builds a repository whose data is exactly [months]. Must be called from
 /// inside a test body (registers the temp-dir cleanup via [addTearDown]).

@@ -1,4 +1,4 @@
-// Firebase configuration for the Red Rebels apps.
+// Firebase configuration for the SoloSalamina apps.
 //
 // Hand-generated from android/app/google-services.json and
 // ios/Runner/GoogleService-Info.plist (what `flutterfire configure` would

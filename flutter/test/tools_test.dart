@@ -4,15 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:red_rebels_calendar/data/events_repository.dart';
-import 'package:red_rebels_calendar/data/players_repository.dart';
-import 'package:red_rebels_calendar/i18n/i18n.dart';
-import 'package:red_rebels_calendar/main.dart';
-import 'package:red_rebels_calendar/models/events.dart';
-import 'package:red_rebels_calendar/pages/settings_page.dart';
-import 'package:red_rebels_calendar/state/app_state.dart';
-import 'package:red_rebels_calendar/theme.dart';
-import 'package:red_rebels_calendar/widgets/event_details_sheet.dart';
+import 'package:solo_salamina/data/events_repository.dart';
+import 'package:solo_salamina/data/players_repository.dart';
+import 'package:solo_salamina/i18n/i18n.dart';
+import 'package:solo_salamina/main.dart';
+import 'package:solo_salamina/models/events.dart';
+import 'package:solo_salamina/pages/settings_page.dart';
+import 'package:solo_salamina/state/app_state.dart';
+import 'package:solo_salamina/theme.dart';
+import 'package:solo_salamina/widgets/event_details_sheet.dart';
 
 void main() {
   late EventsRepository events;
@@ -78,7 +78,7 @@ void main() {
       final app = appState();
       if (pendingEventKey != null) app.pendingEventKey = pendingEventKey;
       await tester.pumpWidget(
-        ChangeNotifierProvider.value(value: app, child: const RedRebelsApp()),
+        ChangeNotifierProvider.value(value: app, child: const SoloSalaminaApp()),
       );
       // First frame triggers the post-frame tour check; second pump runs the
       // dialog route animation (no pumpAndSettle — countdown timers).
@@ -90,7 +90,7 @@ void main() {
     testWidgets('appears on fresh prefs and Skip flags it as seen', (tester) async {
       final app = await boot(tester);
 
-      expect(find.text('1 / 7'), findsOneWidget);
+      expect(find.text('1 / 8'), findsOneWidget);
       expect(find.text('Swipe to Navigate'), findsOneWidget); // web step 1
       expect(find.text('Skip'), findsOneWidget);
       expect(find.text('Back'), findsNothing); // hidden on the first step
@@ -108,7 +108,7 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     });
 
-    testWidgets('Next walks all 7 web steps, Back returns, Got it! finishes', (tester) async {
+    testWidgets('Next walks all 8 steps, Back returns, Got it! finishes', (tester) async {
       final app = await boot(tester);
 
       const titles = [
@@ -119,9 +119,10 @@ void main() {
         'Enable Notifications',
         'Change Visual Theme',
         'Export Calendar',
+        'Club News',
       ];
       for (var i = 0; i < titles.length; i++) {
-        expect(find.text('${i + 1} / 7'), findsOneWidget);
+        expect(find.text('${i + 1} / 8'), findsOneWidget);
         expect(find.text(titles[i]), findsOneWidget);
         if (i < titles.length - 1) {
           await tester.tap(find.text('Next'));
@@ -132,7 +133,7 @@ void main() {
       // Back steps backwards from the last step.
       await tester.tap(find.text('Back'));
       await tester.pump();
-      expect(find.text('Change Visual Theme'), findsOneWidget);
+      expect(find.text('Export Calendar'), findsOneWidget);
       await tester.tap(find.text('Next'));
       await tester.pump();
 
@@ -141,7 +142,7 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
 
-      expect(find.text('Export Calendar'), findsNothing);
+      expect(find.text('Club News'), findsNothing);
       expect(app.introSeen, isTrue);
 
       await tester.pumpWidget(const SizedBox());
@@ -150,7 +151,7 @@ void main() {
     testWidgets('renders the Greek copy verbatim', (tester) async {
       await boot(tester, language: 'el');
 
-      expect(find.text('1 / 7'), findsOneWidget);
+      expect(find.text('1 / 8'), findsOneWidget);
       expect(find.text('Σύρετε για Πλοήγηση'), findsOneWidget);
       expect(find.text('Παράλειψη'), findsOneWidget);
       expect(find.text('Επόμενο'), findsOneWidget);

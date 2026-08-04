@@ -5,8 +5,8 @@ library;
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:red_rebels_calendar/data/constants.dart';
-import 'package:red_rebels_calendar/models/events.dart';
+import 'package:solo_salamina/data/constants.dart';
+import 'package:solo_salamina/models/events.dart';
 
 SportEvent eventOn(int day, String time) => SportEvent(
       day: day,

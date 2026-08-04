@@ -5,8 +5,9 @@ import '../models/events.dart';
 
 const teamName = 'Νέα Σαλαμίνα';
 
-/// Deployed web app origin — serves the live data feeds (events.json,
-/// players.json) and player portraits.
+/// Origin serving the live data feeds (events.json, players.json) and player
+/// portraits. TODO(sunset): re-point once data hosting moves off the old
+/// red-rebels.com Worker (SoloSalamina pivot — web app is being sunset).
 const siteBaseUrl = 'https://red-rebels.com';
 const seasonStartYear = 2026;
 const seasonEndYear = 2027;

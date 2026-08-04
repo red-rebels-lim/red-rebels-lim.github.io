@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
-import 'package:red_rebels_calendar/data/parse_client.dart';
+import 'package:solo_salamina/data/parse_client.dart';
 
 void main() {
   /// Records every request and replies with [status] / [body].
