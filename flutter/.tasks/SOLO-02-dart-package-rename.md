@@ -1,6 +1,6 @@
 # SOLO-02: Dart package rename → solo_salamina
 
-**Status:** todo
+**Status:** done (PR #113, merged 2026-08-04)
 **Batch:** rebrand (`feat/solosalamina-rebrand`)
 **Depends on:** -
 **Estimated scope:** Small (mechanical, wide diff)

@@ -1,6 +1,6 @@
 # SOLO-06: NewsArticle model + fixture
 
-**Status:** todo
+**Status:** done (PR #114, merged 2026-08-04)
 **Batch:** news (`feat/news-feed`)
 **Depends on:** -
 **Estimated scope:** Small

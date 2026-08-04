@@ -16,21 +16,21 @@ later). Full plan context: the SOLO task files below.
 
 | ID | Title | Batch | Status | Depends on |
 |----|-------|-------|--------|------------|
-| SOLO-01 | Flutter CI workflow | ci | todo | - |
-| SOLO-02 | Dart package rename → solo_salamina | rebrand | todo | - |
-| SOLO-03 | App class + display names | rebrand | todo | SOLO-02 |
-| SOLO-04 | i18n brand strings ⚠️ Greek sign-off | rebrand | todo | - |
-| SOLO-05 | Rebrand straggler sweep | rebrand | todo | SOLO-02..04 |
-| SOLO-06 | NewsArticle model + fixture | news | todo | - |
-| SOLO-07 | NewsRepository | news | todo | SOLO-06 |
-| SOLO-08 | AppState news wiring | news | todo | SOLO-07 |
-| SOLO-09 | News list page + 5th tab ⚠️ | news | todo | SOLO-08 |
-| SOLO-10 | Article reader + share | news | todo | SOLO-09 |
-| SOLO-11 | Onboarding step + news page tests ⚠️ | news | todo | SOLO-10 |
+| SOLO-01 | Flutter CI workflow | ci | done (#112) | - |
+| SOLO-02 | Dart package rename → solo_salamina | rebrand | done (#113) | - |
+| SOLO-03 | App class + display names | rebrand | done (#113) | SOLO-02 |
+| SOLO-04 | i18n brand strings ⚠️ Greek sign-off | rebrand | done (#113) | - |
+| SOLO-05 | Rebrand straggler sweep | rebrand | done (#113) | SOLO-02..04 |
+| SOLO-06 | NewsArticle model + fixture | news | done (#114) | - |
+| SOLO-07 | NewsRepository | news | done (#114) | SOLO-06 |
+| SOLO-08 | AppState news wiring | news | done (#114) | SOLO-07 |
+| SOLO-09 | News list page + 5th tab ⚠️ | news | done (#114) | SOLO-08 |
+| SOLO-10 | Article reader + share | news | done (#114) | SOLO-09 |
+| SOLO-11 | Onboarding step + news page tests ⚠️ | news | done (#114) | SOLO-10 |
 | SOLO-12 | Android identity → com.solosalamina.app | ids | blocked | Firebase delivery |
 | SOLO-13 | iOS identity → com.solosalamina.app | ids | blocked | Firebase delivery |
 | SOLO-14 | firebase_options regen + QA script PKG | ids | blocked | SOLO-12, SOLO-13 |
-| SOLO-15 | Icon regeneration + logo art | icons | blocked | Logo delivery |
+| SOLO-15 | Icon regeneration + logo art | icons | done (#115, site assets) | - |
 
 ---
 

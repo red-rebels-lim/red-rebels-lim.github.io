@@ -1,6 +1,6 @@
 # SOLO-03: App class + display names
 
-**Status:** todo
+**Status:** done (PR #113, merged 2026-08-04)
 **Batch:** rebrand (`feat/solosalamina-rebrand`)
 **Depends on:** SOLO-02
 **Estimated scope:** Small

@@ -1,6 +1,6 @@
 # SOLO-11: Onboarding step + news page tests ⚠️ Greek sign-off
 
-**Status:** todo
+**Status:** done (PR #114, merged 2026-08-04)
 **Batch:** news (`feat/news-feed`)
 **Depends on:** SOLO-10
 **Estimated scope:** Small/Medium
