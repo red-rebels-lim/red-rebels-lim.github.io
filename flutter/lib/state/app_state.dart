@@ -133,6 +133,9 @@ class AppState extends ChangeNotifier {
   /// subtle stale-data indicator while this holds (FR-OFFLINE-2).
   bool get lastSyncFailed => _lastSyncFailed;
 
+  /// True while [syncEvents] is in flight (drives first-load spinners).
+  bool get syncing => _syncing;
+
   late String _language;
   late ThemeMode _themeMode;
   late String _visualTheme;
@@ -292,6 +295,7 @@ class AppState extends ChangeNotifier {
     }
     _syncing = true;
     _lastSyncAttempt = now;
+    notifyListeners(); // Surfaces first-load spinners while the fetch runs.
     try {
       final results = await Future.wait([
         events.refresh(client: httpClientFactory?.call()),

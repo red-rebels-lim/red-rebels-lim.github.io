@@ -8,11 +8,18 @@
     "calendar": "Calendar",
     "stats": "Statistics",
     "squad": "Squad",
+    "news": "News",
     "options": "Tools",
     "export": "Export (.ics)",
     "print": "Print",
     "install": "Install App",
     "settings": "Settings"
+  },
+  "news": {
+    "title": "News",
+    "empty": "No news yet — pull down to refresh.",
+    "openOriginal": "Read on solosalamina.com",
+    "share": "Share article"
   },
   "squad": {
     "colApps": "M",

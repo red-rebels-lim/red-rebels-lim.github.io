@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 
-/// Bottom navigation matching the web `BottomNav`: four tabs with 10px
-/// uppercase condensed labels, red active state, translucent bar in dark mode.
+/// Bottom navigation, ported from the web `BottomNav` (plus the News tab):
+/// 10px uppercase condensed labels, red active state, translucent bar in
+/// dark mode.
 class BottomNav extends StatelessWidget {
   const BottomNav({super.key, required this.index, required this.onSelect});
 
@@ -21,6 +22,7 @@ class BottomNav extends StatelessWidget {
       (Icons.calendar_month_outlined, Icons.calendar_month, app.t('nav.calendar')),
       (Icons.bar_chart_outlined, Icons.bar_chart, app.t('nav.stats')),
       (Icons.people_alt_outlined, Icons.people_alt, app.t('nav.squad', 'Squad')),
+      (Icons.newspaper_outlined, Icons.newspaper, app.t('nav.news', 'News')),
       (Icons.settings_outlined, Icons.settings, app.t('nav.settings')),
     ];
 

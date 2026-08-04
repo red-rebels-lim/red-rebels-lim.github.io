@@ -16,6 +16,7 @@ import 'logic/fcm_token_provider.dart';
 import 'logic/home_widget_updater.dart';
 import 'logic/push_registration.dart';
 import 'pages/calendar_page.dart';
+import 'pages/news_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/squad_page.dart';
 import 'pages/stats_page.dart';
@@ -263,6 +264,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                         CalendarPage(),
                         StatsPage(),
                         SquadPage(),
+                        NewsPage(),
                         SettingsPage(),
                       ],
                     ),
