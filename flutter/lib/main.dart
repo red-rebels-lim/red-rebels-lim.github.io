@@ -57,11 +57,13 @@ Future<void> main() async {
     // Boot on: FcmTokenProvider degrades to null/false on every call.
   }
 
+  final prefs = await SharedPreferences.getInstance();
   final events = await EventsRepository.load();
   final players = await PlayersRepository.load();
-  final news = await NewsRepository.load();
+  // Boot from the cache matching the app language, so a translated feed
+  // (once the site serves one) survives cold starts per language.
+  final news = await NewsRepository.load(language: AppState.resolveLanguage(prefs));
   final i18n = await I18n.load();
-  final prefs = await SharedPreferences.getInstance();
   final tokenProvider = FcmTokenProvider();
   final push = PushRegistration(
     // Disabled (silent no-op) when the build has no Back4App credentials.

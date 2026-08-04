@@ -13,7 +13,8 @@ void main() {
   final fixtureRaw = File('test/fixtures/wp_posts.json').readAsStringSync();
 
   late Directory tempDir;
-  Future<File?> cacheFile() async => File('${tempDir.path}/news-cache.json');
+  Future<File?> cacheFile(String language) async =>
+      File('${tempDir.path}/news-cache-$language.json');
 
   setUp(() async {
     tempDir = await Directory.systemTemp.createTemp('news-cache-test');
@@ -43,7 +44,7 @@ void main() {
     });
 
     test('corrupt cache falls back to empty', () async {
-      final file = (await cacheFile())!;
+      final file = (await cacheFile('el'))!;
       await file.writeAsString('{broken');
       final repo = await NewsRepository.load(cacheFile: cacheFile);
       expect(repo.articles, isEmpty);
@@ -97,6 +98,44 @@ void main() {
           (_) async => throw TimeoutException('slow', const Duration(seconds: 10)));
       expect(await repo.refresh(client: timingOut), isFalse);
       never.close();
+    });
+  });
+
+  group('language', () {
+    MockClient capturing(List<String> urls) => MockClient((req) async {
+          urls.add(req.url.toString());
+          return http.Response(fixtureRaw, 200,
+              headers: {'content-type': 'application/json; charset=utf-8'});
+        });
+
+    test('requests the feed in the given language, caches per language',
+        () async {
+      final repo = await NewsRepository.load(cacheFile: cacheFile);
+      final urls = <String>[];
+
+      expect(await repo.refresh(client: capturing(urls), language: 'en'),
+          isTrue);
+      expect(urls.single, contains('lang=en'));
+      expect(File('${tempDir.path}/news-cache-en.json').existsSync(), isTrue);
+      expect(File('${tempDir.path}/news-cache-el.json').existsSync(), isFalse);
+
+      expect(await repo.refresh(client: capturing(urls), language: 'el'),
+          isTrue);
+      expect(urls.last, contains('lang=el'));
+      expect(File('${tempDir.path}/news-cache-el.json').existsSync(), isTrue);
+    });
+
+    test('load reads the language-specific cache', () async {
+      final repo = await NewsRepository.load(cacheFile: cacheFile);
+      await repo.refresh(client: okClient(), language: 'en');
+
+      final en =
+          await NewsRepository.load(cacheFile: cacheFile, language: 'en');
+      expect(en.articles.length, 3);
+      // No Greek cache was written — Greek boot starts empty.
+      final el =
+          await NewsRepository.load(cacheFile: cacheFile, language: 'el');
+      expect(el.articles, isEmpty);
     });
   });
 }

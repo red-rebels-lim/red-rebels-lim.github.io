@@ -11,40 +11,48 @@ import '../models/news.dart';
 /// Follows the EventsRepository contract, minus the bundled asset: news has no
 /// meaningful ship-time snapshot, so a cold start without a cache file simply
 /// yields an empty list (the page shows its loading/error states instead).
+///
+/// The feed is requested in the app language via the standard `lang` query
+/// parameter (Polylang convention). Until the site installs a languages
+/// plugin the parameter is ignored and both languages serve the Greek
+/// originals — the moment translations go live, no app change is needed.
 class NewsRepository {
   NewsRepository._(this._articles, this._cacheFileProvider);
 
-  /// Latest 20 posts with embedded featured media + terms. v1 is a fixed
-  /// single page; a "load more" would append `&page=2` results in memory only.
-  static const remoteUrl =
-      'https://solosalamina.com/wp-json/wp/v2/posts?per_page=20&_embed=1';
+  /// Latest 20 posts with embedded featured media + terms, in [language].
+  /// v1 is a fixed single page; a "load more" would append `&page=2` results
+  /// in memory only.
+  static String remoteUrlFor(String language) =>
+      'https://solosalamina.com/wp-json/wp/v2/posts?per_page=20&_embed=1&lang=$language';
 
   static const _fetchTimeout = Duration(seconds: 10);
-  static const _cacheFileName = 'news-cache.json';
 
   List<NewsArticle> _articles;
   List<NewsArticle> get articles => _articles;
 
-  /// Resolves the cache file location; injectable for tests. May return null
-  /// (e.g. on platforms/tests where path_provider is unavailable) — caching
-  /// is then silently skipped.
-  final Future<File?> Function() _cacheFileProvider;
+  /// Resolves the cache file for a language; injectable for tests. May return
+  /// null (e.g. on platforms/tests where path_provider is unavailable) —
+  /// caching is then silently skipped.
+  final Future<File?> Function(String language) _cacheFileProvider;
 
-  static Future<File?> _defaultCacheFile() async {
+  static Future<File?> _defaultCacheFile(String language) async {
     try {
       final dir = await getApplicationDocumentsDirectory();
-      return File('${dir.path}/$_cacheFileName');
+      return File('${dir.path}/news-cache-$language.json');
     } catch (_) {
       return null; // Plugin unavailable (tests) — no cache.
     }
   }
 
-  /// Loads from the cache file when present and valid, else starts empty.
-  static Future<NewsRepository> load({Future<File?> Function()? cacheFile}) async {
+  /// Loads the [language] cache when present and valid, else starts empty.
+  static Future<NewsRepository> load({
+    Future<File?> Function(String language)? cacheFile,
+    String language = 'el',
+  }) async {
     final provider = cacheFile ?? _defaultCacheFile;
 
     try {
-      final file = await provider();
+      final file = await provider(language);
       if (file != null && await file.exists()) {
         final cached = _parsePayload(await file.readAsString());
         if (cached != null) return NewsRepository._(cached, provider);
@@ -56,15 +64,17 @@ class NewsRepository {
     return NewsRepository._(const [], provider);
   }
 
-  /// Fetches the live feed and swaps the in-memory list on success.
+  /// Fetches the live feed in [language] and swaps the in-memory list on
+  /// success.
   ///
   /// Returns true when new data was applied. Any failure (no network, bad
   /// status, malformed payload, timeout) returns false and leaves the current
   /// data untouched — it never throws.
-  Future<bool> refresh({http.Client? client}) async {
+  Future<bool> refresh({http.Client? client, String language = 'el'}) async {
     final c = client ?? http.Client();
     try {
-      final response = await c.get(Uri.parse(remoteUrl)).timeout(_fetchTimeout);
+      final response =
+          await c.get(Uri.parse(remoteUrlFor(language))).timeout(_fetchTimeout);
       if (response.statusCode != 200) return false;
 
       final raw = utf8.decode(response.bodyBytes);
@@ -72,7 +82,7 @@ class NewsRepository {
       if (parsed == null) return false;
 
       _articles = parsed;
-      await _persist(raw);
+      await _persist(raw, language);
       return true;
     } catch (_) {
       return false;
@@ -81,10 +91,10 @@ class NewsRepository {
     }
   }
 
-  /// Best-effort write of the raw feed payload to the cache file.
-  Future<void> _persist(String raw) async {
+  /// Best-effort write of the raw feed payload to the [language] cache file.
+  Future<void> _persist(String raw, String language) async {
     try {
-      final file = await _cacheFileProvider();
+      final file = await _cacheFileProvider(language);
       await file?.writeAsString(raw, flush: true);
     } catch (_) {
       // Caching is an optimisation — never let it break a refresh.

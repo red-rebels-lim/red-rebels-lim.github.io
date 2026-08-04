@@ -36,9 +36,9 @@ void main() {
     final file = File('${dir.path}/news-cache.json');
     await file.writeAsString(
         File('test/fixtures/wp_posts.json').readAsStringSync());
-    seededNews = await NewsRepository.load(cacheFile: () async => file);
+    seededNews = await NewsRepository.load(cacheFile: (_) async => file);
     emptyNews = await NewsRepository.load(
-        cacheFile: () async => File('${dir.path}/absent.json'));
+        cacheFile: (_) async => File('${dir.path}/absent.json'));
   });
 
   Widget wrap(Widget child, {NewsRepository? news}) => ChangeNotifierProvider(
