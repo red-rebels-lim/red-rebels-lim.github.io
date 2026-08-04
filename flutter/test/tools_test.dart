@@ -90,7 +90,7 @@ void main() {
     testWidgets('appears on fresh prefs and Skip flags it as seen', (tester) async {
       final app = await boot(tester);
 
-      expect(find.text('1 / 7'), findsOneWidget);
+      expect(find.text('1 / 8'), findsOneWidget);
       expect(find.text('Swipe to Navigate'), findsOneWidget); // web step 1
       expect(find.text('Skip'), findsOneWidget);
       expect(find.text('Back'), findsNothing); // hidden on the first step
@@ -108,7 +108,7 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     });
 
-    testWidgets('Next walks all 7 web steps, Back returns, Got it! finishes', (tester) async {
+    testWidgets('Next walks all 8 steps, Back returns, Got it! finishes', (tester) async {
       final app = await boot(tester);
 
       const titles = [
@@ -119,9 +119,10 @@ void main() {
         'Enable Notifications',
         'Change Visual Theme',
         'Export Calendar',
+        'Club News',
       ];
       for (var i = 0; i < titles.length; i++) {
-        expect(find.text('${i + 1} / 7'), findsOneWidget);
+        expect(find.text('${i + 1} / 8'), findsOneWidget);
         expect(find.text(titles[i]), findsOneWidget);
         if (i < titles.length - 1) {
           await tester.tap(find.text('Next'));
@@ -132,7 +133,7 @@ void main() {
       // Back steps backwards from the last step.
       await tester.tap(find.text('Back'));
       await tester.pump();
-      expect(find.text('Change Visual Theme'), findsOneWidget);
+      expect(find.text('Export Calendar'), findsOneWidget);
       await tester.tap(find.text('Next'));
       await tester.pump();
 
@@ -141,7 +142,7 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
 
-      expect(find.text('Export Calendar'), findsNothing);
+      expect(find.text('Club News'), findsNothing);
       expect(app.introSeen, isTrue);
 
       await tester.pumpWidget(const SizedBox());
@@ -150,7 +151,7 @@ void main() {
     testWidgets('renders the Greek copy verbatim', (tester) async {
       await boot(tester, language: 'el');
 
-      expect(find.text('1 / 7'), findsOneWidget);
+      expect(find.text('1 / 8'), findsOneWidget);
       expect(find.text('Σύρετε για Πλοήγηση'), findsOneWidget);
       expect(find.text('Παράλειψη'), findsOneWidget);
       expect(find.text('Επόμενο'), findsOneWidget);

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/events_repository.dart';
+import '../data/news_repository.dart';
 import '../data/players_repository.dart';
 import '../i18n/i18n.dart';
 import '../logic/push_registration.dart';
@@ -19,13 +20,12 @@ class AppState extends ChangeNotifier {
     required this.players,
     required this.i18n,
     required SharedPreferences prefs,
+    this.news,
     this.syncEnabled = false,
     this.httpClientFactory,
     this.push,
   }) : _prefs = prefs {
-    // Default to the device locale (Greek device → Greek), like the web app.
-    _language = prefs.getString('language') ??
-        (PlatformDispatcher.instance.locale.languageCode == 'el' ? 'el' : 'en');
+    _language = resolveLanguage(prefs);
     _themeMode = switch (prefs.getString('themeMode')) {
       'light' => ThemeMode.light,
       'dark' => ThemeMode.dark,
@@ -44,6 +44,13 @@ class AppState extends ChangeNotifier {
     _notifPrefs = _loadNotifPrefs(prefs);
     _sportFilters = _loadSportFilters(prefs);
   }
+
+  /// Stored language, defaulting to the device locale (Greek device → Greek),
+  /// like the web app. Shared with main.dart so pre-AppState loads (news
+  /// cache) resolve the same language.
+  static String resolveLanguage(SharedPreferences prefs) =>
+      prefs.getString('language') ??
+      (PlatformDispatcher.instance.locale.languageCode == 'el' ? 'el' : 'en');
 
   /// Local storage key for the NotifPrefs JSON snapshot (renders the saved
   /// notification preferences on restart without a network round-trip).
@@ -98,6 +105,10 @@ class AppState extends ChangeNotifier {
 
   final EventsRepository events;
   final PlayersRepository players;
+
+  /// Optional so the many tests constructing AppState without news keep
+  /// working; when absent, [syncEvents] simply skips the news feed.
+  final NewsRepository? news;
   final I18n i18n;
   final SharedPreferences _prefs;
 
@@ -126,6 +137,9 @@ class AppState extends ChangeNotifier {
   /// True when the most recent sync attempt failed — the calendar shows a
   /// subtle stale-data indicator while this holds (FR-OFFLINE-2).
   bool get lastSyncFailed => _lastSyncFailed;
+
+  /// True while [syncEvents] is in flight (drives first-load spinners).
+  bool get syncing => _syncing;
 
   late String _language;
   late ThemeMode _themeMode;
@@ -286,10 +300,13 @@ class AppState extends ChangeNotifier {
     }
     _syncing = true;
     _lastSyncAttempt = now;
+    notifyListeners(); // Surfaces first-load spinners while the fetch runs.
     try {
       final results = await Future.wait([
         events.refresh(client: httpClientFactory?.call()),
         players.refresh(client: httpClientFactory?.call()),
+        if (news case final news?)
+          news.refresh(client: httpClientFactory?.call(), language: _language),
       ]);
       final ok = results.every((r) => r);
       _lastSyncFailed = !ok;
@@ -318,6 +335,16 @@ class AppState extends ChangeNotifier {
     _prefs.setString('language', lang);
     notifyListeners();
     widgetRefresher?.call();
+    // Re-fetch the news feed in the new language (fire-and-forget; the list
+    // just re-renders when translated content arrives). Gated like syncEvents
+    // so tests never hit the network.
+    if (syncEnabled) {
+      news
+          ?.refresh(client: httpClientFactory?.call(), language: lang)
+          .then((changed) {
+        if (changed) notifyListeners();
+      });
+    }
   }
 
   void setThemeMode(ThemeMode mode) {
@@ -351,6 +378,17 @@ class AppState extends ChangeNotifier {
   }
 
   void clearFilters() => setFilters(const FilterState());
+
+  String? _newsCategory;
+
+  /// Selected news category (WordPress category name, Greek as-is) or null
+  /// for all. Session-only, like the calendar [filters].
+  String? get newsCategory => _newsCategory;
+
+  void setNewsCategory(String? category) {
+    _newsCategory = category;
+    notifyListeners();
+  }
 
   late ({bool football, bool volleyball}) _sportFilters;
 

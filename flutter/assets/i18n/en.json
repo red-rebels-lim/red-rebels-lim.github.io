@@ -8,11 +8,19 @@
     "calendar": "Calendar",
     "stats": "Statistics",
     "squad": "Squad",
+    "news": "News",
     "options": "Tools",
     "export": "Export (.ics)",
     "print": "Print",
     "install": "Install App",
     "settings": "Settings"
+  },
+  "news": {
+    "title": "News",
+    "empty": "No news yet — pull down to refresh.",
+    "emptyFiltered": "No news in this category.",
+    "openOriginal": "Read on solosalamina.com",
+    "share": "Share article"
   },
   "squad": {
     "colApps": "M",
@@ -89,6 +97,7 @@
   },
   "filters": {
     "title": "Event Filters",
+    "category": "Category",
     "addFilter": "+ Filter",
     "column": "Column",
     "value": "Value",
@@ -410,6 +419,8 @@
     "step6Desc": "Choose from 4 visual themes in Settings: Default, Brutalism, Cinema, or Neon HUD.",
     "step7Title": "Export Calendar",
     "step7Desc": "Export matches to your phone or Google Calendar as an .ics file.",
+    "step8Title": "Club News",
+    "step8Desc": "Read the latest club news from solosalamina.com in the News tab — tap an article to read it in the app.",
     "skip": "Skip",
     "prev": "Back",
     "next": "Next",

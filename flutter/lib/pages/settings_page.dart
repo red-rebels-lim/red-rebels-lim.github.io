@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../data/constants.dart';
+import '../logic/external_launch.dart';
 import '../logic/push_registration.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/web_toggle.dart';
 
+export '../logic/external_launch.dart' show openExternalUrl;
+
 /// Public repository, linked from the About section (SET-11).
 const githubRepoUrl = 'https://github.com/red-rebels-lim/red-rebels-lim.github.io';
-
-/// Bridge to url_launcher — injectable so widget tests can assert launches
-/// without a real plugin behind them.
-@visibleForTesting
-Future<bool> Function(Uri url) openExternalUrl =
-    (url) => launchUrl(url, mode: LaunchMode.externalApplication);
 
 /// Picker option labels (web `themeLabels` — settings.theme* i18n keys).
 String _themeLabel(AppState app, String theme) => switch (theme) {
