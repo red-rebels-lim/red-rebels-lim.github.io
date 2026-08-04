@@ -5,8 +5,8 @@ library;
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:red_rebels_calendar/logic/football_stats.dart';
-import 'package:red_rebels_calendar/models/events.dart';
+import 'package:solo_salamina/logic/football_stats.dart';
+import 'package:solo_salamina/models/events.dart';
 
 import 'stats_fakes.dart';
 

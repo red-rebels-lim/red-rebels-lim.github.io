@@ -11,8 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
-import 'package:red_rebels_calendar/data/players_repository.dart';
-import 'package:red_rebels_calendar/models/players.dart';
+import 'package:solo_salamina/data/players_repository.dart';
+import 'package:solo_salamina/models/players.dart';
 
 import 'live_feed_fakes.dart';
 

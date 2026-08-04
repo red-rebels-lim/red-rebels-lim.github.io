@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:red_rebels_calendar/widgets/marquee.dart';
+import 'package:solo_salamina/widgets/marquee.dart';
 
 import 'qa_helpers.dart';
 

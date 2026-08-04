@@ -10,13 +10,13 @@ import 'package:http/testing.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:red_rebels_calendar/data/events_repository.dart';
-import 'package:red_rebels_calendar/data/players_repository.dart';
-import 'package:red_rebels_calendar/i18n/i18n.dart';
-import 'package:red_rebels_calendar/models/events.dart';
-import 'package:red_rebels_calendar/pages/calendar_page.dart';
-import 'package:red_rebels_calendar/state/app_state.dart';
-import 'package:red_rebels_calendar/theme.dart';
+import 'package:solo_salamina/data/events_repository.dart';
+import 'package:solo_salamina/data/players_repository.dart';
+import 'package:solo_salamina/i18n/i18n.dart';
+import 'package:solo_salamina/models/events.dart';
+import 'package:solo_salamina/pages/calendar_page.dart';
+import 'package:solo_salamina/state/app_state.dart';
+import 'package:solo_salamina/theme.dart';
 
 import 'live_feed_fakes.dart';
 

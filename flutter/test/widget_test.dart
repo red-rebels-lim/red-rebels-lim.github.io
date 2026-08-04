@@ -6,19 +6,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:red_rebels_calendar/data/constants.dart';
-import 'package:red_rebels_calendar/data/events_repository.dart';
-import 'package:red_rebels_calendar/data/players_repository.dart';
-import 'package:red_rebels_calendar/i18n/i18n.dart';
-import 'package:red_rebels_calendar/main.dart';
-import 'package:red_rebels_calendar/models/events.dart';
-import 'package:red_rebels_calendar/pages/calendar_page.dart';
-import 'package:red_rebels_calendar/state/app_state.dart';
-import 'package:red_rebels_calendar/theme.dart';
-import 'package:red_rebels_calendar/widgets/calendar_cards_view.dart';
-import 'package:red_rebels_calendar/widgets/calendar_list_view.dart';
-import 'package:red_rebels_calendar/widgets/event_card.dart';
-import 'package:red_rebels_calendar/widgets/event_details_sheet.dart';
+import 'package:solo_salamina/data/constants.dart';
+import 'package:solo_salamina/data/events_repository.dart';
+import 'package:solo_salamina/data/players_repository.dart';
+import 'package:solo_salamina/i18n/i18n.dart';
+import 'package:solo_salamina/main.dart';
+import 'package:solo_salamina/models/events.dart';
+import 'package:solo_salamina/pages/calendar_page.dart';
+import 'package:solo_salamina/state/app_state.dart';
+import 'package:solo_salamina/theme.dart';
+import 'package:solo_salamina/widgets/calendar_cards_view.dart';
+import 'package:solo_salamina/widgets/calendar_list_view.dart';
+import 'package:solo_salamina/widgets/event_card.dart';
+import 'package:solo_salamina/widgets/event_details_sheet.dart';
 
 void main() {
   late EventsRepository events;
@@ -101,7 +101,7 @@ void main() {
     await tester.pumpWidget(
       ChangeNotifierProvider(
         create: (_) => AppState(events: events, players: players, i18n: i18n, prefs: prefs),
-        child: const RedRebelsApp(),
+        child: const SoloSalaminaApp(),
       ),
     );
     await tester.pump();

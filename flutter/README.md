@@ -1,6 +1,6 @@
-# Red Rebels — Flutter app
+# SoloSalamina — Flutter app
 
-Native Android & iOS companion to the Red Rebels Calendar web app (`../app`).
+Native Android & iOS app for SoloSalamina — Νέα Σαλαμίνα match calendar, stats & news (formerly Red Rebels; the web app in `../app` is being sunset).
 Same data, same i18n bundles, same stats logic — ported to Dart.
 
 ## Features

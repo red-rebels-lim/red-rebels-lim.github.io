@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/events_repository.dart';
+import 'data/news_repository.dart';
 import 'data/parse_client.dart';
 import 'data/players_repository.dart';
 import 'firebase_options.dart';
@@ -15,6 +16,7 @@ import 'logic/fcm_token_provider.dart';
 import 'logic/home_widget_updater.dart';
 import 'logic/push_registration.dart';
 import 'pages/calendar_page.dart';
+import 'pages/news_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/squad_page.dart';
 import 'pages/stats_page.dart';
@@ -55,10 +57,13 @@ Future<void> main() async {
     // Boot on: FcmTokenProvider degrades to null/false on every call.
   }
 
+  final prefs = await SharedPreferences.getInstance();
   final events = await EventsRepository.load();
   final players = await PlayersRepository.load();
+  // Boot from the cache matching the app language, so a translated feed
+  // (once the site serves one) survives cold starts per language.
+  final news = await NewsRepository.load(language: AppState.resolveLanguage(prefs));
   final i18n = await I18n.load();
-  final prefs = await SharedPreferences.getInstance();
   final tokenProvider = FcmTokenProvider();
   final push = PushRegistration(
     // Disabled (silent no-op) when the build has no Back4App credentials.
@@ -72,6 +77,7 @@ Future<void> main() async {
         final app = AppState(
           events: events,
           players: players,
+          news: news,
           i18n: i18n,
           prefs: prefs,
           syncEnabled: true,
@@ -81,7 +87,7 @@ Future<void> main() async {
         _wireWidgetClicks(app);
         return app;
       },
-      child: const RedRebelsApp(),
+      child: const SoloSalaminaApp(),
     ),
   );
 }
@@ -137,14 +143,14 @@ void _wireWidgetClicks(AppState app) {
   }
 }
 
-class RedRebelsApp extends StatelessWidget {
-  const RedRebelsApp({super.key});
+class SoloSalaminaApp extends StatelessWidget {
+  const SoloSalaminaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     return MaterialApp(
-      title: 'Red Rebels',
+      title: 'SoloSalamina',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(app.visualTheme, Brightness.light),
       darkTheme: buildTheme(app.visualTheme, Brightness.dark),
@@ -162,7 +168,12 @@ class HomeShell extends StatefulWidget {
 }
 
 class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
-  int _index = 0;
+  /// News is the home tab (centered in the bottom nav): the app opens on it
+  /// and system back returns to it before exiting. Calendar stays index 0 —
+  /// deep links (`goToTab(0)`) and the stats CTA (`goToTab(1)`) are unmoved.
+  static const _homeIndex = 2;
+
+  int _index = _homeIndex;
 
   @override
   void initState() {
@@ -215,10 +226,10 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     final dark = Theme.of(context).brightness == Brightness.dark;
     return PopScope(
       // Material bottom-nav convention (QA #14): system back returns to the
-      // start destination (Calendar) first; only a second back exits.
-      canPop: _index == 0,
+      // start destination (News) first; only a second back exits.
+      canPop: _index == _homeIndex,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) setState(() => _index = 0);
+        if (!didPop) setState(() => _index = _homeIndex);
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
@@ -245,9 +256,11 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                 // below, clear of the punch-hole. (The red strip existed to
                 // color the status bar, QA GLB-01; there is no bar anymore.)
                 SizedBox(height: MediaQuery.paddingOf(context).top),
+                // No header back button — the bottom nav is the way between
+                // tabs; system back still returns to News (PopScope above).
                 MobileHeader(
                   showCalendarActions: _index == 0,
-                  onBack: _index == 0 ? null : () => setState(() => _index = 0),
+                  showNewsActions: _index == _homeIndex,
                 ),
                 // Brutalism-only ticker (renders nothing on other themes).
                 const Marquee(),
@@ -259,6 +272,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                       children: const [
                         CalendarPage(),
                         StatsPage(),
+                        NewsPage(),
                         SquadPage(),
                         SettingsPage(),
                       ],
