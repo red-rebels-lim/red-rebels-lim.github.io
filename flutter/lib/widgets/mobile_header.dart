@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/calendar_page.dart' show showCalendarFilterSheet;
+import '../pages/news_page.dart' show showNewsFilterSheet;
 import '../state/app_state.dart';
 import '../theme.dart';
 
@@ -14,9 +15,17 @@ import '../theme.dart';
 /// 2026-07-14): no share button anywhere, and the filter button stays even
 /// though the web has no touch trigger for its FilterPanel.
 class MobileHeader extends StatelessWidget {
-  const MobileHeader({super.key, required this.showCalendarActions, this.onBack});
+  const MobileHeader({
+    super.key,
+    required this.showCalendarActions,
+    this.showNewsActions = false,
+    this.onBack,
+  });
 
   final bool showCalendarActions;
+
+  /// News tab: category-filter button (same design as the calendar filter).
+  final bool showNewsActions;
 
   /// Web `showBack` — set on every non-calendar page; navigates home.
   final VoidCallback? onBack;
@@ -80,6 +89,16 @@ class MobileHeader extends StatelessWidget {
               iconColor: iconColor,
               showBadge: app.filters.isActive,
               onTap: () => showCalendarFilterSheet(context),
+            ),
+            const SizedBox(width: 8),
+          ],
+          if (showNewsActions) ...[
+            _HeaderButton(
+              icon: Icons.filter_list_rounded,
+              tooltip: app.t('filters.title'),
+              iconColor: iconColor,
+              showBadge: app.newsCategory != null,
+              onTap: () => showNewsFilterSheet(context),
             ),
             const SizedBox(width: 8),
           ],

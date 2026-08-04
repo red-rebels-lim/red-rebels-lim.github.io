@@ -57,3 +57,6 @@ app/test-results
 tests
 .envrc
 .playwright-mcp/
+
+# Per-user Claude Code settings (may contain tokens/permissions)
+.claude/settings.local.json

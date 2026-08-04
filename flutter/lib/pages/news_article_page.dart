@@ -26,11 +26,13 @@ class NewsArticlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
-    final theme = Theme.of(context);
     final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      // The app-wide scaffold color is transparent (the shell paints the
+      // stadium backdrop) — a pushed route must supply its own themed
+      // background or light mode renders dark text on black.
+      backgroundColor: colors.background,
       appBar: AppBar(
         backgroundColor: colors.surfacePanel,
         foregroundColor: colors.foreground,

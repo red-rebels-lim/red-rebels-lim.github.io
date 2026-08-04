@@ -57,11 +57,13 @@ Future<void> main() async {
     // Boot on: FcmTokenProvider degrades to null/false on every call.
   }
 
+  final prefs = await SharedPreferences.getInstance();
   final events = await EventsRepository.load();
   final players = await PlayersRepository.load();
-  final news = await NewsRepository.load();
+  // Boot from the cache matching the app language, so a translated feed
+  // (once the site serves one) survives cold starts per language.
+  final news = await NewsRepository.load(language: AppState.resolveLanguage(prefs));
   final i18n = await I18n.load();
-  final prefs = await SharedPreferences.getInstance();
   final tokenProvider = FcmTokenProvider();
   final push = PushRegistration(
     // Disabled (silent no-op) when the build has no Back4App credentials.
@@ -256,7 +258,10 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                 SizedBox(height: MediaQuery.paddingOf(context).top),
                 // No header back button — the bottom nav is the way between
                 // tabs; system back still returns to News (PopScope above).
-                MobileHeader(showCalendarActions: _index == 0),
+                MobileHeader(
+                  showCalendarActions: _index == 0,
+                  showNewsActions: _index == _homeIndex,
+                ),
                 // Brutalism-only ticker (renders nothing on other themes).
                 const Marquee(),
                 Expanded(
