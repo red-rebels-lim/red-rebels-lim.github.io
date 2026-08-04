@@ -50,7 +50,7 @@ class MobileHeader extends StatelessWidget {
           ],
           Expanded(
             child: _BrandTitle(
-              text: '${app.t('common.appName', 'Red Rebels')} ${app.t('common.calendarLabel', 'Calendar')}',
+              text: '${app.t('common.appName', 'SoloSalamina')} ${app.t('common.calendarLabel', 'Calendar')}',
             ),
           ),
           if (showCalendarActions) ...[

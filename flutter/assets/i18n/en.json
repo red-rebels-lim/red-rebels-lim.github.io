@@ -1,8 +1,8 @@
 {
   "common": {
-    "appName": "Red Rebels",
-    "rebels": "RED REBELS",
-    "brandText": "Red Rebels 26/27"
+    "appName": "SoloSalamina",
+    "rebels": "SOLOSALAMINA",
+    "brandText": "SoloSalamina 26/27"
   },
   "nav": {
     "calendar": "Calendar",
@@ -343,7 +343,7 @@
     "viewOnGithub": "View on GitHub",
     "madeWith": "Made with love for Nea Salamina",
     "notificationPreview": "Notification Preview",
-    "previewTitle": "Red Rebels Calendar",
+    "previewTitle": "SoloSalamina Calendar",
     "previewReminder": "Nea Salamis vs PAEEK — Kickoff in {{time}}",
     "previewScore": "Nea Salamis 2-0 Doxa Katokopia — Match ended!",
     "previewNewEvent": "New match added: Nea Salamis vs Ayia Napa, Apr 19",
