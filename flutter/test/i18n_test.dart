@@ -6,7 +6,7 @@ library;
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:red_rebels_calendar/i18n/i18n.dart';
+import 'package:solo_salamina/i18n/i18n.dart';
 
 void main() {
   late I18n i18n;

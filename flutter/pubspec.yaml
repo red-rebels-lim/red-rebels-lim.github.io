@@ -1,5 +1,5 @@
-name: red_rebels_calendar
-description: "Red Rebels — Nea Salamina match calendar and stats for Android & iOS."
+name: solo_salamina
+description: "SoloSalamina — Nea Salamina match calendar, stats & news for Android & iOS."
 publish_to: 'none'
 
 version: 1.0.0+1

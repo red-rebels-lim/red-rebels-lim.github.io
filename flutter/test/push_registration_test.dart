@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:red_rebels_calendar/data/parse_client.dart';
-import 'package:red_rebels_calendar/logic/push_registration.dart';
+import 'package:solo_salamina/data/parse_client.dart';
+import 'package:solo_salamina/logic/push_registration.dart';
 
 /// The web app's NotifPreference defaults (app/src/lib/preferences.ts) —
 /// FR-NOTIF-2: the app must write the exact same schema.

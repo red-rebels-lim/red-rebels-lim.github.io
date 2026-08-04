@@ -8,15 +8,15 @@ import 'package:http/testing.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:red_rebels_calendar/data/events_repository.dart';
-import 'package:red_rebels_calendar/data/parse_client.dart';
-import 'package:red_rebels_calendar/data/players_repository.dart';
-import 'package:red_rebels_calendar/i18n/i18n.dart';
-import 'package:red_rebels_calendar/logic/push_registration.dart';
-import 'package:red_rebels_calendar/pages/settings_page.dart';
-import 'package:red_rebels_calendar/state/app_state.dart';
-import 'package:red_rebels_calendar/widgets/web_toggle.dart';
-import 'package:red_rebels_calendar/theme.dart';
+import 'package:solo_salamina/data/events_repository.dart';
+import 'package:solo_salamina/data/parse_client.dart';
+import 'package:solo_salamina/data/players_repository.dart';
+import 'package:solo_salamina/i18n/i18n.dart';
+import 'package:solo_salamina/logic/push_registration.dart';
+import 'package:solo_salamina/pages/settings_page.dart';
+import 'package:solo_salamina/state/app_state.dart';
+import 'package:solo_salamina/widgets/web_toggle.dart';
+import 'package:solo_salamina/theme.dart';
 
 /// Scripted [PushTokenProvider] — no Firebase anywhere in the test suite.
 class FakeTokenProvider implements PushTokenProvider {

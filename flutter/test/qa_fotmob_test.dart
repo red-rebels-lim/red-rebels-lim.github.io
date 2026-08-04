@@ -8,13 +8,13 @@ import 'package:http/testing.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:red_rebels_calendar/data/events_repository.dart';
-import 'package:red_rebels_calendar/data/fotmob_client.dart';
-import 'package:red_rebels_calendar/data/players_repository.dart';
-import 'package:red_rebels_calendar/i18n/i18n.dart';
-import 'package:red_rebels_calendar/pages/stats_page.dart';
-import 'package:red_rebels_calendar/state/app_state.dart';
-import 'package:red_rebels_calendar/theme.dart';
+import 'package:solo_salamina/data/events_repository.dart';
+import 'package:solo_salamina/data/fotmob_client.dart';
+import 'package:solo_salamina/data/players_repository.dart';
+import 'package:solo_salamina/i18n/i18n.dart';
+import 'package:solo_salamina/pages/stats_page.dart';
+import 'package:solo_salamina/state/app_state.dart';
+import 'package:solo_salamina/theme.dart';
 
 /// FotMob blocks batch (QA-20 — register rows STA-07 + STA-06 football).
 ///
