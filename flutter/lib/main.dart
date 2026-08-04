@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/events_repository.dart';
+import 'data/news_repository.dart';
 import 'data/parse_client.dart';
 import 'data/players_repository.dart';
 import 'firebase_options.dart';
@@ -57,6 +58,7 @@ Future<void> main() async {
 
   final events = await EventsRepository.load();
   final players = await PlayersRepository.load();
+  final news = await NewsRepository.load();
   final i18n = await I18n.load();
   final prefs = await SharedPreferences.getInstance();
   final tokenProvider = FcmTokenProvider();
@@ -72,6 +74,7 @@ Future<void> main() async {
         final app = AppState(
           events: events,
           players: players,
+          news: news,
           i18n: i18n,
           prefs: prefs,
           syncEnabled: true,

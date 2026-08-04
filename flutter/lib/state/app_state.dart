@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/events_repository.dart';
+import '../data/news_repository.dart';
 import '../data/players_repository.dart';
 import '../i18n/i18n.dart';
 import '../logic/push_registration.dart';
@@ -19,6 +20,7 @@ class AppState extends ChangeNotifier {
     required this.players,
     required this.i18n,
     required SharedPreferences prefs,
+    this.news,
     this.syncEnabled = false,
     this.httpClientFactory,
     this.push,
@@ -98,6 +100,10 @@ class AppState extends ChangeNotifier {
 
   final EventsRepository events;
   final PlayersRepository players;
+
+  /// Optional so the many tests constructing AppState without news keep
+  /// working; when absent, [syncEvents] simply skips the news feed.
+  final NewsRepository? news;
   final I18n i18n;
   final SharedPreferences _prefs;
 
@@ -290,6 +296,7 @@ class AppState extends ChangeNotifier {
       final results = await Future.wait([
         events.refresh(client: httpClientFactory?.call()),
         players.refresh(client: httpClientFactory?.call()),
+        if (news case final news?) news.refresh(client: httpClientFactory?.call()),
       ]);
       final ok = results.every((r) => r);
       _lastSyncFailed = !ok;
