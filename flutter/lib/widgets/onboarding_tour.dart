@@ -14,9 +14,10 @@ import '../theme.dart';
 /// last step; tapping the overlay skips. Completing or skipping sets the
 /// app's existing seen flag ([AppState.introSeenKey]).
 ///
-/// All copy comes from the `onboarding.step{1..7}Title/Desc` i18n keys —
-/// byte-copies of the web JSONs, so EN and EL match the PWA verbatim.
-const onboardingStepCount = 7;
+/// All copy comes from the `onboarding.step{1..8}Title/Desc` i18n keys —
+/// steps 1-7 are byte-copies of the web JSONs; step 8 introduces the News
+/// tab (SoloSalamina pivot, no web counterpart).
+const onboardingStepCount = 8;
 
 Future<void> showOnboardingTour(BuildContext context) {
   final app = context.read<AppState>();
