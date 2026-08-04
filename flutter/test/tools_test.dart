@@ -78,7 +78,7 @@ void main() {
       final app = appState();
       if (pendingEventKey != null) app.pendingEventKey = pendingEventKey;
       await tester.pumpWidget(
-        ChangeNotifierProvider.value(value: app, child: const RedRebelsApp()),
+        ChangeNotifierProvider.value(value: app, child: const SoloSalaminaApp()),
       );
       // First frame triggers the post-frame tour check; second pump runs the
       // dialog route animation (no pumpAndSettle — countdown timers).

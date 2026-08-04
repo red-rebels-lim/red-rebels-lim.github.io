@@ -81,7 +81,7 @@ Future<void> main() async {
         _wireWidgetClicks(app);
         return app;
       },
-      child: const RedRebelsApp(),
+      child: const SoloSalaminaApp(),
     ),
   );
 }
@@ -137,14 +137,14 @@ void _wireWidgetClicks(AppState app) {
   }
 }
 
-class RedRebelsApp extends StatelessWidget {
-  const RedRebelsApp({super.key});
+class SoloSalaminaApp extends StatelessWidget {
+  const SoloSalaminaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     return MaterialApp(
-      title: 'Red Rebels',
+      title: 'SoloSalamina',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(app.visualTheme, Brightness.light),
       darkTheme: buildTheme(app.visualTheme, Brightness.dark),

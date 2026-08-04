@@ -101,7 +101,7 @@ void main() {
     await tester.pumpWidget(
       ChangeNotifierProvider(
         create: (_) => AppState(events: events, players: players, i18n: i18n, prefs: prefs),
-        child: const RedRebelsApp(),
+        child: const SoloSalaminaApp(),
       ),
     );
     await tester.pump();

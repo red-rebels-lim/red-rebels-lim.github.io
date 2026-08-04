@@ -35,7 +35,7 @@ void main() {
     prefs = await SharedPreferences.getInstance();
     final app = AppState(events: events, players: players, i18n: i18n, prefs: prefs);
     await tester.pumpWidget(
-      ChangeNotifierProvider.value(value: app, child: const RedRebelsApp()),
+      ChangeNotifierProvider.value(value: app, child: const SoloSalaminaApp()),
     );
     await tester.pump();
     return app;

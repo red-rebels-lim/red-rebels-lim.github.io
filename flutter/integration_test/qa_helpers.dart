@@ -26,7 +26,7 @@ const Map<String, Object> qaBaselinePrefs = {
   'themeMode': 'light',
 };
 
-/// Boots the full app ([RedRebelsApp] incl. HomeShell/tour wiring) against a
+/// Boots the full app ([SoloSalaminaApp] incl. HomeShell/tour wiring) against a
 /// synthetic dataset. Sync is disabled (AppState default) so the live feed
 /// can never clobber the fixture mid-test.
 Future<AppState> bootApp(
@@ -51,7 +51,7 @@ Future<AppState> bootApp(
     prefs: sharedPrefs,
   );
   await tester.pumpWidget(
-    ChangeNotifierProvider.value(value: app, child: const RedRebelsApp()),
+    ChangeNotifierProvider.value(value: app, child: const SoloSalaminaApp()),
   );
   await pumpFrames(tester);
   return app;

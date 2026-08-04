@@ -4,7 +4,7 @@
     <!-- Push notifications on API 33+; requested at runtime by firebase_messaging. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
-        android:label="Red Rebels"
+        android:label="SoloSalamina"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <!-- Branded small icon + accent for FCM notifications (default is the app icon,
