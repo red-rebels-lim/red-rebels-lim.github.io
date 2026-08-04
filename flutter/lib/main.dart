@@ -166,7 +166,12 @@ class HomeShell extends StatefulWidget {
 }
 
 class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
-  int _index = 0;
+  /// News is the home tab (centered in the bottom nav): the app opens on it
+  /// and system back returns to it before exiting. Calendar stays index 0 —
+  /// deep links (`goToTab(0)`) and the stats CTA (`goToTab(1)`) are unmoved.
+  static const _homeIndex = 2;
+
+  int _index = _homeIndex;
 
   @override
   void initState() {
@@ -219,10 +224,10 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     final dark = Theme.of(context).brightness == Brightness.dark;
     return PopScope(
       // Material bottom-nav convention (QA #14): system back returns to the
-      // start destination (Calendar) first; only a second back exits.
-      canPop: _index == 0,
+      // start destination (News) first; only a second back exits.
+      canPop: _index == _homeIndex,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) setState(() => _index = 0);
+        if (!didPop) setState(() => _index = _homeIndex);
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
@@ -249,10 +254,9 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                 // below, clear of the punch-hole. (The red strip existed to
                 // color the status bar, QA GLB-01; there is no bar anymore.)
                 SizedBox(height: MediaQuery.paddingOf(context).top),
-                MobileHeader(
-                  showCalendarActions: _index == 0,
-                  onBack: _index == 0 ? null : () => setState(() => _index = 0),
-                ),
+                // No header back button — the bottom nav is the way between
+                // tabs; system back still returns to News (PopScope above).
+                MobileHeader(showCalendarActions: _index == 0),
                 // Brutalism-only ticker (renders nothing on other themes).
                 const Marquee(),
                 Expanded(
@@ -263,8 +267,8 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                       children: const [
                         CalendarPage(),
                         StatsPage(),
-                        SquadPage(),
                         NewsPage(),
+                        SquadPage(),
                         SettingsPage(),
                       ],
                     ),

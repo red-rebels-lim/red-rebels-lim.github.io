@@ -50,7 +50,7 @@ class MobileHeader extends StatelessWidget {
           ],
           Expanded(
             child: _BrandTitle(
-              text: '${app.t('common.appName', 'SoloSalamina')} ${app.t('common.calendarLabel', 'Calendar')}',
+              label: app.t('common.appName', 'SoloSalamina'),
             ),
           ),
           if (showCalendarActions) ...[
@@ -97,57 +97,39 @@ class MobileHeader extends StatelessWidget {
   }
 }
 
-/// Web `h1.font-condensed text-xl font-bold tracking-tight text-[#dc2828]`
-/// plus the per-theme overrides in `index.css` (THM-03/THM-08):
-///
-/// - brutalism — `font-size: 14px; text-transform: uppercase;
-///   letter-spacing: 3px` (which is also why the full title fits);
-/// - cinema — gradient-clipped text, `foreground → primary` at 135°;
-/// - neon — `text-shadow: 0 0 10px var(--primary)` (via [condensed]'s glow).
+/// SoloSalamina wordmark (crest + "Solo Salamina"), replacing the old text
+/// title. The dark variant recolors the black "Solo" to white so the mark
+/// stays legible on dark/brutalism/cinema/neon backgrounds; "Salamina" keeps
+/// its brand red in both.
 class _BrandTitle extends StatelessWidget {
-  const _BrandTitle({required this.text});
+  const _BrandTitle({required this.label});
 
-  final String text;
+  /// Accessibility label (the wordmark is an image).
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-
-    if (colors.themeId == 'brutalism') {
-      return Text(
-        text.upperNoTonos,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: condensed(size: 14, color: accentRed, letterSpacing: 3),
-      );
-    }
-
-    // Web `tracking-tight` = -0.025em at text-xl.
-    final title = Text(
-      text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: condensed(size: 20, color: accentRed, letterSpacing: -0.5),
-    );
-
-    if (colors.themeId == 'cinema') {
-      return ShaderMask(
-        shaderCallback: (bounds) => LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [colors.foreground, colors.primary],
-        ).createShader(bounds),
-        // The gradient supplies the color; the glyphs just need full alpha.
-        child: Text(
-          text,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: condensed(size: 20, color: Colors.white, letterSpacing: -0.5),
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Semantics(
+      label: label,
+      image: true,
+      child: SizedBox(
+        height: 30,
+        // scaleDown: full 30px height when space allows (News/Squad/...),
+        // shrinks instead of clipping next to the calendar action buttons.
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Image.asset(
+            dark
+                ? 'assets/images/solosalamina_wordmark_dark.png'
+                : 'assets/images/solosalamina_wordmark.png',
+            height: 30,
+            excludeFromSemantics: true,
+          ),
         ),
-      );
-    }
-
-    return title;
+      ),
+    );
   }
 }
 
