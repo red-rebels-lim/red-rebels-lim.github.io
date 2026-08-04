@@ -363,6 +363,17 @@ class AppState extends ChangeNotifier {
 
   void clearFilters() => setFilters(const FilterState());
 
+  String? _newsCategory;
+
+  /// Selected news category (WordPress category name, Greek as-is) or null
+  /// for all. Session-only, like the calendar [filters].
+  String? get newsCategory => _newsCategory;
+
+  void setNewsCategory(String? category) {
+    _newsCategory = category;
+    notifyListeners();
+  }
+
   late ({bool football, bool volleyball}) _sportFilters;
 
   /// Settings-level sport toggles (SPORTS FILTER section).

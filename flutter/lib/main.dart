@@ -256,7 +256,10 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                 SizedBox(height: MediaQuery.paddingOf(context).top),
                 // No header back button — the bottom nav is the way between
                 // tabs; system back still returns to News (PopScope above).
-                MobileHeader(showCalendarActions: _index == 0),
+                MobileHeader(
+                  showCalendarActions: _index == 0,
+                  showNewsActions: _index == _homeIndex,
+                ),
                 // Brutalism-only ticker (renders nothing on other themes).
                 const Marquee(),
                 Expanded(

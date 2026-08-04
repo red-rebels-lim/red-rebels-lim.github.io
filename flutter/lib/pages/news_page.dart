@@ -16,6 +16,38 @@ const _monthKeys = [
 String formatNewsDate(AppState app, DateTime date) =>
     '${date.day} ${app.t('months.${_monthKeys[date.month - 1]}')} ${date.year}';
 
+/// Opens the news category-filter sheet, mirroring the calendar's
+/// [showCalendarFilterSheet] design. Called from the global MobileHeader.
+void showNewsFilterSheet(BuildContext context) {
+  final app = context.read<AppState>();
+  showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    builder: (_) => SingleChildScrollView(
+      // Edge-to-edge: keep the Apply row above the gesture bar.
+      child: SafeArea(
+        top: false,
+        child: _NewsFilterSheet(
+          initial: app.newsCategory,
+          categories: newsCategories(app.news?.articles ?? const []),
+          onApply: app.setNewsCategory,
+        ),
+      ),
+    ),
+  );
+}
+
+/// Unique category names across [articles], in order of first appearance
+/// (the feed is newest-first, so frequent categories surface early).
+List<String> newsCategories(List<NewsArticle> articles) {
+  final seen = <String>{};
+  return [
+    for (final article in articles)
+      for (final category in article.categories)
+        if (seen.add(category)) category,
+  ];
+}
+
 /// Club news from solosalamina.com: pull-to-refresh card list, tap opens the
 /// in-app reader. Content is Greek-only and shown as-is in both languages.
 class NewsPage extends StatelessWidget {
@@ -25,7 +57,14 @@ class NewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final colors = AppColors.of(context);
-    final articles = app.news?.articles ?? const <NewsArticle>[];
+    final all = app.news?.articles ?? const <NewsArticle>[];
+    final category = app.newsCategory;
+    final articles = category == null
+        ? all
+        : [
+            for (final a in all)
+              if (a.categories.contains(category)) a,
+          ];
 
     return Container(
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -37,7 +76,7 @@ class NewsPage extends StatelessWidget {
       child: RefreshIndicator(
         onRefresh: () => app.syncEvents(),
         child: articles.isEmpty
-            ? _EmptyState(app: app, colors: colors)
+            ? _EmptyState(app: app, colors: colors, filtered: all.isNotEmpty)
             : ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(12),
@@ -65,18 +104,26 @@ class NewsPage extends StatelessWidget {
 }
 
 /// Spinner while the first sync is in flight, `errors.fetchFailed` + retry
-/// when it failed, `news.empty` otherwise. Scrollable so pull-to-refresh
+/// when it failed, `news.empty` otherwise. [filtered] means articles exist
+/// but the category filter hides them all. Scrollable so pull-to-refresh
 /// still works from every state.
 class _EmptyState extends StatelessWidget {
-  const _EmptyState({required this.app, required this.colors});
+  const _EmptyState({required this.app, required this.colors, this.filtered = false});
 
   final AppState app;
   final AppColors colors;
+  final bool filtered;
 
   @override
   Widget build(BuildContext context) {
     final Widget body;
-    if (app.syncing) {
+    if (filtered) {
+      body = Text(
+        app.t('news.emptyFiltered', 'No news in this category.'),
+        textAlign: TextAlign.center,
+        style: TextStyle(color: colors.mutedForeground),
+      );
+    } else if (app.syncing) {
       body = const CircularProgressIndicator(strokeWidth: 2.5);
     } else if (app.lastSyncFailed) {
       body = Column(
@@ -221,6 +268,92 @@ class _CategoryChip extends StatelessWidget {
       child: Text(
         label.upperNoTonos,
         style: condensed(size: 11, color: brandRed, letterSpacing: 1.1),
+      ),
+    );
+  }
+}
+
+/// Category picker, mirroring the calendar `_FilterSheet` design: title,
+/// ChoiceChip wrap with an "All" chip, Clear all + Apply row.
+class _NewsFilterSheet extends StatefulWidget {
+  const _NewsFilterSheet({
+    required this.initial,
+    required this.categories,
+    required this.onApply,
+  });
+
+  final String? initial;
+  final List<String> categories;
+  final ValueChanged<String?> onApply;
+
+  @override
+  State<_NewsFilterSheet> createState() => _NewsFilterSheetState();
+}
+
+class _NewsFilterSheetState extends State<_NewsFilterSheet> {
+  late String? _category = widget.initial;
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            app.t('filters.title'),
+            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Text(app.t('filters.category', 'Category'), style: theme.textTheme.labelLarge),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              ChoiceChip(
+                label: Text(app.t('filters.all')),
+                selected: _category == null,
+                onSelected: (_) => setState(() => _category = null),
+              ),
+              for (final category in widget.categories)
+                ChoiceChip(
+                  label: Text(category),
+                  selected: _category == category,
+                  onSelected: (_) => setState(
+                      () => _category = _category == category ? null : category),
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () {
+                    widget.onApply(null);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(app.t('filters.clearAll')),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: FilledButton(
+                  onPressed: () {
+                    widget.onApply(_category);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(app.t('filters.apply')),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

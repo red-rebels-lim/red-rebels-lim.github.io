@@ -55,6 +55,92 @@ void main() {
         ),
       );
 
+  AppState makeApp({NewsRepository? news}) => AppState(
+        events: events,
+        players: players,
+        news: news,
+        i18n: i18n,
+        prefs: prefs,
+      );
+
+  Widget wrapWith(AppState app, Widget child) => ChangeNotifierProvider.value(
+        value: app,
+        child: MaterialApp(
+          theme: buildTheme('default', Brightness.light),
+          home: Scaffold(body: child),
+        ),
+      );
+
+  group('newsCategories', () {
+    test('unique names in order of first appearance', () {
+      expect(newsCategories(seededNews.articles), [
+        'Ποδόσφαιρο',
+        'Ποδόσφαιρο Ανδρών',
+        'Ακαδημία Ποδοσφαίρου',
+      ]);
+    });
+  });
+
+  group('category filter', () {
+    testWidgets('shows only articles in the selected category', (tester) async {
+      final app = makeApp(news: seededNews);
+      app.setNewsCategory('Ακαδημία Ποδοσφαίρου');
+      await tester.pumpWidget(wrapWith(app, const NewsPage()));
+      await tester.pump();
+
+      expect(find.textContaining('Ακαδημία'), findsWidgets);
+      expect(find.textContaining('Ομόνοια'), findsNothing);
+      expect(find.textContaining('Ανακεφαλαίωση'), findsNothing);
+    });
+
+    testWidgets('filtered-to-empty shows the emptyFiltered message',
+        (tester) async {
+      final app = makeApp(news: seededNews);
+      app.setNewsCategory('Πετόσφαιρα');
+      await tester.pumpWidget(wrapWith(app, const NewsPage()));
+      await tester.pump();
+
+      expect(find.text('No news in this category.'), findsOneWidget);
+    });
+
+    testWidgets('sheet applies and clears the category', (tester) async {
+      final app = makeApp(news: seededNews);
+      await tester.pumpWidget(wrapWith(
+        app,
+        Builder(
+          builder: (context) => Center(
+            child: OutlinedButton(
+              onPressed: () => showNewsFilterSheet(context),
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      ));
+
+      await tester.tap(find.text('open'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400)); // sheet animation
+
+      expect(find.text('All'), findsOneWidget);
+      expect(find.text('Ποδόσφαιρο'), findsOneWidget); // category chip
+      await tester.tap(find.text('Ποδόσφαιρο Ανδρών'));
+      await tester.pump();
+      await tester.tap(find.text('Apply'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(app.newsCategory, 'Ποδόσφαιρο Ανδρών');
+
+      // Clear All resets to null.
+      await tester.tap(find.text('open'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text('Clear All'));
+      await tester.pump();
+      expect(app.newsCategory, isNull);
+    });
+  });
+
   group('NewsPage', () {
     testWidgets('renders article cards from the repository', (tester) async {
       await tester.pumpWidget(wrap(const NewsPage(), news: seededNews));
