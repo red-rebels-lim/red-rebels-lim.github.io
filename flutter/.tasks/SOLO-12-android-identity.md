@@ -1,6 +1,6 @@
 # SOLO-12: Android identity → com.solosalamina.app
 
-**Status:** blocked (needs user-supplied google-services.json)
+**Status:** done (PR #118)
 **Batch:** ids (`feat/solosalamina-ids`) — atomic with SOLO-13/14
 **Depends on:** user Firebase delivery
 **Estimated scope:** Medium

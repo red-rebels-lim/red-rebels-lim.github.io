@@ -7,7 +7,7 @@ set -uo pipefail
 DEVICE="${1:?adb device id}"
 ART="${2:?artifacts dir}"
 ADB=(~/Library/Android/sdk/platform-tools/adb -s "$DEVICE")
-PKG=com.redrebels.red_rebels_calendar
+PKG=com.solosalamina.app
 mkdir -p "$ART/shots"
 rc=0
 

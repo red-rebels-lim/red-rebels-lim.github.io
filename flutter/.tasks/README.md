@@ -11,8 +11,8 @@ later). Full plan context: the SOLO task files below.
 | ci (`chore/flutter-ci`) | SOLO-01 | — |
 | rebrand (`feat/solosalamina-rebrand`) | SOLO-02…SOLO-05 | Greek copy sign-off (SOLO-04) |
 | news (`feat/news-feed`) | SOLO-06…SOLO-11 | Greek copy sign-off (SOLO-09/11) |
-| ids (`feat/solosalamina-ids`) | SOLO-12…SOLO-14 | **blocked**: user-supplied Firebase configs for `com.solosalamina.app` |
-| icons (`feat/solosalamina-icons`) | SOLO-15 | **blocked**: user-supplied logos |
+| ids (`feat/solosalamina-ids`) | SOLO-12…SOLO-14 | done (#118) |
+| icons (`feat/solosalamina-icons`) | SOLO-15 | done (#115, site assets) |
 
 | ID | Title | Batch | Status | Depends on |
 |----|-------|-------|--------|------------|
@@ -27,9 +27,9 @@ later). Full plan context: the SOLO task files below.
 | SOLO-09 | News list page + 5th tab ⚠️ | news | done (#114) | SOLO-08 |
 | SOLO-10 | Article reader + share | news | done (#114) | SOLO-09 |
 | SOLO-11 | Onboarding step + news page tests ⚠️ | news | done (#114) | SOLO-10 |
-| SOLO-12 | Android identity → com.solosalamina.app | ids | blocked | Firebase delivery |
-| SOLO-13 | iOS identity → com.solosalamina.app | ids | blocked | Firebase delivery |
-| SOLO-14 | firebase_options regen + QA script PKG | ids | blocked | SOLO-12, SOLO-13 |
+| SOLO-12 | Android identity → com.solosalamina.app | ids | done (#118) | - |
+| SOLO-13 | iOS identity → com.solosalamina.app | ids | done (#118) | - |
+| SOLO-14 | firebase_options regen + QA script PKG | ids | done (#118) | - |
 | SOLO-15 | Icon regeneration + logo art | icons | done (#115, site assets) | - |
 
 ---

@@ -1,4 +1,4 @@
-package com.redrebels.red_rebels_calendar
+package com.solosalamina.app
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -304,9 +304,9 @@ class NextMatchWidgetProvider : AppWidgetProvider() {
         // deep-links into that match's sheet (same eventKey format the
         // push notifications use).
         val uri = if (showMatch && eventKey.isNotEmpty()) {
-            Uri.parse("redrebels://widget?eventKey=${Uri.encode(eventKey)}")
+            Uri.parse("solosalamina://widget?eventKey=${Uri.encode(eventKey)}")
         } else {
-            Uri.parse("redrebels://widget")
+            Uri.parse("solosalamina://widget")
         }
         views.setOnClickPendingIntent(
             R.id.widget_root,
