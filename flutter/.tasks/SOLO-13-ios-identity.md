@@ -1,6 +1,6 @@
 # SOLO-13: iOS identity → com.solosalamina.app
 
-**Status:** blocked (needs user-supplied GoogleService-Info.plist)
+**Status:** done (PR #118)
 **Batch:** ids (`feat/solosalamina-ids`) — atomic with SOLO-12/14
 **Depends on:** user Firebase delivery
 **Estimated scope:** Small

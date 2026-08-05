@@ -1,6 +1,6 @@
 # SOLO-14: firebase_options regen + QA script PKG
 
-**Status:** blocked
+**Status:** done (PR #118)
 **Batch:** ids (`feat/solosalamina-ids`) — atomic with SOLO-12/13
 **Depends on:** SOLO-12, SOLO-13
 **Estimated scope:** Small
