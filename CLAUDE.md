@@ -49,14 +49,18 @@ app/                       # the application — work here
     register-telegram-webhook.sh
   e2e/                     # Playwright specs — GITIGNORED, local only, not run in CI
   public/                  # static assets; calendar.ics files generated at build
+payload/                   # Payload CMS on CF Workers (D1+R2) — data-platform write layer
+                           #   see payload/README.md; Payload version pinned, GraphQL off
 .github/
   workflows/{ci,scrape,reminders}.yml
   scripts/                 # standalone Node project for cron reminders + push
 docs/, app/docs/           # planning notes (not load-bearing)
+                           #   EXCEPT docs/back4app-data-architecture.md — active plan
 app/.tasks/                # sprint tracker tied to app/.claude/skills/start-task etc.
+.tasks/                    # DATA sprint: Cloudflare data platform (repo-root, cross-project)
 ```
 
-Three separate `package.json` files: `app/`, `app/scripts/scraper/`, `.github/scripts/`. CI installs each separately. Don't add scraper deps to the app bundle.
+Four separate `package.json` files: `app/`, `app/scripts/scraper/`, `.github/scripts/`, `payload/`. CI installs each separately. Don't add scraper deps to the app bundle.
 
 ## Domain glossary
 
