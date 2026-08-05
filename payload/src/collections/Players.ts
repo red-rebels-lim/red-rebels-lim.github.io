@@ -36,6 +36,14 @@ export const Players: CollectionConfig = {
       },
       fields: [{ name: 'name', type: 'text', required: true }],
     },
+    {
+      name: 'photoUrl',
+      type: 'text',
+      admin: {
+        description:
+          'Legacy portrait path (/images/players/*.webp) — served verbatim in the frozen JSON contract (Flutter prefixes the site base URL).',
+      },
+    },
     { name: 'photo', type: 'upload', relationTo: 'player-photos' },
   ],
 }

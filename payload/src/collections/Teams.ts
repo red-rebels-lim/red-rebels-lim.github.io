@@ -19,14 +19,18 @@ export const Teams: CollectionConfig = {
       name: 'nameEl',
       type: 'text',
       required: true,
-      admin: { description: 'Canonical Greek uppercase — matches legacy events.ts opponent strings.' },
+      admin: {
+        description: 'Canonical Greek uppercase — matches legacy events.ts opponent strings.',
+      },
     },
     { name: 'nameEn', type: 'text', required: true },
     { name: 'shortName', type: 'text' },
     {
       name: 'aliases',
       type: 'array',
-      admin: { description: 'Scraper-source spellings (FotMob / DataProject English names, variants).' },
+      admin: {
+        description: 'Scraper-source spellings (FotMob / DataProject English names, variants).',
+      },
       fields: [{ name: 'name', type: 'text', required: true }],
     },
     {
@@ -36,6 +40,11 @@ export const Teams: CollectionConfig = {
       options: SPORT_OPTIONS.filter((o) => o.value !== 'meeting').map((o) => ({ ...o })),
     },
     { name: 'fotmobId', type: 'number' },
+    {
+      name: 'logoUrl',
+      type: 'text',
+      admin: { description: 'Legacy crest path (images/team_logos/*.webp).' },
+    },
     { name: 'logo', type: 'upload', relationTo: 'team-logos' },
   ],
 }

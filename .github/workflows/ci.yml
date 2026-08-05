@@ -131,3 +131,48 @@ jobs:
     steps:
       - name: All checks passed
         run: echo "All CI checks passed!"
+  payload:
+    name: Payload (lint, test, parity)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: payload/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: payload
+
+      - name: Lint
+        run: npm run lint
+        working-directory: payload
+
+      - name: Migrate local D1
+        run: npm run migrate
+        working-directory: payload
+        env:
+          PAYLOAD_SECRET: ci-only-secret
+
+      - name: Integration tests
+        run: npm test
+        working-directory: payload
+        env:
+          PAYLOAD_SECRET: ci-only-secret
+
+      - name: Seed local D1 from TS sources
+        run: npx cross-env NODE_OPTIONS=--no-deprecation payload run scripts/seed.ts
+        working-directory: payload
+        env:
+          PAYLOAD_SECRET: ci-only-secret
+
+      - name: Parity against frozen JSON contract
+        run: npx cross-env NODE_OPTIONS=--no-deprecation payload run scripts/parity.ts
+        working-directory: payload
+        env:
+          PAYLOAD_SECRET: ci-only-secret

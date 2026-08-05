@@ -36,12 +36,12 @@ Repo-root tracker because the work spans `payload/` (new), `app/` (Worker),
 
 | ID | Title | Batch | Status | Depends on |
 |----|-------|-------|--------|------------|
-| DATA-01 | Scaffold Payload on Workers (template, local dev) | scaffold | in review (PR #120) | - |
-| DATA-02 | Payload collections: seasons/teams/players/fixtures/… | scaffold | in review (PR #120) | DATA-01 |
-| DATA-03 | Provision D1+R2, deploy Payload Worker, admin user ⚠️ CF auth | scaffold | in review (PR #120) | DATA-02 |
-| DATA-04 | Seed script: current season from TS sources | seed | todo | DATA-02 |
-| DATA-05 | Historical backfill: season 2025-26 from git history | seed | todo | DATA-04 |
-| DATA-06 | Parity checker (D1 → legacy JSON contract diff) | seed | todo | DATA-04 |
+| DATA-01 | Scaffold Payload on Workers (template, local dev) | scaffold | done (PR #120) | - |
+| DATA-02 | Payload collections: seasons/teams/players/fixtures/… | scaffold | done (PR #120) | DATA-01 |
+| DATA-03 | Provision D1+R2, deploy Payload Worker, admin user ⚠️ CF auth | scaffold | done (PR #120) | DATA-02 |
+| DATA-04 | Seed script: current season from TS sources | seed | in review | DATA-02 |
+| DATA-05 | Historical backfill: season 2025-26 from git history | seed | in review | DATA-04 |
+| DATA-06 | Parity checker (D1 → legacy JSON contract diff) | seed | in review | DATA-04 |
 | DATA-07 | rrcalendar: bind D1, dynamic /events.json + /players.json | read-path | todo | DATA-03, DATA-06 |
 | DATA-08 | Live updates: `live` status, /live.json, purge-on-write | read-path | todo | DATA-07 |
 | DATA-09 | Scraper → Payload REST writes (merge rules, dual-write) | write-path | todo | DATA-03 |
