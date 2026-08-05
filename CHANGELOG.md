@@ -7,6 +7,7 @@
 - Flutter app: portrait-only lock and full-immersive fullscreen (Android + iOS), with gesture-bar insets on event/player/filter sheets
 
 ### Fixed
+- Aug 5 friendly vs ΟΜΟΝΟΙΑ 29ΗΣ ΜΑΪΟΥ corrected to a home game at 19:30 (Ammochostos stadium) — was listed as away with no kick-off time
 - Away matches showed our lineup/scorers/bookings under the opponent's column header — columns now follow the header row (match home team left) on **both** web `EventPopover` and Flutter event sheet (QA #11)
 - Flutter: event-sheet "View All Statistics" now opens the stats page on the match's sport instead of the last-selected tab (QA #12)
 - Flutter: calendar grid no longer swallows vertical drags — grid view is one page-level scrollable, so the selected-day list is reachable on short screens (QA #19)
