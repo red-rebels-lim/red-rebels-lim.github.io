@@ -442,9 +442,10 @@ export const eventsData: EventsData = {
     {
       day: 5,
       sport: "football-men",
-      location: "away",
+      location: "home",
       opponent: "ΟΜΟΝΟΙΑ 29ΗΣ ΜΑΪΟΥ",
-      time: "",
+      time: "19:30",
+      venue: "Stadio Vitex Ammochostos Epistrofi",
       logo: "images/team_logos/ΑΛΣ_ΟΜΟΝΟΙΑ_29_Μ.webp",
       status: "upcoming",
       competition: "friendly"
