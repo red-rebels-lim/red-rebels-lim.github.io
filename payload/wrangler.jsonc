@@ -18,20 +18,19 @@
   "d1_databases": [
     {
       "binding": "D1",
-      // DATABASE_ID placeholder — filled by DATA-03 (`wrangler d1 create solosalamina-data`).
       // Local dev never touches remote: getPlatformProxy in payload.config.ts
       // only enables remoteBindings when NODE_ENV=production.
-      "database_id": "DATABASE_ID",
+      "database_id": "05c8389c-dede-431e-bb1c-80551e8dceb8",
       "database_name": "solosalamina-data",
       "remote": true,
     },
   ],
   "services": [
-    // The service should match the "name" of your worker
-    // {
-    //   "binding": "WORKER_SELF_REFERENCE",
-    //   "service": "my-app"
-    // },
+    // The service must match the "name" of this worker
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "solosalamina-payload",
+    },
   ],
   "r2_buckets": [
     {
