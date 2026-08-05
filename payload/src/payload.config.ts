@@ -9,7 +9,13 @@ import { GetPlatformProxyOptions } from 'wrangler'
 import { r2Storage } from '@payloadcms/storage-r2'
 
 import { Users } from './collections/Users'
-import { Media } from './collections/Media'
+import { Seasons } from './collections/Seasons'
+import { Teams } from './collections/Teams'
+import { Players } from './collections/Players'
+import { SquadMemberships } from './collections/SquadMemberships'
+import { Fixtures } from './collections/Fixtures'
+import { TeamLogos } from './collections/TeamLogos'
+import { PlayerPhotos } from './collections/PlayerPhotos'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -50,7 +56,18 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  // NOTE: no drafts/versions on data collections — the rrcalendar Worker reads
+  // the generated D1 tables directly and the schema must stay flat.
+  collections: [
+    Users,
+    Seasons,
+    Teams,
+    Players,
+    SquadMemberships,
+    Fixtures,
+    TeamLogos,
+    PlayerPhotos,
+  ],
   editor: lexicalEditor(),
   // REST + Local API only — GraphQL is incomplete on Workers (route files removed too).
   graphQL: {
@@ -65,7 +82,7 @@ export default buildConfig({
   storage: [
     r2Storage({
       bucket: cloudflare.env.R2,
-      collections: { media: true },
+      collections: { 'team-logos': true, 'player-photos': true },
     }),
   ],
 })

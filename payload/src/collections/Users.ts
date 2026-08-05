@@ -5,7 +5,10 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
   },
-  auth: true,
+  auth: {
+    // API-key auth for the scraper service account (DATA-03/DATA-09).
+    useAPIKey: true,
+  },
   fields: [
     // Email added by default
     // Add more fields as needed

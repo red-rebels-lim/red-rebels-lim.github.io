@@ -68,7 +68,13 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
-    media: Media;
+    seasons: Season;
+    teams: Team;
+    players: Player;
+    'squad-memberships': SquadMembership;
+    fixtures: Fixture;
+    'team-logos': TeamLogo;
+    'player-photos': PlayerPhoto;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -77,7 +83,13 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
+    seasons: SeasonsSelect<false> | SeasonsSelect<true>;
+    teams: TeamsSelect<false> | TeamsSelect<true>;
+    players: PlayersSelect<false> | PlayersSelect<true>;
+    'squad-memberships': SquadMembershipsSelect<false> | SquadMembershipsSelect<true>;
+    fixtures: FixturesSelect<false> | FixturesSelect<true>;
+    'team-logos': TeamLogosSelect<false> | TeamLogosSelect<true>;
+    'player-photos': PlayerPhotosSelect<false> | PlayerPhotosSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -125,6 +137,9 @@ export interface User {
   id: number;
   updatedAt: string;
   createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -144,11 +159,63 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "seasons".
  */
-export interface Media {
+export interface Season {
   id: number;
-  alt: string;
+  /**
+   * e.g. 2026-27
+   */
+  code: string;
+  startYear: number;
+  endYear: number;
+  /**
+   * Exactly one season should be current.
+   */
+  isCurrent?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "teams".
+ */
+export interface Team {
+  id: number;
+  /**
+   * Stable key, same as i18n fotmob.teams.* (e.g. omonoia).
+   */
+  slug: string;
+  /**
+   * Canonical Greek uppercase — matches legacy events.ts opponent strings.
+   */
+  nameEl: string;
+  nameEn: string;
+  shortName?: string | null;
+  /**
+   * Scraper-source spellings (FotMob / DataProject English names, variants).
+   */
+  aliases?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  sports?: ('football-men' | 'volleyball-men' | 'volleyball-women')[] | null;
+  fotmobId?: number | null;
+  logo?: (number | null) | TeamLogo;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Team crest images (R2).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-logos".
+ */
+export interface TeamLogo {
+  id: number;
+  alt?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -158,6 +225,194 @@ export interface Media {
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "players".
+ */
+export interface Player {
+  id: number;
+  /**
+   * Stable key from the legacy roster, e.g. alberto_varo_lara.
+   */
+  slug: string;
+  sport: 'football-men' | 'volleyball-men' | 'volleyball-women';
+  nameEl: string;
+  nameEn: string;
+  position: 'GK' | 'DEF' | 'MID' | 'FWD' | 'SETTER' | 'OUTSIDE' | 'OPPOSITE' | 'MIDDLE' | 'LIBERO';
+  subPosition?: ('Central' | 'Wing' | 'Defensive' | 'Attacking') | null;
+  dateOfBirth?: string | null;
+  nationality?: string | null;
+  /**
+   * Every raw name form seen in match detail (Greek uppercase, mixed case, abbreviated). Load-bearing for stats resolution.
+   */
+  aliases?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  photo?: (number | null) | PlayerPhoto;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Player portrait images (R2).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "player-photos".
+ */
+export interface PlayerPhoto {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+}
+/**
+ * Who was in which squad, in which season, with what number.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "squad-memberships".
+ */
+export interface SquadMembership {
+  id: number;
+  player: number | Player;
+  season: number | Season;
+  sport: 'football-men' | 'volleyball-men' | 'volleyball-women';
+  shirtNumber?: number | null;
+  active?: boolean | null;
+  joinedDate?: string | null;
+  leftDate?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Live-edit flow: set status to "live" at kickoff, edit the score during the match, set "played" + final score at full time. Played results are final — the scraper only fills missing detail.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "fixtures".
+ */
+export interface Fixture {
+  id: number;
+  season: number | Season;
+  sport: 'football-men' | 'volleyball-men' | 'volleyball-women' | 'meeting';
+  /**
+   * Stored UTC; legacy month/day/time are derived as Cyprus wall-clock.
+   */
+  kickoff: string;
+  /**
+   * CFA draw fixture without a confirmed date — kickoff holds the matchday-window start.
+   */
+  dateTbd?: boolean | null;
+  /**
+   * Date known but kick-off time not announced (legacy time: "").
+   */
+  timeTbd?: boolean | null;
+  location: 'home' | 'away';
+  /**
+   * Empty for meetings.
+   */
+  opponent?: (number | null) | Team;
+  /**
+   * Canonical Greek (uppercase) opponent string — or the meeting title. Part of the frozen eventKey; do not rename casually.
+   */
+  opponentName: string;
+  venue?: string | null;
+  status: 'upcoming' | 'live' | 'played';
+  /**
+   * Home-away order, e.g. 2-1 (volleyball: sets, e.g. 3-1).
+   */
+  score?: string | null;
+  /**
+   * Cup shoot-out, e.g. 1-3.
+   */
+  penalties?: string | null;
+  competition?: ('league' | 'cup' | 'friendly') | null;
+  matchday?: number | null;
+  duration?: string | null;
+  reportEN?: string | null;
+  reportEL?: string | null;
+  scorers?:
+    | {
+        name: string;
+        minute?: string | null;
+        team: 'home' | 'away';
+        type?: ('pen' | 'og') | null;
+        id?: string | null;
+      }[]
+    | null;
+  bookings?:
+    | {
+        name: string;
+        minute?: string | null;
+        team: 'home' | 'away';
+        card: 'yellow' | 'red';
+        id?: string | null;
+      }[]
+    | null;
+  lineup?: {
+    home?:
+      | {
+          name: string;
+          number?: number | null;
+          position?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    away?:
+      | {
+          name: string;
+          number?: number | null;
+          position?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  subs?:
+    | {
+        playerOn: string;
+        playerOff: string;
+        minute?: string | null;
+        team: 'home' | 'away';
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Per-set rally points, home-away.
+   */
+  sets?:
+    | {
+        home: number;
+        away: number;
+        id?: string | null;
+      }[]
+    | null;
+  vbScorers?:
+    | {
+        name: string;
+        points: number;
+        team: 'home' | 'away';
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * FROZEN legacy key (month-day-sport-opponent) — computed automatically.
+   */
+  eventKey?: string | null;
+  source: 'scraper' | 'manual';
+  /**
+   * Locked fixtures are never touched by the scraper.
+   */
+  locked?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -188,8 +443,32 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
-        relationTo: 'media';
-        value: number | Media;
+        relationTo: 'seasons';
+        value: number | Season;
+      } | null)
+    | ({
+        relationTo: 'teams';
+        value: number | Team;
+      } | null)
+    | ({
+        relationTo: 'players';
+        value: number | Player;
+      } | null)
+    | ({
+        relationTo: 'squad-memberships';
+        value: number | SquadMembership;
+      } | null)
+    | ({
+        relationTo: 'fixtures';
+        value: number | Fixture;
+      } | null)
+    | ({
+        relationTo: 'team-logos';
+        value: number | TeamLogo;
+      } | null)
+    | ({
+        relationTo: 'player-photos';
+        value: number | PlayerPhoto;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -240,6 +519,9 @@ export interface PayloadMigration {
 export interface UsersSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
   email?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;
@@ -257,9 +539,186 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
+ * via the `definition` "seasons_select".
  */
-export interface MediaSelect<T extends boolean = true> {
+export interface SeasonsSelect<T extends boolean = true> {
+  code?: T;
+  startYear?: T;
+  endYear?: T;
+  isCurrent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "teams_select".
+ */
+export interface TeamsSelect<T extends boolean = true> {
+  slug?: T;
+  nameEl?: T;
+  nameEn?: T;
+  shortName?: T;
+  aliases?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  sports?: T;
+  fotmobId?: T;
+  logo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "players_select".
+ */
+export interface PlayersSelect<T extends boolean = true> {
+  slug?: T;
+  sport?: T;
+  nameEl?: T;
+  nameEn?: T;
+  position?: T;
+  subPosition?: T;
+  dateOfBirth?: T;
+  nationality?: T;
+  aliases?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  photo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "squad-memberships_select".
+ */
+export interface SquadMembershipsSelect<T extends boolean = true> {
+  player?: T;
+  season?: T;
+  sport?: T;
+  shirtNumber?: T;
+  active?: T;
+  joinedDate?: T;
+  leftDate?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "fixtures_select".
+ */
+export interface FixturesSelect<T extends boolean = true> {
+  season?: T;
+  sport?: T;
+  kickoff?: T;
+  dateTbd?: T;
+  timeTbd?: T;
+  location?: T;
+  opponent?: T;
+  opponentName?: T;
+  venue?: T;
+  status?: T;
+  score?: T;
+  penalties?: T;
+  competition?: T;
+  matchday?: T;
+  duration?: T;
+  reportEN?: T;
+  reportEL?: T;
+  scorers?:
+    | T
+    | {
+        name?: T;
+        minute?: T;
+        team?: T;
+        type?: T;
+        id?: T;
+      };
+  bookings?:
+    | T
+    | {
+        name?: T;
+        minute?: T;
+        team?: T;
+        card?: T;
+        id?: T;
+      };
+  lineup?:
+    | T
+    | {
+        home?:
+          | T
+          | {
+              name?: T;
+              number?: T;
+              position?: T;
+              id?: T;
+            };
+        away?:
+          | T
+          | {
+              name?: T;
+              number?: T;
+              position?: T;
+              id?: T;
+            };
+      };
+  subs?:
+    | T
+    | {
+        playerOn?: T;
+        playerOff?: T;
+        minute?: T;
+        team?: T;
+        id?: T;
+      };
+  sets?:
+    | T
+    | {
+        home?: T;
+        away?: T;
+        id?: T;
+      };
+  vbScorers?:
+    | T
+    | {
+        name?: T;
+        points?: T;
+        team?: T;
+        id?: T;
+      };
+  eventKey?: T;
+  source?: T;
+  locked?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-logos_select".
+ */
+export interface TeamLogosSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "player-photos_select".
+ */
+export interface PlayerPhotosSelect<T extends boolean = true> {
   alt?: T;
   updatedAt?: T;
   createdAt?: T;
