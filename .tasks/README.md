@@ -36,9 +36,9 @@ Repo-root tracker because the work spans `payload/` (new), `app/` (Worker),
 
 | ID | Title | Batch | Status | Depends on |
 |----|-------|-------|--------|------------|
-| DATA-01 | Scaffold Payload on Workers (template, local dev) | scaffold | todo | - |
-| DATA-02 | Payload collections: seasons/teams/players/fixtures/… | scaffold | todo | DATA-01 |
-| DATA-03 | Provision D1+R2, deploy Payload Worker, admin user ⚠️ CF auth | scaffold | todo | DATA-02 |
+| DATA-01 | Scaffold Payload on Workers (template, local dev) | scaffold | in review (PR #120) | - |
+| DATA-02 | Payload collections: seasons/teams/players/fixtures/… | scaffold | in review (PR #120) | DATA-01 |
+| DATA-03 | Provision D1+R2, deploy Payload Worker, admin user ⚠️ CF auth | scaffold | in review (PR #120) | DATA-02 |
 | DATA-04 | Seed script: current season from TS sources | seed | todo | DATA-02 |
 | DATA-05 | Historical backfill: season 2025-26 from git history | seed | todo | DATA-04 |
 | DATA-06 | Parity checker (D1 → legacy JSON contract diff) | seed | todo | DATA-04 |
