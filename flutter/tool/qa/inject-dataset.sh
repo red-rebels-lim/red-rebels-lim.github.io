@@ -10,7 +10,7 @@ cd "$(dirname "$0")/../.."
 NAME="${1:?dataset name or --restore}"
 DEVICE="${2:-}"
 ADB=(~/Library/Android/sdk/platform-tools/adb); [[ -n "$DEVICE" ]] && ADB+=(-s "$DEVICE")
-PKG=com.redrebels.red_rebels_calendar
+PKG=com.solosalamina.app
 # EventsRepository caches under the app documents dir (path_provider).
 CACHE=app_flutter/events-cache.json
 

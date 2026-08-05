@@ -18,7 +18,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDTNRaFckomYJXDZH9eeY11l7Wl108XmPw',
-    appId: '1:658056361557:android:2e1972e6b8f4b0327386dc',
+    appId: '1:658056361557:android:d2b040809f57b3ea7386dc',
     messagingSenderId: '658056361557',
     projectId: 'red-rebels-calendar',
     storageBucket: 'red-rebels-calendar.firebasestorage.app',
@@ -26,10 +26,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBhgcJZccMegnquUAndfbyxkV4euJ0LyZo',
-    appId: '1:658056361557:ios:fc7cb6e9588fdd2e7386dc',
+    appId: '1:658056361557:ios:868183ea7273e7fd7386dc',
     messagingSenderId: '658056361557',
     projectId: 'red-rebels-calendar',
     storageBucket: 'red-rebels-calendar.firebasestorage.app',
-    iosBundleId: 'com.redrebels.redRebelsCalendar',
+    iosBundleId: 'com.solosalamina.app',
   );
 }

@@ -1,4 +1,4 @@
-package com.redrebels.red_rebels_calendar
+package com.solosalamina.app
 
 import io.flutter.embedding.android.FlutterActivity
 
