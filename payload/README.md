@@ -48,9 +48,11 @@ and point `SEED_EVENTS`/`SEED_CONSTANTS`/`SEED_TRANSLATE`/`SEED_I18N_EN` at them
 with `SEED_SKIP_PLAYERS=1 SEED_NOT_CURRENT=1` (2025-26 lives at revision
 `40f6ae7` — the last pure pre-rollover state). `scripts/lib/legacy-shape.ts` is
 the DB→contract reshape shared with the parity checker; the serving Worker
-(DATA-07) must produce identical output. eventKey is unique per **(season,
-eventKey)** — the legacy key carries no year, so league fixtures recur across
-seasons. CI runs migrate → test → seed → parity on every PR (`payload` job).
+(DATA-07) imports it via `app/src/worker/feeds.ts` and
+`scripts/worker-parity.ts` proves its output matches too. eventKey is unique
+per **(season, eventKey)** — the legacy key carries no year, so league fixtures
+recur across seasons. CI runs migrate → test → seed → parity → worker-parity
+on every PR (`payload` job).
 
 ## Rules
 

@@ -39,10 +39,10 @@ Repo-root tracker because the work spans `payload/` (new), `app/` (Worker),
 | DATA-01 | Scaffold Payload on Workers (template, local dev) | scaffold | done (PR #120) | - |
 | DATA-02 | Payload collections: seasons/teams/players/fixtures/… | scaffold | done (PR #120) | DATA-01 |
 | DATA-03 | Provision D1+R2, deploy Payload Worker, admin user ⚠️ CF auth | scaffold | done (PR #120) | DATA-02 |
-| DATA-04 | Seed script: current season from TS sources | seed | in review | DATA-02 |
-| DATA-05 | Historical backfill: season 2025-26 from git history | seed | in review | DATA-04 |
-| DATA-06 | Parity checker (D1 → legacy JSON contract diff) | seed | in review | DATA-04 |
-| DATA-07 | rrcalendar: bind D1, dynamic /events.json + /players.json | read-path | todo | DATA-03, DATA-06 |
+| DATA-04 | Seed script: current season from TS sources | seed | done (PR #122) | DATA-02 |
+| DATA-05 | Historical backfill: season 2025-26 from git history | seed | done (PR #122) | DATA-04 |
+| DATA-06 | Parity checker (D1 → legacy JSON contract diff) | seed | done (PR #122) | DATA-04 |
+| DATA-07 | rrcalendar: bind D1, dynamic /events.json + /players.json | read-path | done (feat/worker-d1-api, awaiting PR) | DATA-03, DATA-06 |
 | DATA-08 | Live updates: `live` status, /live.json, purge-on-write | read-path | todo | DATA-07 |
 | DATA-09 | Scraper → Payload REST writes (merge rules, dual-write) | write-path | todo | DATA-03 |
 | DATA-10 | Reminders cron: fetch API instead of eval'ing events.ts | write-path | todo | DATA-07 |

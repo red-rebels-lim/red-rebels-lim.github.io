@@ -1,17 +1,26 @@
 /**
  * Cloudflare Worker entry point.
  * Routes /api/* webhook requests to the appropriate handlers.
+ * /events.json and /players.json are served dynamically from D1 (DATA-07),
+ * falling back to the static build artifacts on any failure.
  * Everything else is served from static assets.
  */
 
+import { buildEventsFeed, buildPlayersFeed, type D1Database } from './worker/feeds';
+
 interface SecretsStoreBinding {
   get(): Promise<string | null>;
+}
+
+interface ExecutionContext {
+  waitUntil(promise: Promise<unknown>): void;
 }
 
 interface Env {
   TELEGRAM_BOT_TOKEN: SecretsStoreBinding;
   BACK4APP_APP_ID: SecretsStoreBinding;
   BACK4APP_REST_API_KEY: SecretsStoreBinding;
+  D1?: D1Database;
   ASSETS: { fetch: (request: Request) => Promise<Response> };
 }
 
@@ -32,7 +41,7 @@ async function resolveSecrets(env: Env): Promise<ResolvedSecrets | null> {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     if (url.pathname === '/api/telegram-webhook' && request.method === 'POST') {
@@ -41,9 +50,46 @@ export default {
       return handleTelegramWebhook(request, secrets.telegramToken, secrets.appId, secrets.restApiKey);
     }
 
+    if (request.method === 'GET' && (url.pathname === '/events.json' || url.pathname === '/players.json')) {
+      return serveFeed(request, env, ctx, url.pathname);
+    }
+
     return env.ASSETS.fetch(request);
   },
 };
+
+// ─── D1-backed feeds (DATA-07) ───────────────────────────────────────────────
+
+// TTL-only caching until DATA-08 adds the meta version row that Payload bumps
+// on write; then the cache key can include it for instant invalidation.
+const FEED_CACHE_CONTROL = 'public, max-age=60';
+
+async function serveFeed(request: Request, env: Env, ctx: ExecutionContext, pathname: string): Promise<Response> {
+  try {
+    if (!env.D1) throw new Error('D1 binding missing');
+    // Cache API is Workers-specific (caches.default) — absent in tests.
+    const cache = (globalThis.caches as unknown as { default?: Cache } | undefined)?.default;
+    const cacheKey = new Request(new URL(pathname, request.url).toString());
+    if (cache) {
+      const hit = await cache.match(cacheKey);
+      if (hit) return hit;
+    }
+    const feed = pathname === '/events.json' ? await buildEventsFeed(env.D1) : await buildPlayersFeed(env.D1);
+    const response = new Response(JSON.stringify(feed), {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': FEED_CACHE_CONTROL,
+      },
+    });
+    if (cache) ctx.waitUntil(cache.put(cacheKey, response.clone()));
+    return response;
+  } catch (error) {
+    // The static build artifacts keep being generated until DATA-15 exactly so
+    // a D1 outage degrades to stale-but-valid data, never an error response.
+    console.error(`feed ${pathname} fell back to static assets:`, error);
+    return env.ASSETS.fetch(request);
+  }
+}
 
 // ─── Telegram ────────────────────────────────────────────────────────────────
 

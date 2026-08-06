@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- `/events.json` and `/players.json` are now served dynamically from D1 by the rrcalendar Worker (60s edge cache; automatic fallback to the static build artifacts on any D1 failure) — every shipped app gets DB-backed data with no app update; a new worker-parity CI step proves the dynamic feeds match the frozen JSON contract (DATA-07)
 - Re-runnable Flutter QA suite: 34 scenario-tagged integration tests + 7 synthetic datasets (`flutter/integration_test/`), `tool/qa/` orchestration scripts (run-suite, dataset injection, device pass, artifact collection), native-apps TEST-PLAN, and the 2026-07-27 test-run report (findings #11–#20; binary evidence kept local)
 - Flutter app: portrait-only lock and full-immersive fullscreen (Android + iOS), with gesture-bar insets on event/player/filter sheets
 
