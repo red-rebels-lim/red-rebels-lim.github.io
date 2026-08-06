@@ -6,14 +6,15 @@ A Progressive Web App for Nea Salamina FC (Cyprus), covering football and volley
 
 ## Project Status
 
-> **Last Updated:** 2026-07-17 | Use `/project-status` to regenerate
+> **Last Updated:** 2026-08-06 | Use `/project-status` to regenerate
 
 | Metric | Value |
 |--------|-------|
 | **Web PWA** | ✅ Live at [red-rebels.com](https://red-rebels.com) |
 | **Web sprint** (volleyball stats + mobile/settings redesign) | 11 of 11 tasks done |
-| **Flutter native app** | QA register fully resolved (25 done, 1 cancelled of 26) |
-| **In progress** | Android home-screen widget — live countdown (PR #101) |
+| **Flutter native app** | Shipped incl. Android widget; iOS push + widget pending Apple membership |
+| **Data platform** (Payload CMS + D1 + R2) | 7 of 15 tasks done — read path landing |
+| **In progress** | DATA read-path: `/events.json` + `/players.json` served from D1 (DATA-07 done, DATA-08 next) |
 
 ### Progress
 
@@ -21,7 +22,8 @@ A Progressive Web App for Nea Salamina FC (Cyprus), covering football and volley
 Web PWA          [████████████████████] 100%  ✅ Live in production
 Web sprint       [████████████████████] 100%  ✅ 11/11 tasks (app/.tasks/)
 Flutter QA       [████████████████████] 100%  ✅ 26/26 resolved (flutter/.tasks/)
-Android widget   [███████████████░░░░░]  75%  🔄 Next-match widget + countdown
+Android widget   [████████████████████] 100%  ✅ Shipped with live countdown
+Data platform    [█████████░░░░░░░░░░░]  47%  🔄 7/15 tasks (.tasks/)
 ```
 
 ### Completed
@@ -30,14 +32,17 @@ Android widget   [███████████████░░░░░] 
 - ✅ **Volleyball stats sprint** — stat types, engine, components, StatsPage tabs, Stitch design alignment (TASK-01–08)
 - ✅ **Mobile & settings redesign** — bottom nav, mobile calendar, settings page (TASK-09–11)
 - ✅ **Flutter app parity QA** — 26-item register closed 2026-07-16: theming, stats, settings, FotMob, first-run tour, cold-start fix (QA-01–26; QA-23 sharing cancelled by stakeholder decision)
+- ✅ **Android home-screen widget** — next-match widget with live countdown inside the final 24h (PRs #99, #101)
+- ✅ **Data platform: scaffold + seed** — Payload CMS deployed on CF Workers (D1+R2), data collections, season seed + 2025-26 historical backfill, parity checkers guarding the frozen JSON contract (DATA-01–06, PRs #120/#122)
 
 ### In Progress
 
-- 🔄 **Android home-screen widget** — next-match widget shipped (PR #99); live per-second countdown inside the final 24h open in PR #101
+- 🔄 **Data platform: read path** — the rrcalendar Worker serves `/events.json` + `/players.json` dynamically from D1 with static fallback (DATA-07, awaiting PR); live match updates next (DATA-08)
 
 ### Remaining
 
-- ⏳ iOS widget equivalent and store release preparation — see `flutter/.tasks/` and `app/.tasks/` for task-level detail
+- ⏳ **Data platform** — write path (scraper → Payload, reminders cron → API), push infra on D1, Back4App decommission (DATA-09–15, `.tasks/`)
+- ⏳ iOS push + widget and store release preparation — pending Apple Developer membership; see `flutter/.tasks/` for task-level detail
 
 ## Features
 

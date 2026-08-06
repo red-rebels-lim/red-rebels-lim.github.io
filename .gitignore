@@ -54,7 +54,7 @@ app/test-results
 *.lcov
 
 /scripts
-tests
+/tests
 .envrc
 .playwright-mcp/
 

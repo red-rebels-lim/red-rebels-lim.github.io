@@ -1,6 +1,6 @@
 # DATA-07: rrcalendar — bind D1, dynamic /events.json + /players.json
 
-**Status:** todo
+**Status:** in review (PR #123)
 **Batch:** read-path (`feat/worker-d1-api`)
 **Depends on:** DATA-03, DATA-06
 **Estimated scope:** Medium/Large
@@ -34,6 +34,17 @@ off the read path entirely.
 
 ## Acceptance criteria
 
-- [ ] Both endpoints serve DB data byte-identical to the static files (parity CI)
-- [ ] D1 outage → static fallback, not an error response
-- [ ] Existing routes (telegram webhook, SPA assets) untouched; app CI green
+- [x] Both endpoints serve DB data byte-identical to the static files (parity CI)
+      — `payload/scripts/worker-parity.ts` runs the Worker's builders against the
+      seeded local D1 and diffs vs the TS sources; wired into the CI `payload` job.
+- [x] D1 outage → static fallback, not an error response — covered by vitest
+      (`app/src/__tests__/worker/feeds.test.ts`): missing binding + query failure
+      both fall through to ASSETS.
+- [x] Existing routes (telegram webhook, SPA assets) untouched; app CI green —
+      814 tests + lint + build pass; `wrangler dev` smoke check against remote D1
+      served real 2026/27 data on both endpoints, SPA fallthrough 200.
+
+Note: local `wrangler dev` shows two dev-only quirks — miniflare persists the
+Cache API across restarts and workerd's frozen clock keeps cached entries from
+expiring, so `generatedAt` looks stuck locally. Production advances the clock
+per request and honours the 60s TTL. Verify post-deploy with two curls >60s apart.

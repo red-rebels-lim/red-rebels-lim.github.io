@@ -9,6 +9,7 @@ import path from 'path'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
+import { sortedStringify } from './lib/compare'
 import { loadEventsData, loadPlayers, loadSeasonYears } from './lib/extract'
 import { fixtureToLegacy, playerToLegacy } from './lib/legacy-shape'
 import type { LegacyEvent, MonthName } from './lib/types'
@@ -21,14 +22,6 @@ const SKIP_PLAYERS = process.env.SEED_SKIP_PLAYERS === '1'
 
 const payload = await getPayload({ config })
 const problems: string[] = []
-
-function sortedStringify(value: unknown): string {
-  return JSON.stringify(value, (_k, v) =>
-    v && typeof v === 'object' && !Array.isArray(v)
-      ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => a.localeCompare(b)))
-      : v,
-  )
-}
 
 function diffObjects(label: string, expected: unknown, actual: unknown) {
   const e = sortedStringify(expected)

@@ -176,3 +176,9 @@ jobs:
         working-directory: payload
         env:
           PAYLOAD_SECRET: ci-only-secret
+
+      - name: Worker feed parity (DATA-07)
+        run: npx cross-env NODE_OPTIONS=--no-deprecation payload run scripts/worker-parity.ts
+        working-directory: payload
+        env:
+          PAYLOAD_SECRET: ci-only-secret

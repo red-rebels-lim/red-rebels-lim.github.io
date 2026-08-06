@@ -11,6 +11,11 @@ Apps never read from this Worker: the `rrcalendar` Worker (`app/src/_worker.ts`)
 binds the same D1 database and serves the public JSON API. This project exists
 for the admin UI, the scraper's REST write path, and D1 migrations.
 
+Production admin: **https://admin.red-rebels.com/admin** (custom domain on the
+Worker; the workers.dev URL is disabled). Route changes alone can be applied
+without a code deploy via `npx wrangler triggers deploy` — it validates
+`assets.directory`, so `mkdir -p .open-next/assets` first if you haven't built.
+
 ## Commands (npm, run from `payload/`)
 
 | Command | What |
@@ -48,9 +53,32 @@ and point `SEED_EVENTS`/`SEED_CONSTANTS`/`SEED_TRANSLATE`/`SEED_I18N_EN` at them
 with `SEED_SKIP_PLAYERS=1 SEED_NOT_CURRENT=1` (2025-26 lives at revision
 `40f6ae7` — the last pure pre-rollover state). `scripts/lib/legacy-shape.ts` is
 the DB→contract reshape shared with the parity checker; the serving Worker
-(DATA-07) must produce identical output. eventKey is unique per **(season,
-eventKey)** — the legacy key carries no year, so league fixtures recur across
-seasons. CI runs migrate → test → seed → parity on every PR (`payload` job).
+(DATA-07) imports it via `app/src/worker/feeds.ts` and
+`scripts/worker-parity.ts` proves its output matches too. eventKey is unique
+per **(season, eventKey)** — the legacy key carries no year, so league fixtures
+recur across seasons. CI runs migrate → test → seed → parity → worker-parity
+on every PR (`payload` job).
+
+## Live match flow (DATA-08)
+
+Dashboard flow during a match, from the fixture's edit page:
+
+1. **Kickoff** — set status to `live`. The fixture appears on `/live.json`;
+   `/events.json` keeps reporting it as `upcoming` (the frozen contract has no
+   live state).
+2. **During the match** — edit `score` (and `sets` for volleyball) as it
+   changes. Every save is visible on the public endpoints within seconds.
+3. **Full time** — set status to `played` with the final score/detail. Played
+   results are final: the scraper (DATA-09) only fills missing detail.
+
+How the propagation works: every write to a data collection (fixtures, teams,
+players, squad-memberships, seasons) bumps a `dataVersion` row in `payload_kv`
+(`src/lib/dataVersion.ts`) — same D1, no external calls. The rrcalendar Worker
+keys its edge cache on that value and memoizes the version lookup for ~10s, so
+a poll storm costs O(1) D1 reads and an edit shows up in ≤ ~10s regardless of
+the entries' `max-age`. Gotcha: this project's pinned `@payloadcms/db-d1-sqlite`
+aliases `upsert` to `updateOne`, so `payload.kv.set` on a **missing** key is a
+silent no-op — `bumpDataVersion` creates the row at the db layer the first time.
 
 ## Rules
 

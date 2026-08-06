@@ -13,6 +13,17 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "d1_databases": [
+    {
+      // Same database the Payload Worker writes (provisioned in DATA-03).
+      // "remote": true points local `wrangler dev` at the real D1 so the
+      // preview smoke check exercises production data (reads only).
+      "binding": "D1",
+      "database_id": "05c8389c-dede-431e-bb1c-80551e8dceb8",
+      "database_name": "solosalamina-data",
+      "remote": true
+    }
+  ],
   "secrets_store_secrets": [
     { "binding": "TELEGRAM_BOT_TOKEN", "store_id": "5bc2095c42554bd29807d19bffc06a2a", "secret_name": "TELEGRAM_BOT_TOKEN" },
     { "binding": "BACK4APP_APP_ID", "store_id": "5bc2095c42554bd29807d19bffc06a2a", "secret_name": "BACK4APP_APP_ID" },

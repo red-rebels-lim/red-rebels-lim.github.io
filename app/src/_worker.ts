@@ -1,17 +1,32 @@
 /**
  * Cloudflare Worker entry point.
  * Routes /api/* webhook requests to the appropriate handlers.
+ * /events.json and /players.json are served dynamically from D1 (DATA-07),
+ * falling back to the static build artifacts on any failure.
  * Everything else is served from static assets.
  */
 
+import {
+  buildEventsFeed,
+  buildLiveFeed,
+  buildPlayersFeed,
+  getDataVersion,
+  type D1Database,
+} from './worker/feeds';
+
 interface SecretsStoreBinding {
   get(): Promise<string | null>;
+}
+
+interface ExecutionContext {
+  waitUntil(promise: Promise<unknown>): void;
 }
 
 interface Env {
   TELEGRAM_BOT_TOKEN: SecretsStoreBinding;
   BACK4APP_APP_ID: SecretsStoreBinding;
   BACK4APP_REST_API_KEY: SecretsStoreBinding;
+  D1?: D1Database;
   ASSETS: { fetch: (request: Request) => Promise<Response> };
 }
 
@@ -32,7 +47,7 @@ async function resolveSecrets(env: Env): Promise<ResolvedSecrets | null> {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     if (url.pathname === '/api/telegram-webhook' && request.method === 'POST') {
@@ -41,9 +56,60 @@ export default {
       return handleTelegramWebhook(request, secrets.telegramToken, secrets.appId, secrets.restApiKey);
     }
 
+    if (request.method === 'GET' && url.pathname in FEEDS) {
+      return serveFeed(request, env, ctx, url.pathname as keyof typeof FEEDS);
+    }
+
     return env.ASSETS.fetch(request);
   },
 };
+
+// ─── D1-backed feeds (DATA-07/08) ────────────────────────────────────────────
+
+// Cache keys include the Payload-bumped data version (DATA-08), so a dashboard
+// edit is visible within the ~10s version memo; max-age only bounds the edge
+// entry's lifetime and client-side caching.
+const FEEDS = {
+  '/events.json': { build: buildEventsFeed, maxAge: 60 },
+  '/players.json': { build: buildPlayersFeed, maxAge: 60 },
+  '/live.json': { build: buildLiveFeed, maxAge: 30 },
+} as const;
+
+async function serveFeed(request: Request, env: Env, ctx: ExecutionContext, pathname: keyof typeof FEEDS): Promise<Response> {
+  const { build, maxAge } = FEEDS[pathname];
+  try {
+    if (!env.D1) throw new Error('D1 binding missing');
+    // Cache API is Workers-specific (caches.default) — absent in tests.
+    const cache = (globalThis.caches as unknown as { default?: Cache } | undefined)?.default;
+    const version = await getDataVersion(env.D1);
+    const cacheKey = new Request(`${new URL(pathname, request.url)}?v=${encodeURIComponent(version)}`);
+    if (cache) {
+      const hit = await cache.match(cacheKey);
+      if (hit) return hit;
+    }
+    const feed = await build(env.D1);
+    const response = new Response(JSON.stringify(feed), {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': `public, max-age=${maxAge}`,
+      },
+    });
+    if (cache) ctx.waitUntil(cache.put(cacheKey, response.clone()));
+    return response;
+  } catch (error) {
+    console.error(`feed ${pathname} fell back:`, error);
+    if (pathname === '/live.json') {
+      // No static counterpart exists (the SPA fallthrough would serve HTML) —
+      // an empty list is the contract-valid degraded answer.
+      return new Response('[]', {
+        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'public, max-age=5' },
+      });
+    }
+    // The static build artifacts keep being generated until DATA-15 exactly so
+    // a D1 outage degrades to stale-but-valid data, never an error response.
+    return env.ASSETS.fetch(request);
+  }
+}
 
 // ─── Telegram ────────────────────────────────────────────────────────────────
 
