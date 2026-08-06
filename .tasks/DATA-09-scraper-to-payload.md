@@ -1,6 +1,6 @@
 # DATA-09: Scraper → Payload REST writes (merge rules, dual-write)
 
-**Status:** in progress
+**Status:** in review (PR #127)
 **Batch:** write-path (`feat/scraper-payload`)
 **Depends on:** DATA-03
 **Estimated scope:** Large
