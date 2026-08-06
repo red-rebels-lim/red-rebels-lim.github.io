@@ -24,6 +24,9 @@ export const Fixtures: CollectionConfig = {
       'Live-edit flow: set status to "live" at kickoff, edit the score during the match, set "played" + final score at full time. Played results are final — the scraper only fills missing detail.',
   },
   defaultSort: '-kickoff',
+  // The legacy eventKey carries no year, so league fixtures recur across
+  // seasons — uniqueness is per (season, eventKey), never global.
+  indexes: [{ fields: ['season', 'eventKey'], unique: true }],
   hooks: {
     beforeValidate: [
       ({ data }) => {
@@ -79,6 +82,14 @@ export const Fixtures: CollectionConfig = {
       },
     },
     { name: 'venue', type: 'text' },
+    {
+      name: 'logoUrl',
+      type: 'text',
+      admin: {
+        description:
+          'Legacy opponent-logo path (images/team_logos/*.webp) — served verbatim in the frozen JSON contract.',
+      },
+    },
     {
       name: 'status',
       type: 'select',
@@ -196,7 +207,6 @@ export const Fixtures: CollectionConfig = {
     {
       name: 'eventKey',
       type: 'text',
-      unique: true,
       index: true,
       admin: {
         readOnly: true,

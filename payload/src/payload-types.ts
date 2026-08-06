@@ -203,6 +203,10 @@ export interface Team {
     | null;
   sports?: ('football-men' | 'volleyball-men' | 'volleyball-women')[] | null;
   fotmobId?: number | null;
+  /**
+   * Legacy crest path (images/team_logos/*.webp).
+   */
+  logoUrl?: string | null;
   logo?: (number | null) | TeamLogo;
   updatedAt: string;
   createdAt: string;
@@ -252,6 +256,10 @@ export interface Player {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Legacy portrait path (/images/players/*.webp) — served verbatim in the frozen JSON contract (Flutter prefixes the site base URL).
+   */
+  photoUrl?: string | null;
   photo?: (number | null) | PlayerPhoto;
   updatedAt: string;
   createdAt: string;
@@ -325,6 +333,10 @@ export interface Fixture {
    */
   opponentName: string;
   venue?: string | null;
+  /**
+   * Legacy opponent-logo path (images/team_logos/*.webp) — served verbatim in the frozen JSON contract.
+   */
+  logoUrl?: string | null;
   status: 'upcoming' | 'live' | 'played';
   /**
    * Home-away order, e.g. 2-1 (volleyball: sets, e.g. 3-1).
@@ -566,6 +578,7 @@ export interface TeamsSelect<T extends boolean = true> {
       };
   sports?: T;
   fotmobId?: T;
+  logoUrl?: T;
   logo?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -589,6 +602,7 @@ export interface PlayersSelect<T extends boolean = true> {
         name?: T;
         id?: T;
       };
+  photoUrl?: T;
   photo?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -622,6 +636,7 @@ export interface FixturesSelect<T extends boolean = true> {
   opponent?: T;
   opponentName?: T;
   venue?: T;
+  logoUrl?: T;
   status?: T;
   score?: T;
   penalties?: T;
