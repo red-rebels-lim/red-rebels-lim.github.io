@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { planSync, eventToFixtureData, type SeasonInfo } from './payload-sync.ts';
+import { planSync, eventToFixtureData, assertPlanSafe, type SeasonInfo, type SyncPlan } from './payload-sync.ts';
 import type { SportEvent } from './index.ts';
 
 const season: SeasonInfo = { id: 1, startYear: 2026, endYear: 2027 };
@@ -151,6 +151,28 @@ describe('planSync — protection rules', () => {
     );
     expect(plan.updates).toHaveLength(0);
     expect(plan.skips[0].reason).toBe('played-unchanged');
+  });
+});
+
+describe('assertPlanSafe', () => {
+  const planWith = (creates: number): SyncPlan => ({
+    creates: Array.from({ length: creates }, (_, i) => ({ eventKey: `key-${i}`, data: {} })),
+    updates: [],
+    skips: [],
+    unknownOpponents: [],
+  });
+
+  it('aborts when creations exceed the safety cap (stale-source scrape)', () => {
+    expect(() => assertPlanSafe(planWith(78), 15)).toThrow(/78 fixture creations exceed the safety cap of 15/);
+  });
+
+  it('passes normal-sized plans and honours a raised cap', () => {
+    expect(() => assertPlanSafe(planWith(3), 15)).not.toThrow();
+    expect(() => assertPlanSafe(planWith(78), 78)).not.toThrow();
+  });
+
+  it('aborts on unknown opponents', () => {
+    expect(() => assertPlanSafe({ ...planWith(0), unknownOpponents: ['ΧΧΧ'] }, 15)).toThrow(/unknown opponents/);
   });
 });
 

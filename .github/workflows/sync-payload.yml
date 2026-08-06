@@ -1,0 +1,42 @@
+# Dual-write gate (DATA-09): syncs events.ts to the Payload/D1 database only
+# AFTER it lands on main — i.e. after the scraper's PR passed human review.
+# The scrape run itself only dry-runs the sync (its plan is in that run's log).
+# Feed parity then proves production serves every reviewed value.
+
+name: Sync events to Payload
+
+on:
+  push:
+    branches: [main]
+    paths: ['app/src/data/events.ts']
+  workflow_dispatch:
+
+concurrency:
+  group: payload-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+
+      - name: Install scraper dependencies
+        run: npm install
+        working-directory: app/scripts/scraper
+
+      - name: Sync events.ts to Payload/D1
+        run: npx tsx payload-sync-run.ts
+        working-directory: app/scripts/scraper
+        env:
+          PAYLOAD_API_KEY: ${{ secrets.PAYLOAD_API_KEY }}
+
+      - name: Feed parity (production D1 feed vs events.ts)
+        run: npx tsx feed-parity.ts
+        working-directory: app/scripts/scraper
