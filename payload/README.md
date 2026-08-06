@@ -11,6 +11,11 @@ Apps never read from this Worker: the `rrcalendar` Worker (`app/src/_worker.ts`)
 binds the same D1 database and serves the public JSON API. This project exists
 for the admin UI, the scraper's REST write path, and D1 migrations.
 
+Production admin: **https://admin.red-rebels.com/admin** (custom domain on the
+Worker; the workers.dev URL is disabled). Route changes alone can be applied
+without a code deploy via `npx wrangler triggers deploy` — it validates
+`assets.directory`, so `mkdir -p .open-next/assets` first if you haven't built.
+
 ## Commands (npm, run from `payload/`)
 
 | Command | What |

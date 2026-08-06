@@ -15,6 +15,14 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS",
   },
+  "routes": [
+    // Admin dashboard at https://admin.red-rebels.com/admin — Cloudflare
+    // manages the DNS record + cert for custom domains automatically.
+    {
+      "pattern": "admin.red-rebels.com",
+      "custom_domain": true,
+    },
+  ],
   "d1_databases": [
     {
       "binding": "D1",
