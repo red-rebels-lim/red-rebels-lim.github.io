@@ -15,7 +15,7 @@ Only things you would otherwise get wrong are recorded here.
 
 - Local dev: `cd app && npm run dev` (Vite at `:5173`). Worker preview: `npm run preview` (build + `wrangler dev`).
 - Build: `npm run build` runs `generate:calendar` → `tsc -b` → `vite build`. The first step rewrites `public/calendar.ics` and `public/calendar-el.ics` (gitignored).
-- Deploy: production deploys are wired through the **Cloudflare dashboard's git integration** (not a GitHub Action in this repo). Pushing to `main` triggers Cloudflare's build + deploy. For local manual deploys (rare), `npm run deploy` = `npm run build && wrangler deploy` with appropriate `wrangler` auth. For a hotfix, prefer pushing a PR through main rather than running `wrangler deploy` directly — the dashboard pipeline is the source of truth.
+- Deploy: production deploys are wired through the **Cloudflare dashboard's git integration** (not a GitHub Action in this repo). Pushing to `main` triggers Cloudflare's build + deploy — this applies to **both** Workers: `rrcalendar` (app) and `solosalamina-payload` (payload/, watch paths `payload/**`). For local manual deploys (rare), `npm run deploy` in the respective project with `wrangler` auth. For a hotfix, prefer pushing a PR through main rather than running `wrangler deploy` directly — the dashboard pipeline is the source of truth.
 - Pre-push hook (`app/.husky/pre-push`) runs lint + test + build. Don't `--no-verify`.
 - Never push directly to `main`. Always open a PR.
 
