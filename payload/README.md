@@ -28,6 +28,14 @@ without a code deploy via `npx wrangler triggers deploy` — it validates
 | `npm run generate:types` | regen `cloudflare-env.d.ts` + `payload-types.ts` |
 | `npm run deploy` | migrate remote D1 + build with OpenNext + deploy Worker (**needs wrangler auth**, DATA-03) |
 
+Merges to `main` that touch `payload/**` build + deploy automatically via the
+Cloudflare dashboard's **Workers Builds** git integration (same mechanism as
+the `rrcalendar` Worker; root directory `payload`, deploy command runs
+`deploy:database` first so D1 migrations apply before the new code serves).
+`npm run deploy` remains the manual/emergency path. Note: the very first build
+after connecting the repo only fires on the next qualifying push — there is no
+"build now" button while the build history is empty.
+
 ## Local setup
 
 ```sh
