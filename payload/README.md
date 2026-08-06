@@ -28,6 +28,10 @@ without a code deploy via `npx wrangler triggers deploy` — it validates
 | `npm run generate:types` | regen `cloudflare-env.d.ts` + `payload-types.ts` |
 | `npm run deploy` | migrate remote D1 + build with OpenNext + deploy Worker (**needs wrangler auth**, DATA-03) |
 
+Merges to `main` that touch `payload/**` deploy automatically via
+`.github/workflows/deploy-payload.yml` (needs the `CLOUDFLARE_API_TOKEN` repo
+secret); `npm run deploy` remains for manual/emergency deploys.
+
 ## Local setup
 
 ```sh

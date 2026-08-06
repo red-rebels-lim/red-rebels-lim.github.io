@@ -1,0 +1,56 @@
+# Deploys the Payload CMS Worker (payload/) on every merge to main that
+# touches it: remote D1 migrations, OpenNext build, wrangler deploy — the same
+# `npm run deploy` used for manual deploys. The rrcalendar Worker (app/) is NOT
+# deployed here — that stays on the Cloudflare dashboard's git integration.
+#
+# Requires the CLOUDFLARE_API_TOKEN repo secret (account-scoped: Workers
+# Scripts:Edit + D1:Edit). PAYLOAD_SECRET is only needed at runtime — the
+# deployed Worker reads it from its Cloudflare secret (set in DATA-03) — so the
+# build uses a placeholder, mirroring the deploy:database script.
+
+name: Deploy Payload
+
+on:
+  push:
+    branches: [main]
+    paths: ['payload/**']
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-payload
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Migrate D1 + deploy Worker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail fast if unconfigured
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN repo secret is not set — create an account API token (Workers Scripts:Edit + D1:Edit) and add it via 'gh secret set CLOUDFLARE_API_TOKEN'"
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: payload/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: payload
+
+      - name: Migrate remote D1 + build + deploy
+        run: npm run deploy
+        working-directory: payload
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: fc9845c61382875222ba1c4f85fece0d
+          PAYLOAD_SECRET: ignore
+          NEXT_TELEMETRY_DISABLED: '1'

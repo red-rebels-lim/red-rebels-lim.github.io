@@ -26,6 +26,7 @@ Only things you would otherwise get wrong are recorded here.
 | `ci.yml` | PR | type-check, lint, test, build | does not run e2e, does not deploy |
 | `scrape.yml` | manual (`workflow_dispatch`) | runs scraper, sends notifications, opens PR with updated `events.ts` | not on a schedule |
 | `reminders.yml` | cron `*/30 * * * *` | sends Web Push + Telegram reminders for matches in next 25h | does not touch repo |
+| `deploy-payload.yml` | push to `main` touching `payload/**` (+ manual) | remote D1 migrate + OpenNext build + deploy Payload Worker | does not deploy rrcalendar (that's the CF dashboard git integration) |
 
 ## Directory map
 
@@ -94,6 +95,7 @@ Four separate `package.json` files: `app/`, `app/scripts/scraper/`, `.github/scr
 | `VITE_GA_MEASUREMENT_ID`, `VITE_CLARITY_PROJECT_ID` | `app/.env.local` (optional) | Analytics |
 | `BACK4APP_APP_ID`, `BACK4APP_REST_API_KEY`, `TELEGRAM_BOT_TOKEN` | Cloudflare Secrets Store (binding in `wrangler.jsonc`) | Worker runtime |
 | `BACK4APP_APP_ID`, `BACK4APP_MASTER_KEY`, `VAPID_*`, `TELEGRAM_BOT_TOKEN` | GitHub Actions secrets | Cron + scraper |
+| `CLOUDFLARE_API_TOKEN` | GitHub Actions secret | Payload Worker deploy (`deploy-payload.yml`) — account token, Workers Scripts:Edit + D1:Edit |
 
 `app/.env.example` is the source of truth for client-side vars. Empty values are fine for local dev — Back4App is only needed for push features.
 
