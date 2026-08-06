@@ -1,5 +1,11 @@
-import { describe, it, expect, vi } from 'vitest';
-import { buildEventsFeed, buildPlayersFeed } from '@/worker/feeds';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  buildEventsFeed,
+  buildLiveFeed,
+  buildPlayersFeed,
+  getDataVersion,
+  resetDataVersionMemo,
+} from '@/worker/feeds';
 import type { D1Database, D1PreparedStatement } from '@/worker/feeds';
 import worker from '@/_worker';
 
@@ -256,6 +262,88 @@ describe('buildPlayersFeed', () => {
   });
 });
 
+describe('buildLiveFeed', () => {
+  it('returns the tiny live shape with sets for a live volleyball match', async () => {
+    const feed = await buildLiveFeed(
+      fakeD1({
+        seasons,
+        // fake resolves by first FROM — the live query targets fixtures
+        fixtures: [
+          {
+            id: 11,
+            event_key: 'july-21-volleyball-women-ΑΕΛ',
+            sport: 'volleyball-women',
+            opponent_name: 'ΑΕΛ',
+            location: 'away',
+            kickoff: '2026-07-21T15:00:00.000Z',
+            score: '1-1',
+            status: 'live',
+          },
+        ],
+        fixtures_sets: childTables.fixtures_sets,
+      }),
+    );
+    expect(feed).toEqual([
+      {
+        eventKey: 'july-21-volleyball-women-ΑΕΛ',
+        sport: 'volleyball-women',
+        opponent: 'ΑΕΛ',
+        location: 'away',
+        kickoff: '2026-07-21T15:00:00.000Z',
+        score: '1-1',
+        sets: [
+          { home: 25, away: 20 },
+          { home: 23, away: 25 },
+        ],
+      },
+    ]);
+  });
+
+  it('returns [] when nothing is live', async () => {
+    expect(await buildLiveFeed(fakeD1({ seasons, fixtures: [] }))).toEqual([]);
+  });
+});
+
+describe('getDataVersion', () => {
+  beforeEach(() => {
+    resetDataVersionMemo();
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const countingD1 = (rows: Row[]) => {
+    let queries = 0;
+    const stmt: D1PreparedStatement = {
+      bind: () => stmt,
+      all: async () => {
+        queries++;
+        return { results: rows };
+      },
+    };
+    return {
+      d1: { prepare: () => stmt, batch: async () => [] } as D1Database,
+      count: () => queries,
+    };
+  };
+
+  it('reads the payload_kv row and memoizes it for 10s', async () => {
+    const { d1, count } = countingD1([{ data: '1754482800000.7' }]);
+    expect(await getDataVersion(d1)).toBe('1754482800000.7');
+    expect(await getDataVersion(d1)).toBe('1754482800000.7');
+    expect(count()).toBe(1);
+    vi.advanceTimersByTime(10_001);
+    await getDataVersion(d1);
+    expect(count()).toBe(2);
+  });
+
+  it("degrades to '0' when the row is missing", async () => {
+    const { d1 } = countingD1([]);
+    expect(await getDataVersion(d1)).toBe('0');
+  });
+});
+
 describe('worker feed routes', () => {
   const staticResponse = () => new Response('{"static":true}');
   const makeEnv = (d1?: D1Database) =>
@@ -278,6 +366,39 @@ describe('worker feed routes', () => {
     const res = await worker.fetch(new Request('https://example.com/players.json'), env, ctx);
     const body = (await res.json()) as { players: unknown[] };
     expect(body.players).toEqual([]);
+  });
+
+  it('serves /live.json as a bare array', async () => {
+    const env = makeEnv(
+      fakeD1({
+        seasons,
+        fixtures: [
+          {
+            id: 11,
+            event_key: 'july-21-volleyball-women-ΑΕΛ',
+            sport: 'volleyball-women',
+            opponent_name: 'ΑΕΛ',
+            location: 'away',
+            kickoff: '2026-07-21T15:00:00.000Z',
+            score: null,
+            status: 'live',
+          },
+        ],
+        fixtures_sets: [],
+      }),
+    );
+    const res = await worker.fetch(new Request('https://example.com/live.json'), env, ctx);
+    expect(res.headers.get('Cache-Control')).toBe('public, max-age=30');
+    const body = (await res.json()) as { eventKey: string }[];
+    expect(body).toHaveLength(1);
+    expect(body[0].eventKey).toBe('july-21-volleyball-women-ΑΕΛ');
+  });
+
+  it('degrades /live.json to [] when D1 is unavailable (never SPA HTML)', async () => {
+    const env = makeEnv(undefined);
+    const res = await worker.fetch(new Request('https://example.com/live.json'), env, ctx);
+    expect(res.headers.get('Content-Type')).toContain('application/json');
+    expect(await res.json()).toEqual([]);
   });
 
   it('falls back to static assets when the D1 binding is missing', async () => {

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { dataVersionHooks } from '../lib/dataVersion'
 import { SPORT_OPTIONS } from './shared'
 
 export const Teams: CollectionConfig = {
@@ -7,6 +8,7 @@ export const Teams: CollectionConfig = {
     useAsTitle: 'nameEl',
     defaultColumns: ['slug', 'nameEl', 'nameEn', 'sports'],
   },
+  hooks: dataVersionHooks,
   fields: [
     {
       name: 'slug',

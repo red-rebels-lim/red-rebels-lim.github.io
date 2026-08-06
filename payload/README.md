@@ -54,6 +54,27 @@ per **(season, eventKey)** — the legacy key carries no year, so league fixture
 recur across seasons. CI runs migrate → test → seed → parity → worker-parity
 on every PR (`payload` job).
 
+## Live match flow (DATA-08)
+
+Dashboard flow during a match, from the fixture's edit page:
+
+1. **Kickoff** — set status to `live`. The fixture appears on `/live.json`;
+   `/events.json` keeps reporting it as `upcoming` (the frozen contract has no
+   live state).
+2. **During the match** — edit `score` (and `sets` for volleyball) as it
+   changes. Every save is visible on the public endpoints within seconds.
+3. **Full time** — set status to `played` with the final score/detail. Played
+   results are final: the scraper (DATA-09) only fills missing detail.
+
+How the propagation works: every write to a data collection (fixtures, teams,
+players, squad-memberships, seasons) bumps a `dataVersion` row in `payload_kv`
+(`src/lib/dataVersion.ts`) — same D1, no external calls. The rrcalendar Worker
+keys its edge cache on that value and memoizes the version lookup for ~10s, so
+a poll storm costs O(1) D1 reads and an edit shows up in ≤ ~10s regardless of
+the entries' `max-age`. Gotcha: this project's pinned `@payloadcms/db-d1-sqlite`
+aliases `upsert` to `updateOne`, so `payload.kv.set` on a **missing** key is a
+silent no-op — `bumpDataVersion` creates the row at the db layer the first time.
+
 ## Rules
 
 - **Payload version is pinned exactly** (currently 3.82.1). The `rrcalendar`

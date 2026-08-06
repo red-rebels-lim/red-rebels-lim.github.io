@@ -35,6 +35,17 @@ export interface PlayersFeed {
   players: unknown[]
 }
 
+/** /live.json entry — a new (non-frozen) contract, deliberately tiny. */
+export interface LiveMatch {
+  eventKey: string
+  sport: string
+  opponent: string
+  location: string
+  kickoff: string
+  score?: string
+  sets?: { home: number; away: number }[]
+}
+
 // The static feed lists month buckets in season order starting at July
 // (pre-season friendlies belong to the start year).
 const SEASON_MONTH_ORDER: MonthName[] = [
@@ -63,6 +74,33 @@ function groupByParent(rows: Row[], pick: (row: Row) => Row): Map<unknown, Row[]
     byParent.get(parent)!.push(pick(row))
   }
   return byParent
+}
+
+// ─── data version (DATA-08) ─────────────────────────────────────────────────
+// Payload bumps the payload_kv 'dataVersion' row on every write to a data
+// collection; the Worker keys its edge cache on the value. The lookup itself
+// is memoized per isolate so a poll storm costs O(1) D1 reads per 10s.
+
+const VERSION_MEMO_TTL_MS = 10_000
+let versionMemo: { value: string; at: number } | null = null
+
+/** Test hook — clears the per-isolate memo. */
+export function resetDataVersionMemo(): void {
+  versionMemo = null
+}
+
+export async function getDataVersion(d1: D1Database): Promise<string> {
+  const now = Date.now()
+  if (versionMemo && now - versionMemo.at < VERSION_MEMO_TTL_MS) return versionMemo.value
+  const { results } = await d1
+    .prepare('SELECT data FROM payload_kv WHERE key = ?1 LIMIT 1')
+    .bind('dataVersion')
+    .all()
+  // Opaque token — the raw JSON text of the KV row (a timestamp). Missing row
+  // (fresh DB, hooks never fired) degrades to '0': TTL-only caching, as before.
+  const value = String(results[0]?.data ?? '0')
+  versionMemo = { value, at: now }
+  return value
 }
 
 async function currentSeason(d1: D1Database): Promise<Row> {
@@ -172,6 +210,39 @@ export async function buildEventsFeed(d1: D1Database): Promise<EventsFeed> {
     generatedAt: new Date().toISOString(),
     events,
   }
+}
+
+export async function buildLiveFeed(d1: D1Database): Promise<LiveMatch[]> {
+  const { results: live } = await d1
+    .prepare(
+      `SELECT f.* FROM fixtures f JOIN seasons s ON f.season_id = s.id
+       WHERE s.is_current = 1 AND f.status = 'live' ORDER BY f.kickoff, f.id`,
+    )
+    .all()
+  if (live.length === 0) return []
+
+  const { results: setRows } = await d1
+    .prepare(
+      `SELECT c.* FROM fixtures_sets c JOIN fixtures f ON c._parent_id = f.id
+       JOIN seasons s ON f.season_id = s.id
+       WHERE s.is_current = 1 AND f.status = 'live' ORDER BY c._parent_id, c._order`,
+    )
+    .all()
+  const setsByFixture = groupByParent(setRows, (r) => ({ home: r.home, away: r.away }))
+
+  return live.map((row) => {
+    const match: LiveMatch = {
+      eventKey: String(row.event_key),
+      sport: String(row.sport),
+      opponent: String(row.opponent_name),
+      location: String(row.location),
+      kickoff: String(row.kickoff),
+    }
+    if (row.score != null) match.score = String(row.score)
+    const sets = setsByFixture.get(row.id)
+    if (sets) match.sets = sets as { home: number; away: number }[]
+    return match
+  })
 }
 
 export async function buildPlayersFeed(d1: D1Database): Promise<PlayersFeed> {

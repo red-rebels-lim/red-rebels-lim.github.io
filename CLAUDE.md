@@ -32,7 +32,8 @@ Only things you would otherwise get wrong are recorded here.
 ```
 app/                       # the application — work here
   src/
-    _worker.ts             # CF Worker entry: /api/telegram-webhook
+    _worker.ts             # CF Worker entry: /api/telegram-webhook + D1-backed
+                           #   /events.json /players.json /live.json (static fallback)
     sw.ts                  # service worker (push notifications)
     App.tsx                # router (BrowserRouter)
     pages/                 # CalendarPage, StatsPage (lazy), SettingsPage (lazy)

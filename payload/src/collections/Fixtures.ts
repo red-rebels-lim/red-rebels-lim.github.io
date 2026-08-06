@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { dataVersionHooks } from '../lib/dataVersion'
 import { computeEventKey } from '../lib/eventKey'
 import { SPORT_OPTIONS, TEAM_SIDE_OPTIONS } from './shared'
 
@@ -36,6 +37,7 @@ export const Fixtures: CollectionConfig = {
         return data
       },
     ],
+    ...dataVersionHooks,
   },
   fields: [
     { name: 'season', type: 'relationship', relationTo: 'seasons', required: true, index: true },

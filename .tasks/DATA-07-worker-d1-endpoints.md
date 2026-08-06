@@ -1,6 +1,6 @@
 # DATA-07: rrcalendar — bind D1, dynamic /events.json + /players.json
 
-**Status:** done (feat/worker-d1-api, awaiting PR)
+**Status:** in review (PR #123)
 **Batch:** read-path (`feat/worker-d1-api`)
 **Depends on:** DATA-03, DATA-06
 **Estimated scope:** Medium/Large

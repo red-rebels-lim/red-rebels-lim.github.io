@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { dataVersionHooks } from '../lib/dataVersion'
 
 export const Seasons: CollectionConfig = {
   slug: 'seasons',
@@ -6,6 +7,7 @@ export const Seasons: CollectionConfig = {
     useAsTitle: 'code',
     defaultColumns: ['code', 'startYear', 'endYear', 'isCurrent'],
   },
+  hooks: dataVersionHooks,
   fields: [
     {
       name: 'code',
