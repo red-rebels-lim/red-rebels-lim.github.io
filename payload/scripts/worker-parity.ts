@@ -23,6 +23,10 @@ const CONSTANTS_PATH = process.env.SEED_CONSTANTS ?? path.join(APP_SRC, 'data/co
 
 const proxy = await getPlatformProxy<{ D1: D1Database }>({
   configPath: path.resolve(import.meta.dirname, '../wrangler.jsonc'),
+  // The binding is remote:true for deploys, but parity must read the locally
+  // seeded simulator (CI has no Cloudflare auth) — same as payload.config.ts
+  // outside production.
+  remoteBindings: false,
 })
 
 const problems: string[] = []
