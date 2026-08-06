@@ -1,6 +1,6 @@
 # DATA-08: Live updates — live status flow, /live.json, purge-on-write
 
-**Status:** done (feat/live-updates, awaiting PR)
+**Status:** in review (PR #123)
 **Batch:** read-path (`feat/worker-d1-api`)
 **Depends on:** DATA-07
 **Estimated scope:** Medium
