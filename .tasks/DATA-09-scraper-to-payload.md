@@ -48,5 +48,24 @@ Dual-write initially: events.ts keeps being written until DATA-15.
 - [x] Unknown opponent aborts with a clear error before any write (plan phase
       collects unknowns; executor throws before any POST/PATCH)
 
-Soak checklist (after merge): `gh workflow run scrape.yml`, review the run's
-sync log + feed-parity output + the events.ts PR it opens.
+## Soak run record (2026-08-06, run 31114619957)
+
+The soak caught a real design flaw. The scraper's season URLs still pointed at
+25/26 sources (gather-season-schedule pending), so the run planned 78 junk
+creations + 2 dateTbd adoptions onto last season's dates — and because the
+sync ran inside the scrape, it wrote them straight to production D1,
+bypassing the events.ts PR review gate. All 25/26 opponents exist in the
+teams registry (historical backfill), so the unknown-opponent guard passed.
+
+Cleanup: junk PR #128 closed; 80 fixtures + 1,479 child rows deleted from D1
+(backed up to session scratchpad first); the 2 corrupted draw fixtures
+restored via remote seed; the admin-entered Aug 5 result re-applied
+(the seed has no protection rules — its status write clobbered it); feed
+parity green, 35 events, production verified.
+
+Fixes:
+- D1 writes moved behind the review gate: scrape.yml only DRY-RUNS the sync
+  (plan in the log for the reviewer); `sync-payload.yml` performs the real
+  sync when events.ts lands on main, then runs feed parity.
+- Bulk-create safety cap (`assertPlanSafe`, default 15, override
+  `PAYLOAD_MAX_CREATES`) — a stale-source scrape can never mass-create again.

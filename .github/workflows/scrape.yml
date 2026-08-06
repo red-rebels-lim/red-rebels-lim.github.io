@@ -31,12 +31,11 @@ jobs:
         run: npm run scrape
         working-directory: app/scripts/scraper
         env:
-          # Dual-write (DATA-09): sync the merged result to Payload/D1.
+          # DATA-09: the D1 sync only DRY-RUNS here — its plan lands in this
+          # log for the PR reviewer. Real writes happen post-merge via
+          # sync-payload.yml, so the events.ts PR review gates the database.
           PAYLOAD_API_KEY: ${{ secrets.PAYLOAD_API_KEY }}
-
-      - name: Feed parity (production D1 feed vs scraped events.ts)
-        run: npx tsx feed-parity.ts
-        working-directory: app/scripts/scraper
+          PAYLOAD_DRY_RUN: '1'
 
       - name: Check for changes
         id: check_changes

@@ -24,7 +24,8 @@ Only things you would otherwise get wrong are recorded here.
 | File | Trigger | What it does | What it does NOT do |
 |---|---|---|---|
 | `ci.yml` | PR | type-check, lint, test, build | does not run e2e, does not deploy |
-| `scrape.yml` | manual (`workflow_dispatch`) | runs scraper, sends notifications, opens PR with updated `events.ts` | not on a schedule |
+| `scrape.yml` | manual (`workflow_dispatch`) | runs scraper, DRY-RUNS the D1 sync (plan in log), sends notifications, opens PR with updated `events.ts` | not on a schedule; never writes to D1 |
+| `sync-payload.yml` | push to `main` touching `events.ts` (+ manual) | real D1 sync (post-review gate) + production feed parity | caps bulk creations (`PAYLOAD_MAX_CREATES`, default 15) |
 | `reminders.yml` | cron `*/30 * * * *` | sends Web Push + Telegram reminders for matches in next 25h | does not touch repo |
 
 ## Directory map

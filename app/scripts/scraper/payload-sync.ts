@@ -1,10 +1,12 @@
 /**
  * Dual-write sync to Payload/D1 (DATA-09).
  *
- * After the scraper writes events.ts, the same merged+enriched result is
- * synced to the fixtures collection over Payload REST. The battle-tested
- * events.ts merge rules stay where they are — this module only decides, per
- * fixture already merged, what the database row is allowed to receive:
+ * The scraper's merged events.ts result is synced to the fixtures collection
+ * over Payload REST — as a DRY-RUN during the scrape (the plan lands in the
+ * workflow log for the PR reviewer) and for real only after the events.ts PR
+ * merges to main (sync-payload.yml). The battle-tested events.ts merge rules
+ * stay where they are — this module only decides, per fixture already merged,
+ * what the database row is allowed to receive:
  *
  *   - locked or source 'manual'  → never touched
  *   - status 'live'              → never touched (being live-edited mid-scrape)
@@ -209,6 +211,30 @@ export interface SyncOptions {
   apiUrl: string; // e.g. https://admin.red-rebels.com/api
   apiKey: string; // Payload users API key (scraper service account)
   dryRun?: boolean;
+  /** Abort if the plan creates more fixtures than this (default 15). */
+  maxCreates?: number;
+}
+
+/**
+ * Safety cap: a normal scrape creates a handful of fixtures (a cup draw, a
+ * rescheduled friendly); dozens means something is wrong — the 2026-08-06
+ * soak run scraped stale season URLs and planned 78 creations of last
+ * season's fixtures. Season population goes through the seed script, never
+ * through this sync. Raise PAYLOAD_MAX_CREATES only after reviewing the plan.
+ */
+export function assertPlanSafe(plan: SyncPlan, maxCreates: number): void {
+  if (plan.unknownOpponents.length > 0) {
+    throw new Error(
+      `Payload sync aborted before any write — unknown opponents (add the team via the admin or the add-team skill): ${plan.unknownOpponents.join(' | ')}`,
+    );
+  }
+  if (plan.creates.length > maxCreates) {
+    throw new Error(
+      `Payload sync aborted before any write — ${plan.creates.length} fixture creations exceed the safety cap of ${maxCreates}. ` +
+        `A stale-source scrape looks exactly like this. If the plan is genuinely correct, re-run with PAYLOAD_MAX_CREATES=${plan.creates.length}. ` +
+        `Would create: ${plan.creates.map((c) => c.eventKey).join(' | ')}`,
+    );
+  }
 }
 
 async function api<T>(opts: SyncOptions, path: string, init?: RequestInit): Promise<T> {
@@ -253,12 +279,7 @@ export async function syncEventsToPayload(
   ]);
 
   const plan = planSync(events, fixtures.docs, teams.docs, season);
-
-  if (plan.unknownOpponents.length > 0) {
-    throw new Error(
-      `Payload sync aborted before any write — unknown opponents (add the team via the admin or the add-team skill): ${plan.unknownOpponents.join(' | ')}`,
-    );
-  }
+  const maxCreates = opts.maxCreates ?? Number(process.env.PAYLOAD_MAX_CREATES ?? 15);
 
   const skipped: Record<string, number> = {};
   for (const s of plan.skips) skipped[s.reason] = (skipped[s.reason] ?? 0) + 1;
@@ -267,8 +288,12 @@ export async function syncEventsToPayload(
     console.log(`  [dry-run] creates: ${plan.creates.length}, updates: ${plan.updates.length}, skips:`, skipped);
     for (const c of plan.creates) console.log(`  [dry-run] + ${c.eventKey}`);
     for (const u of plan.updates) console.log(`  [dry-run] ~ ${u.eventKey} (${u.reason})`);
+    // Surface what a real run would refuse, so the reviewer sees it in the log.
+    assertPlanSafe(plan, maxCreates);
     return { created: 0, updated: 0, filled: 0, skipped };
   }
+
+  assertPlanSafe(plan, maxCreates);
 
   let created = 0;
   let updated = 0;
