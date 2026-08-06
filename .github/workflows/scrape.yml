@@ -30,6 +30,13 @@ jobs:
       - name: Run scraper
         run: npm run scrape
         working-directory: app/scripts/scraper
+        env:
+          # Dual-write (DATA-09): sync the merged result to Payload/D1.
+          PAYLOAD_API_KEY: ${{ secrets.PAYLOAD_API_KEY }}
+
+      - name: Feed parity (production D1 feed vs scraped events.ts)
+        run: npx tsx feed-parity.ts
+        working-directory: app/scripts/scraper
 
       - name: Check for changes
         id: check_changes
