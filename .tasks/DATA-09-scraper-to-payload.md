@@ -1,6 +1,6 @@
 # DATA-09: Scraper → Payload REST writes (merge rules, dual-write)
 
-**Status:** todo
+**Status:** in progress
 **Batch:** write-path (`feat/scraper-payload`)
 **Depends on:** DATA-03
 **Estimated scope:** Large
@@ -35,5 +35,18 @@ Dual-write initially: events.ts keeps being written until DATA-15.
 ## Acceptance criteria
 
 - [ ] Scrape run updates D1 and events.ts identically (parity green in workflow)
-- [ ] Played/locked/live fixtures provably untouched (unit tests on the merge port)
-- [ ] Unknown opponent aborts with a clear error before any write
+      — implemented (`feed-parity.ts` + scrape.yml step); pending the soak
+      `workflow_dispatch` run. NOTE the parity is a **subset** check by design:
+      the DB legitimately knows more than events.ts during the transition
+      (admins enter friendly results/venues the CFA never publishes — observed
+      live with the Aug 5 friendly result). Feed-ahead drift logs as warnings;
+      missing fixtures or contradicting values fail the run.
+- [x] Played/locked/live fixtures provably untouched (18 unit tests on the
+      merge port, `payload-sync.test.ts`), incl. fill-only detail on played,
+      never-replace, ±10-day dateTbd adoption, and no-churn preservation of
+      admin-enriched fields the scrape lacks
+- [x] Unknown opponent aborts with a clear error before any write (plan phase
+      collects unknowns; executor throws before any POST/PATCH)
+
+Soak checklist (after merge): `gh workflow run scrape.yml`, review the run's
+sync log + feed-parity output + the events.ts PR it opens.

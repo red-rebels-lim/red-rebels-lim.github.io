@@ -42,9 +42,9 @@ Repo-root tracker because the work spans `payload/` (new), `app/` (Worker),
 | DATA-04 | Seed script: current season from TS sources | seed | done (PR #122) | DATA-02 |
 | DATA-05 | Historical backfill: season 2025-26 from git history | seed | done (PR #122) | DATA-04 |
 | DATA-06 | Parity checker (D1 → legacy JSON contract diff) | seed | done (PR #122) | DATA-04 |
-| DATA-07 | rrcalendar: bind D1, dynamic /events.json + /players.json | read-path | in review (PR #123) | DATA-03, DATA-06 |
-| DATA-08 | Live updates: `live` status, /live.json, purge-on-write | read-path | in review (PR #123) | DATA-07 |
-| DATA-09 | Scraper → Payload REST writes (merge rules, dual-write) | write-path | todo | DATA-03 |
+| DATA-07 | rrcalendar: bind D1, dynamic /events.json + /players.json | read-path | done (PR #123, verified in prod) | DATA-03, DATA-06 |
+| DATA-08 | Live updates: `live` status, /live.json, purge-on-write | read-path | done (PR #123, verified in prod) | DATA-07 |
+| DATA-09 | Scraper → Payload REST writes (merge rules, dual-write) | write-path | in progress | DATA-03 |
 | DATA-10 | Reminders cron: fetch API instead of eval'ing events.ts | write-path | todo | DATA-07 |
 | DATA-11 | Push tables in D1 + Worker /api/push/* + Back4App export | push-infra | todo | DATA-07 |
 | DATA-12 | Reminder sender reads D1 subscriptions (dual-read window) | push-infra | todo | DATA-11 |

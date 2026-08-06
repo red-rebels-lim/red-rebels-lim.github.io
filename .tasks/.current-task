@@ -1,0 +1,8 @@
+{
+  "taskId": "DATA-09",
+  "epic": "data-platform",
+  "title": "Scraper → Payload REST writes (merge rules, dual-write)",
+  "batch": "write-path",
+  "branch": "feat/scraper-payload",
+  "startedAt": "2026-08-06T14:45:00Z"
+}
