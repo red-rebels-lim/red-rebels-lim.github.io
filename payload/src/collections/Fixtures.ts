@@ -24,7 +24,7 @@ export const Fixtures: CollectionConfig = {
     useAsTitle: 'opponentName',
     defaultColumns: ['kickoff', 'sport', 'opponentName', 'location', 'status', 'score'],
     description:
-      'Live-edit flow: set status to "live" at kickoff, edit the score during the match, set "played" + final score at full time. Played results are final — the scraper only fills missing detail.',
+      'This database is the source of truth — scripts never write to it. Live-edit flow: set status to "live" at kickoff, edit the score during the match, set "played" + final score at full time.',
   },
   defaultSort: '-kickoff',
   // The legacy eventKey carries no year, so league fixtures recur across
@@ -235,7 +235,8 @@ export const Fixtures: CollectionConfig = {
       defaultValue: false,
       admin: {
         position: 'sidebar',
-        description: 'Locked fixtures are never touched by the scraper.',
+        description:
+          'Extra safety for any future automated writer (e.g. the planned MCP tool): locked fixtures must never be touched programmatically.',
       },
     },
   ],

@@ -1,7 +1,7 @@
 /**
- * Post-sync feed parity (DATA-09): after the scraper dual-writes to Payload,
- * everything the freshly written events.ts knows must be reflected in the
- * production /events.json (served from D1 by the rrcalendar Worker).
+ * On-demand diagnostic (no longer a workflow gate): compares the production
+ * /events.json (served from D1, the human-managed source of truth) against
+ * the local events.ts, reporting where the legacy file has fallen behind.
  *
  * The check is a SUBSET comparison, not equality: the database legitimately
  * knows MORE than the scraper during the transition — admins enter friendly

@@ -30,12 +30,6 @@ jobs:
       - name: Run scraper
         run: npm run scrape
         working-directory: app/scripts/scraper
-        env:
-          # DATA-09: the D1 sync only DRY-RUNS here — its plan lands in this
-          # log for the PR reviewer. Real writes happen post-merge via
-          # sync-payload.yml, so the events.ts PR review gates the database.
-          PAYLOAD_API_KEY: ${{ secrets.PAYLOAD_API_KEY }}
-          PAYLOAD_DRY_RUN: '1'
 
       - name: Check for changes
         id: check_changes

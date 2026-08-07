@@ -1237,26 +1237,11 @@ async function main() {
         console.log('ℹ️  Skipping enrichment (--no-enrich)');
       }
 
-      // 10. Dual-write (DATA-09): sync the merged+enriched result to Payload/D1.
-      // events.ts stays the canonical scraper output until DATA-15; a sync
-      // failure fails the run loudly rather than silently drifting.
-      if (process.env.PAYLOAD_API_KEY) {
-        console.log();
-        console.log('☁️  Syncing merged result to Payload (dual-write)...');
-        const { syncEventsToPayload } = await import('./payload-sync.ts');
-        const summary = await syncEventsToPayload(existingEvents, {
-          apiUrl: process.env.PAYLOAD_API_URL ?? 'https://admin.red-rebels.com/api',
-          apiKey: process.env.PAYLOAD_API_KEY,
-          dryRun: process.env.PAYLOAD_DRY_RUN === '1',
-        });
-        console.log(
-          `  ✓ Payload — created: ${summary.created}, updated: ${summary.updated}, ` +
-          `detail filled: ${summary.filled}, skipped: ${JSON.stringify(summary.skipped)}`,
-        );
-      } else {
-        console.log();
-        console.log('ℹ️  PAYLOAD_API_KEY not set — skipping Payload sync');
-      }
+      // NOTE (2026-08-07): the scraper no longer writes to Payload/D1. The
+      // database is the human-managed source of truth (dashboard, and later an
+      // MCP tool over the Payload API); scripts only produce events.ts for the
+      // legacy web/cron readers. payload-sync.ts survives as the protection-
+      // rule/REST foundation for that MCP tool.
 
       const footballCount = cfaFixtures.length;
       const vbMenCount = mergedVolleyball.filter(f => f.sport === 'volleyball-men').length;
