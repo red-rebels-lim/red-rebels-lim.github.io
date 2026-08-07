@@ -58,7 +58,7 @@ Repo-root tracker because the work spans `payload/`, `app/` (Worker),
 | DATA-08 | Live updates: `live` status, /live.json, purge-on-write | read-path | done (PR #123, verified in prod) | DATA-07 |
 | DATA-09 | Scraper → Payload REST writes (merge rules, dual-write) | write-path | done (PR #127/#129) — superseded by the pivot; payload-sync.ts kept as MCP foundation | DATA-03 |
 | DATA-10 | Reminders cron: fetch /events.json instead of eval'ing events.ts | cron-data | todo — reminders (Telegram + FCM) must see dashboard-entered fixtures; events.ts is frozen | DATA-07 |
-| DATA-11 | Push tables in D1 + Worker /api/push/* + Back4App export | push-infra | in progress | DATA-07 |
+| DATA-11 | Push tables in D1 + Worker /api/push/* + Back4App export | push-infra | in review | DATA-07 |
 | DATA-12 | Reminder sender reads D1 subscriptions (dual-read window) | push-infra | todo | DATA-11 |
 | DATA-13 | Flutter: parse_client → Worker push endpoints | push-infra | todo | DATA-11 |
 | DATA-14 | Flutter: live score UI + foreground polling | flutter-live | todo | DATA-08 |
