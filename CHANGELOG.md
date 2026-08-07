@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- Notification storage moved to D1 (DATA-11): new validated Worker endpoints `/api/push/register|prefs|unregister` (light per-IP rate limiting) replace the world-readable Back4App classes; the Telegram webhook now stores subscribers in D1; a one-time export script preserves Parse objectIds so ids persisted by installed clients keep working
+
 ### Changed
 - The Payload/D1 database is now the source of truth, managed by humans through the admin dashboard — automated writes are retired (the scraper dual-write and its post-merge sync workflow, added earlier in this cycle, were removed after one supervised run; a future MCP tool over the Payload API will take their place). Production seeding now requires an explicit `SEED_ALLOW_PRODUCTION=1` override.
 

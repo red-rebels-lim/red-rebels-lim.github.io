@@ -92,7 +92,7 @@ Four separate `package.json` files: `app/`, `app/scripts/scraper/`, `.github/scr
 | `VITE_BACK4APP_APP_ID`, `VITE_BACK4APP_JS_KEY` | `app/.env.local` | Public Parse client keys |
 | `VITE_VAPID_PUBLIC_KEY` | `app/.env.local` | Web Push subscription |
 | `VITE_GA_MEASUREMENT_ID`, `VITE_CLARITY_PROJECT_ID` | `app/.env.local` (optional) | Analytics |
-| `BACK4APP_APP_ID`, `BACK4APP_REST_API_KEY`, `TELEGRAM_BOT_TOKEN` | Cloudflare Secrets Store (binding in `wrangler.jsonc`) | Worker runtime |
+| `TELEGRAM_BOT_TOKEN` | Cloudflare Secrets Store (binding in `wrangler.jsonc`) | Worker runtime (`BACK4APP_*` bindings still exist but are unused since DATA-11 — removed in DATA-15) |
 | `BACK4APP_APP_ID`, `BACK4APP_MASTER_KEY`, `VAPID_*`, `TELEGRAM_BOT_TOKEN` | GitHub Actions secrets | Cron + scraper |
 
 `app/.env.example` is the source of truth for client-side vars. Empty values are fine for local dev — Back4App is only needed for push features.
