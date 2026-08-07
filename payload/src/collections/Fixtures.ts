@@ -18,6 +18,8 @@ const lineupPlayerFields = [
 
 export const Fixtures: CollectionConfig = {
   slug: 'fixtures',
+  // Saved list-view filters ("Presets" dropdown): filters + columns + sort.
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'opponentName',
     defaultColumns: ['kickoff', 'sport', 'opponentName', 'location', 'status', 'score'],
