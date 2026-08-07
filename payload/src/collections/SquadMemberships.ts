@@ -4,6 +4,8 @@ import { SPORT_OPTIONS } from './shared'
 
 export const SquadMemberships: CollectionConfig = {
   slug: 'squad-memberships',
+  // Saved list-view filters ("Presets" dropdown): filters + columns + sort.
+  enableQueryPresets: true,
   admin: {
     defaultColumns: ['player', 'season', 'sport', 'shirtNumber', 'active'],
     description: 'Who was in which squad, in which season, with what number.',

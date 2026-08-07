@@ -4,6 +4,8 @@ import { SPORT_OPTIONS } from './shared'
 
 export const Teams: CollectionConfig = {
   slug: 'teams',
+  // Saved list-view filters ("Presets" dropdown): filters + columns + sort.
+  enableQueryPresets: true,
   admin: {
     useAsTitle: 'nameEl',
     defaultColumns: ['slug', 'nameEl', 'nameEn', 'sports'],
