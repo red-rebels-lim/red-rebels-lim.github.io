@@ -1,7 +1,7 @@
 # DATA-10: Reminders cron — fetch the API instead of eval'ing events.ts
 
 **Status:** todo
-**Batch:** write-path (`feat/scraper-payload`)
+**Batch:** cron-data (`feat/cron-api`)
 **Depends on:** DATA-07
 **Estimated scope:** Small/Medium
 
@@ -9,8 +9,14 @@
 
 Kills the `new Function('return ' + …)` hazard. `send-reminders.js` stops
 regex-parsing the checked-out repo and instead fetches
-`https://red-rebels.com/events.json` (now DB-backed) — same data, plain fetch,
+`https://red-rebels.com/events.json` (DB-backed) — same data, plain fetch,
 no checkout of app sources needed.
+
+**Pivot note (2026-08-07):** this went from nice-to-have to necessary — the
+scraper is retired and D1 is human-managed, so `events.ts` is frozen and only
+falls further behind. Until this task lands, reminders fire from stale data
+and never see dashboard-entered fixtures. Reminders themselves outlive the
+web sunset (Telegram + FCM serve the Flutter app).
 
 ## Implementation notes
 
