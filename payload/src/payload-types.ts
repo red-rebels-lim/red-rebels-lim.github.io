@@ -302,7 +302,7 @@ export interface SquadMembership {
   createdAt: string;
 }
 /**
- * Live-edit flow: set status to "live" at kickoff, edit the score during the match, set "played" + final score at full time. Played results are final — the scraper only fills missing detail.
+ * This database is the source of truth — scripts never write to it. Live-edit flow: set status to "live" at kickoff, edit the score during the match, set "played" + final score at full time.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "fixtures".
@@ -420,7 +420,7 @@ export interface Fixture {
   eventKey?: string | null;
   source: 'scraper' | 'manual';
   /**
-   * Locked fixtures are never touched by the scraper.
+   * Extra safety for any future automated writer (e.g. the planned MCP tool): locked fixtures must never be touched programmatically.
    */
   locked?: boolean | null;
   updatedAt: string;

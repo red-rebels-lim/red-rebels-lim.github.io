@@ -55,7 +55,13 @@ npx payload run scripts/seed.ts     # seed local D1 from app/src TS sources (ide
 npx payload run scripts/parity.ts   # verify DB reproduces the frozen JSON contract
 ```
 
-Prefix with `NODE_ENV=production` to run against remote D1. Historical seasons:
+These are **local/CI test infrastructure** (the CI `payload` job seeds a
+throwaway local D1 to prove the Worker's frozen contract). The production
+database is the human-managed source of truth — no script or workflow writes
+to it (decision 2026-08-07; the retired scraper dual-write lives on as
+`app/scripts/scraper/payload-sync.ts`, the protection-rule foundation for the
+planned MCP tool). `NODE_ENV=production` seeding therefore refuses to run
+without `SEED_ALLOW_PRODUCTION=1` — it clobbers admin-entered data. Historical seasons:
 extract `events.ts`/`constants.ts`/`translate.ts`/`i18n/en.json` from git history
 and point `SEED_EVENTS`/`SEED_CONSTANTS`/`SEED_TRANSLATE`/`SEED_I18N_EN` at them,
 with `SEED_SKIP_PLAYERS=1 SEED_NOT_CURRENT=1` (2025-26 lives at revision

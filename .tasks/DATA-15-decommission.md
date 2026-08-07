@@ -1,37 +1,37 @@
-# DATA-15: Decommission — events.ts export-only, retire Back4App
+# DATA-15: Decommission — retire Back4App
 
 **Status:** todo
 **Batch:** decommission (`chore/retire-back4app`)
-**Depends on:** DATA-09…DATA-13 (+ drained old-build traffic per DATA-12 logs)
+**Depends on:** DATA-10…DATA-13 (+ drained old-build traffic per DATA-12 logs)
 **Estimated scope:** Medium
 
 ## Context
 
-D1 becomes the sole source of truth. `events.ts` flips from store to export
-(kept only for the web app until its sunset + the ICS build). Back4App retires.
+The last Back4App dependency dies. Re-scoped 2026-08-07: the old plan's
+"events.ts becomes an export of D1" is dropped — the web PWA sunsets instead
+(its own plan, out of this sprint), so `events.ts` simply stays frozen until
+the web app is wound down. Scraper retirement is DATA-17.
 
 ## Implementation notes
 
-- Scraper: drop the events.ts write path; `payload-sync` (DATA-09) becomes the
-  only write. New export script `payload/scripts/export-events-ts.ts` generates
-  `events.ts` + `players.ts`-compatible files from D1 for the web build (plain
-  literal format preserved — nothing evals it anymore after DATA-10, but the
-  web bundle still imports it until sunset).
+- Retirement gate: DATA-12 per-store logs show ~zero Parse-only activity for
+  2+ weeks → remove the dual-read, export a final Parse data dump for archive,
+  then delete the Back4App app.
 - Flutter bundled snapshots (`assets/data/*.json`): regenerate from the live
   endpoints (`tool/generate_*.mjs` simplify to a fetch).
-- Back4App retirement gate: DATA-12 per-store logs show ~zero Parse-only
-  activity for 2+ weeks → remove dual-read, remove web `lib/parse.ts`/
-  `lib/push.ts`/`lib/preferences.ts` Parse usage (or freeze if web sunset lands
-  first), export final Parse data dump for archive, then delete the Back4App app.
+- Telegram webhook (`app/src/_worker.ts`) moves its subscriber store from
+  Parse to D1 (part of DATA-11's table design — verify before deleting).
 - Remove `BACK4APP_*` from: GH secrets usage, wrangler.jsonc secrets_store
-  bindings (coordinate — real resource IDs), `.env.example`, docs.
-- Update CLAUDE.md (root + data + scraper): new source-of-truth story, D1/Payload
-  workflow, kill the "events.ts is externally parsed" gotcha (now false).
-- Update docs/back4app-data-architecture.md status → implemented.
+  bindings (coordinate — real resource IDs), `.env.example`, docs. Web
+  `lib/parse.ts`/`lib/push.ts` Parse usage: freeze, not refactor — the web
+  app is sunsetting.
+- Update CLAUDE.md (root + data + scraper): new source-of-truth story; kill
+  the "events.ts is externally parsed" gotcha (false after DATA-10).
+- Update docs/back4app-data-architecture.md status → implemented/pivoted.
 
 ## Acceptance criteria
 
-- [ ] A scrape cycle + a reminders cycle + a Flutter cold start all work with
-      Back4App deleted (staging check before actual deletion)
+- [ ] A reminders cycle + a Flutter cold start + Telegram subscribe/unsubscribe
+      all work with Back4App deleted (staging check before actual deletion)
 - [ ] Archive dump of final Parse data stored (location documented)
 - [ ] CLAUDE.md files reflect the new architecture
