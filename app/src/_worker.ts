@@ -13,6 +13,7 @@ import {
   getDataVersion,
   type D1Database,
 } from './worker/feeds';
+import { handlePushRoute, tgCreate, tgDelete, tgFind, tgSetLang } from './worker/push';
 
 interface SecretsStoreBinding {
   get(): Promise<string | null>;
@@ -24,26 +25,11 @@ interface ExecutionContext {
 
 interface Env {
   TELEGRAM_BOT_TOKEN: SecretsStoreBinding;
-  BACK4APP_APP_ID: SecretsStoreBinding;
-  BACK4APP_REST_API_KEY: SecretsStoreBinding;
+  // Back4App secret bindings still exist in wrangler.jsonc until DATA-15,
+  // but nothing in the Worker reads them anymore (DATA-11 moved the stores
+  // to D1).
   D1?: D1Database;
   ASSETS: { fetch: (request: Request) => Promise<Response> };
-}
-
-interface ResolvedSecrets {
-  telegramToken: string;
-  appId: string;
-  restApiKey: string;
-}
-
-async function resolveSecrets(env: Env): Promise<ResolvedSecrets | null> {
-  const [telegramToken, appId, restApiKey] = await Promise.all([
-    env.TELEGRAM_BOT_TOKEN?.get(),
-    env.BACK4APP_APP_ID?.get(),
-    env.BACK4APP_REST_API_KEY?.get(),
-  ]);
-  if (!telegramToken || !appId || !restApiKey) return null;
-  return { telegramToken, appId, restApiKey };
 }
 
 export default {
@@ -51,9 +37,17 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === '/api/telegram-webhook' && request.method === 'POST') {
-      const secrets = await resolveSecrets(env);
-      if (!secrets) return new Response('Missing env vars', { status: 500 });
-      return handleTelegramWebhook(request, secrets.telegramToken, secrets.appId, secrets.restApiKey);
+      const telegramToken = await env.TELEGRAM_BOT_TOKEN?.get();
+      if (!telegramToken || !env.D1) return new Response('Missing env vars', { status: 500 });
+      return handleTelegramWebhook(request, telegramToken, env.D1);
+    }
+
+    if (url.pathname.startsWith('/api/push/')) {
+      if (!env.D1) return new Response('Service unavailable', { status: 503 });
+      const limited = await rateLimit(request);
+      if (limited) return limited;
+      const response = await handlePushRoute(env.D1, request, url.pathname);
+      if (response) return response;
     }
 
     if (request.method === 'GET' && url.pathname in FEEDS) {
@@ -63,6 +57,31 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+// ─── light per-IP rate limit (DATA-11) ───────────────────────────────────────
+
+// Best-effort fixed window via the Cache API: per-colo and racy by design —
+// enough to blunt abuse of the unauthenticated push endpoints without a
+// Durable Object. 60 requests/hour is generous for register/prefs flows.
+const RATE_LIMIT = 60;
+
+async function rateLimit(request: Request): Promise<Response | null> {
+  const cache = (globalThis.caches as unknown as { default?: Cache } | undefined)?.default;
+  if (!cache) return null; // tests / local without Cache API
+  const ip = request.headers.get('cf-connecting-ip') ?? 'unknown';
+  const windowStart = Math.floor(Date.now() / 3_600_000);
+  const key = new Request(`https://rate-limit.internal/push/${ip}/${windowStart}`);
+  const hit = await cache.match(key);
+  const count = hit ? Number(await hit.text()) : 0;
+  if (count >= RATE_LIMIT) {
+    return new Response(JSON.stringify({ error: 'rate limit exceeded' }), {
+      status: 429,
+      headers: { 'Content-Type': 'application/json; charset=utf-8', 'Retry-After': '3600' },
+    });
+  }
+  await cache.put(key, new Response(String(count + 1), { headers: { 'Cache-Control': 'max-age=3600' } }));
+  return null;
+}
 
 // ─── D1-backed feeds (DATA-07/08) ────────────────────────────────────────────
 
@@ -112,8 +131,8 @@ async function serveFeed(request: Request, env: Env, ctx: ExecutionContext, path
 }
 
 // ─── Telegram ────────────────────────────────────────────────────────────────
-
-const TELEGRAM_PARSE_URL = 'https://parseapi.back4app.com/classes/TelegramSubscriber';
+// Subscriber store lives in D1 (telegram_subscribers, DATA-11); previously
+// Back4App REST.
 
 interface TelegramUpdate {
   message?: {
@@ -123,7 +142,7 @@ interface TelegramUpdate {
   };
 }
 
-async function handleTelegramWebhook(request: Request, token: string, appId: string, restApiKey: string): Promise<Response> {
+async function handleTelegramWebhook(request: Request, token: string, d1: D1Database): Promise<Response> {
   let update: TelegramUpdate;
   try {
     update = await request.json() as TelegramUpdate;
@@ -136,25 +155,25 @@ async function handleTelegramWebhook(request: Request, token: string, appId: str
 
   const chatId = message.chat.id;
   const command = message.text.trim().split(/\s+/)[0].toLowerCase();
-  const existing = await tgQuery(appId, restApiKey, chatId);
-  const userLang = (existing as { lang?: string } | null)?.lang ??
+  const existing = await tgFind(d1, chatId);
+  const userLang = existing?.lang ??
     (message.from?.language_code === 'el' ? 'el' : 'en');
   const msg = TG_MESSAGES[userLang as keyof typeof TG_MESSAGES] ?? TG_MESSAGES.en;
 
   switch (command) {
     case '/start': {
-      if (existing) {
+      if (existing?.active) {
         await tgSend(token, chatId, msg.alreadySubscribed);
       } else {
         const lang = message.from?.language_code === 'el' ? 'el' : 'en';
-        await tgCreate(appId, restApiKey, chatId, lang);
+        await tgCreate(d1, chatId, lang);
         await tgSend(token, chatId, msg.welcome);
       }
       break;
     }
     case '/stop': {
       if (existing) {
-        await tgDelete(appId, restApiKey, (existing as { objectId: string }).objectId);
+        await tgDelete(d1, chatId);
         await tgSend(token, chatId, msg.stopped);
       } else {
         await tgSend(token, chatId, msg.notSubscribed);
@@ -164,7 +183,7 @@ async function handleTelegramWebhook(request: Request, token: string, appId: str
     case '/language': {
       if (existing) {
         const newLang = userLang === 'en' ? 'el' : 'en';
-        await tgUpdate(appId, restApiKey, (existing as { objectId: string }).objectId, { lang: newLang });
+        await tgSetLang(d1, chatId, newLang);
         const newMsg = TG_MESSAGES[newLang as keyof typeof TG_MESSAGES];
         await tgSend(token, chatId, newMsg.langSwitched);
       } else {
@@ -178,42 +197,6 @@ async function handleTelegramWebhook(request: Request, token: string, appId: str
   }
 
   return new Response('OK');
-}
-
-async function tgQuery(appId: string, restApiKey: string, chatId: number) {
-  const res = await fetch(
-    `${TELEGRAM_PARSE_URL}?where=${encodeURIComponent(JSON.stringify({ chatId }))}`,
-    { headers: parseHeaders(appId, restApiKey) },
-  );
-  const data = await res.json() as { results: Array<{ objectId: string }> };
-  return data.results?.[0] ?? null;
-}
-
-async function tgCreate(appId: string, restApiKey: string, chatId: number, lang: string) {
-  await fetch(TELEGRAM_PARSE_URL, {
-    method: 'POST',
-    headers: { ...parseHeaders(appId, restApiKey), 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chatId, lang, active: true,
-      reminderHours: [24, 2],
-      enabledSports: ['football-men', 'volleyball-men', 'volleyball-women'],
-    }),
-  });
-}
-
-async function tgDelete(appId: string, restApiKey: string, objectId: string) {
-  await fetch(`${TELEGRAM_PARSE_URL}/${objectId}`, {
-    method: 'DELETE',
-    headers: parseHeaders(appId, restApiKey),
-  });
-}
-
-async function tgUpdate(appId: string, restApiKey: string, objectId: string, fields: Record<string, unknown>) {
-  await fetch(`${TELEGRAM_PARSE_URL}/${objectId}`, {
-    method: 'PUT',
-    headers: { ...parseHeaders(appId, restApiKey), 'Content-Type': 'application/json' },
-    body: JSON.stringify(fields),
-  });
 }
 
 async function tgSend(token: string, chatId: number, text: string) {
@@ -243,11 +226,3 @@ const TG_MESSAGES = {
   },
 };
 
-// ─── Shared helpers ───────────────────────────────────────────────────────────
-
-function parseHeaders(appId: string, restApiKey: string) {
-  return {
-    'X-Parse-Application-Id': appId,
-    'X-Parse-REST-API-Key': restApiKey,
-  };
-}

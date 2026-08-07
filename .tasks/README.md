@@ -58,7 +58,7 @@ Repo-root tracker because the work spans `payload/`, `app/` (Worker),
 | DATA-08 | Live updates: `live` status, /live.json, purge-on-write | read-path | done (PR #123, verified in prod) | DATA-07 |
 | DATA-09 | Scraper → Payload REST writes (merge rules, dual-write) | write-path | done (PR #127/#129) — superseded by the pivot; payload-sync.ts kept as MCP foundation | DATA-03 |
 | DATA-10 | Reminders cron: fetch /events.json instead of eval'ing events.ts | cron-data | todo — reminders (Telegram + FCM) must see dashboard-entered fixtures; events.ts is frozen | DATA-07 |
-| DATA-11 | Push tables in D1 + Worker /api/push/* + Back4App export | push-infra | todo — **next up** | DATA-07 |
+| DATA-11 | Push tables in D1 + Worker /api/push/* + Back4App export | push-infra | in progress | DATA-07 |
 | DATA-12 | Reminder sender reads D1 subscriptions (dual-read window) | push-infra | todo | DATA-11 |
 | DATA-13 | Flutter: parse_client → Worker push endpoints | push-infra | todo | DATA-11 |
 | DATA-14 | Flutter: live score UI + foreground polling | flutter-live | todo | DATA-08 |
@@ -67,6 +67,14 @@ Repo-root tracker because the work spans `payload/`, `app/` (Worker),
 | DATA-17 | Retire the scraper (scrape.yml + code); relocate payload-sync.ts | retire-scraper | todo | DATA-16 (needs payload-sync.ts's new home) |
 
 ## Deferred / out of scope
+
+- **Repo split** (decided in principle 2026-08-07, execute after this sprint):
+  extract `flutter/` into its own repository (own release cadence/CI; only
+  build-time coupling is the two snapshot scripts, to be repointed at the live
+  endpoints). Payload + the rrcalendar Worker stay together (shared D1 schema,
+  legacy-shape module, parity CI); rename this repo once slimmed. Reads for
+  Flutter stay on the thin Worker (frozen contract, edge-cached) — Payload
+  REST is the write/MCP interface, not the app feed.
 
 - **Web PWA sunset** — decided in principle (2026-08-07): Flutter is the
   product; no further web investment. The actual wind-down (timeline, what

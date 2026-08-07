@@ -1,0 +1,14 @@
+// Minimal config for booting a throwaway LOCAL D1 in worker tests via
+// getPlatformProxy — deliberately no secrets_store bindings (unsupported in
+// the local proxy) and no remote flag.
+{
+  "name": "rrcalendar-test",
+  "compatibility_date": "2026-04-12",
+  "d1_databases": [
+    {
+      "binding": "D1",
+      "database_id": "test-db",
+      "database_name": "test-db"
+    }
+  ]
+}
