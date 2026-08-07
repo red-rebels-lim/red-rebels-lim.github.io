@@ -69,3 +69,13 @@ Fixes:
   sync when events.ts lands on main, then runs feed parity.
 - Bulk-create safety cap (`assertPlanSafe`, default 15, override
   `PAYLOAD_MAX_CREATES`) — a stale-source scrape can never mass-create again.
+
+## Superseded (2026-08-07)
+
+Strategic pivot after one supervised run: the database is the human-managed
+source of truth (dashboard now, an MCP tool over the Payload API next) — NO
+script or workflow writes to it. sync-payload.yml and payload-sync-run.ts
+removed; the scraper no longer calls the sync; seed.ts refuses production
+without SEED_ALLOW_PRODUCTION=1. `payload-sync.ts` + its tests are KEPT as the
+protection-rule/REST foundation for the MCP tool. Consequence: events.ts (web,
+cron, ICS) now falls behind D1 until DATA-15 flips it to an export of D1.

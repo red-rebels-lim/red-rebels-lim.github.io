@@ -44,13 +44,13 @@ Repo-root tracker because the work spans `payload/` (new), `app/` (Worker),
 | DATA-06 | Parity checker (D1 → legacy JSON contract diff) | seed | done (PR #122) | DATA-04 |
 | DATA-07 | rrcalendar: bind D1, dynamic /events.json + /players.json | read-path | done (PR #123, verified in prod) | DATA-03, DATA-06 |
 | DATA-08 | Live updates: `live` status, /live.json, purge-on-write | read-path | done (PR #123, verified in prod) | DATA-07 |
-| DATA-09 | Scraper → Payload REST writes (merge rules, dual-write) | write-path | in review (PR #127) | DATA-03 |
+| DATA-09 | Scraper → Payload REST writes (merge rules, dual-write) | write-path | done (PR #127/#129) — superseded 2026-08-07: automated D1 writes retired, DB is human-managed (dashboard → MCP tool) | DATA-03 |
 | DATA-10 | Reminders cron: fetch API instead of eval'ing events.ts | write-path | todo | DATA-07 |
 | DATA-11 | Push tables in D1 + Worker /api/push/* + Back4App export | push-infra | todo | DATA-07 |
 | DATA-12 | Reminder sender reads D1 subscriptions (dual-read window) | push-infra | todo | DATA-11 |
 | DATA-13 | Flutter: parse_client → Worker push endpoints | push-infra | todo | DATA-11 |
 | DATA-14 | Flutter: live score UI + foreground polling | push-infra | todo | DATA-08 |
-| DATA-15 | Decommission: events.ts export-only, retire Back4App | decommission | todo | DATA-09…DATA-13 |
+| DATA-15 | Decommission: events.ts export-only, retire Back4App | decommission | todo — pulled forward by the 2026-08-07 pivot: events.ts must become an EXPORT of D1 (no scraper merge), web/cron/ICS follow | DATA-09…DATA-13 |
 
 ## Deferred (not in this sprint)
 

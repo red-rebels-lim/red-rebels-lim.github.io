@@ -1,12 +1,13 @@
 /**
- * Dual-write sync to Payload/D1 (DATA-09).
+ * Payload write-protection planner + REST client.
  *
- * The scraper's merged events.ts result is synced to the fixtures collection
- * over Payload REST — as a DRY-RUN during the scrape (the plan lands in the
- * workflow log for the PR reviewer) and for real only after the events.ts PR
- * merges to main (sync-payload.yml). The battle-tested events.ts merge rules
- * stay where they are — this module only decides, per fixture already merged,
- * what the database row is allowed to receive:
+ * RETIRED as an automated sync (2026-08-07): the database is the
+ * human-managed source of truth — nothing writes to it from scripts or
+ * workflows anymore. This module is kept (with its tests) as the foundation
+ * for the planned MCP tool that will execute chat commands against the
+ * Payload API: it already provides the authenticated REST client, eventKey/
+ * kickoff computation, team resolution via aliases, and the tested rules for
+ * what a fixture row may receive:
  *
  *   - locked or source 'manual'  → never touched
  *   - status 'live'              → never touched (being live-edited mid-scrape)

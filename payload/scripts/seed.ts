@@ -36,6 +36,19 @@ const I18N_EN_PATH = process.env.SEED_I18N_EN ?? path.join(APP_SRC, 'i18n/en.jso
 const SKIP_PLAYERS = process.env.SEED_SKIP_PLAYERS === '1'
 const NOT_CURRENT = process.env.SEED_NOT_CURRENT === '1'
 
+// The production database is the human-managed source of truth (dashboard /
+// MCP). Seeding it from the TS sources CLOBBERS admin-entered data (the seed
+// has no protection rules — proven 2026-08-06 when it reset an admin-entered
+// result's status). Local/CI seeding is this script's only routine job.
+if (process.env.NODE_ENV === 'production' && process.env.SEED_ALLOW_PRODUCTION !== '1') {
+  console.error(
+    'Refusing to seed a production database: D1 is the source of truth and the seed ' +
+      'overwrites admin-entered data. If you are certain (fresh season, reviewed diff), ' +
+      're-run with SEED_ALLOW_PRODUCTION=1.',
+  )
+  process.exit(1)
+}
+
 const stats = { created: 0, updated: 0, unchanged: 0 }
 const payload = await getPayload({ config })
 
